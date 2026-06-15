@@ -2,6 +2,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .ipynb_checkpoints/
+.DS_Store
 *.py[cod]
 memoire/*.aux
 memoire/*.bbl
@@ -12,6 +13,7 @@ memoire/*.lof
 memoire/*.log
 memoire/*.lot
 memoire/*.out
+memoire/*.xmpi
 memoire/*.synctex.gz
 memoire/*.toc
 # Donnees capteurs brutes confidentielles — NE PAS diffuser (depot autonome)
