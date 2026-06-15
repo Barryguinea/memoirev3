@@ -1,105 +1,84 @@
 \begin{abstract}
 \noindent
-La boiterie est l'un des troubles les plus coûteux et les plus préoccupants de l'élevage
-laitier, en raison de ses effets sur le bien-être animal, la douleur chronique, la production,
-la fertilité et la longévité des vaches. Sa prise en charge repose encore largement sur
-l'observation humaine et le score locomoteur, deux approches indispensables mais difficiles à
-maintenir de façon continue dans les troupeaux. Dans ce contexte, les capteurs d'activité
-ouvrent une voie complémentaire: ils ne diagnostiquent pas la boiterie, mais peuvent repérer
-des changements comportementaux persistants qui justifient une vérification terrain. Ce
-mémoire conçoit et évalue un système reproductible d'\textbf{alerte comportementale précoce}
-à partir de capteurs IceQube fixés à la patte, sur un corpus longitudinal de vaches laitières.
+La boiterie demeure un problème majeur de bien-être et de performance en élevage laitier. Son
+repérage repose encore largement sur l'observation humaine et le score locomoteur, qui sont
+indispensables mais difficiles à maintenir de façon continue dans les troupeaux. Les capteurs
+d'activité offrent une surveillance complémentaire: ils ne diagnostiquent pas la boiterie, mais
+peuvent signaler des changements comportementaux persistants qui justifient une vérification
+terrain. Ce mémoire conçoit et évalue un système reproductible d'\textbf{alerte
+comportementale précoce} à partir de capteurs IceQube fixés à la patte.
 
-La contribution principale est la branche temporelle HYPO. Contrairement à une détection
-ponctuelle d'anomalies, HYPO compare chaque vache à sa propre période de référence et recherche
-une baisse graduelle, persistante et concordante de plusieurs familles de signaux: pas,
-\textit{Motion Index}, transitions posturales, temps couché et temps debout. Cette logique
-individualisée permet de transformer des séries indirectes en priorités de vérification
-traçables. La validation technique repose sur des événements injectés uniquement après la
-période de référence, puis comparés à une exécution propre de la même vache afin d'isoler les
-alertes réellement attribuables à l'événement. Sur les dégradations graduelles évaluées, HYPO
-recouvre la grande majorité des événements et localise mieux les épisodes que les comparateurs
-Isolation Forest et Local Outlier Factor. Le contrôle bref isolé est rejeté, ce qui montre que
-le système ne réagit pas simplement à toute variation ponctuelle. La charge de vérification
-reste mesurée et discutée, car une alerte comportementale utile doit aussi rester exploitable
-par les équipes terrain. L'analyse de sensibilité, les intervalles de confiance regroupés par
-vache, la courbe détection--charge et le manifeste cryptographique renforcent la reproductibilité et la
-traçabilité des résultats.
+La contribution principale est la branche temporelle HYPO. Elle compare chaque vache à sa
+propre période de référence et recherche une baisse graduelle, persistante et concordante de
+plusieurs familles de signaux: pas, \textit{Motion Index}, transitions posturales, temps
+couché et temps debout. Cette logique individualisée transforme des séries indirectes en
+priorités de vérification traçables. La validation technique repose sur des événements injectés
+uniquement après la période de référence, puis comparés à une exécution propre de la même vache
+afin d'isoler les alertes réellement attribuables à l'événement. Sur les dégradations
+graduelles évaluées, HYPO recouvre la grande majorité des événements et localise mieux les
+épisodes que les comparateurs Isolation Forest et Local Outlier Factor. Le contrôle bref isolé
+est rejeté, ce qui montre que le système ne réagit pas simplement à toute fluctuation
+ponctuelle.
 
-Une extension bidirectionnelle explore une seconde signature comportementale, l'INSTABILITÉ,
-car un inconfort locomoteur peut aussi s'accompagner d'agitation, de transitions plus
-fréquentes ou de fragmentation posturale. Cette branche est volontairement séparée de HYPO et
-fusionnée par une règle hiérarchique: l'instabilité isolée produit une sortie de surveillance,
-tandis que la notification de vérification reste réservée aux baisses persistantes ou aux
-séquences instabilité--hypoactivité. Cette fusion élargit les situations surveillées et rend
-lisible une trajectoire possible allant de l'instabilité à l'hypoactivité. Elle augmente
-toutefois la charge de vérification et reste vulnérable aux causes non locomotrices. Elle
-constitue donc une piste opérationnelle intéressante, mais non une preuve clinique.
+Le mémoire explore aussi une extension bidirectionnelle fondée sur une branche
+INSTABILITÉ. Cette branche représente des situations où un inconfort locomoteur pourrait
+s'accompagner d'agitation, de transitions plus fréquentes ou de fragmentation posturale. Elle
+reste séparée de HYPO: l'instabilité isolée produit une sortie de surveillance, tandis que la
+notification de vérification reste réservée aux baisses persistantes ou aux séquences
+instabilité--hypoactivité. Cette extension rend le système plus expressif, mais elle augmente
+la charge de vérification et reste vulnérable aux causes non locomotrices. Elle constitue donc
+une piste opérationnelle prudente, et non une preuve clinique.
 
-Enfin, une analyse complémentaire IceTag--SLS synchronisée confronte les sorties aux scores SLS
-en utilisant uniquement les données capteurs antérieures à l'évaluation. Cette analyse est
-méthodologiquement correcte mais limitée par le faible nombre de vaches présentant un score
-locomoteur élevé et par l'entrelacement avec le groupe \textit{Exercise}. Le mémoire apporte
-ainsi un détecteur temporel défendable, une extension bidirectionnelle prudente, une interface
-Streamlit de priorisation et un protocole entièrement reproductible. Sa contribution centrale
-est de montrer comment produire une alerte utile à l'élevage tout en séparant clairement
-performance logicielle, hypothèse comportementale et validation clinique.
+Une analyse complémentaire IceTag--SLS synchronisée confronte les sorties aux scores
+locomoteurs en utilisant uniquement des données capteurs antérieures à l'évaluation. Elle est
+méthodologiquement correcte, mais limitée par le faible nombre de vaches à score élevé et par
+l'entrelacement avec le groupe \textit{Exercise}. Le résultat central du mémoire est donc un
+détecteur temporel défendable, une interface de priorisation et un protocole reproductible qui
+sépare clairement performance logicielle, hypothèse comportementale et validation clinique.
 
 \vspace{1em}
-\textbf{Mots-clés:} alerte comportementale précoce, capteur IceQube, accéléromètre,
-détection de changement, période de référence individuelle, hypoactivité, instabilité
-comportementale, Isolation Forest, Local Outlier Factor, boiterie bovine, élevage de précision,
-reproductibilité.
+\textbf{Mots-clés:} boiterie bovine, alerte comportementale, capteur IceQube, détection de
+changement, élevage de précision.
 \end{abstract}
 
 \begin{otherlanguage}{english}
 \renewcommand{\abstractname}{Abstract}
 \begin{abstract}
 \noindent
-Lameness is one of the costliest and most important welfare problems in dairy farming because
-it affects pain, productivity, fertility and cow longevity. Its management still relies largely
-on human observation and locomotion scoring, which remain essential but are difficult to apply
-continuously at herd scale. Activity sensors offer a complementary route: they do not diagnose
-lameness, but they can identify persistent behavioral changes that justify on-farm
-verification. This thesis designs and evaluates a reproducible \textbf{early behavioral-alert}
-system using leg-mounted IceQube sensors and a longitudinal corpus of dairy cows.
+Lameness remains a major welfare and performance issue in dairy farming. Its detection still
+relies largely on human observation and locomotion scoring, which are essential but difficult
+to maintain continuously at herd scale. Activity sensors provide a complementary form of
+monitoring: they do not diagnose lameness, but they can signal persistent behavioral changes
+that justify on-farm verification. This thesis designs and evaluates a reproducible
+\textbf{early behavioral-alert} system based on leg-mounted IceQube sensors.
 
-The main contribution is the temporal HYPO branch. Unlike pointwise anomaly detection, HYPO
-compares each cow with her own reference period and searches for a gradual, persistent and
-concordant decline across several signal families: steps, motion index, postural transitions,
-lying time and standing time. This individualized logic converts indirect time series into
-traceable verification priorities. Technical validation uses events injected strictly after
-the reference period and compares each injected run with a clean run of the same cow, so that
-only attributable alerts are credited. On gradual degradations, HYPO recovers most events and
-localizes episodes better than Isolation Forest and Local Outlier Factor
-comparators. The isolated brief variation is rejected, showing that the system does not simply
-react to any short fluctuation. The verification load is measured and discussed, because a
-useful behavioral alert must remain workable for on-farm teams. The sensitivity analysis,
-per-cow confidence intervals, detection--load curve and cryptographic manifest strengthen the
-reproducibility and traceability of the results.
+The main contribution is the temporal HYPO branch. It compares each cow with her own reference
+period and searches for a gradual, persistent and concordant decline across several signal
+families: steps, motion index, postural transitions, lying time and standing time. This
+individualized logic converts indirect time series into traceable verification priorities.
+Technical validation uses events injected strictly after the reference period and compares each
+injected run with a clean run of the same cow, so that only attributable alerts are credited.
+On gradual degradations, HYPO recovers most events and localizes episodes better than Isolation
+Forest and Local Outlier Factor comparators. The isolated brief variation is rejected, showing
+that the system does not simply react to any short fluctuation.
 
-A bidirectional extension explores a second behavioral signature, INSTABILITY, because
-locomotor discomfort may also involve agitation, more frequent transitions or fragmented
-posture. This branch is deliberately separated from HYPO and combined through a hierarchical
-fusion rule: isolated instability produces a surveillance output, whereas verification
-notifications remain reserved for persistent decreases or instability-to-hypoactivity
-sequences. This fusion broadens the situations under surveillance and makes a possible
-trajectory from instability to hypoactivity easier to read. It also increases the verification
-load and remains vulnerable to non-locomotor causes. It is therefore an operationally
-interesting extension, not clinical proof.
+The thesis also explores a bidirectional extension based on an INSTABILITY branch. This branch
+represents situations in which locomotor discomfort could involve agitation, more frequent
+transitions or fragmented posture. It remains separated from HYPO: isolated instability
+produces a surveillance output, whereas verification notifications are reserved for persistent
+decreases or instability-to-hypoactivity sequences. This extension makes the system more
+expressive, but it also increases the verification load and remains vulnerable to
+non-locomotor causes. It is therefore a cautious operational direction, not clinical proof.
 
-Finally, a synchronized IceTag--SLS analysis compares the outputs with locomotion scores using
-only sensor data collected before the evaluation. This analysis is methodologically sound but
-limited by the small number of cows with elevated locomotion scores and by the overlap with the
-\textit{Exercise} group. The thesis therefore contributes a defensible temporal detector, a
-cautious bidirectional extension, a Streamlit prioritization interface and a fully
-reproducible protocol. Its central contribution is to show how to produce a useful
-herd-management alert while clearly separating software performance, behavioral hypothesis and
-clinical validation.
+A synchronized IceTag--SLS analysis compares the outputs with locomotion scores using only
+sensor data collected before the evaluation. It is methodologically sound, but limited by the
+small number of cows with elevated scores and by the overlap with the \textit{Exercise} group.
+The central result of the thesis is therefore a defensible temporal detector, a prioritization
+interface and a reproducible protocol that clearly separates software performance, behavioral
+hypothesis and clinical validation.
 
 \vspace{1em}
-\textbf{Keywords:} early behavioral alert, IceQube sensor, accelerometer, change detection,
-individual reference period, hypoactivity, behavioral instability, Isolation Forest, Local
-Outlier Factor, bovine lameness, precision livestock farming, reproducibility.
+\textbf{Keywords:} bovine lameness, behavioral alert, IceQube sensor, change detection,
+precision livestock farming.
 \end{abstract}
 \end{otherlanguage}
