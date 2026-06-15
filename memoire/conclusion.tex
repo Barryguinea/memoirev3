@@ -4,11 +4,12 @@
 \newcommand{\conclusionheading}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
 
 \conclusionheading{Synthèse}
-Ce mémoire a conçu et évalué une alerte comportementale temporelle à partir de capteurs
-IceQube. Le résultat principal est la branche HYPO, qui recherche une réduction persistante
-et concordante des pas, du mouvement, des transitions et de la posture par rapport à la
-période de référence individuelle. Une extension exploratoire ajoute une branche INSTABILITÉ et une
-fusion hiérarchique qui distingue surveillance et notification de vérification.
+Ce mémoire atteint son objectif principal: produire une chaîne reproductible qui transforme
+des mesures IceQube indirectes en priorités de vérification locomotrice. Le résultat central
+est la branche HYPO, qui recherche une réduction persistante et concordante des pas, du
+mouvement, des transitions et de la posture par rapport à la période de référence
+individuelle. Une extension exploratoire ajoute une branche INSTABILITÉ et une fusion
+hiérarchique qui distingue surveillance et notification de vérification.
 
 \conclusionheading{Résultats principaux}
 Sur 33 dégradations graduelles injectées après la période de référence, HYPO produit une couverture attribuable dans
@@ -16,6 +17,8 @@ Sur 33 dégradations graduelles injectées après la période de référence, HY
 est rejeté et le fond atteint 0,402 notification par vache-jour. Dans l'ablation, HYPO atteint
 29,5\,\% à IoU20, contre 0\,\% pour les trois comparateurs IF/LOF. L'analyse OFAT montre que
 l'agrégation et le nombre de familles concordantes structurent principalement le compromis.
+Ces résultats soutiennent l'intérêt d'une détection temporelle individualisée plutôt qu'une
+décision fondée sur des anomalies ponctuelles.
 
 Sur la campagne étendue de 132 scénarios, la fusion hiérarchique couvre 72,7\,\% des
 scénarios de vérification, 66,7\,\% des instabilités en surveillance et 90,9\,\% des séquences.
@@ -36,10 +39,11 @@ vache soit boiteuse.
 Le travail fournit une validation attribuable de HYPO avec intervalles de confiance, une
 ablation et ses tailles d'effet, une analyse OFAT, une courbe détection--charge, une tentative
 de calibration individuelle rapportée malgré son résultat négatif, une extension
-bidirectionnelle avec contrôles de confusion, une évaluation du temps d'exécution, une analyse SLS
-synchronisée, une interface de priorisation et des artefacts reproductibles. Sa
-contribution méthodologique est de séparer clairement les résultats établis, les hypothèses
-exploratoires et les affirmations cliniques non démontrées.
+bidirectionnelle avec contrôles de confusion, une évaluation du temps d'exécution, une analyse
+SLS synchronisée, une interface de priorisation et des artefacts reproductibles. Sa
+contribution méthodologique est double: proposer un détecteur temporel interprétable et
+montrer comment évaluer ce type d'outil sans confondre résultats techniques, hypothèses
+exploratoires et affirmations cliniques non démontrées.
 
 \conclusionheading{Disponibilité}
 Le code source, les paramètres figés, les douze profils d'injection et les scripts

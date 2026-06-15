@@ -1,8 +1,9 @@
 \chapter{Validation et résultats}
 \label{chapitre:validation}
 
-Ce chapitre distingue deux niveaux de preuve. La première partie évalue le module HYPO sur
-des dégradations graduelles, une ablation et une analyse OFAT complètes. La deuxième partie
+Ce chapitre présente les preuves techniques du système en partant du résultat le plus solide:
+la branche HYPO. La première partie montre sa réponse à des dégradations graduelles, son
+avantage sur les comparateurs IF/LOF et sa stabilité locale par OFAT. La deuxième partie
 examine l'extension INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
 pourcentages décrivent la réponse du logiciel à des scénarios contrôlés; ils ne sont pas des
 performances cliniques. Le Tableau~\ref{tab:cles_lecture_resultats} rassemble les clés de
@@ -499,11 +500,16 @@ objectif préalable.
 
 \section{Synthèse}
 
-La validation principale montre que HYPO localise mieux les dégradations graduelles que les
-comparateurs IF et LOF, tout en conservant une charge de fond importante. Le comparateur
-pédométrique obtient une localisation proche, mais recouvre moins d'événements et produit
-une charge de fond plus élevée.
-L'extension bidirectionnelle ajoute une information de surveillance et récupère les
-séquences synthétiques, mais elle n'améliore pas IoU20, augmente le fond et reste vulnérable
-aux causes non locomotrices. Elle constitue donc un résultat exploratoire mitigé et non une
-preuve de supériorité ou de précurseur clinique.
+La validation principale établit que HYPO transforme des baisses graduelles injectées après
+la période de référence en épisodes attribuables, mieux localisés que ceux des comparateurs IF
+et LOF. Le résultat est renforcé par trois contrôles complémentaires: le contrôle bref est
+rejeté, l'ablation favorise HYPO chez les onze vaches, et l'analyse OFAT montre que la
+conclusion ne dépend pas d'un seul seuil isolé. Le comparateur pédométrique obtient une
+localisation proche, mais recouvre moins d'événements et produit une charge de fond plus
+élevée.
+
+L'extension bidirectionnelle ajoute une information de surveillance et récupère les séquences
+synthétiques. Son intérêt est donc descriptif et opérationnel: elle organise mieux les sorties
+lorsqu'une instabilité précède une baisse. Elle n'améliore toutefois pas IoU20, augmente le
+fond et reste vulnérable aux causes non locomotrices. Elle constitue donc une piste
+exploratoire, non une preuve de supériorité ou de précurseur clinique.

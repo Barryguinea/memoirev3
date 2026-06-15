@@ -80,9 +80,10 @@ positionnement est volontaire et imposé par les données~: le corpus ne dispose
 clinique synchronisé avec les enregistrements capteurs sur
 l'ensemble des animaux et des périodes. Les taux de détection rapportés caractérisent donc le
 comportement du logiciel face à des perturbations connues, et non une sensibilité ou une
-spécificité cliniques. Cette prudence rejoint les recommandations de la littérature, qui
-distingue nettement détection automatisée et outil diagnostique validé
-\citep{alsaaod2019automatic}.
+spécificité cliniques. Cette prudence n'affaiblit pas la démarche: elle en fixe le niveau de
+preuve et évite de confondre performance logicielle, alerte d'élevage et diagnostic
+vétérinaire. Elle rejoint les recommandations de la littérature, qui distingue nettement
+détection automatisée et outil diagnostique validé \citep{alsaaod2019automatic}.
 
 \introheading{Démarche méthodologique}
 Le corpus principal contient 37\,839 mesures de 28 vaches. Les 60\,\% premiers intervalles
@@ -100,17 +101,23 @@ résultats constituent une extension exploratoire: ils ne remplacent pas la vali
 technique plus ciblée de HYPO et ne mesurent ni sensibilité ni spécificité cliniques.
 
 \introheading{Contributions}
-Le mémoire apporte:
+Le mémoire apporte une chaîne complète qui va du signal brut à une priorité de vérification
+reproductible. Ses contributions sont les suivantes:
 \begin{enumerate}
-  \item un détecteur HYPO directionnel, persistant et interprétable;
+  \item un détecteur HYPO directionnel, persistant et interprétable, centré sur la trajectoire
+  individuelle de chaque vache;
   \item une validation attribuable après la période de référence, une ablation contre IF et LOF et une
   analyse OFAT de vingt variantes;
   \item une extension bidirectionnelle exploratoire avec persistances séparées et cinq
   règles de fusion;
-  \item des contrôles brefs et des facteurs confondants qui rendent visibles les limites de spécificité;
+  \item des contrôles brefs et des facteurs confondants qui rendent visibles les limites de spécificité
+  au lieu de les masquer;
   \item une évaluation du temps d'exécution de la chaîne complète, une analyse SLS synchronisée, une interface
   Streamlit et une suite de tests reproductibles.
 \end{enumerate}
+L'originalité du travail tient moins à un modèle complexe qu'à l'articulation contrôlée de
+quatre exigences souvent séparées: individualisation, temporalité, attribution et
+reproductibilité.
 
 \introheading{Structure du mémoire}
 Le Chapitre~\ref{chapitre:contexte} présente la boiterie, les signaux comportementaux et les

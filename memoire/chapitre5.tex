@@ -3,17 +3,23 @@
 
 \section{Réponse à la question principale}
 
-Le résultat le plus défendable concerne HYPO. Une détection directionnelle, individualisée,
-fondée sur plusieurs signaux et persistante produit des épisodes temporellement plus cohérents avec les
-dégradations graduelles que les comparateurs IF et LOF. Après soustraction de l'exécution
-propre, HYPO couvre 29 des 33 événements graduels et atteint IoU20 dans 13 cas. Cette preuve
-reste technique: elle montre que le code réagit à des baisses contrôlées, non qu'il détecte
-une boiterie clinique.
+L'apport central du mémoire est de montrer qu'une alerte comportementale peut être construite
+autour d'une trajectoire individuelle plutôt qu'autour de points anormaux isolés. HYPO combine
+direction du changement, cohérence entre signaux et persistance temporelle; cette combinaison
+produit des épisodes plus cohérents avec les dégradations graduelles que les comparateurs IF
+et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33 événements graduels et
+atteint IoU20 dans 13 cas. Cette preuve reste technique: elle montre que le code réagit à des
+baisses contrôlées, non qu'il détecte une boiterie clinique.
 
 Le taux de nouveaux départs de 57,6\,\% nuance la couverture de 87,9\,\%. Une partie de la
 réponse prolonge un épisode déjà actif au lieu d'en créer un. Le délai médian de 20,75 heures
 montre également que le terme \textit{précoce} doit être interprété relativement à des
 dégradations de 36 à 60 heures, et non comme une réaction immédiate.
+
+Cette nuance n'annule pas le résultat principal. Elle précise plutôt l'usage réaliste du
+système: prioriser une vérification lorsque plusieurs familles de signaux se dégradent de
+façon persistante, avec une traçabilité suffisante pour expliquer pourquoi une vache remonte
+dans le classement.
 
 \section{Niveau de preuve des principales conclusions}
 
@@ -50,12 +56,14 @@ Le Tableau~\ref{tab:portee_conclusions} associe à chaque conclusion son niveau 
 
 \section{Apport de l'ablation et de l'OFAT}
 
-L'ablation indique que la quantité de points anormaux n'est pas le critère décisif. IF
+L'ablation apporte un résultat méthodologique important: la quantité de points anormaux n'est
+pas le critère décisif. IF
 ponctuel produit 7,658 départs par vache-jour, mais aucun événement à IoU20. IF et LOF suivis
 de persistance réduisent la charge, sans localiser les fenêtres avec IoU20. HYPO atteint un
 IoU attribuable moyen de 0,137 et 29,5\,\% à IoU20 sur les quatre profils. La direction du
 changement, la cohérence entre familles et l'accumulation temporelle constituent donc les
-éléments les mieux soutenus par l'expérience.
+éléments les mieux soutenus par l'expérience. C'est ce point qui rend HYPO plus défendable
+qu'une simple accumulation d'anomalies ponctuelles.
 
 L'analyse OFAT montre que les conclusions ne reposent pas sur une valeur unique de chaque
 seuil. Elle identifie toutefois deux choix structurants: l'agrégation et le nombre de familles
