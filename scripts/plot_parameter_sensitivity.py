@@ -24,11 +24,12 @@ DEFAULT_SUMMARY = (
     PROJECT_ROOT
     / "data"
     / "revalidation"
+    / "hypo_module"
     / "parameter_sensitivity"
     / "parameter_sensitivity_summary.csv"
 )
-DEFAULT_PDF = PROJECT_ROOT / "memoire" / "figures" / "parameter_sensitivity_effects.pdf"
-DEFAULT_PNG = PROJECT_ROOT / "memoire" / "figures" / "parameter_sensitivity_effects.png"
+DEFAULT_PDF = PROJECT_ROOT / "memoire" / "figures" / "hypo_parameter_sensitivity_effects.pdf"
+DEFAULT_PNG = PROJECT_ROOT / "memoire" / "figures" / "hypo_parameter_sensitivity_effects.png"
 
 PARAMETER_LABELS = {
     "min_families": "Familles concordantes",

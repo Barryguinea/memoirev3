@@ -15,8 +15,10 @@ MemoireV2 fournit la base active parce qu'elle contient:
 
 ## Éléments utiles du premier mémoire
 
-Les sources du premier mémoire sont conservées sous
-`sources_memoire/memoire_initial` pour récupérer après audit:
+Les sources du premier mémoire ont été consultées lors de la construction de
+MemoireV3, puis retirées du dépôt final pour éviter de conserver une archive
+redondante avec le manuscrit actif. Après audit, seuls les éléments compatibles
+avec le cadrage actuel ont été réintégrés dans `memoire/`:
 
 - les explications générales d'Isolation Forest et de LOF;
 - les diagrammes d'architecture et éléments de traçabilité;
@@ -37,12 +39,13 @@ n'est donc pas dupliqué une seconde fois.
 - les seuils anciens considérés comme biologiquement validés;
 - les fichiers compilés, caches et sorties intermédiaires historiques.
 
-Ces éléments peuvent être étudiés pour comprendre l'historique du projet, mais
-ils ne doivent pas être copiés dans les résultats scientifiques de MemoireV3.
+Ces éléments peuvent être étudiés hors dépôt pour comprendre l'historique du
+projet, mais ils ne doivent pas être copiés dans les résultats scientifiques de
+MemoireV3.
 
 ## Règle de réécriture
 
-Le manuscrit actif sous `memoire/` est actuellement une base V2. Il ne doit pas
-être réécrit comme mémoire hybride avant qu'une architecture V3 techniquement
-acceptable soit identifiée. À défaut, l'hybride devra rester une perspective de
-recherche et MemoireV2 demeurera la version déposée.
+Le manuscrit actif sous `memoire/` constitue la version V3 déposée dans ce dépôt:
+il conserve le module HYPO comme résultat principal et présente l'extension
+bidirectionnelle comme exploratoire. Les archives de travail antérieures ne sont
+pas nécessaires à la compilation, aux tests ni à la reproduction des résultats.
