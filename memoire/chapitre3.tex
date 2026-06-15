@@ -31,10 +31,10 @@ Le Tableau~\ref{tab:modules} récapitule les modules qui produisent les sorties 
     \texttt{scripts/per\_cow\_calibration.py} & Test exploratoire d'un seuil individualisé. \\
     \texttt{scripts/detection\_}\\\texttt{background\_curve.py}
       & Courbe descriptive détection--charge. \\
-    \texttt{revalidation\_v3/profiles.py} & Douze scénarios synthétiques et contrôles. \\
-    \texttt{revalidation\_v3/campaign.py} & Injections après la période de référence et métriques attribuables. \\
-    \texttt{revalidation\_v3/sensitivity.py} & Comparaison des fusions et sensibilité technique. \\
-    \texttt{revalidation\_v3/}\\\texttt{mcgill\_sls\_validation.py} & Cohorte et mesures SLS. \\
+    Profils de l'extension bidirectionnelle & Douze scénarios synthétiques et contrôles. \\
+    Campagne de l'extension bidirectionnelle & Injections après la période de référence et métriques attribuables. \\
+    Sensibilité de la fusion & Comparaison des fusions et sensibilité technique. \\
+    Analyse IceTag--SLS synchronisée & Cohorte et mesures SLS. \\
     \texttt{app.py}, \texttt{ui/} & Interface Streamlit de priorisation. \\
     \texttt{tests/} & Tests unitaires, invariants et non-régression. \\
     \bottomrule
@@ -46,7 +46,7 @@ génération des figures, orchestration de la validation HYPO et mesure de perfo
 n'introduisent pas une logique de détection parallèle. Le script
 \texttt{run\_hypo\_module\_validation.py} produit les artefacts de la campagne principale et
 de l'ablation; \texttt{benchmark\_performance.py} chronomètre la chaîne de traitement complète; et
-\path{plot_v3_manuscript_results.py} produit les figures de l'extension. Les scripts
+un script dédié produit les figures de l'extension. Les scripts
 \path{per_cow_calibration.py} et \path{detection_background_curve.py} réutilisent la
 campagne HYPO sans introduire de nouvelle logique d'alerte. La
 Figure~\ref{fig:architecture_modules} schématise cette organisation.
@@ -213,7 +213,7 @@ respectives.
 Le module \path{revalidation/campaign.py} sélectionne les vaches admissibles, exécute une
 référence propre et injecte les quatre profils de la campagne HYPO. Le module
 \path{revalidation/ablation.py} réutilise les mêmes fenêtres pour les cinq variantes. Le
-module \path{revalidation_v3/campaign.py} étend ensuite le protocole aux douze scénarios
+module d'extension bidirectionnelle étend ensuite le protocole aux douze scénarios
 bidirectionnels. Le harnais garantit trois propriétés~: un placement reproductible des
 perturbations, une attribution stricte de l'effet à l'injection, et le rejet de toute
 campagne mal formée.
@@ -372,7 +372,7 @@ l'analyse de sensibilité, l'analyse SLS et le démarrage de Streamlit. Les rés
 atteste la cohérence logicielle, pas la validité clinique.
 
 Chaque résultat suit un cycle de vie traçable~: une commande de reproduction exécute un
-module de \path{revalidation_v3}, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
+module de validation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
 fige ces sorties~; et un script dédié les transforme en figures du manuscrit. Aucun résultat
 n'est saisi à la main. Une modification du code, des données ou des paramètres impose donc
 une nouvelle exécution et un nouveau manifeste, de sorte que le PDF seul ne constitue jamais
