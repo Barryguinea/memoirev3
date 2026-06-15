@@ -1,0 +1,418 @@
+\chapter{Détails de validation et reproductibilité}
+\label{annexe:validation}
+
+\newcommand{\annexeheading}[1]{%
+  \par\medskip
+  \noindent\textbf{#1}\par\smallskip
+}
+
+% =====================================================================
+\annexeheading{Paramètres figés}
+% =====================================================================
+
+La configuration finale retenue est gelée après les campagnes de validation. Elle fixe
+notamment un intervalle de 15~minutes, une contamination de 0.06, une fenêtre de persistance
+de 7~heures, un minimum de 2~bins anomaux par fenêtre, un mode de cohérence multi-signaux
+(MIX) avec un seuil de taux d'anomalies de 0.24, un cooldown de 12~heures et un seuil
+z-score sur le \textit{Motion Index} de 2.2. Le Tableau~\ref{tab:config_finale}
+(Chapitre~\ref{chapitre:methodologie}) présente ces paramètres en détail. Un fichier de
+référence documente la provenance expérimentale de ces choix et les campagnes de validation
+associées.
+
+% =====================================================================
+\annexeheading{Grille de paramètres explorée}
+% =====================================================================
+
+Le Tableau~\ref{tab:grille_complete} présente la grille complète de paramètres explorée au
+cours des campagnes de validation robuste. Cette grille a été élargie progressivement de
+v4 (12~configurations) à v5.2 (336~configurations).
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Grille de paramètres explorée dans les validations robustes. Les colonnes
+    \texttt{v4}/\texttt{v5.1}/\texttt{v5.2} donnent le nombre de valeurs testées pour
+    chaque paramètre~; le nombre de configurations est le \emph{produit} de ces comptes.}
+    \label{tab:grille_complete}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{llccc}
+        \toprule
+        \textbf{Paramètre} & \textbf{Valeurs explorées (union des campagnes)}
+            & \textbf{v4} & \textbf{v5.1} & \textbf{v5.2} \\
+        \midrule
+        \texttt{contamination}    & 0.05, 0.06, 0.07, 0.08
+            & 3 & 3 & 4 \\
+        \texttt{persist\_hours}   & 6, 7, 8
+            & 2 & 2 & 3 \\
+        \texttt{alert\_min}       & 2, 3
+            & 1 & 1 & 2 \\
+        \texttt{mix\_mode}        & MIX
+            & 1 & 1 & 1 \\
+        \texttt{mix\_rate\_thr}   & 0.16, 0.18, 0.20, 0.22, 0.24, 0.28, 0.34
+            & 2 & 4 & 7 \\
+        \texttt{mi\_z\_high\_thr} & 2.2, 2.5
+            & 1 & 2 & 2 \\
+        \midrule
+        \textbf{Total configs} ($=$ produit) &
+            & \textbf{12} & \textbf{48} & \textbf{336} \\
+        \textbf{Seeds}            &
+            & 8 & 8 & 8 \\
+        \textbf{Scénarios}        &
+            & 3 & 3 & 3 \\
+        \textbf{Total exécutions}       &
+            & \textbf{288} & \textbf{1\,152} & \textbf{8\,064} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+L'élargissement progressif de la grille permet de vérifier que les seuils retenus ne sont
+pas un optimum local fragile, mais une zone de stabilité dans l'espace des paramètres. La
+colonne ``v5.2'' correspond à la grille la plus large, utilisée pour le verdict final de
+robustesse.
+
+% =====================================================================
+\annexeheading{Campagnes de référence}
+% =====================================================================
+
+Les principales campagnes de validation utilisées dans ce mémoire sont les suivantes:
+\begin{itemize}
+  \item \textit{Validation manuelle v2}: première campagne d'injections détectables et
+  non-détectables, servant de référence historique;
+  \item \textit{Validation manuelle v2.1}: campagne de consolidation alignée sur les seuils
+  finaux (\texttt{persist\_hours} = 7);
+  \item \textit{Validation robuste v4}: 288~exécutions, grille de 12~configurations,
+  3~scénarios, 8~seeds;
+  \item \textit{Validation robuste v5.1}: 1\,152~exécutions, grille élargie à 48~configurations,
+  ajout des paramètres \texttt{mi\_z\_high\_thr} et de seuils supplémentaires;
+  \item \textit{Validation robuste v5.2}: 8\,064~exécutions, grille complète de 336~configurations,
+  vérification de stabilité à grande échelle;
+  \item \textit{Validation exploratoire LOF}: 288~exécutions selon le protocole v4, avec LOF
+  comme détecteur en remplacement d'IF (comparaison au niveau événement);
+  \item \textit{Benchmark de performance}: mesure de scalabilité sur le corpus complet,
+  avec décomposition du temps par composante;
+  \item \textit{Ablation étendue}: 90~cas par variante (3~vaches $\times$ 3~profils
+  $\times$ 10~seeds), comparaison IF/LOF/règles seules.
+\end{itemize}
+
+Au total, les campagnes de validation représentent 9\,504~exécutions expérimentales
+indépendantes, générant plus de 28\,000~évaluations événementielles individuelles.
+
+% =====================================================================
+\annexeheading{Détails des profils d'injection}
+% =====================================================================
+
+Les injections synthétiques modifient les colonnes brutes du capteur (\textit{Steps}, \textit{Motion Index},
+\textit{Lying Time}, \textit{Standing Time}, \textit{Transitions}) en appliquant des multiplicateurs par phases.
+Le Tableau~\ref{tab:injection_multiplicateurs} détaille les amplitudes utilisées pour le
+profil \texttt{detectable\_strong}~; les phases y alternent entre repos (proche de 0)
+et épisode (valeurs élevées) toutes les 6~bins ($\approx$1\,h\,30).
+
+\begin{table}[H]
+    \centering
+    \caption{Multiplicateurs d'injection pour le profil \texttt{detectable\_strong}.}
+    \label{tab:injection_multiplicateurs}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Signal}       & \textbf{Phase repos}   & \textbf{Phase épisode} \\
+        \midrule
+        \textit{Steps}                 & 0.02 -- 0.10           & 1.80 -- 2.80 \\
+        \textit{Motion Index}          & 0.01 -- 0.08           & 2.00 -- 3.40 \\
+        \textit{Lying Time}            & 2.60 -- 4.20           & 0.65 -- 1.10 \\
+        \textit{Standing Time}         & 0.04 -- 0.20           & 1.25 -- 2.10 \\
+        \textit{Transitions}           & 0.03 -- 0.15           & 3.00 -- 5.20 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Les multiplicateurs sont tirés uniformément dans les intervalles indiqués, ce qui introduit
+une variabilité réaliste entre injections. Le Tableau~\ref{tab:injection_tous_profils}
+compare les quatre profils d'injection utilisés dans les campagnes de validation~; les
+valeurs indiquent l'intervalle [min, max] des multiplicateurs appliqués aux signaux
+bruts.
+
+\begin{table}[H]
+    \centering
+    \caption{Multiplicateurs d'injection pour les quatre profils.}
+    \label{tab:injection_tous_profils}
+    \small
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Signal} & \textbf{Strong} & \textbf{Multisignal} & \textbf{Borderline}
+            & \textbf{Hidden} \\
+        \midrule
+        \textit{Steps} (épisode)     & 1.80--2.80 & 1.40--2.20 & 1.35--1.95 & $\sim$0.86 \\
+        \textit{Motion Index} (ép.)  & 2.00--3.40 & 1.60--2.80 & 1.70--2.45 & $\sim$0.86 \\
+        \textit{Lying Time} (ép.)    & 0.65--1.10 & 0.70--1.30 & 0.62--0.98 & 1.00 \\
+        \textit{Standing Time} (ép.) & 1.25--2.10 & 1.10--1.90 & 1.15--1.70 & 1.00 \\
+        \textit{Transitions} (ép.)   & 3.00--5.20 & 2.50--4.80 & 1.85--3.05 & $\sim$0.86 \\
+        \midrule
+        Familles touchées   & 5/5        & 5/5        & 5/5        & 1/5 \\
+        Amplitude relative  & forte      & modérée    & faible     & quasi-nulle \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Le profil \textit{hidden} (non détectable) constitue le contrôle négatif: il ne modifie
+qu'une seule famille de signaux avec un multiplicateur proche de~1
+($\mathcal{N}(0.86, 0.04)$, clippé à $[0.70, 0.98]$), ce qui produit une variation
+indistinguable du bruit naturel. La graduation des amplitudes entre \textit{strong},
+\textit{multisignal}, borderline et \textit{hidden} permet d'évaluer la
+sensibilité du pipeline à différents niveaux de sévérité.
+
+% =====================================================================
+\annexeheading{Artefacts produits par campagne}
+% =====================================================================
+
+Chaque campagne de validation produit un ensemble standardisé d'artefacts, présentés dans
+le Tableau~\ref{tab:artefacts}.
+
+\begin{table}[H]
+    \centering
+    \caption{Artefacts produits par chaque campagne de validation.}
+    \label{tab:artefacts}
+    \begin{tabular}{lp{8cm}}
+        \toprule
+        \textbf{Artefact}                & \textbf{Contenu} \\
+        \midrule
+        Métadonnées de campagne          & Paramètres, grille, seeds, horodatage,
+                                           durée d'exécution \\
+        Résumé par configuration         & Métriques agrégées (détection, IoU, faux positifs),
+                                           verdict GO/NO-GO, score de sélection \\
+        Rapport par scénario             & Métriques détaillées par scénario d'injection
+                                           (strong, borderline, hidden) \\
+        Évaluation événementielle        & Une ligne par événement injecté, avec chevauchement,
+                                           IoU, raison de détection/non-détection \\
+        Résultats par exécution                & Paramètres et métriques de chaque exécution individuelle \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% =====================================================================
+\annexeheading{Score de sélection v4}
+% =====================================================================
+
+Le classement des configurations dans la validation robuste repose sur un score de
+sélection pondéré:
+
+\begin{equation}
+    S = 0.50 \cdot \overline{\text{IoU20}}_{\text{strong}}
+      + 0.20 \cdot \overline{\text{det}}_{\text{strong}}
+      + 0.20 \cdot \overline{\text{det}}_{\text{border}}
+      - 0.25 \cdot \overline{\text{leak}}_{\text{hidden}}
+      - 0.30 \cdot \overline{\text{FN}}
+      - 0.10 \cdot \sigma_{\text{FN}}
+    \label{eq:selection_score}
+\end{equation}
+
+\noindent
+où $\overline{\text{IoU20}}_{\text{strong}}$ est le recouvrement strict moyen sur les cas
+forts, $\overline{\text{det}}$ les taux de détection, $\overline{\text{leak}}$ le taux de
+fuite, $\overline{\text{FN}}$ le taux moyen de fausses notifications et $\sigma_{\text{FN}}$
+son écart-type.
+
+La pondération reflète trois priorités opérationnelles hiérarchisées:
+\begin{enumerate}
+    \item \textit{Précision temporelle} (50\% pour IoU20): pour un éleveur, savoir
+    \textit{quand} un épisode a commencé est plus utile qu'une simple alerte binaire.
+    Un système qui détecte mais localise mal dans le temps perd sa valeur pratique;
+    \item \textit{Maîtrise des fausses alertes} ($-$30\% pour $\overline{\text{FN}}$,
+    $-$10\% pour $\sigma_{\text{FN}}$): la littérature montre que les éleveurs cessent
+    de consulter les systèmes d'alerte dès que le taux de faux positifs dépasse
+    $\sim$0.2/cow-day \citep{rutten2013invited}. La pénalisation de la variance
+    ($\sigma$) garantit en outre une fiabilité prédictible;
+    \item \textit{Couverture de détection} (20\% chacun pour strong et borderline):
+    le poids symétrique entre cas forts et borderline évite de favoriser des configurations
+    agressives sur les cas faciles au détriment des cas ambigus.
+\end{enumerate}
+La pénalité de fuite ($-$25\%) est élevée car une alerte sur un cas volontairement non
+détectable signale une défaillance grave de la spécificité. Ces poids ne sont pas issus
+d'une optimisation formelle mais d'un arbitrage explicite, documenté et gelé avant
+l'exécution des campagnes de validation.
+
+% =====================================================================
+\annexeheading{Intégrité des résultats}
+% =====================================================================
+
+L'intégrité des artefacts de référence est vérifiée via un manifeste cryptographique
+SHA-256. Ce manifeste contient l'empreinte de chaque fichier de résultats produit par les
+campagnes de validation. La vérification consiste à recalculer les empreintes et à les
+comparer au manifeste de référence.
+
+Le résultat attendu pour la baseline officielle est: zéro fichier manquant, zéro fichier
+modifié, zéro fichier inattendu. Cette lecture signifie qu'aucun artefact de référence n'a
+disparu, qu'aucun résultat n'a été modifié en place, et qu'aucun bruit non prévu n'a été
+injecté dans la baseline vérifiée. Ce mécanisme garantit que les réorganisations de code
+n'ont pas altéré les résultats expérimentaux sur lesquels reposent les conclusions du
+mémoire.
+
+% =====================================================================
+\annexeheading{Archive logicielle du mémoire}
+% =====================================================================
+
+L'archive logicielle de référence du mémoire est décrite dans le manifeste
+\path{data/memoire_archive_manifest_v2.json}. Ce manifeste liste:
+\begin{enumerate}
+    \item le dépôt Git privé de référence du projet (accessible sur demande
+    auprès de l'auteur);
+    \item le tag de référence de la version figée du mémoire (\texttt{memoire-v2});
+    \item les sources LaTeX du manuscrit;
+    \item les paramètres gelés (\texttt{data/final\_thresholds\_v1.json});
+    \item les manifestes d'intégrité SHA-256;
+    \item les principaux CSV de résultats cités dans le manuscrit, y compris les statistiques
+    appariées IF/LOF exportées dans \path{data/if_lof_stats/}.
+\end{enumerate}
+
+Cette archive ne comprend pas les données brutes capteurs, non diffusables pour des raisons
+de confidentialité. En revanche, elle fournit tous les éléments nécessaires pour rejouer
+la démarche sur un nouveau corpus disposant du même schéma de colonnes.
+
+% =====================================================================
+\annexeheading{Reproduction des expériences}
+% =====================================================================
+
+Pour reproduire les résultats présentés dans ce mémoire, les étapes suivantes sont
+nécessaires:
+
+\begin{enumerate}
+    \item \textit{Installation}: installer les dépendances déclarées dans le fichier de
+    dépendances du projet (Python~3.10+, pandas, scikit-learn, NumPy);
+    \item \textit{Données}: placer le corpus brut (37\,839~lignes, 28~vaches) dans le
+    répertoire de données du projet;
+    \item \textit{Validation manuelle}: exécuter les notebooks de validation manuelle
+    v2 et v2.1;
+    \item \textit{Validation robuste}: exécuter les notebooks v4, v5.1 et v5.2 dans
+    l'ordre, chacun produisant ses artefacts horodatés;
+    \item \textit{Comparaison IF/LOF}: exécuter \texttt{python scripts/compute\_if\_lof\_paired\_stats.py}
+    pour régénérer les intervalles de confiance appariés à partir des CSV existants;
+    \item \textit{Vérification}: comparer les empreintes SHA-256 des artefacts produits
+    avec le manifeste de référence.
+\end{enumerate}
+
+Le seed aléatoire (\texttt{random\_state} = 42 pour IF, seeds explicites pour les
+validations) garantit la reproductibilité bit-à-bit des résultats sur une même version
+de scikit-learn.
+
+% =====================================================================
+\annexeheading{Variabilité inter-vache des fausses notifications}
+\label{annexe:variabilite_vache}
+% =====================================================================
+
+Les métriques agrégées (0.105 fausse notification/vache-jour, 91.7\% d'accord) résument
+le comportement moyen du pipeline sur l'ensemble du troupeau, mais masquent la variabilité
+naturelle entre individus. Le Tableau~\ref{tab:distribution_par_vache} classe les 28~vaches
+en quatre groupes selon leur taux individuel de fausses notifications, mesurés sur
+41~jours pour la configuration finale v5.2~; les groupes sont définis par quartile du
+taux individuel et les effectifs exacts sont calculés sur la configuration à seed
+médian.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Distribution des fausses notifications par vache sur la période d'étude.}
+    \label{tab:distribution_par_vache}
+    \begin{tabular}{lccccc}
+        \toprule
+        \textbf{Groupe} & \textbf{$n$ vaches} & \textbf{FN totales} &
+        \textbf{FN/vache} & \textbf{FN/vache-jour} & \textbf{Description} \\
+        \midrule
+        Très stable  & 7 & 0--1   & $\leq$1   & $\leq$0.024 & Signal quasi-nul \\
+        Stable       & 7 & 2--3   & 2--3      & 0.05--0.07  & Comportement régulier \\
+        Actif        & 7 & 4--7   & 4--7      & 0.10--0.17  & Variabilité modérée \\
+        Très actif   & 7 & 8--15  & 8--15     & 0.20--0.37  & Forte variabilité \\
+        \midrule
+        \textbf{Total} & \textbf{28} & — & $\mathbf{4.6}$ (moy.) & $\mathbf{0.112}$ & \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{0.3em}
+    \raggedright\footnotesize\textit{Note}: la valeur totale de 0.112~FN/vache-jour est
+    la \emph{moyenne des taux individuels} des 28~vaches (configuration finale, seed
+    médian). Elle diffère légèrement du taux agrégé de 0.105~FN/vache-jour rapporté au
+    Chapitre~\ref{chapitre:validation}, ce dernier étant calculé comme moyenne \emph{par
+    exécution} sur la grille robuste v5.1~; les deux mesures sont cohérentes et restent
+    sous le seuil critique de la littérature.
+\end{table}
+
+\textit{Mécanisme de la variabilité.}
+Les vaches du groupe \textit{Très actif} présentent des profils comportementaux naturellement
+irréguliers: pics d'activité locomotrice plus fréquents, alternances couché/debout plus
+variables, et \textit{Motion Index} plus élevé en dehors des épisodes injectés. Pour ces animaux,
+la distribution des scores Isolation~Forest est décalée vers des valeurs plus élevées en
+condition normale, ce qui abaisse le seuil effectif de détection. Ce phénomène, bien
+documenté dans la littérature sur la détection d'anomalies
+\citep{chandola2009anomaly}, rappelle que le score IF est relatif au profil global de la
+vache: une anomalie est toujours définie par rapport à la norme individuelle.
+
+\textit{Implication pour le déploiement.}
+Deux adaptations opérationnelles découlent de cette analyse:
+\begin{enumerate}
+    \item \textit{Calibration individuelle}: un ajustement du seuil de contamination
+    par vache permettrait de maintenir un taux uniforme de fausses alertes à l'échelle du
+    troupeau, plutôt que d'appliquer un seuil global qui surcharge les animaux naturellement
+    actifs;
+    \item \textit{Pondération des alertes}: le score de confiance pourrait intégrer
+    l'historique individuel de l'animal pour différencier une anomalie forte pour une vache
+    calme d'une anomalie modérée pour une vache active.
+\end{enumerate}
+
+Ces adaptations constituent des axes d'amélioration concrets, validables sur un corpus
+élargi. Le taux agrégé (0.105~FN/vache-jour) reste bien en dessous du seuil critique
+identifié dans la littérature (${\sim}0.2$~FN/vache-jour, \cite{rutten2013invited}).
+
+% =====================================================================
+\annexeheading{Distribution des recouvrements temporels (IoU)}
+\label{annexe:distribution_iou}
+% =====================================================================
+
+La Figure~\ref{fig:iou_distribution} présente les distributions de best\_iou pour les
+trois scénarios d'injection sur l'ensemble des configurations GO de la campagne v5.2.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            ybar,
+            bar width=8pt,
+            width=12cm, height=7cm,
+            ylabel={Fréquence relative (\%)},
+            xlabel={Best IoU},
+            symbolic x coords={0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50+},
+            xtick=data,
+            x tick label style={font=\scriptsize, rotate=30, anchor=east},
+            ymin=0, ymax=60,
+            ymajorgrids=true,
+            grid style={black!8},
+            legend style={at={(0.98,0.96)}, anchor=north east, font=\small,
+                          legend columns=1, draw=black!20, fill=white},
+            enlarge x limits=0.08,
+            axis line style={black!60},
+            tick style={black!40},
+        ]
+            \addplot[fill=rulegreen!40, draw=rulegreen!80] coordinates {
+                (0.00,0) (0.05,0) (0.10,2) (0.15,5) (0.20,8)
+                (0.25,15) (0.30,22) (0.35,25) (0.40,15) (0.45,5) (0.50+,3)
+            };
+            \addlegendentry{Strong}
+
+            \addplot[fill=loforange!40, draw=loforange!80] coordinates {
+                (0.00,42) (0.05,18) (0.10,15) (0.15,10) (0.20,7)
+                (0.25,4) (0.30,2) (0.35,1) (0.40,1) (0.45,0) (0.50+,0)
+            };
+            \addlegendentry{Borderline}
+
+            \addplot[fill=profgray!30, draw=profgray!60] coordinates {
+                (0.00,55) (0.05,0) (0.10,0) (0.15,0) (0.20,0)
+                (0.25,0) (0.30,0) (0.35,0) (0.40,0) (0.45,0) (0.50+,0)
+            };
+            \addlegendentry{Non-détectable}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Distribution des \texttt{best\_iou} par scénario d'injection (campagne v5.2).}
+    \label{fig:iou_distribution}
+\end{figure}
+
+La distribution des cas forts est centrée autour de 0.30--0.35, avec une queue s'étendant
+jusqu'à 0.50+, ce qui signifie que le pipeline recouvre environ un tiers de la fenêtre
+temporelle de l'épisode injecté dans la majorité des configurations stables. La
+distribution bimodale des cas borderline, avec un pic à zéro et une queue jusqu'à 0.20,
+confirme que ces cas se situent à la frontière de détection du pipeline.

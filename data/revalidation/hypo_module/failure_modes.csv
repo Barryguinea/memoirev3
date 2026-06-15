@@ -1,0 +1,8 @@
+family,mode,numerator,denominator,percentage,definition
+HYPO,gradual_uncovered,4,33,12.1,Aucun intervalle attribuable ne recouvre la fenêtre injectée.
+HYPO,gradual_poorly_localized,16,33,48.5,"Recouvrement attribuable présent, mais meilleur IoU inférieur à 0,20."
+HYPO,covered_without_novel_start,10,29,34.5,Fenêtre recouverte sans nouveau départ par rapport à l'exécution propre.
+Fusion hiérarchique,nonlocomotor_hypoactivity_alerted,9,11,81.8,Alerte attribuable sur le confondant d'hypoactivité non locomotrice.
+INSTABILITÉ,pure_instability_in_surveillance,22,33,66.7,Instabilité pure recouverte par la branche de surveillance.
+Fusion hiérarchique,pure_instability_actionable_episode,0,33,0.0,Instabilité pure recouverte par un épisode actionnable de la fusion.
+HYPO,brief_control_alerted,0,11,0.0,Alerte attribuable sur la variation brève isolée.

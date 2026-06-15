@@ -1,0 +1,10 @@
+check,passed,detail
+required_columns,True,ok
+non_empty,True,n_events=44
+unique_event_ids,True,duplicates=0
+unique_physical_windows,True,duplicates=0
+non_overlapping_physical_windows,True,overlaps=0
+strictly_post_baseline,True,violations=0
+single_primary_seed,True,n_seeds=1
+all_scenarios_present,True,"gradual_marked,gradual_mild,gradual_moderate,isolated_short_variation"
+informative_source_windows,True,violations=0

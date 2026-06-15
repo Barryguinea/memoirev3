@@ -1,0 +1,102 @@
+\begin{abstract}
+\noindent
+La boiterie est l'un des trois problèmes de santé les plus fréquents chez les vaches
+laitières, avec des prévalences de 20 à 55\,\% selon les études. Son coût économique
+(75 à 300+ USD par cas) et son impact sur le bien-être animal motivent le développement
+de systèmes de détection automatisée. Ce mémoire présente la conception,
+l'implémentation et la validation d'un système reproductible de détection de boiterie
+probable, à partir de données de capteurs comportementaux collectées sur 28~vaches
+pendant 41~jours, comme l'activité, les transitions posturales et la dynamique de
+mouvement. L'architecture proposée est modulaire~: un \textit{pipeline} en quatre étapes
+(chargement, extraction d'environ 50~variables dérivées, détection d'anomalies,
+application de règles métier) combine un détecteur d'anomalies non supervisé proposé
+(Isolation Forest) avec des règles métier explicites comme la persistance temporelle,
+la cohérence multi-signaux et l'espacement des notifications. L'implémentation comprend
+également un score continu de risque pour le classement des animaux et un tableau de
+bord interactif offrant à l'éleveur quatre vues complémentaires.
+
+La validation du système proposé est conduite sur deux niveaux. Une validation manuelle
+par injections contrôlées confirme que les événements détectables sont récupérés avec
+un recouvrement temporel strict, tandis que les scénarios non détectables restent
+silencieux. Une validation robuste multi-configurations, avec plus de 9\,500~exécutions et
+336~paramétrisations, établit 100\,\% de détection sur les cas forts, une fuite nulle
+et un taux de fausses notifications limité à 0.105 par vache-jour. De plus, l'accord
+de décision entre deux campagnes successives atteint 91.7\,\%.
+
+D'autre part, pour valider les choix d'architecture, une étude d'ablation portant sur
+90~cas par variante compare quatre configurations du pipeline et montre que chaque
+composante est nécessaire~: le détecteur seul manque de précision temporelle, tandis
+que les règles seules génèrent significativement plus de fausses alertes. Isolation
+Forest et Local Outlier Factor présentent en outre des profils complémentaires,
+ouvrant la perspective d'un ensemble hybride. Un \textit{benchmark} de performance confirme
+enfin une scalabilité linéaire ($\approx$0.6~seconde par vache).
+
+La rigueur statistique est renforcée par des tests appariés (McNemar exact et Wilcoxon
+des rangs signés), des intervalles de confiance à 95\,\% par rééchantillonnage
+\textit{bootstrap}, des courbes de sensibilité/spécificité et de précision/rappel,
+une analyse de l'importance des variables par valeurs de Shapley, ainsi qu'une
+calibration isotonique des scores (score de Brier = 0.087~; erreur de calibration
+espérée = 0.015). Une matrice de responsabilités documente l'intégration du système
+dans le \textit{workflow} de ferme.
+
+Une validation exploratoire sur un corpus complémentaire de 30~vaches (même ferme,
+capteur IceTag, automne~2019) confirme la portabilité technique du pipeline et une
+cohérence partielle avec les scores cliniques locomoteurs disponibles pour 12~d'entre
+elles. L'ensemble constitue un cadre reproductible pour la détection non supervisée de
+boiterie probable, avec traçabilité par empreintes cryptographiques des artefacts.
+
+\vspace{1em}
+\textbf{Mots clés:} boiterie bovine, données capteurs, détection d'anomalies,
+Isolation Forest, règles métier, validation robuste, reproductibilité, élevage de
+précision.
+\end{abstract}
+
+\begin{otherlanguage}{english}
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+Lameness is one of the three most prevalent health issues in dairy cattle, affecting
+20--55\,\% of herds depending on the study. Its economic cost (75--300+ USD per case)
+and welfare impact motivate the development of automated detection systems. This thesis
+presents the design, implementation and validation of a reproducible system for probable
+bovine lameness detection, using behavioral sensor data collected from 28~cows over
+41~days, such as activity, postural transitions and movement dynamics. The proposed
+architecture is modular~: a four-stage pipeline (loading, extraction of about
+50~derived features, anomaly detection, application of business rules) combines a
+proposed unsupervised anomaly detector (Isolation Forest) with explicit business rules
+such as temporal persistence, multi-signal coherence and notification spacing. The
+implementation also includes a continuous risk score for ranking animals and an
+interactive dashboard offering four complementary views to the farmer.
+
+Validation of the proposed system is conducted at two levels. A manual validation
+using controlled injections confirms that detectable events are recovered with strict
+temporal overlap, while undetectable scenarios remain silent. A robust
+multi-configuration validation, with more than 9,500~runs and
+336~parameterizations, establishes 100\,\% detection on strong cases, zero leakage
+and a false notification rate limited to 0.105 per cow-day. Furthermore, decision
+agreement between two successive campaigns reaches 91.7\,\%.
+
+To validate the architectural choices, an ablation study of 90~cases per variant
+compares four pipeline configurations and shows that each component is necessary~:
+the detector alone lacks temporal precision, whereas rules alone generate significantly
+more false alerts. Isolation Forest and Local Outlier Factor further exhibit
+complementary profiles, opening the prospect of a hybrid ensemble. A performance
+benchmark finally confirms linear scalability ($\approx$0.6~second per cow).
+
+Statistical rigor is reinforced by paired tests (exact McNemar and Wilcoxon
+signed-rank), 95\,\% bootstrap confidence intervals, sensitivity/specificity and
+precision/recall curves, a Shapley-value feature importance analysis, and isotonic
+score calibration (Brier score = 0.087~; expected calibration error = 0.015). A
+responsibility matrix also documents the integration of the system into the farm
+workflow.
+
+An exploratory validation on a complementary cohort of 30~cows (same farm, IceTag
+sensor, fall~2019) confirms the technical portability of the pipeline and partial
+concordance with locomotor clinical scores available for 12~cows. The work
+constitutes a reproducible framework for unsupervised detection of probable lameness,
+with cryptographic-hash traceability of all artifacts.
+
+\vspace{1em}
+\textbf{Keywords:} bovine lameness, sensor data, anomaly detection, Isolation Forest,
+business rules, robust validation, reproducibility, precision livestock farming.
+\end{abstract}
+\end{otherlanguage}

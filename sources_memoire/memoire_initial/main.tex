@@ -1,0 +1,126 @@
+\documentclass[11pt]{memoireuqamV2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OVERLEAF: Utiliser TexLive 2021 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[round,authoryear]{natbib}  % citations APA (Auteur, Année) -- style UQAM
+
+\usepackage[french]{babel}
+% Forcer "Tableau" partout (babel français utilise "Table" par défaut)
+\addto\captionsfrench{%
+  \renewcommand{\tablename}{Tableau}%
+  \renewcommand{\figurename}{Figure}%
+}
+\usepackage[utf8]{inputenc} % Encodage UTF-8 standard
+\usepackage[T1]{fontenc}
+\usepackage{silence}
+\usepackage{url}
+% \usepackage[a-1b]{pdfx} % à réactiver uniquement pour une finalisation PDF/A
+\usepackage[hypertexnames=false]{hyperref}
+
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}         % \text{} dans les équations
+\usepackage{enumitem}        % options [leftmargin=...] dans enumerate
+\usepackage{booktabs}       % tableaux professionnels
+\usepackage{multirow}       % cellules fusionnées
+\usepackage{longtable}      % tableaux qui se brisent sur plusieurs pages
+\usepackage{array}          % colonnes personnalisées
+\usepackage{float}          % option [H] pour certains flottants
+\usepackage{tikz}           % diagrammes
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, decorations.pathreplacing, backgrounds}
+\usepackage{pgfplots}       % graphiques de données
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{patterns}    % hachures dans les bar charts
+
+\usepackage{placeins}       % \FloatBarrier pour éviter les chevauchements
+\usepackage{xcolor}         % couleurs personnalisées
+% --- Palette professionnelle (inspirée Tableau / Nature) ---
+\definecolor{ifblue}{RGB}{55,90,127}       % bleu marine sobre
+\definecolor{loforange}{RGB}{190,120,50}   % terre cuite douce
+\definecolor{rulegreen}{RGB}{75,135,100}   % vert sauge
+\definecolor{rawred}{RGB}{175,70,70}       % rouge brique atténué
+\definecolor{profgray}{RGB}{130,130,130}   % gris neutre
+
+% Police similaire à Calibri
+\usepackage[sfdefault,lf]{carlito}
+% \usepackage{times}
+\emergencystretch=2em
+\hfuzz=10pt
+\hbadness=10000
+\vbadness=10000
+% \citep et \citet sont définis nativement par natbib
+
+% Nettoie les avertissements purement typographiques de Carlito.
+\WarningFilter{latexfont}{Font shape `T1/Crlt-LF/m/sc' undefined}
+\WarningFilter{latexfont}{Some font shapes were not available, defaults substituted}
+% Avertissement bénin de babel-french sur les légendes, sans impact sur le PDF courant.
+\WarningFilter{french3.ldf}{Figures' and tables' captions might look like}
+
+% Le format des citations et des labels est géré par natbib + apalike-uqam
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%
+% Pour la page titre
+%%%%%%%%%%%%%%%%%%%%
+\title{Détection de boiterie bovine probable à partir de données capteurs}
+% Votre nom complet tel qu'il apparaît à votre dossier du registrariat de l'UQAM
+\author{Aliou Barry}
+% Année et mois courant sauf si spécifié autrement pas \degreemonth et \degreeyear
+%\degreemonth{mois du dépôt}
+%\degreeyear{année du dépôt}
+\uqammemoire %% ou \uqamthese ou \uqamrapport ou \uqamprop 
+\matiere{informatique}
+\concentration{Concentration : systèmes électroniques}
+
+
+\pagenumbering{roman} % numérotation des pages en chiffres romains
+\thispagestyle{empty}        % La page titre n'est pas numérotée
+\maketitle
+\stepcounter{page}
+
+%%%%%%%%%%%%%%%%%%%%
+% Page préliminaires
+%%%%%%%%%%%%%%%%%%%%
+
+\include{dedicace}
+\include{remerciements}
+\tableofcontents % Pour générer la table des matières
+\listoffigures
+\listoftables
+\include{glossaire}
+\include{symboles}
+
+\include{resume}
+% Utilisez l'environnement  abstract pour rédiger votre résumé
+
+%%%%%%%%%%%%%%%%%%%%
+% Document principal
+%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
+
+% Utilisez l'environnement  introduction pour rédiger votre introduction
+\include{introduction}
+
+\include{chapitre1}
+\include{chapitre2}
+\include{chapitre3}
+\include{chapitre4}
+\include{chapitre5}
+
+% Utilisez l'environnement  conclusion pour rédiger votre conclusion
+\include{conclusion}
+
+%%%%%%%%%%%%%%%%%%%%
+% Page liminaires
+%%%%%%%%%%%%%%%%%%%%
+\appendix % À partir de cette ligne toutes les commandes \chapter subséquentes seront des appendices
+\include{annexe}
+
+\bibliographystyle{apalike-uqam}
+\bibliography{references}
+\end{document}

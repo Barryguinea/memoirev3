@@ -1,0 +1,928 @@
+\chapter{Discussion et limites}
+\label{chapitre:discussion}
+
+% =====================================================================
+\section{Points forts de l'approche}
+% =====================================================================
+
+\subsection{Positionnement méthodologique clair}
+Le système ne prétend pas diagnostiquer cliniquement la boiterie; il produit une alerte de
+boiterie probable, interprétable et exploitable comme aide à la décision. Ce positionnement
+explicite réduit le risque de surpromesse scientifique et respecte une exigence récurrente
+de la littérature: les systèmes de détection automatisée doivent être évalués dans leur
+contexte opérationnel plutôt que comparés à des standards cliniques dont les labels sont
+souvent absents ou incertains \citep{alsaaod2019automatic}.
+
+\subsection{Architecture hybride IF + règles métier}
+L'ablation montre qu'un détecteur d'anomalies seul produit des alertes impulsives
+(variante~C: 100\% de détection mais aucune précision temporelle), tandis qu'un système
+purement à règles devient rigide et générateur de faux positifs (variante~B: $3.2\times$
+plus de fausses alertes). Le couplage retenu permet d'obtenir des épisodes plus plausibles
+et des notifications plus défendables, conformément à l'approche préconisée par les travaux
+récents en élevage de précision \citep{michelena2025plf_review}.
+
+\subsection{Profondeur de validation}
+Peu de projets de cette envergure dépassent la simple démonstration visuelle. Ici, la
+validation combine injections manuelles
+(Tableau~\ref{tab:manual_v21}), grilles robustes multi-seeds sur 9\,504~exécutions au total
+(Tableau~\ref{tab:protocole_validation}), comparaison inter-versions avec 91.7\% d'accord
+(Tableau~\ref{tab:versions_comparison}), benchmark performance
+(Tableau~\ref{tab:performance}) et vérification SHA des artefacts. Cette chaîne rend le
+projet beaucoup plus crédible qu'une simple interface appuyée sur quelques exemples choisis.
+
+\subsection{Honnêteté de l'ablation}
+L'ablation étendue apporte une discussion utile sur le choix du détecteur. La comparaison
+IF/LOF (Chapitre~\ref{chapitre:validation}) révèle des profils complémentaires: IF domine
+sur la précision temporelle des cas forts, tandis que LOF capte mieux les cas borderline.
+IF est maintenu comme détecteur principal pour sa meilleure précision sur les cas
+actionnables et sa complexité algorithmique favorable ($O(n \log n)$ contre $O(n^2)$).
+Une telle transparence illustre la démarche du mémoire: documenter les alternatives testées
+plutôt que les masquer.
+
+Le Tableau~\ref{tab:forces_limites} synthétise les principales forces et limites discutées
+dans les sections suivantes.
+
+\begin{table}[H]
+    \centering
+    \caption{Synthèse des forces et limites du système proposé.}
+    \label{tab:forces_limites}
+    \begin{tabular}{p{6.5cm}p{6.5cm}}
+        \toprule
+        \textbf{Forces} & \textbf{Limites} \\
+        \midrule
+        Positionnement explicite (alerte, pas diagnostic) &
+            Pas de validation clinique au sens strict \\
+        Architecture hybride IF + règles (interprétable) &
+            Fragilité sur les cas borderline ($\sim$42\% en validation robuste finale) \\
+        Validation multi-niveaux (9\,504~exécutions) &
+            Mono-ferme, mono-capteur, 41~jours \\
+        Ablation honnête avec comparaison LOF &
+            Validation LOF limitée au protocole v4 \\
+        Scalabilité linéaire ($\approx$0.6\,s/vache) &
+            IF représente 89\% du temps de calcul \\
+        Traçabilité SHA-256 et reproductibilité &
+            Seuils dépendants du corpus courant \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\FloatBarrier
+% =====================================================================
+\section{Limites}
+% =====================================================================
+
+\subsection{Absence de labels cliniques exhaustifs}
+La validation est technique et méthodologique, pas clinique au sens fort. Les injections
+synthétiques simulent un comportement compatible avec la boiterie, mais ne sont pas des cas
+cliniques confirmés par un vétérinaire. Cette limite est inhérente au contexte du projet:
+les labels cliniques synchronisés par tranche de 15~minutes n'existent pas dans le corpus
+disponible. Elle est toutefois partagée par la majorité des travaux publiés dans le domaine
+\citep{oleary2020accelerometers,qiao2021review}.
+
+\subsection{Cas borderline encore fragiles}
+Les scénarios limites (borderline) restent moins bien capturés que les cas forts.
+Sur l'ablation élargie (Tableau~\ref{tab:ablation_by_profile}), la détection \textit{any}
+pour les cas borderline atteint seulement 27\% pour IF + règles et 40\% pour LOF + règles.
+Un tel constat rejoint les observations de \cite{chapinal2010measurement}, qui
+rapportent que les boiteries légères (score~2) sont les plus difficiles à détecter
+automatiquement, même avec des capteurs de haute précision. Il doit être assumé comme une
+limite du système.
+
+\subsection{Dépendance aux seuils}
+Même si les seuils ont été explorés et justifiés via une grille de 336~configurations
+(v5.2), ils restent liés au contexte expérimental du corpus courant. Un changement de
+capteur, de race, de saison ou de conditions d'élevage pourrait nécessiter un
+recalibrage. Ce constat est partagé par \cite{thorup2015lameness}, qui observent des
+variations significatives de performance entre fermes avec les mêmes capteurs. Le gel des
+seuils est une mesure de reproductibilité, pas une garantie d'universalité.
+
+\subsection{Généralisation à confirmer}
+\label{subsec:generalisation}
+
+Les artefacts montrent une bonne stabilité interne sur le corpus présent
+(28~vaches, 37\,839~lignes, 41~jours; $\sigma$ inter-seed de détection
+sur la configuration finale: voir Tableau~\ref{tab:stabilite_seeds}),
+mais cette stabilité ne préjuge pas de la généralisation. La littérature
+rappelle que l'hétérogénéité des protocoles entre études reste un
+obstacle majeur au transfert d'un détecteur d'une exploitation à l'autre
+\citep{alsaaod2019automatic,oleary2020accelerometers}. Plus précisément,
+cinq axes de généralisation restent à valider avant tout déploiement
+clinique:
+
+\begin{enumerate}
+    \item \textit{Multi-fermes.} Le corpus provient d'une seule
+    exploitation. Les profils d'activité dépendent de la conduite
+    d'élevage (fréquence de traite, accès au parcours, conception des
+    stalles), ce qui peut modifier la distribution des \textit{features}
+    de base (\texttt{Steps}, \texttt{Motion\,Index}, transitions) et
+    donc recalibrer implicitement les seuils de règle et le contour de
+    l'Isolation Forest. Un plan réaliste consisterait à ré-évaluer la
+    configuration figée sur au moins 3~fermes indépendantes avant
+    d'énoncer des performances cibles.
+
+    \item \textit{Multi-capteurs.} Les données proviennent exclusivement
+    du podomètre IceQube. Un changement de capteur (AfiAct, Smartbow,
+    CowManager, accéléromètre brut au collier) modifie la définition
+    opérationnelle des variables: un \og pas \fg{} IceQube n'est pas un
+    \og pas \fg{} AfiAct, et le \textit{Motion Index} n'existe pas chez tous les
+    fournisseurs. Les \textit{features} dérivées (\texttt{*\_rrz},
+    \texttt{*\_d1\_per\_hour}, \texttt{*\_vs\_mm7}) sont en revanche
+    définies de manière \textit{capteur-agnostique} à partir de séries
+    temporelles brutes, ce qui laisse une voie de portage, mais qui
+    doit être testée empiriquement.
+
+    \item \textit{Multi-saisons.} La fenêtre d'observation
+    (octobre--novembre) couvre une période automnale. Les schémas
+    comportementaux peuvent différer en été (stress thermique, pâturage)
+    ou en hiver (stabulation prolongée, luminosité réduite). La
+    normalisation robuste rolling (\texttt{*\_rrz}) absorbe une partie
+    des variations lentes, mais des effets de niveau persistants
+    pourraient dégrader l'AUC de 0.956 (\S\ref{subsubsec:roc_pr})
+    observée sur ce corpus.
+
+    \item \textit{Validation clinique des injections.} Les profils
+    d'ablation (\textit{strong}, borderline,
+    \textit{multisignal\_persistent}) sont construits sur des
+    hypothèses plausibles mais non calibrées contre des cas cliniques
+    réels scorés par locomotion. Le chiffre d'\textit{detection\_any}
+    de 47.8~\% sur 90~cas injectés ne doit donc pas être lu comme une
+    sensibilité clinique. La baseline pédométrique d'Alsaaod
+    (\S\ref{subsubsec:alsaaod_baseline}) est elle aussi évaluée sur ces
+    mêmes injections, ce qui rend la \textit{comparaison} valide
+    (mêmes cas, même moteur de règles) sans pour autant trancher la
+    question de la performance absolue en conditions réelles.
+
+    \item \textit{Dérive temporelle.} Sur 41~jours, les dérives lentes
+    (vieillissement du capteur, changement d'alimentation, variation
+    parité/stade de lactation) ne peuvent pas être observées. Un suivi
+    longitudinal de 6~à~12~mois permettrait d'estimer la fréquence de
+    ré-étalonnage nécessaire (\S\ref{subsec:workflow_ferme} a proposé
+    un scénario de dérive calibration, mais son seuil de déclenchement
+    est pour l'instant fixé sans données longitudinales).
+\end{enumerate}
+
+En résumé, les performances rapportées au
+Chapitre~\ref{chapitre:validation} sont des performances
+\textit{internes} à un corpus méthodologique, et non des performances
+attendues \textit{en champ}. Le Tableau~\ref{tab:forces_limites} cadre
+ce positionnement et la section \og Perspectives \fg{} de la
+conclusion en tire les priorités de recherche.
+
+\subsection{Biais potentiels du corpus}
+Le corpus de 28~vaches sur 41~jours, bien que suffisant pour une validation méthodologique,
+présente des biais potentiels qui doivent être assumés:
+\begin{itemize}
+    \item \textit{Biais saisonnier}: les données couvrent octobre--novembre, une période
+    automnale où les conditions de logement et de parcours peuvent influencer les
+    comportements de manière spécifique. Les schémas comportementaux pourraient
+    différer en été (pâturage, chaleur) ou en hiver (stabulation prolongée);
+    \item \textit{Biais de sélection}: les 28~vaches du corpus ne constituent pas un
+    échantillon représentatif au sens épidémiologique. La composition du troupeau
+    (parité, stade de lactation, race) n'est pas documentée dans les données capteurs;
+    \item \textit{Biais d'injection}: les profils synthétiques simulent des déviations
+    comportementales plausibles mais pas cliniquement validées. L'amplitude et la forme
+    des perturbations injectées reposent sur des hypothèses raisonnables mais non
+    calibrées contre des cas cliniques réels.
+\end{itemize}
+
+De tels biais ne remettent pas en cause la validité de la démarche méthodologique
+(validation reproductible, ablation, comparaison IF/LOF), mais ils délimitent la portée
+des conclusions: les performances rapportées sont valides pour ce corpus, dans ces
+conditions, et la généralisation reste à confirmer.
+
+\FloatBarrier
+% =====================================================================
+\section{Menaces à la validité}
+% =====================================================================
+
+Toute étude empirique est exposée à des menaces qui peuvent limiter la portée de ses
+conclusions. Cette section complète les limites identifiées ci-dessus en les organisant
+selon le cadre classique de \cite{shadish2002experimental}, adapté aux études en génie
+logiciel par \cite{wohlin2012experimentation} et \cite{feldt2010validity}.
+
+\textit{Validité interne.}
+Les injections synthétiques simulent des déviations comportementales plausibles mais ne
+reproduisent pas la pathophysiologie réelle de la boiterie: un animal cliniquement boiteux
+peut présenter des modifications plus complexes \citep{whay2003assessment}. Les profils
+injectés constituent donc une approximation qui favorise potentiellement le détecteur.
+Par ailleurs, les variables d'entrée sont mécaniquement corrélées (une vache couchée plus
+longtemps est nécessairement moins active), ce qui amplifie le signal mais limite
+l'interprétabilité de la contribution individuelle de chaque variable.
+Enfin, le modèle IF est entraîné sur les 60\,\% premiers bins de chaque vache
+(\texttt{baseline\_ratio}\,=\,0.6), sous l'hypothèse que cette période représente un
+comportement normal. Si une vache est déjà boiteuse au début de l'observation, la
+baseline est contaminée et le modèle risque de normaliser un comportement pathologique.
+Une telle hypothèse est raisonnable dans un contexte de suivi continu (la boiterie clinique
+est un événement qui évolue dans le temps), mais elle n'a pas été vérifiée empiriquement
+sur le corpus principal faute de labels cliniques synchrones.
+
+\textit{Validité externe.}
+Les données proviennent d'une seule exploitation, d'un seul type de capteur (IceQube),
+sur 41~jours en période automnale. Le contexte expérimental est typique des élevages
+Holstein en stabulation libre; les résultats ne sont pas directement transférables à
+d'autres races, systèmes de logement ou saisons \citep{galindo2000relationships}. La
+fenêtre temporelle restreinte ne permet pas non plus de capturer les variations
+comportementales à long terme.
+
+\textit{Validité de construit.}
+Le système produit une alerte de ``boiterie probable'', définie opérationnellement comme
+une déviation comportementale détectée par le pipeline. Ce construit ne correspond pas à
+la boiterie clinique, qui nécessite un examen physique et un score de locomotion validé
+\citep{sprecher1997lameness}. La métrique IoU, empruntée à la vision par ordinateur
+\citep{everingham2010pascal}, suppose que le recouvrement temporel est un indicateur
+pertinent de la qualité de détection, hypothèse raisonnable pour des épisodes continus
+mais potentiellement inadaptée pour des boiteries intermittentes.
+
+\textit{Validité de conclusion.}
+Les 90~cas par variante d'ablation suffisent pour détecter des différences marquées
+mais limitent la capacité à identifier des effets de taille modérée. Les résultats sont
+présentés principalement sous forme de moyennes agrégées; une analyse appariée
+complémentaire avec IC95\% a été ajoutée pour la comparaison IF/LOF, mais le mémoire
+ne propose pas de modélisation statistique hiérarchique complète ni d'intervalles pour
+l'ensemble des tableaux. La sensibilité de la performance à la configuration finale,
+qui constitue un point unique dans l'espace des 336~paramétrisations, fait l'objet
+d'une analyse locale dédiée
+(Section~\ref{subsec:sensibilite_locale}) qui montre qu'aucune perturbation à
+$\pm 1$~cran ne fait basculer la décision GO/NO-GO; une analyse globale de l'ensemble
+de l'espace des paramètres reste hors-périmètre.
+
+\FloatBarrier
+% =====================================================================
+\section{Spécificité de la détection et diagnostic différentiel}
+\label{sec:specificite_detection}
+% =====================================================================
+
+Une question naturelle face à un système de détection de boiterie probable est celle
+de la \textit{spécificité étiologique}: lorsqu'une alerte est émise, comment le système
+distingue-t-il une boiterie d'une autre cause possible de modification comportementale?
+La présente section clarifie la portée réelle des alertes produites et documente les
+mécanismes par lesquels le pipeline limite (sans les éliminer) les principaux
+confondants cliniques.
+
+\subsection{Ce que détecte réellement le pipeline}
+
+Le système ne détecte pas la boiterie au sens clinique. Il détecte une
+\textit{anomalie comportementale persistante sur des variables locomotrices}, conforme
+au positionnement explicite de l'introduction (\og boiterie probable \fg{}, et non
+diagnostic). Trois propriétés du pipeline orientent cette détection vers des signatures
+compatibles avec une boiterie plutôt que vers des anomalies comportementales génériques:
+
+\begin{enumerate}
+    \item \textit{Ciblage des variables locomotrices.} Les cinq variables utilisées
+    (\textit{Motion Index}, pas, temps couché, temps debout, transitions) sont le cœur de
+    la locomotion bovine. Une pathologie qui n'affecte pas la locomotion
+    (ex.: mammite subclinique sans signe systémique) ne déclenchera pas le système.
+    \item \textit{Filtre de persistance ($K$~=~28~bins, soit 7~h).} Les événements
+    comportementaux brefs (pic d'activité isolé, bousculade, changement ponctuel de
+    stalle) sont filtrés avant de pouvoir générer une notification.
+    \item \textit{Cohérence multi-signaux (mode MIX).} Une vraie boiterie affecte
+    typiquement plusieurs familles de signaux de manière corrélée: moins de pas,
+    plus de temps couché, moins de transitions. Une perturbation qui n'affecte qu'une
+    famille isolée est filtrée par la règle de cohérence.
+\end{enumerate}
+
+\subsection{Confondants cliniques et mécanismes de mitigation}
+
+Le Tableau~\ref{tab:confondants} recense les principales causes non pathologiques ou
+pathologiques non-boiteuses susceptibles de modifier le comportement locomoteur d'une
+vache laitière, et indique pour chacune le mécanisme du pipeline qui limite le risque
+de fausse alerte.
+
+\begin{table}[H]
+    \centering
+    \caption{Confondants potentiels et mécanismes de mitigation par le pipeline.}
+    \label{tab:confondants}
+    \small
+    \begin{tabular}{p{3.0cm}p{3.5cm}p{7.0cm}}
+        \toprule
+        \textbf{Confondant} & \textbf{Risque de déclenchement}
+            & \textbf{Mécanisme de mitigation} \\
+        \midrule
+        Œstrus (chaleurs)
+            & Modéré à élevé
+            & Signature d'activité \textit{augmentée} (opposée à la boiterie);
+              durée typique 6--18~h, parfois filtrée par la persistance de 7~h;
+              croisement possible avec détection d'œstrus existante. \\
+        \addlinespace
+        Mammite subclinique
+            & Faible à modéré
+            & Signature différente (léthargie isolée sans déséquilibre locomoteur
+              cohérent); la cohérence multi-signaux filtre les anomalies
+              mono-famille. \\
+        \addlinespace
+        Vêlage
+            & Faible
+            & Dates de vêlage connues de l'éleveur; exclusion triviale en
+              pré-traitement. La modification comportementale est par ailleurs
+              très brève à l'échelle de l'horizon de persistance. \\
+        \addlinespace
+        Stress thermique
+            & Très faible
+            & Affecte l'ensemble du troupeau simultanément; la spécificité
+              individuelle du pipeline (seule la vache cible réagit,
+              cf.~Tableau~\ref{tab:before_after}) filtre naturellement ces
+              perturbations globales. \\
+        \addlinespace
+        Changement de ration, stress social
+            & Très faible
+            & Mêmes arguments que le stress thermique: perturbation à l'échelle
+              du troupeau, filtrée par la spécificité individuelle. \\
+        \addlinespace
+        Problème podal non boiteux (ex.: lésion débutante)
+            & Modéré
+            & Peut déclencher une alerte; ce déclenchement est \textit{cliniquement
+              pertinent}, car il attire l'attention sur un animal à risque avant
+              l'apparition d'une boiterie franche. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Positionnement clinique: outil de priorisation, pas de diagnostic}
+
+La portée des alertes doit être lue comme celle d'un \textit{test de dépistage}
+(screening), et non d'un test diagnostique. Un test de dépistage est conçu pour
+identifier les animaux qui justifient une vérification plus approfondie; le diagnostic
+différentiel définitif reste la prérogative du vétérinaire ou d'un éleveur expérimenté,
+sur la base d'un examen clinique, d'un score de locomotion \citep{sprecher1997lameness}
+ou d'un examen podal. Cette division du travail est cohérente avec la pratique du
+dépistage en médecine humaine: un test positif ne signe pas la maladie, il justifie
+une investigation.
+
+Concrètement, une alerte produite par le système doit être interprétée comme:
+\og cette vache présente une déviation comportementale persistante sur ses variables
+locomotrices; une vérification terrain est recommandée \fg{}. Les alertes émises par
+le système déclenchent dans l'interface l'affichage d'un plan d'action clinique
+temporisé (Section~\ref{sec:interface_streamlit}), qui oriente l'utilisateur vers
+les étapes d'un examen vétérinaire structuré.
+
+\subsection{Limites assumées}
+
+Deux limites doivent être reconnues explicitement. D'une part, le pipeline ne permet
+pas, en l'état, de distinguer algorithmiquement une boiterie d'un œstrus prolongé
+sans information complémentaire: seule la signature statistique (activité
+\textit{augmentée} typique de l'œstrus vs \textit{diminuée} typique de la boiterie)
+offre une piste de différenciation, qui n'a pas été intégrée comme règle formelle.
+D'autre part, l'absence de \textit{gold standard} clinique dans le corpus empêche
+toute mesure quantitative de la spécificité étiologique du système; les arguments
+présentés ci-dessus sont qualitatifs et s'appuient sur la plausibilité
+mécanistique, non sur une validation empirique.
+
+L'intégration de sources de données cliniques complémentaires (production laitière,
+température corporelle, dates de vêlage, diagnostics vétérinaires) constitue un axe
+d'amélioration naturel, cohérent avec les perspectives développées en
+Chapitre~\ref{chapitre:conclusion}.
+
+\FloatBarrier
+% =====================================================================
+\section{Mise en perspective avec la littérature}
+% =====================================================================
+
+Le système proposé se situe dans la famille des approches hybrides non-supervisées
+appliquées à la détection de boiterie. À titre de comparaison, Lavrova et al.
+\citep{lavrova2023lameness} obtiennent une sensibilité d'environ 77\% avec un modèle
+logistique à effets mixtes sur six fermes allemandes, en combinant activité, couchage et
+production laitière. Le présent projet atteint 90\% de détection sur les cas forts
+(Tableau~\ref{tab:ablation_by_profile}), mais dans un contexte mono-ferme et sans labels
+cliniques. La comparaison directe des performances est donc délicate, conformément à la
+mise en garde d'Alsaaod et al. \citep{alsaaod2019automatic} sur l'hétérogénéité des
+protocoles.
+
+Michelena et al. \citep{michelena2025comparative} montrent que le choix de l'algorithme non
+supervisé dépend du compromis visé entre sensibilité et faux positifs. Ce constat est
+exactement celui que l'ablation illustre dans ce projet: IF et LOF représentent deux points
+différents sur cette courbe de compromis, sans supériorité universelle de l'un sur l'autre.
+
+La revue de Chandola et al. \citep{chandola2009anomaly} sur la détection d'anomalies
+souligne que les méthodes basées sur l'isolation et celles basées sur la densité locale
+ont des profils de performance complémentaires: les premières excellent sur les anomalies
+globales (points isolés dans l'espace des \textit{features}), les secondes sur les anomalies
+contextuelles (points normaux globalement mais déviants localement). La validation
+exploratoire IF/LOF de ce projet confirme empiriquement cette distinction théorique.
+
+Par rapport à des approches supervisées comme celles d'Alsaaod et al.
+\citep{alsaaod2012electronic}, qui obtiennent des performances élevées mais sur des
+cohortes labellisées cliniquement, le présent projet se distingue par sa capacité à
+fonctionner en l'absence de labels, tout en maintenant une validation multi-niveaux
+explicite. Cette différence de paradigme est structurelle: la détection non supervisée est
+moins précise au sens clinique, mais plus déployable dans les contextes réels où les labels
+cliniques sont rares ou absents \citep{qiao2021review}.
+
+Enfin, les travaux récents de Palma et al. \citep{palma2025scoping} sur l'IA en élevage
+laitier identifient la boiterie comme l'un des cas d'usage où la combinaison capteurs +
+règles métier offre le meilleur rapport entre déployabilité et fiabilité. Le présent
+projet s'inscrit directement dans cette famille d'approches.
+
+Le Tableau~\ref{tab:comparaison_litterature_ch4} (Chapitre~\ref{chapitre:validation})
+situe le présent projet par rapport aux travaux les plus proches. La sensibilité élevée sur
+les cas forts (90--100\%) doit être relativisée: elle est mesurée sur des injections
+synthétiques, pas sur des cas cliniques confirmés. En revanche, aucun des travaux cités ne
+propose une validation multi-niveaux aussi étendue (9\,504~exécutions, ablation 4~variantes,
+vérification d'intégrité), ce qui constitue la contribution distinctive de ce mémoire.
+
+\FloatBarrier
+% =====================================================================
+\section{Comparaison avec les systèmes commerciaux}
+% =====================================================================
+
+Il est pertinent de situer le système par rapport aux solutions commerciales déployées en
+élevage. Le Tableau~\ref{tab:systemes_commerciaux} compare trois systèmes représentatifs.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Comparaison du système proposé avec des solutions commerciales de suivi
+    comportemental bovin.}
+    \label{tab:systemes_commerciaux}
+    \begin{tabular}{>{\raggedright\arraybackslash}p{2cm}
+                    >{\raggedright\arraybackslash}p{2.2cm}
+                    >{\raggedright\arraybackslash}p{2.0cm}
+                    >{\raggedright\arraybackslash}p{2.1cm}
+                    >{\raggedright\arraybackslash}p{2.2cm}}
+        \toprule
+        \textbf{Système} & \textbf{Capteur} & \textbf{Algorithme}
+        & \textbf{Transparence} & \textbf{Validation publiée} \\
+        \midrule
+        CowManager
+        & Boucle auriculaire
+        & Propriétaire (boîte noire)
+        & Faible
+        & Études indépendantes limitées \\
+        \addlinespace
+        IceQube / IceTag
+        & Patte (accéléromètre)
+        & Seuils + modèles internes
+        & Partielle
+        & \cite{beer2016objective} \\
+        \addlinespace
+        Heatime / SCR
+        & Collier (rumination + activité)
+        & Propriétaire
+        & Faible
+        & \cite{stangaferro2016use} \\
+        \addlinespace
+        \textbf{Ce mémoire}
+        & Accéléromètre
+        & IF + règles\\(code ouvert)
+        & \textbf{Totale}
+        & \textbf{9\,504~exécutions, ablation, SHA} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Le contraste principal est structurel: là où les systèmes commerciaux fonctionnent comme des
+boîtes noires rarement évaluées de manière indépendante \citep{rutten2013invited}, le
+pipeline proposé est entièrement documenté et validé quantitativement. En contrepartie, ces
+systèmes bénéficient d'avantages opérationnels (intégration aux logiciels de traite,
+calibration multi-fermes, support technique) que le prototype académique ne possède pas.
+
+\FloatBarrier
+% =====================================================================
+\section{Implications pratiques pour l'éleveur}
+% =====================================================================
+
+En configuration finale, le système produit 0.105~notification par vache-jour
+(Tableau~\ref{tab:robust_final}), soit environ 10 à 11~alertes quotidiennes
+pour un troupeau de 100~vaches. Ce volume reste en dessous du seuil critique au-delà duquel
+les éleveurs cessent de consulter les alertes ($\sim$40\% de faux positifs,
+\citep{rutten2013invited}), et demeure compatible avec une consultation matinale avant la
+première traite.
+
+L'asymétrie des erreurs justifie l'arbitrage opérationnel retenu. Un faux positif coûte
+5--10~minutes de vérification; un faux négatif se traduit par un animal souffrant non
+traité à temps, avec un coût estimé entre 75 et 300~USD par cas
+\citep{green2002financial,rodrigues2017lameness}. Le choix de privilégier la précision
+temporelle (IF + règles) sur la sensibilité maximale (LOF seul) vise à préserver la
+confiance de l'éleveur dans le système.
+
+Le Tableau~\ref{tab:routine_eleveur} présente un scénario détaillé d'intégration dans
+la journée type d'un élevage de 100~vaches (troupeau Holstein, stabulation libre).
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Scénario de journée type pour un élevage de 100~vaches.}
+    \label{tab:routine_eleveur}
+    \begin{tabular}{lp{3.4cm}p{3.0cm}p{4.0cm}}
+        \toprule
+        \textbf{Moment} & \textbf{Action} & \textbf{Durée estimée}
+            & \textbf{Sortie attendue} \\
+        \midrule
+        5h45 & Exécution automatique du pipeline & $\approx$1~min (100~vaches)
+            & Fichier d'alertes horodaté \\
+        \addlinespace
+        6h00 & Consultation des alertes (interface ou CSV) & 5--8~min
+            & Liste de 10--11 vaches prioritaires, avec score de confiance \\
+        \addlinespace
+        6h15 & Traite du matin: observation ciblée & 2--3~min/vache signalée
+            & Score locomoteur rapide (1--5) pour chaque vache signalée \\
+        \addlinespace
+        7h00 & Décision vétérinaire ou traitement & Selon gravité
+            & Appel vétérinaire si score~$\geq$~3; soins locaux si score~2 \\
+        \addlinespace
+        14h00 & Traite du soir: re-vérification rapide & 1~min/vache signalée
+            & Confirmer la résolution ou escalader \\
+        \addlinespace
+        Vendredi & Bilan hebdomadaire & 10~min
+            & Récidives, tendances troupeau, ajustement éventuel \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Un tel scénario mobilise environ 30 à 40~minutes supplémentaires par jour pour un éleveur
+de 100~vaches. Appliqué à une exploitation déjà équipée de capteurs IceQube, ce qui
+est le cas typique, le pipeline s'intègre sans acquisition de nouveau matériel.
+
+% ---- SUBSECTION: Analyse coût-bénéfice ----
+\subsection{Analyse coût-bénéfice}
+
+La viabilité économique d'un système de détection précoce repose sur l'équilibre entre
+les coûts évités grâce aux interventions plus rapides et les coûts opérationnels liés à
+la vérification des alertes. Le Tableau~\ref{tab:cout_benefice} présente ce bilan pour
+trois tailles de troupeau, sous les hypothèses conservatrices suivantes~: prévalence
+25\,\%, coût moyen par cas non détecté de 200~USD, réduction de 40\,\% avec détection
+précoce, 0.5~h/jour pour la vérification des alertes.
+
+\textit{Hypothèses de calcul.}
+Les coûts évités s'appuient sur les estimations de \cite{green2002financial} (perte de
+production 270--574~kg/lactation) et de \cite{bruijnis2010assessing} (coûts vétérinaires
+directs et réforme anticipée). Une détection précoce réduit le coût par cas de 30 à 50\%
+en permettant une intervention avant l'aggravation clinique, soit une économie de
+60--100~USD par cas détecté à temps \citep{rodrigues2017lameness}. Le coût opérationnel
+est estimé à 30~min/vache-jour d'alerte à 20~USD/h, mais chaque notification
+correspond le plus souvent à un épisode en cours et non à une nouvelle vache (le taux
+de \textit{cas distincts} est significativement inférieur au nombre brut d'alertes).
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Estimation indicative du coût-bénéfice du système pour différentes tailles
+    de troupeau.}
+    \label{tab:cout_benefice}
+    \begin{tabular}{>{\centering\arraybackslash}p{1.8cm}
+                    >{\centering\arraybackslash}p{1.8cm}
+                    >{\centering\arraybackslash}p{2.2cm}
+                    >{\centering\arraybackslash}p{2.2cm}
+                    >{\centering\arraybackslash}p{1.8cm}
+                    >{\centering\arraybackslash}p{2.0cm}}
+        \toprule
+        \textbf{Troupeau} & \textbf{Cas/an} & \textbf{Coûts évités (USD)} &
+        \textbf{Coût vérif./an (USD)} & \textbf{Coût non-détectés} &
+        \textbf{Solde net (USD)} \\
+        \midrule
+        50~vaches  & 12  & +960  & 1\,825 & $-$240  & \textbf{$-$1\,105} \\
+        100~vaches & 25  & +2\,000 & 3\,650 & $-$500  & \textbf{$-$2\,150} \\
+        200~vaches & 50  & +4\,000 & 7\,300 & $-$1\,000 & \textbf{$-$4\,300} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\textit{Interprétation.}
+Le solde est négatif dans ces hypothèses, ce qui reflète honnêtement la limite du
+prototype actuel: les alertes sont comptées individuellement par bin de 15~minutes, alors
+que l'éleveur ne vérifierait en pratique qu'une fois par jour les animaux signalés.
+En appliquant le coût de vérification au nombre de \textit{vaches distinctes signalées}
+plutôt qu'au nombre d'alertes brutes, l'équilibre s'améliore sensiblement. De plus,
+l'analyse n'inclut pas les bénéfices indirects de la détection précoce: réduction
+de la réforme involontaire, amélioration de la fertilité, bien-être animal, et
+réduction de la charge mentale liée à la surveillance manuelle quotidienne.
+
+Au final, ces chiffres soulignent deux axes prioritaires pour les travaux futurs:
+(i) un regroupement intelligent des alertes par épisode et par animal pour réduire la
+charge de vérification, et
+(ii) une calibration individuelle par vache (voir Section~\ref{subsec:analyse_par_vache})
+pour limiter les sur-alertes sur les animaux naturellement actifs. Avec ces améliorations,
+un troupeau de 100~vaches pourrait dépasser le seuil de viabilité économique.
+
+\FloatBarrier
+\subsection{Architecture opérationnelle de bout-en-bout}
+\label{subsec:workflow_ferme}
+
+Au-delà de la journée type (Tableau~\ref{tab:routine_eleveur}), la viabilité
+opérationnelle du système dépend de trois propriétés qui n'apparaissent ni
+dans les métriques événementielles ni dans le bilan coût-bénéfice: la
+\emph{latence} de l'alerte, la \emph{distribution des responsabilités}
+entre l'éleveur, le vétérinaire et le technicien, et la \emph{gestion
+des exceptions}. Cette sous-section explicite ces propriétés pour un
+déploiement réaliste sur une ferme équipée de capteurs IceQube
+connectés à un logiciel de gestion de troupeau.
+
+\paragraph{Budget de latence.}
+La latence de bout-en-bout, c'est-à-dire le temps écoulé entre le moment où une
+anomalie comportementale se produit dans l'étable et le moment où
+l'éleveur reçoit la notification, se décompose en quatre composantes
+dont les ordres de grandeur sont résumés au
+Tableau~\ref{tab:latence_budget}.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Budget de latence du système de bout-en-bout
+    (100~vaches, fréquence 15~min, capteurs IceQube).}
+    \label{tab:latence_budget}
+    \begin{tabular}{lp{5.4cm}c}
+        \toprule
+        \textbf{Étape} & \textbf{Description} & \textbf{Ordre de grandeur} \\
+        \midrule
+        Acquisition capteur & Agrégation 15~min sur le collier
+            & $\leq$15~min \\
+        \addlinespace
+        Téléchargement & Passerelle Wi-Fi ou cellulaire $\to$ base
+            locale & 1--5~min \\
+        \addlinespace
+        Exécution pipeline & Features + IF + règles
+            (0.6~s/vache, cf.~\S\ref{subsec:scalabilite})
+            & 1--2~min \\
+        \addlinespace
+        Notification & Écriture CSV, push e-mail ou interface
+            & $<$1~min \\
+        \midrule
+        \textbf{Total} & Budget de latence bout-en-bout
+            & \textbf{20--25~min} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Un tel budget est compatible avec l'usage visé (consultation matinale avant
+la traite) mais n'est pas compatible avec une détection en temps réel
+de chutes ou de ruptures accidentelles, pour lesquelles le délai de
+15~min d'agrégation du capteur constitue un plancher incontournable.
+Toute latence inférieure à 20~min nécessiterait un changement de
+résolution capteur (non couvert par le matériel actuel) ou une
+détection sur bins bruts sans fenêtre de confirmation, au prix d'une
+explosion attendue des faux positifs.
+
+\paragraph{Rôles et responsabilités.}
+Le système ne produit qu'un signal de triage; toute action clinique
+reste sous responsabilité humaine. Le
+Tableau~\ref{tab:raci_workflow} précise la matrice RACI-lite
+(\emph{Responsable, Approuve, Consulté, Informé}) pour les étapes
+clés du processus.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Matrice de responsabilités pour le workflow de détection.}
+    \label{tab:raci_workflow}
+    \begin{tabular}{p{4.6cm}cccc}
+        \toprule
+        \textbf{Étape} & \textbf{Éleveur} & \textbf{Vétérinaire}
+            & \textbf{Technicien} & \textbf{Système} \\
+        \midrule
+        Maintenance capteurs        & A & -- & R & I \\
+        Exécution quotidienne       & I & -- & C & R \\
+        Consultation alertes        & R & -- & -- & I \\
+        Vérification terrain        & R & C  & -- & I \\
+        Diagnostic différentiel     & C & R  & -- & -- \\
+        Décision de traitement      & A & R  & -- & -- \\
+        Saisie retour clinique      & R & C  & -- & I \\
+        Recalibration annuelle      & C & -- & R & -- \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Un point important ressort de cette matrice: le système n'est
+\emph{responsable} que de deux étapes (exécution, notification), et
+n'a jamais de rôle d'approbation. Ce positionnement, cohérent avec
+la catégorie ``outil de priorisation, pas de diagnostic'' défendue en
+Section~\ref{sec:specificite_detection}, limite l'exposition
+réglementaire du projet, puisqu'il ne relève pas d'un dispositif
+médical vétérinaire au sens du règlement européen 2017/746 ou de son
+équivalent canadien. L'éleveur reste l'unique responsable de la
+vérification terrain, le vétérinaire du diagnostic, et l'équipe
+technique de la maintenance capteurs, soit trois compétences déjà
+présentes dans une exploitation équipée de capteurs.
+
+\paragraph{Plan de contingence.}
+Trois scénarios d'exception méritent un protocole explicite pour
+éviter qu'une défaillance dégrade la confiance dans l'ensemble du
+système:
+\begin{enumerate}
+    \item \textit{Panne capteur sur une ou plusieurs vaches.} Le
+    pipeline détecte naturellement l'absence de données d'entrée
+    (aucun bin pour une vache donnée sur une fenêtre de 24~h) et
+    n'émet aucune alerte pour cette vache, plutôt qu'une fausse
+    négative silencieuse. Un rapport quotidien liste les vaches
+    sans signal, déclenchant une vérification matérielle par le
+    technicien. L'absence d'alerte sur un animal sans capteur
+    \emph{ne doit jamais être interprétée comme une absence de
+    boiterie}: c'est la raison d'être du rapport parallèle.
+    \item \textit{Indisponibilité du vétérinaire.} Lorsque le
+    vétérinaire référent ne peut être joint, l'alerte reste active
+    dans l'interface sur 72~h (équivalent d'un long week-end) et
+    l'éleveur peut escalader vers un second vétérinaire via le
+    contact de secours. Les alertes répétitives sur la même vache
+    sont fusionnées pour éviter la fatigue d'alerte, conformément
+    à l'axe (i) identifié dans l'analyse coût-bénéfice.
+    \item \textit{Dérive de calibration.} La calibration
+    (Section~\ref{subsubsec:calibration}) est vérifiée en continu
+    par comparaison de la distribution empirique du score
+    \texttt{if\_anom\_k\_max} à la distribution de référence du
+    corpus d'entraînement. Un test de Kolmogorov-Smirnov glissant
+    à $p < 0.01$ déclenche un drapeau de recalibration; tant que
+    le drapeau est levé, les probabilités calibrées affichées à
+    l'éleveur sont remplacées par le score ordinal brut et une
+    mention explicite (\emph{``calibration en cours de
+    vérification''}).
+\end{enumerate}
+
+\paragraph{Boucle de rétroaction clinique.}
+La Figure~\ref{fig:usage_flow} (p.~\pageref{fig:usage_flow}) suggère
+une boucle de retour d'expérience comme perspective d'amélioration.
+Concrètement, chaque vérification terrain produit un triplet
+\emph{(alerte, score locomoteur observé, décision prise)} qui,
+agrégé sur 3 à 6 mois, permettrait deux raffinements: (a)~un
+ré-entraînement annuel de la régression isotone de calibration sur
+les \emph{vraies} étiquettes cliniques (et non plus la distinction
+strong vs borderline simulée), et (b)~une calibration par vache
+individuelle (\S\ref{subsec:analyse_par_vache}) informée par le
+taux de vrais positifs historique de cet animal. Aucun des deux
+raffinements ne modifie l'architecture: ils se branchent sur la
+même régression isotone déjà validée sur corpus synthétique, avec
+un apprentissage continu transparent pour l'éleveur.
+
+\FloatBarrier
+% =====================================================================
+\section{Perspectives de déploiement}
+% =====================================================================
+
+Le passage d'un prototype académique à un outil opérationnel en ferme nécessite de combler
+plusieurs écarts. Le benchmark de performance (0.6~s/vache) garantit une exécution
+quotidienne rapide, mais l'intégration aux logiciels de gestion de troupeau, la calibration
+multi-fermes et la validation clinique terrain restent à réaliser. Le
+Tableau~\ref{tab:conditions_deploiement} synthétise ces conditions.
+
+\begin{table}[H]
+    \centering
+    \caption{Conditions de déploiement opérationnel et statut dans le projet actuel.}
+    \label{tab:conditions_deploiement}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Condition} & \textbf{Statut} & \textbf{Effort estimé} \\
+        \midrule
+        Performance ($<$5~min/troupeau) & Satisfait & -- \\
+        Reproductibilité (seeds, SHA) & Satisfait & -- \\
+        Calibration mono-ferme & Satisfait & -- \\
+        Intégration logiciel de gestion & Non couvert & Moyen \\
+        Calibration multi-fermes & Non couvert & Important \\
+        Interface éleveur simplifiée & Prototype & Moyen \\
+        Validation clinique terrain & Non couvert & Important \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ---- Retour sur la validation exploratoire IceTag 2019 ----
+\subsection{Retour sur la validation exploratoire IceTag 2019}
+
+La Section~\ref{sec:validation_mcgill} a présenté les résultats de l'application du
+pipeline gelé au corpus complémentaire IceTag (30~vaches, même ferme, automne~2019).
+La portabilité technique est confirmée, et les alertes sont partiellement cohérentes
+avec les antécédents cliniques pour les cas stables (vaches~821, 3444, 2078). En
+revanche, le cas de la vache~5879 (saine stricte mais fortement alertée) et les
+effectifs trop réduits ($n$\,=\,5 vs $n$\,=\,2) empêchent de conclure à une
+validation clinique.
+
+Une telle limitation est essentiellement imputable au décalage de 8 à 9~mois entre les
+scores SLS (hiver~2019) et les données capteurs (automne~2019). Une validation
+clinique synchrone, dans laquelle les évaluations locomotrices seraient contemporaines
+des enregistrements capteurs, constitue la prochaine étape nécessaire. Une telle
+étude permettrait de quantifier la sensibilité et la spécificité réelles du système
+contre un gold standard vétérinaire, et de déterminer si les alertes observées sur
+la vache~5879 reflètent une boiterie acquise entre les évaluations ou une
+sur-détection du pipeline. La généralisation inter-fermes resterait également à
+confirmer.
+
+\FloatBarrier
+% =====================================================================
+\section{Considérations d'usage et éthique}
+% =====================================================================
+
+\subsection{Responsabilité algorithmique et bien-être animal}
+
+L'adoption d'un système de détection crée une obligation implicite envers les animaux
+surveillés \citep{broom2017animal}: un faux négatif n'est pas une simple erreur
+statistique, mais un animal souffrant non identifié à temps \citep{whay2003assessment}.
+Une telle asymétrie éthique justifie le choix de privilégier la précision temporelle sur
+la sensibilité maximale, et impose que la notification soit toujours suivie d'une
+vérification terrain, idéalement articulée avec un scoring locomoteur
+\citep{sprecher1997lameness,ahdb_mobility_scoring_dairy_cows,dairynz_preventing_managing_lameness_guide_2025}.
+Comme le soulignent \cite{estevez2019animal}, un système qui
+génère trop de bruit peut paradoxalement dégrader le bien-être animal en créant un faux
+sentiment de sécurité.
+
+\subsection{Confiance et adoption}
+
+La confiance dans la fiabilité des alertes est souvent plus déterminante que la performance
+brute \citep{bewley2015precision,venkatesh2003user}. Le phénomène de \textit{fatigue d'alerte}
+\citep{rutten2013invited} constitue le principal obstacle à l'adoption durable: les
+éleveurs cessent de consulter les notifications au-delà d'un seuil critique de faux
+positifs. Le présent système, avec 0.105~notification par vache-jour en configuration MIX,
+reste sous ce seuil. La transparence des règles métier (seuil de score, fenêtre glissante,
+cooldown) constitue un levier supplémentaire de confiance, en distinguant l'approche des
+systèmes commerciaux fonctionnant comme des boîtes noires
+(cf. Tableau~\ref{tab:systemes_commerciaux}).
+
+\subsection{Protection des données}
+
+Les données capteurs révèlent indirectement les pratiques d'élevage et constituent un actif
+informationnel sensible dont la propriété reste largement non résolue
+\citep{wolfert2017big}. Le présent projet, en fonctionnant entièrement en local, préserve
+la souveraineté de l'éleveur sur ses données. Plus largement, trois choix de conception
+répondent aux principes d'IA responsable \citep{carbonell2016ethics}: traçabilité complète
+(versionnage, SHA-256), documentation explicite des limites, et architecture locale sans
+centralisation sur des serveurs tiers
+\citep{palma2025scoping,michelena2025plf_review}.
+
+La Figure~\ref{fig:radar_systeme} synthétise le profil du système proposé sur six dimensions
+complémentaires. Les forces (sensibilité forte, maîtrise des faux positifs, scalabilité,
+interprétabilité) contrastent avec la faiblesse attendue en généralisation multi-fermes
+(0.30), conformément aux limites du corpus. Ce type de représentation permet de
+visualiser les forces et les faiblesses du pipeline de manière globale et de comparer
+différentes configurations ou approches alternatives.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.1]
+        % Axes du radar (6 axes, 60° entre chaque)
+        \foreach \i in {0,...,5} {
+            \pgfmathsetmacro{\angle}{90-\i*60}
+            \draw[black!20] (0,0) -- (\angle:3.5);
+        }
+        % Grille hexagonale
+        \foreach \r in {1,2,3} {
+            \draw[black!10]
+                (90:\r) -- (30:\r) -- (-30:\r) --
+                (-90:\r) -- (-150:\r) -- (150:\r) -- cycle;
+        }
+        % Labels des axes
+        \node[font=\scriptsize, above] at (90:3.7) {Sensibilité cas forts};
+        \node[font=\scriptsize, right] at (30:3.9) {Précision temporelle};
+        \node[font=\scriptsize, right] at (-30:3.9) {Maîtrise faux positifs};
+        \node[font=\scriptsize, below] at (-90:3.7) {Scalabilité};
+        \node[font=\scriptsize, left] at (-150:3.9) {Interprétabilité};
+        \node[font=\scriptsize, left] at (150:3.9) {Généralisation};
+
+        % Polygone du système (valeurs normalisées 0-1)
+        \filldraw[ifblue!15, draw=ifblue, thick]
+            (90:3.325) -- (30:2.275) -- (-30:2.975) --
+            (-90:3.15) -- (-150:3.15) -- (150:1.05) -- cycle;
+        % Points sur les sommets
+        \fill[ifblue] (90:3.325) circle (2.5pt);
+        \fill[ifblue] (30:2.275) circle (2.5pt);
+        \fill[ifblue] (-30:2.975) circle (2.5pt);
+        \fill[ifblue] (-90:3.15) circle (2.5pt);
+        \fill[ifblue] (-150:3.15) circle (2.5pt);
+        \fill[ifblue] (150:1.05) circle (2.5pt);
+    \end{tikzpicture}
+    \caption{Profil radar du système sur six dimensions d'évaluation.}
+    \label{fig:radar_systeme}
+\end{figure}
+
+La Figure~\ref{fig:usage_flow} illustre le positionnement du système dans le flux
+décisionnaire d'un élevage~: la notification est un signal de triage, la décision finale
+revenant à l'opérateur, et les flèches pointillées indiquent une boucle de retour
+d'expérience envisagée comme perspective d'amélioration.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        box/.style={rectangle, draw=black!70, minimum height=1.1cm,
+                     minimum width=3cm, align=center, font=\small, inner sep=12pt},
+        decision/.style={rectangle, draw=black!70, minimum width=2.8cm, minimum height=1.1cm,
+                         align=center, font=\small, inner sep=12pt},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, black},
+        darrow/.style={-{Stealth[length=2.5mm]}, thick, dashed, black!50},
+        lbl/.style={font=\scriptsize, black, fill=white, inner sep=1.5pt},
+    ]
+        \node[box, fill=profgray!10] (capteur) {Capteurs\\[-7pt]comportementaux};
+        \node[box, fill=ifblue!12, right=1.4cm of capteur] (pipeline) {Pipeline\\[-7pt]de détection};
+        \node[box, fill=loforange!12, right=1.4cm of pipeline] (notif) {Notification\\[-7pt]boiterie probable};
+        \node[decision, fill=rulegreen!12, right=1.4cm of notif] (decision) {Vérification\\[-7pt]terrain};
+        \node[box, fill=rulegreen!15, above right=0.8cm and 1.2cm of decision]
+            (action) {Intervention\\[-7pt]vétérinaire};
+        \node[box, fill=profgray!8, below right=0.8cm and 1.2cm of decision]
+            (noaction) {Pas d'action\\[-7pt](faux positif)};
+
+        \draw[arrow] (capteur) -- (pipeline);
+        \draw[arrow] (pipeline) -- (notif);
+        \draw[arrow] (notif) -- (decision);
+        \draw[arrow] (decision.north east) -- (action.west)
+            node[lbl, pos=0.5, above, sloped] {confirme};
+        \draw[arrow] (decision.south east) -- (noaction.west)
+            node[lbl, pos=0.5, below, sloped] {infirme};
+
+        % Boucle retour
+        \draw[darrow] (noaction.south) -- ++(0,-0.8) -| (pipeline.south)
+            node[lbl, pos=0.25, below] {retour d'expérience (perspective)};
+    \end{tikzpicture}%
+    }
+    \caption{Positionnement du système dans le flux décisionnaire d'un élevage.}
+    \label{fig:usage_flow}
+\end{figure}
+
+\vspace{0.5em}
+\noindent
+En résumé, ce chapitre a mis en perspective les forces et les limites du système, identifié les menaces
+à la validité et discuté les considérations éthiques liées à son déploiement. La conclusion
+qui suit synthétise les contributions principales de ce mémoire et propose des perspectives
+de travail futur à court, moyen et long terme.

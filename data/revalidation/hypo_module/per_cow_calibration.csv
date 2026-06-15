@@ -1,0 +1,8 @@
+indicateur,reference,calibre,difference
+Fond moyen / vache-jour,0.4016,0.4016,0.0
+Fond etendue min,0.1965,0.1965,0.0
+Fond etendue max,0.5896,0.5896,0.0
+Fond CV inter-vache,0.2437,0.2437,0.0
+Couverture (graduels),0.8788,0.8788,0.0
+Nouveau depart (graduels),0.5758,0.6061,0.0303
+IoU20 (graduels),0.3939,0.3333,-0.0606

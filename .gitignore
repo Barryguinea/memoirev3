@@ -1,0 +1,34 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.py[cod]
+memoire/*.aux
+memoire/*.bbl
+memoire/*.blg
+memoire/*.fdb_latexmk
+memoire/*.fls
+memoire/*.lof
+memoire/*.log
+memoire/*.lot
+memoire/*.out
+memoire/*.synctex.gz
+memoire/*.toc
+# Donnees capteurs brutes confidentielles — NE PAS diffuser (depot autonome)
+brut.csv
+data/brut.csv
+**/brut.csv
+cowalert_export.csv
+data/cowalert_export.csv
+**/cowalert_export.csv
+COWCSV.csv
+**/COWCSV.csv
+# Donnees brutes McGill confidentielles
+mcgill_iot_cattle/
+**/mcgill_brut.csv
+# Artefacts generes non versionnes
+data/validation_robuste/
+data/validation_manual/
+data/performance/
+logs/
+*.partial.csv

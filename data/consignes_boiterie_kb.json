@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "Base de consignes cliniques — boiterie (vaches laitières)",
+    "version": "1.1.0",
+    "date": "2026-02-26",
+    "language": "fr",
+    "disclaimer": "Informations générales. Ne remplace pas l'avis vétérinaire. Respecter prescriptions et retraits.",
+    "owner": "Equipe projet",
+    "reviewed_by": "A valider (référent clinique / vétérinaire)",
+    "review_date": "2026-02-26",
+    "next_review_date": "2026-08-26",
+    "source_policy": "Sources de référence vétérinaires / institutionnelles priorisées; revue périodique de la KB."
+  },
+  "levels": {
+    "suspect": {
+      "label": "Suspect",
+      "priority": 1,
+      "summary": "Surveillance active (<24h).",
+      "actions_0_24h": [
+        "Observer locomotion (dos arqué, appui, foulée).",
+        "Vérifier pieds (propreté/état) sans stress inutile.",
+        "Contrôler environnement (sol, humidité, surpeuplement, temps debout).",
+        "Marquer l'animal et consigner le cas (date, observation, score mobilité)."
+      ],
+      "call_vet_if": [
+        "Aggravation rapide de la boiterie entre deux contrôles.",
+        "Persistance >24–48h malgré adaptation de conduite."
+      ],
+      "do_not": [
+        "Ne pas forcer de longues marches inutiles pour l'observation.",
+        "Ne pas retarder la réévaluation si aggravation clinique."
+      ],
+      "references": [
+        "merck_overview_lameness_cattle",
+        "ahdb_mobility_scoring_dairy_cows"
+      ],
+      "confidence": "medium",
+      "last_review_date": "2026-02-26"
+    },
+    "probable": {
+      "label": "Probable",
+      "priority": 2,
+      "summary": "Traiter rapidement (idéalement <24–48h).",
+      "actions_0_2h": [
+        "Mettre au calme sur litière sèche et confortable; réduire marche.",
+        "Préparer examen du pied par personnel formé."
+      ],
+      "actions_24_48h": [
+        "Parage thérapeutique (éviter de trop parer/saignement).",
+        "Bloc/“cowslip” sur l’onglon sain si approprié (décharge).",
+        "Gestion de la douleur (AINS/NSAID selon protocole vétérinaire).",
+        "Si dermatite digitée: traitement local + renforcer prévention pédiluve.",
+        "Si suspicion foot rot: contacter vétérinaire (antibiotiques systémiques + retraits)."
+      ],
+      "call_vet_if": [
+        "Suspicion d'infection profonde / foot rot.",
+        "Absence d'amélioration nette après première prise en charge.",
+        "Douleur importante ou dégradation de l'état général."
+      ],
+      "do_not": [
+        "Ne pas parer excessivement jusqu'au saignement.",
+        "Ne pas administrer de traitement médicamenteux hors protocole vétérinaire."
+      ],
+      "recheck": "Réévaluer 3–7 jours; si pas d'amélioration nette, revoir diagnostic/vétérinaire.",
+      "references": [
+        "merck_hoof_origin_lameness_cattle",
+        "dairynz_treating_lameness",
+        "ahdb_mobility_score_sheet_48h_score2"
+      ],
+      "confidence": "medium",
+      "last_review_date": "2026-02-26"
+    },
+    "critique": {
+      "label": "Critique",
+      "priority": 3,
+      "summary": "Priorité; intervention immédiate + vétérinaire si red flags.",
+      "actions_0_2h": [
+        "Isoler et litière profonde; limiter marche.",
+        "Contacter vétérinaire si signes d'urgence (voir red flags)."
+      ],
+      "red_flags": [
+        "Incapacité à se lever ou à aller boire/manger.",
+        "Fièvre, abattement, anorexie marquée.",
+        "Gonflement important du membre, plaie ouverte/écoulement abondant.",
+        "Boiterie très aiguë/douleur extrême."
+      ],
+      "actions_24h": [
+        "Examen complet et plan de traitement (parage, bloc, AINS, +/- antibiotiques selon diagnostic)."
+      ],
+      "call_vet_if": [
+        "Immédiatement si un red flag est présent."
+      ],
+      "do_not": [
+        "Ne pas retarder l'examen vétérinaire en présence de signes d'urgence.",
+        "Ne pas déplacer l'animal inutilement si la douleur est sévère."
+      ],
+      "references": [
+        "merck_overview_lameness_cattle",
+        "merck_hoof_origin_lameness_cattle"
+      ],
+      "confidence": "high",
+      "last_review_date": "2026-02-26"
+    }
+  },
+  "herd_prevention": [
+    "Détection précoce via scoring/mobility scoring + traitement rapide.",
+    "Pédiluves bien gérés (outil de contrôle des DD; pas un traitement curatif seul).",
+    "Améliorer confort/sols/litière; réduire station debout prolongée.",
+    "Protocole écrit + formation + enregistrement systématique des cas."
+  ],
+  "sources": [
+    {
+      "id": "merck_overview_lameness_cattle",
+      "name": "Merck Veterinary Manual — Overview of Lameness in Cattle",
+      "url": "https://www.merckvetmanual.com/musculoskeletal-system/lameness-in-cattle/overview-of-lameness-in-cattle",
+      "publisher": "Merck Veterinary Manual",
+      "type": "reference",
+      "language": "en",
+      "evidence_level": "reference",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Révision/maj indiquée sur la page (Apr 2023; Modified Sept 2024)."
+    },
+    {
+      "id": "merck_hoof_origin_lameness_cattle",
+      "name": "Merck Veterinary Manual — Lameness originating in the hoof in cattle",
+      "url": "https://www.merckvetmanual.com/musculoskeletal-system/lameness-in-cattle/lameness-originating-in-the-hoof-in-cattle",
+      "publisher": "Merck Veterinary Manual",
+      "type": "reference",
+      "language": "en",
+      "evidence_level": "reference",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Lésions infectieuses (DD, etc.)."
+    },
+    {
+      "id": "dairynz_treating_lameness",
+      "name": "DairyNZ — Treating lameness",
+      "url": "https://www.dairynz.co.nz/animal/lameness/treating-lameness/",
+      "publisher": "DairyNZ",
+      "type": "guide",
+      "language": "en",
+      "evidence_level": "practice_guide",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Douleur (AINS) + bloc par défaut (si approprié) + traitement rapide."
+    },
+    {
+      "id": "dairynz_preventing_managing_lameness_guide_2025",
+      "name": "DairyNZ — Preventing and managing lameness guide (PDF, 2025)",
+      "url": "https://www.dairynz.co.nz/media/hr2hwwq2/preventing-and-managing-lameness-guide-2025-v2.pdf",
+      "publisher": "DairyNZ",
+      "type": "guide_pdf",
+      "language": "en",
+      "evidence_level": "practice_guide",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Guide récent; contact vétérinaire si pas d'amélioration en ~1 semaine."
+    },
+    {
+      "id": "ahdb_mobility_scoring_dairy_cows",
+      "name": "AHDB — Mobility scoring for dairy cows",
+      "url": "https://ahdb.org.uk/knowledge-library/mobility-scoring-for-dairy-cows",
+      "publisher": "AHDB",
+      "type": "guidance",
+      "language": "en",
+      "evidence_level": "practice_guidance",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Cadre de scoring pour déclencher traitements."
+    },
+    {
+      "id": "ahdb_mobility_score_sheet_48h_score2",
+      "name": "AHDB — Mobility score score sheet (48h pour score 2)",
+      "url": "https://projectblue.blob.core.windows.net/media/Default/Research%20Papers/Dairy/ahdb_dairy_mobility_score_score_sheet__2_.pdf",
+      "publisher": "AHDB",
+      "type": "score_sheet",
+      "language": "en",
+      "evidence_level": "practice_guidance",
+      "reliability": "high",
+      "review_date": "2026-02-26",
+      "note": "Recommande traiter score 2 sous 48h, score 3 ASAP."
+    },
+    {
+      "id": "uw_madison_footbath_management",
+      "name": "UW-Madison Extension — Footbath management",
+      "url": "https://dairy.extension.wisc.edu/articles/footbath-management/",
+      "publisher": "UW-Madison Extension",
+      "type": "extension_article",
+      "language": "en",
+      "evidence_level": "extension_guidance",
+      "reliability": "medium",
+      "review_date": "2026-02-26",
+      "note": "Pédiluves: contrôle DD; design/gestion importants."
+    }
+  ]
+}

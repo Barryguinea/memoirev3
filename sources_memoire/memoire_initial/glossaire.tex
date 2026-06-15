@@ -1,0 +1,55 @@
+\chapter*{Liste des acronymes et abréviations}
+\addcontentsline{toc}{chapter}{Liste des acronymes et abréviations}
+
+\begin{longtable}{@{}lp{11cm}@{}}
+\textbf{AUC-PR}  & \textit{Area Under the Precision-Recall Curve} : aire sous la courbe précision/rappel \\[3pt]
+\textbf{AUC-ROC} & \textit{Area Under the ROC Curve} : aire sous la courbe ROC (taux vrais positifs vs faux positifs) \\[3pt]
+\textbf{Brier}   & \textit{Brier score} : erreur quadratique moyenne entre probabilités prédites et issues observées \\[3pt]
+\textbf{CSV}     & \textit{Comma-Separated Values} : format de fichier tabulaire \\[3pt]
+\textbf{DL}      & \textit{Deep Learning} : apprentissage profond \\[3pt]
+\textbf{ECE}     & \textit{Expected Calibration Error} : erreur de calibration espérée, moyenne pondérée des écarts entre fiabilité et précision sur les bins de scores \\[3pt]
+\textbf{FAIR}    & \textit{Findable, Accessible, Interoperable, Reusable} : principes directeurs pour la gestion des données scientifiques \\[3pt]
+\textbf{FN}      & \textit{False Negative} : faux négatif \\[3pt]
+\textbf{FP}      & \textit{False Positive} : faux positif \\[3pt]
+\textbf{GO}      & Verdict positif : la configuration satisfait tous les critères de validation \\[3pt]
+\textbf{IF}      & \textit{Isolation Forest} : algorithme de détection d'anomalies par isolation \\[3pt]
+\textbf{IoU}     & \textit{Intersection over Union} : métrique de recouvrement temporel \\[3pt]
+\textbf{JSON}    & \textit{JavaScript Object Notation} : format d'échange de données \\[3pt]
+\textbf{LOCO}    & \textit{Leave-One-Cow-Out} : protocole de validation laissant une vache hors de l'apprentissage à chaque itération \\[3pt]
+\textbf{LOF}     & \textit{Local Outlier Factor} : détecteur d'anomalies basé sur la densité locale \\[3pt]
+\textbf{MAD}     & \textit{Median Absolute Deviation} : écart absolu médian \\[3pt]
+\textbf{McNemar} & Test statistique apparié pour comparer deux classifieurs sur les mêmes échantillons (version exacte avec loi binomiale pour faibles effectifs) \\[3pt]
+\textbf{MCE}     & \textit{Maximum Calibration Error} : écart maximal entre fiabilité et précision sur les bins de scores \\[3pt]
+\textbf{MI}      & \textit{Motion Index} : indice de mouvement mesuré par le capteur \\[3pt]
+\textbf{MIX}     & Mode de cohérence multi-signaux (IF + z-scores + pic MI) \\[3pt]
+\textbf{ML}      & \textit{Machine Learning} : apprentissage automatique \\[3pt]
+\textbf{MM7}     & Moyenne mobile sur 7~périodes \\[3pt]
+\textbf{NMS}     & \textit{Non-Maximum Suppression} : suppression des notifications redondantes \\[3pt]
+\textbf{NO-GO}   & Verdict négatif : la configuration échoue à au moins un critère de validation \\[3pt]
+\textbf{PLF}     & \textit{Precision Livestock Farming} : élevage de précision \\[3pt]
+\textbf{RACI}    & \textit{Responsible, Accountable, Consulted, Informed} : matrice d'attribution des rôles dans un workflow opérationnel \\[3pt]
+\textbf{SHA}     & \textit{Secure Hash Algorithm} : algorithme de hachage cryptographique \\[3pt]
+\textbf{SHAP}    & \textit{SHapley Additive exPlanations} : méthode d'attribution d'importance basée sur les valeurs de Shapley issues de la théorie des jeux \\[3pt]
+\textbf{UTAUT}   & \textit{Unified Theory of Acceptance and Use of Technology} : modèle d'acceptation technologique \\[3pt]
+\textbf{Wilcoxon} & Test des rangs signés de Wilcoxon : test non paramétrique apparié pour comparer deux échantillons sur une métrique continue \\[3pt]
+\end{longtable}
+
+\newpage
+
+\noindent\textbf{Termes techniques}
+
+\vspace{0.5em}
+
+\begin{tabular}{@{}lp{10cm}@{}}
+\textbf{Bin}               & Intervalle temporel discret (15~minutes par défaut) servant d'unité d'analyse \\[3pt]
+\textbf{Boiterie}          & Altération de la locomotion chez les bovins, se traduisant par une démarche asymétrique ou un appui réduit sur un ou plusieurs membres \\[3pt]
+\textbf{Contamination}     & Fraction attendue d'anomalies dans le jeu de données; hyperparamètre principal d'Isolation Forest (fixé à 0.06) \\[3pt]
+\textbf{Cooldown}          & Période minimale d'espacement entre deux notifications consécutives pour une même vache (fixé à 12~heures) \\[3pt]
+\textbf{Cow-day}           & Unité de normalisation : un jour d'observation pour une vache; sert de dénominateur pour le taux de fausses notifications \\[3pt]
+\textbf{Feature}           & Variable calculée à partir des signaux bruts du capteur, servant d'entrée au modèle de détection \\[3pt]
+\textbf{Injection}         & Modification contrôlée des signaux bruts d'une vache cible pour simuler un épisode de boiterie ou un bruit \\[3pt]
+\textbf{Persistance}       & Règle métier exigeant qu'un nombre minimum de bins anomaux soit observé dans une fenêtre temporelle glissante avant de déclencher une alerte \\[3pt]
+\textbf{Pipeline}          & Chaîne de traitement complète, depuis l'ingestion des données brutes jusqu'à l'émission des notifications \\[3pt]
+\textbf{Seed}              & Graine aléatoire fixant le générateur pseudo-aléatoire pour assurer la reproductibilité \\[3pt]
+\textbf{Z-score robuste}   & Mesure d'écart par rapport à la médiane, normalisée par la MAD : $z_i = (x_i - \tilde{\mu}) / (1.4826 \times \text{MAD})$ \\[3pt]
+\end{tabular}

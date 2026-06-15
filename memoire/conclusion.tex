@@ -1,0 +1,60 @@
+\begin{conclusion}
+\label{chapitre:conclusion}
+
+\newcommand{\conclusionheading}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
+
+\conclusionheading{Synthèse}
+Ce mémoire a conçu et évalué une alerte comportementale temporelle à partir de capteurs
+IceQube. Le résultat principal est la branche HYPO, qui recherche une réduction persistante
+et concordante des pas, du mouvement, des transitions et de la posture par rapport à la
+période de référence individuelle. Une extension exploratoire ajoute une branche INSTABILITÉ et une
+fusion hiérarchique qui distingue surveillance et notification de vérification.
+
+\conclusionheading{Résultats principaux}
+Sur 33 dégradations graduelles injectées après la période de référence, HYPO produit une couverture attribuable dans
+87,9\,\% des cas, un nouveau départ dans 57,6\,\% et IoU20 dans 39,4\,\%. Le contrôle bref
+est rejeté et le fond atteint 0,402 notification par vache-jour. Dans l'ablation, HYPO atteint
+29,5\,\% à IoU20, contre 0\,\% pour les trois comparateurs IF/LOF. L'analyse OFAT montre que
+l'agrégation et le nombre de familles concordantes structurent principalement le compromis.
+
+Sur la campagne étendue de 132 scénarios, la fusion hiérarchique couvre 72,7\,\% des
+scénarios de vérification, 66,7\,\% des instabilités en surveillance et 90,9\,\% des séquences.
+Elle ne dépasse cependant pas HYPO sur toutes les dimensions: IoU20 reste à 29,5\,\%, le fond
+passe de 0,446 à 0,571 et 40,9\,\% des facteurs confondants sont alertés. L'extension constitue
+donc un résultat mitigé, non une preuve de supériorité. La chaîne de traitement complète traite le corpus
+en 10,64 secondes en médiane sur cinq répétitions.
+
+\conclusionheading{Portée clinique}
+La limite centrale est causale: 81,8\,\% des hypoactivités non locomotrices sont alertées.
+Les capteurs reconnaissent une forme comportementale sans identifier son origine. Dans la
+cohorte IceTag--SLS, les trois cas SLS~$\geq2$ appartiennent tous au groupe
+\textit{Exercise}; l'association observée ne valide donc pas une détection clinique de la
+boiterie. Une notification signifie qu'un comportement mérite une vérification, non que la
+vache soit boiteuse.
+
+\conclusionheading{Contributions}
+Le travail fournit une validation attribuable de HYPO avec intervalles de confiance, une
+ablation et ses tailles d'effet, une analyse OFAT, une courbe détection--charge, une tentative
+de calibration individuelle rapportée malgré son résultat négatif, une extension
+bidirectionnelle avec contrôles de confusion, une évaluation du temps d'exécution, une analyse SLS
+synchronisée, une interface de priorisation et des artefacts reproductibles. Sa
+contribution méthodologique est de séparer clairement les résultats établis, les hypothèses
+exploratoires et les affirmations cliniques non démontrées.
+
+\conclusionheading{Disponibilité}
+Le code source, les paramètres figés, les douze profils d'injection et les scripts
+d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
+(Annexe~\ref{annexe:validation}). Les données capteurs brutes ne peuvent être diffusées pour
+des raisons de confidentialité, mais la procédure de reproduction et les artefacts documentés
+permettent de rejouer intégralement la démarche, des injections jusqu'aux figures du
+manuscrit.
+
+\conclusionheading{Perspectives}
+La prochaine étape est une validation longitudinale avec scores locomoteurs, examens des
+pieds, causes non locomotrices et métadonnées de contexte. Une séparation stricte entre jeu
+de développement et jeu de test permettra de régler les seuils sans optimisme. Des signaux
+de démarche ou d'asymétrie seraient plus proches du construit clinique que la seule quantité
+de mouvement. Enfin, la charge de vérification devra être évaluée avec les utilisateurs afin
+de définir un compromis acceptable en ferme.
+
+\end{conclusion}

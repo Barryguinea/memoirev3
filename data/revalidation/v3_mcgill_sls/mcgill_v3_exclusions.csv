@@ -1,0 +1,16 @@
+cow,variant,first_sensor_time,last_sensor_time_before_score,baseline_days_before_pre7,primary_coverage,exclusion_reason
+2083,hypo_only,2019-02-15 15:00:00,2019-02-22 13:45:00,17.375,0.0,baseline_trop_courte;couverture_pre7_insuffisante
+8502,hypo_only,2019-01-16 15:15:00,2019-01-23 14:00:00,47.365,0.0,couverture_pre7_insuffisante
+2081,hypo_only,,,,,score_sls_12_mars_absent
+2083,instability_only,2019-02-15 15:00:00,2019-02-22 13:45:00,17.375,0.0,baseline_trop_courte;couverture_pre7_insuffisante
+8502,instability_only,2019-01-16 15:15:00,2019-01-23 14:00:00,47.365,0.0,couverture_pre7_insuffisante
+2081,instability_only,,,,,score_sls_12_mars_absent
+2083,or,2019-02-15 15:00:00,2019-02-22 13:45:00,17.375,0.0,baseline_trop_courte;couverture_pre7_insuffisante
+8502,or,2019-01-16 15:15:00,2019-01-23 14:00:00,47.365,0.0,couverture_pre7_insuffisante
+2081,or,,,,,score_sls_12_mars_absent
+2083,hierarchical,2019-02-15 15:00:00,2019-02-22 13:45:00,17.375,0.0,baseline_trop_courte;couverture_pre7_insuffisante
+8502,hierarchical,2019-01-16 15:15:00,2019-01-23 14:00:00,47.365,0.0,couverture_pre7_insuffisante
+2081,hierarchical,,,,,score_sls_12_mars_absent
+2083,sequential_24_72h,2019-02-15 15:00:00,2019-02-22 13:45:00,17.375,0.0,baseline_trop_courte;couverture_pre7_insuffisante
+8502,sequential_24_72h,2019-01-16 15:15:00,2019-01-23 14:00:00,47.365,0.0,couverture_pre7_insuffisante
+2081,sequential_24_72h,,,,,score_sls_12_mars_absent

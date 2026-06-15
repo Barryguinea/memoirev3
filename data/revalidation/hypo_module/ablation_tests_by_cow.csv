@@ -1,0 +1,11 @@
+paire,n_cows,detect_1,detect_2,detect_favori,p_wilcoxon_detection,iou_1,iou_2,iou_favori,p_wilcoxon_iou
+A vs B,11,0.432,0.159,A. Alerte temporelle multivariée,0.04297,0.137,0.004,A. Alerte temporelle multivariée,0.00098
+A vs C,11,0.432,0.136,A. Alerte temporelle multivariée,0.01562,0.137,0.002,A. Alerte temporelle multivariée,0.00098
+A vs D,11,0.432,0.159,A. Alerte temporelle multivariée,0.04297,0.137,0.005,A. Alerte temporelle multivariée,0.00098
+A vs E,11,0.432,0.273,A. Alerte temporelle multivariée,0.0625,0.137,0.141,E. Comparateur pédométrique (pas seuls),0.96582
+B vs C,11,0.159,0.136,B. IF + règles de persistance,1.0,0.004,0.002,B. IF + règles de persistance,0.4375
+B vs D,11,0.159,0.159,égalité,1.0,0.004,0.005,D. LOF + règles,0.125
+B vs E,11,0.159,0.273,E. Comparateur pédométrique (pas seuls),0.3125,0.004,0.141,E. Comparateur pédométrique (pas seuls),0.00098
+C vs D,11,0.136,0.159,D. LOF + règles,1.0,0.002,0.005,D. LOF + règles,0.10938
+C vs E,11,0.136,0.273,E. Comparateur pédométrique (pas seuls),0.17188,0.002,0.141,E. Comparateur pédométrique (pas seuls),0.00098
+D vs E,11,0.159,0.273,E. Comparateur pédométrique (pas seuls),0.34375,0.005,0.141,E. Comparateur pédométrique (pas seuls),0.00098

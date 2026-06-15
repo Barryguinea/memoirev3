@@ -1,0 +1,249 @@
+claim,manuscript_value,artifact_value,source,passed
+Corpus rows,37839.0,37839.0,data/brut.csv,True
+Corpus cows,28.0,28.0,data/brut.csv,True
+Corpus duration days,41.2,41.197916666666664,data/brut.csv,True
+Steps mean,4.0,3.9689738100901186,data/brut.csv,True
+Steps standard deviation,15.4,15.373304279389345,data/brut.csv,True
+Steps minimum,0.0,0.0,data/brut.csv,True
+Steps maximum,387.0,387.0,data/brut.csv,True
+Motion Index mean,25.5,25.489045693596555,data/brut.csv,True
+Motion Index standard deviation,103.7,103.69545086545754,data/brut.csv,True
+Motion Index minimum,0.0,0.0,data/brut.csv,True
+Motion Index maximum,3351.0,3351.0,data/brut.csv,True
+Transitions mean,0.16,0.1564259097756283,data/brut.csv,True
+Transitions standard deviation,0.4,0.404371006613788,data/brut.csv,True
+Transitions minimum,0.0,0.0,data/brut.csv,True
+Transitions maximum,6.0,6.0,data/brut.csv,True
+CowAlert matched rows,7631.0,7631.0,hypo_module/cowalert_provenance.csv,True
+CowAlert source rows,7823.0,7823.0,hypo_module/cowalert_provenance.csv,True
+CowAlert matched percentage,97.5,97.5,hypo_module/cowalert_provenance.csv,True
+CowAlert matched cows,5.0,5.0,hypo_module/cowalert_provenance.csv,True
+CowAlert Steps correlation,1.0,1.0,hypo_module/cowalert_provenance.csv,True
+CowAlert Motion Index correlation,1.0,1.0,hypo_module/cowalert_provenance.csv,True
+CowAlert Transitions correlation,1.0,1.0,hypo_module/cowalert_provenance.csv,True
+HYPO gradual_mild n_events,11.0,11.0,hypo_module/detection_summary.csv,True
+HYPO gradual_mild new_warning_start_mean,0.455,0.455,hypo_module/detection_summary.csv,True
+HYPO gradual_mild warning_coverage_mean,0.727,0.727,hypo_module/detection_summary.csv,True
+HYPO gradual_mild detect_iou20_mean,0.273,0.273,hypo_module/detection_summary.csv,True
+HYPO gradual_mild best_iou_mean,0.087,0.087,hypo_module/detection_summary.csv,True
+HYPO gradual_moderate n_events,11.0,11.0,hypo_module/detection_summary.csv,True
+HYPO gradual_moderate new_warning_start_mean,0.636,0.636,hypo_module/detection_summary.csv,True
+HYPO gradual_moderate warning_coverage_mean,0.909,0.909,hypo_module/detection_summary.csv,True
+HYPO gradual_moderate detect_iou20_mean,0.364,0.364,hypo_module/detection_summary.csv,True
+HYPO gradual_moderate best_iou_mean,0.192,0.192,hypo_module/detection_summary.csv,True
+HYPO gradual_marked n_events,11.0,11.0,hypo_module/detection_summary.csv,True
+HYPO gradual_marked new_warning_start_mean,0.636,0.636,hypo_module/detection_summary.csv,True
+HYPO gradual_marked warning_coverage_mean,1.0,1.0,hypo_module/detection_summary.csv,True
+HYPO gradual_marked detect_iou20_mean,0.545,0.545,hypo_module/detection_summary.csv,True
+HYPO gradual_marked best_iou_mean,0.269,0.269,hypo_module/detection_summary.csv,True
+HYPO isolated_short_variation n_events,11.0,11.0,hypo_module/detection_summary.csv,True
+HYPO isolated_short_variation new_warning_start_mean,0.0,0.0,hypo_module/detection_summary.csv,True
+HYPO isolated_short_variation warning_coverage_mean,0.0,0.0,hypo_module/detection_summary.csv,True
+HYPO isolated_short_variation detect_iou20_mean,0.0,0.0,hypo_module/detection_summary.csv,True
+HYPO isolated_short_variation best_iou_mean,0.0,0.0,hypo_module/detection_summary.csv,True
+HYPO eligible cows,11.0,11.0,hypo_module/events_primary.csv,True
+HYPO events,44.0,44.0,hypo_module/events_primary.csv,True
+Baseline ratio,0.6,0.6,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO aggregation hours,12.0,12.0,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO persistence hours,6.0,6.0,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO refractory period hours,24.0,24.0,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO activity minimum change,0.1,0.1,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO posture minimum change,0.05,0.05,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO score threshold,0.12,0.12,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO CUSUM drift,0.07,0.07,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO CUSUM threshold,1.2,1.2,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO minimum families,3.0,3.0,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO minimum coverage percentage,25.0,25.0,hypo_module/parameter_sensitivity/parameter_sensitivity_configurations.json,True
+HYPO new onset,0.5758,0.5757575757575758,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO attributable coverage,0.8788,0.8787878787878788,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO IoU20,0.3939,0.3939393939393939,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO mean IoU,0.1827,0.1827362737290056,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO median onset delay hours,20.75,20.75,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO background per cow-day,0.4016,0.4016,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+HYPO background P90,0.4913,0.4913,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT configurations including reference,21.0,21.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT event evaluations,924.0,924.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT new onset range minimum,0.455,0.4545454545454545,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT new onset range maximum,0.667,0.6666666666666666,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT coverage range minimum,0.636,0.6363636363636364,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT coverage range maximum,0.909,0.9090909090909092,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT IoU20 range minimum,0.273,0.2727272727272727,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT IoU20 range maximum,0.455,0.4545454545454545,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT delay range minimum,15.5,15.5,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT delay range maximum,24.5,24.5,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT background range minimum,0.187,0.1873,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT background range maximum,0.553,0.5533,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+OFAT brief control maximum,0.0,0.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True
+Bootstrap couverture_attribuable point,0.8788,0.8788,hypo_module/bootstrap_ci.csv,True
+Bootstrap couverture_attribuable lower,0.7879,0.7879,hypo_module/bootstrap_ci.csv,True
+Bootstrap couverture_attribuable upper,0.9697,0.9697,hypo_module/bootstrap_ci.csv,True
+Bootstrap nouveau_depart point,0.5758,0.5758,hypo_module/bootstrap_ci.csv,True
+Bootstrap nouveau_depart lower,0.4242,0.4242,hypo_module/bootstrap_ci.csv,True
+Bootstrap nouveau_depart upper,0.7576,0.7576,hypo_module/bootstrap_ci.csv,True
+Bootstrap iou20 point,0.3939,0.3939,hypo_module/bootstrap_ci.csv,True
+Bootstrap iou20 lower,0.2424,0.2424,hypo_module/bootstrap_ci.csv,True
+Bootstrap iou20 upper,0.5455,0.5455,hypo_module/bootstrap_ci.csv,True
+Calibration Fond moyen / vache-jour reference,0.4016,0.4016,hypo_module/per_cow_calibration.csv,True
+Calibration Fond moyen / vache-jour calibrated,0.4016,0.4016,hypo_module/per_cow_calibration.csv,True
+Calibration Fond CV inter-vache reference,0.2437,0.2437,hypo_module/per_cow_calibration.csv,True
+Calibration Fond CV inter-vache calibrated,0.2437,0.2437,hypo_module/per_cow_calibration.csv,True
+Calibration Couverture (graduels) reference,0.8788,0.8788,hypo_module/per_cow_calibration.csv,True
+Calibration Couverture (graduels) calibrated,0.8788,0.8788,hypo_module/per_cow_calibration.csv,True
+Calibration Nouveau depart (graduels) reference,0.5758,0.5758,hypo_module/per_cow_calibration.csv,True
+Calibration Nouveau depart (graduels) calibrated,0.6061,0.6061,hypo_module/per_cow_calibration.csv,True
+Calibration IoU20 (graduels) reference,0.3939,0.3939,hypo_module/per_cow_calibration.csv,True
+Calibration IoU20 (graduels) calibrated,0.3333,0.3333,hypo_module/per_cow_calibration.csv,True
+Calibration factor minimum,0.98,0.98171,hypo_module/per_cow_calibration_by_cow.csv,True
+Calibration factor maximum,1.03,1.026443,hypo_module/per_cow_calibration_by_cow.csv,True
+Detection-background threshold 0.04 background_per_cow_day,0.419487,0.419487,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.04 attributable_coverage,0.878788,0.878788,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.04 new_start_rate,0.575758,0.575758,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.04 iou20_rate,0.393939,0.393939,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.04 brief_control_rejection,1.0,1.0,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.12 background_per_cow_day,0.401636,0.401636,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.12 attributable_coverage,0.878788,0.878788,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.12 new_start_rate,0.575758,0.575758,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.12 iou20_rate,0.393939,0.393939,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.12 brief_control_rejection,1.0,1.0,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.14 background_per_cow_day,0.374861,0.374861,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.14 attributable_coverage,0.878788,0.878788,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.14 new_start_rate,0.575758,0.575758,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.14 iou20_rate,0.454545,0.454545,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.14 brief_control_rejection,1.0,1.0,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.2 background_per_cow_day,0.330234,0.330234,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.2 attributable_coverage,0.787879,0.787879,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.2 new_start_rate,0.545455,0.545455,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.2 iou20_rate,0.30303,0.30303,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Detection-background threshold 0.2 brief_control_rejection,1.0,1.0,hypo_module/detection_background_curve/detection_background_curve.csv,True
+Failure mode gradual_uncovered numerator,4.0,4.0,hypo_module/failure_modes.csv,True
+Failure mode gradual_uncovered denominator,33.0,33.0,hypo_module/failure_modes.csv,True
+Failure mode gradual_poorly_localized numerator,16.0,16.0,hypo_module/failure_modes.csv,True
+Failure mode gradual_poorly_localized denominator,33.0,33.0,hypo_module/failure_modes.csv,True
+Failure mode covered_without_novel_start numerator,10.0,10.0,hypo_module/failure_modes.csv,True
+Failure mode covered_without_novel_start denominator,29.0,29.0,hypo_module/failure_modes.csv,True
+Failure mode nonlocomotor_hypoactivity_alerted numerator,9.0,9.0,hypo_module/failure_modes.csv,True
+Failure mode nonlocomotor_hypoactivity_alerted denominator,11.0,11.0,hypo_module/failure_modes.csv,True
+Failure mode pure_instability_in_surveillance numerator,22.0,22.0,hypo_module/failure_modes.csv,True
+Failure mode pure_instability_in_surveillance denominator,33.0,33.0,hypo_module/failure_modes.csv,True
+Failure mode pure_instability_actionable_episode numerator,0.0,0.0,hypo_module/failure_modes.csv,True
+Failure mode pure_instability_actionable_episode denominator,33.0,33.0,hypo_module/failure_modes.csv,True
+Failure mode brief_control_alerted numerator,0.0,0.0,hypo_module/failure_modes.csv,True
+Failure mode brief_control_alerted denominator,11.0,11.0,hypo_module/failure_modes.csv,True
+Ablation A. Alerte temporelle multivariée detect_any,0.432,0.432,hypo_module/ablation_summary.csv,True
+Ablation A. Alerte temporelle multivariée iou20,0.295,0.295,hypo_module/ablation_summary.csv,True
+Ablation A. Alerte temporelle multivariée best_iou,0.137,0.137,hypo_module/ablation_summary.csv,True
+Ablation A. Alerte temporelle multivariée false_notif_cow_day,0.402,0.402,hypo_module/ablation_summary.csv,True
+Ablation B. IF + règles de persistance detect_any,0.159,0.159,hypo_module/ablation_summary.csv,True
+Ablation B. IF + règles de persistance iou20,0.0,0.0,hypo_module/ablation_summary.csv,True
+Ablation B. IF + règles de persistance best_iou,0.004,0.004,hypo_module/ablation_summary.csv,True
+Ablation B. IF + règles de persistance false_notif_cow_day,0.152,0.152,hypo_module/ablation_summary.csv,True
+Ablation C. IF seul detect_any,0.136,0.136,hypo_module/ablation_summary.csv,True
+Ablation C. IF seul iou20,0.0,0.0,hypo_module/ablation_summary.csv,True
+Ablation C. IF seul best_iou,0.002,0.002,hypo_module/ablation_summary.csv,True
+Ablation C. IF seul false_notif_cow_day,7.658,7.658,hypo_module/ablation_summary.csv,True
+Ablation D. LOF + règles detect_any,0.159,0.159,hypo_module/ablation_summary.csv,True
+Ablation D. LOF + règles iou20,0.0,0.0,hypo_module/ablation_summary.csv,True
+Ablation D. LOF + règles best_iou,0.005,0.005,hypo_module/ablation_summary.csv,True
+Ablation D. LOF + règles false_notif_cow_day,0.107,0.107,hypo_module/ablation_summary.csv,True
+Ablation E. Comparateur pédométrique (pas seuls) detect_any,0.273,0.273,hypo_module/ablation_summary.csv,True
+Ablation E. Comparateur pédométrique (pas seuls) iou20,0.318,0.318,hypo_module/ablation_summary.csv,True
+Ablation E. Comparateur pédométrique (pas seuls) best_iou,0.141,0.141,hypo_module/ablation_summary.csv,True
+Ablation E. Comparateur pédométrique (pas seuls) false_notif_cow_day,0.518,0.518,hypo_module/ablation_summary.csv,True
+Ablation A vs B detection p,0.04297,0.04297,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs B IoU p,0.00098,0.00098,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs C detection p,0.01562,0.01562,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs C IoU p,0.00098,0.00098,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs D detection p,0.04297,0.04297,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs D IoU p,0.00098,0.00098,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs E detection p,0.0625,0.0625,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs E IoU p,0.96582,0.96582,hypo_module/ablation_tests_by_cow.csv,True
+Hierarchical actionable coverage,0.7273,0.7272727272727273,v3_refined_full/comparison_summary.csv,True
+Hierarchical instability surveillance,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Hierarchical sequence coverage,0.9091,0.9090909090909092,v3_refined_full/comparison_summary.csv,True
+Hierarchical confound alert rate,0.4091,0.4090909090909091,v3_refined_full/comparison_summary.csv,True
+Hierarchical IoU20,0.2955,0.2954545454545454,v3_refined_full/comparison_summary.csv,True
+Hierarchical background,0.5711,0.5711236741193494,v3_refined_full/comparison_summary.csv,True
+Fusion hypo_only actionable_detection,0.6136,0.6136363636363636,v3_refined_full/comparison_summary.csv,True
+Fusion hypo_only instability_surveillance_detection,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion hypo_only confound_alert_rate,0.4091,0.4090909090909091,v3_refined_full/comparison_summary.csv,True
+Fusion hypo_only actionable_iou20,0.2955,0.2954545454545454,v3_refined_full/comparison_summary.csv,True
+Fusion hypo_only background_per_cow_day,0.4461,0.4461470543881202,v3_refined_full/comparison_summary.csv,True
+Fusion instability_only actionable_detection,0.3864,0.3863636363636363,v3_refined_full/comparison_summary.csv,True
+Fusion instability_only instability_surveillance_detection,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion instability_only confound_alert_rate,0.0,0.0,v3_refined_full/comparison_summary.csv,True
+Fusion instability_only actionable_iou20,0.0,0.0,v3_refined_full/comparison_summary.csv,True
+Fusion instability_only background_per_cow_day,0.8748,0.8748363381186052,v3_refined_full/comparison_summary.csv,True
+Fusion or actionable_detection,0.6591,0.6590909090909091,v3_refined_full/comparison_summary.csv,True
+Fusion or instability_surveillance_detection,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion or confound_alert_rate,0.3182,0.3181818181818182,v3_refined_full/comparison_summary.csv,True
+Fusion or actionable_iou20,0.1136,0.1136363636363636,v3_refined_full/comparison_summary.csv,True
+Fusion or background_per_cow_day,0.9819,0.9818659709931788,v3_refined_full/comparison_summary.csv,True
+Fusion hierarchical actionable_detection,0.7273,0.7272727272727273,v3_refined_full/comparison_summary.csv,True
+Fusion hierarchical instability_surveillance_detection,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion hierarchical confound_alert_rate,0.4091,0.4090909090909091,v3_refined_full/comparison_summary.csv,True
+Fusion hierarchical actionable_iou20,0.2955,0.2954545454545454,v3_refined_full/comparison_summary.csv,True
+Fusion hierarchical background_per_cow_day,0.5711,0.5711236741193494,v3_refined_full/comparison_summary.csv,True
+Fusion sequential_24_72h actionable_detection,0.5682,0.5681818181818182,v3_refined_full/comparison_summary.csv,True
+Fusion sequential_24_72h instability_surveillance_detection,0.6667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion sequential_24_72h confound_alert_rate,0.3636,0.3636363636363636,v3_refined_full/comparison_summary.csv,True
+Fusion sequential_24_72h actionable_iou20,0.0,0.0,v3_refined_full/comparison_summary.csv,True
+Fusion sequential_24_72h background_per_cow_day,0.3658,0.3658340617156048,v3_refined_full/comparison_summary.csv,True
+Hierarchical utility,-0.0884,-0.0883825567812594,v3_refined_full/comparison_summary.csv,True
+Hierarchical median delay,19.875,19.875,v3_refined_full/comparison_summary.csv,True
+Scenario hypo_mild verification,0.455,0.45454545454545453,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario hypo_mild surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario hypo_moderate verification,0.727,0.7272727272727273,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario hypo_moderate surveillance,0.182,0.18181818181818182,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario hypo_marked verification,0.818,0.8181818181818182,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario hypo_marked surveillance,0.545,0.5454545454545454,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_mild verification,0.091,0.09090909090909091,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_mild surveillance,0.455,0.45454545454545453,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_moderate verification,0.091,0.09090909090909091,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_moderate surveillance,0.545,0.5454545454545454,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_marked verification,0.182,0.18181818181818182,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_marked surveillance,1.0,1.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_then_hypo verification,0.909,0.9090909090909091,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario instability_then_hypo surveillance,0.818,0.8181818181818182,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario isolated_sensor_spike verification,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario isolated_sensor_spike surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario short_exercise verification,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario short_exercise surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario handling_manipulation verification,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario handling_manipulation surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario estrus_like_activity verification,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario estrus_like_activity surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario nonlocomotor_hypoactivity verification,0.818,0.8181818181818182,v3_refined_full/events_fusion_hierarchical.csv,True
+Scenario nonlocomotor_hypoactivity surveillance,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Brief controls verification rate,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Brief controls surveillance rate,0.0,0.0,v3_refined_full/events_fusion_hierarchical.csv,True
+Hierarchical background minimum,0.295,0.2947799385875128,v3_refined_full/events_fusion_hierarchical.csv,True
+Hierarchical background maximum,0.884,0.8843398157625383,v3_refined_full/events_fusion_hierarchical.csv,True
+Fusion sensitivity verification range minimum,0.727,0.7272727272727273,v3_refined_full/comparison_summary.csv,True
+Fusion sensitivity verification range maximum,0.75,0.75,v3_refined_full/comparison_summary.csv,True
+Fusion sensitivity surveillance range minimum,0.545,0.5454545454545454,v3_refined_full/comparison_summary.csv,True
+Fusion sensitivity surveillance range maximum,0.667,0.6666666666666666,v3_refined_full/comparison_summary.csv,True
+Fusion sensitivity background range minimum,0.518,0.5175273216488926,v3_refined_full/comparison_summary.csv,True
+Fusion sensitivity background range maximum,0.571,0.5711236741193494,v3_refined_full/comparison_summary.csv,True
+SLS evaluable cows,14.0,14.0,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS cows >=2,3.0,3.0,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS notifications mean >=2,6.6667,6.666666666666667,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS notifications mean <2,4.4545,4.454545454545454,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS exploratory AUC,0.9242,0.9242424242424242,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS Mann-Whitney p,0.0306,0.030603761054851564,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS Spearman rho,0.5044,0.5043852795418039,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS Spearman p,0.0659,0.06587892641408946,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS time fraction AUC,0.7121,0.7121212121212122,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS maximum score AUC,0.6061,0.6060606060606061,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS instability surveillance AUC,0.3485,0.3484848484848485,v3_mcgill_sls/mcgill_v3_summary.json,True
+SLS future notification load,0.7551,0.7550796482467383,v3_mcgill_sls/mcgill_v3_cohort_all_variants.csv,True
+Benchmark cows,28.0,28.0,performance_v3_full_corpus.json,True
+Benchmark rows,37839.0,37839.0,performance_v3_full_corpus.json,True
+Benchmark repeats,5.0,5.0,performance_v3_full_corpus.json,True
+Benchmark median seconds,10.64,10.6365925000282,performance_v3_full_corpus.json,True
+Benchmark minimum seconds,10.58,10.579882584046572,performance_v3_full_corpus.json,True
+Benchmark maximum seconds,10.83,10.829350084008183,performance_v3_full_corpus.json,True
+Benchmark rows per second,3557.0,3557.4362748126036,performance_v3_full_corpus.json,True
+Feature engineering share,0.082,0.08153338752857063,performance_v3_full_corpus.json,True
+IF share of instrumented core,0.828,0.8275350408619133,performance_v3_full_corpus.json,True
+Hybrid share of instrumented core,0.064,0.06434867059164796,performance_v3_full_corpus.json,True
+Comparative IF rules share,0.025,0.02466650617164831,performance_v3_full_corpus.json,True

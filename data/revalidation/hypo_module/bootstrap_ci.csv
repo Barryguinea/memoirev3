@@ -1,0 +1,8 @@
+analyse,cible,valeur,ic95_bas,ic95_haut,effet
+hypo_metrique,couverture_attribuable,0.8788,0.7879,0.9697,
+hypo_metrique,nouveau_depart,0.5758,0.4242,0.7576,
+hypo_metrique,iou20,0.3939,0.2424,0.5455,
+ablation_effet,HYPO_vs_B,0.1335,0.1057,0.1612,rang_biseriale=+1.00; favorables=11/11; p=0.00098
+ablation_effet,HYPO_vs_C,0.1349,0.1066,0.1634,rang_biseriale=+1.00; favorables=11/11; p=0.00098
+ablation_effet,HYPO_vs_D,0.1321,0.1034,0.1608,rang_biseriale=+1.00; favorables=11/11; p=0.00098
+ablation_effet,HYPO_vs_E,-0.0037,-0.0315,0.0217,rang_biseriale=-0.03; favorables=5/11; p=0.96582

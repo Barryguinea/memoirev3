@@ -1,0 +1,509 @@
+\chapter{Validation et résultats}
+\label{chapitre:validation}
+
+Ce chapitre distingue deux niveaux de preuve. La première partie évalue le module HYPO sur
+des dégradations graduelles, une ablation et une analyse OFAT complètes. La deuxième partie
+examine l'extension INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
+pourcentages décrivent la réponse du logiciel à des scénarios contrôlés; ils ne sont pas des
+performances cliniques. Le Tableau~\ref{tab:cles_lecture_resultats} rassemble les clés de
+lecture mobilisées tout au long du chapitre.
+
+\begin{table}[H]
+  \centering
+  \caption{Clés de lecture du chapitre.}
+  \label{tab:cles_lecture_resultats}
+  \small
+  \begin{tabular}{p{0.28\textwidth}p{0.64\textwidth}}
+    \toprule
+    Élément & Interprétation \\
+    \midrule
+    Onze vaches
+      & Seules onze des 28 vaches possèdent une période future suffisamment longue, les signaux
+        requis et une couverture compatible avec toutes les campagnes. \\
+    Injections après la période de référence
+      & Elles commencent après les 60\,\% réservés à la construction de la référence; les
+        données injectées ne peuvent donc pas influencer cette référence. \\
+    Attribution
+      & Une alerte est attribuable seulement si elle apparaît avec l'injection et non dans
+        l'exécution propre de la même vache et de la même période. \\
+    Couverture
+      & Au moins un intervalle attribuable recouvre la fenêtre injectée. \\
+    Nouveau départ
+      & Un épisode absent de l'exécution propre commence dans la fenêtre; ce critère est plus
+        exigeant qu'un simple recouvrement. \\
+    IoU20
+      & Le recouvrement temporel entre l'épisode attribuable et l'événement atteint au moins
+        0,20; il renseigne la localisation, pas la validité clinique. \\
+    Charge de fond
+      & Les notifications hors fenêtres injectées sur des données non étiquetées; sans
+        diagnostic exhaustif, elles ne peuvent pas être appelées faux positifs. \\
+    Hypoactivité non locomotrice
+      & Neuf alertes sur onze montrent que les signaux disponibles ne permettent pas
+        d'identifier la cause d'une baisse persistante. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Intégrité des protocoles}
+
+Onze vaches satisfont les critères de durée et de signaux informatifs. La campagne HYPO
+comprend quatre événements indépendants par vache, soit 44 événements. La campagne étendue
+comprend douze scénarios par vache, soit 132 événements. Tous commencent après la séparation
+chronologique, utilisent des identifiants et des fenêtres physiques distincts et sont
+comparés à une exécution propre de la même vache. Les injections ne modifient pas le fichier
+brut, les variables restent non négatives et le temps postural total est conservé. Le
+Tableau~\ref{tab:protocol_checks} récapitule les contrôles automatiques correspondants.
+
+\begin{table}[H]
+  \centering
+  \caption{Contrôles automatiques communs aux campagnes techniques.}
+  \label{tab:protocol_checks}
+  \begin{tabular}{p{0.68\textwidth}c}
+    \toprule
+    Contrôle & Résultat \\
+    \midrule
+    Colonnes requises présentes et campagnes non vides & Conforme \\
+    Identifiants et fenêtres physiques uniques & Conforme \\
+    Fenêtres non chevauchantes dans la campagne HYPO & Conforme \\
+    Injections strictement postérieures à la période de référence & Conforme \\
+    Signaux sources informatifs et couverture admissible & Conforme \\
+    Non-négativité et conservation du temps postural & Conforme \\
+    Exécution propre utilisée pour l'attribution & Conforme \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Validation technique principale du module HYPO}
+
+\subsection{Résultats attribuables par profil}
+
+Le Tableau~\ref{tab:hypo_profiles} présente séparément le nouveau départ, la couverture
+attribuable et la localisation IoU20. Les trois profils graduels sont les cas techniques
+attendus positifs; la variation brève isolée est le contrôle attendu négatif.
+
+\begin{table}[H]
+  \centering
+  \caption{Résultats attribuables du module HYPO.}
+  \label{tab:hypo_profiles}
+  \small
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Profil & $n$ & Nouveau départ & Couverture & IoU20 & IoU moyen \\
+    \midrule
+    Graduel léger & 11 & 45,5\,\% & 72,7\,\% & 27,3\,\% & 0,087 \\
+    Graduel modéré & 11 & 63,6\,\% & 90,9\,\% & 36,4\,\% & 0,192 \\
+    Graduel marqué & 11 & 63,6\,\% & 100,0\,\% & 54,5\,\% & 0,269 \\
+    Variation brève isolée & 11 & 0,0\,\% & 0,0\,\% & 0,0\,\% & 0,000 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Sur les 33 dégradations graduelles, un nouvel épisode apparaît dans 19 cas, soit 57,6\,\%.
+Après soustraction de l'exécution propre, un intervalle ajouté recouvre la fenêtre dans
+29 cas sur 33, soit 87,9\,\%, et 13 cas atteignent IoU~$\geq0{,}20$, soit 39,4\,\%.
+L'IoU attribuable moyen est de 0,183 et le délai médian de nouveau départ de 20,75 heures.
+Les intervalles de confiance à 95\,\%, obtenus par bootstrap regroupé par vache
+\citep{efron1993introduction,fieldwelsh2007bootstrapping}
+(10\,000~rééchantillonnages, l'unité étant la vache), sont [78,8~; 97,0] pour la couverture,
+[42,4~; 75,8] pour le nouveau départ et [24,2~; 54,5] pour l'IoU20. Leur largeur reflète
+l'effectif de onze vaches et invite à interpréter la valeur ponctuelle avec prudence.
+Ces indicateurs ne sont pas interchangeables: la couverture montre une réponse dans la
+fenêtre, tandis que le nouveau départ vérifie qu'un épisode distinct a réellement commencé.
+
+Le contrôle bref n'engendre aucun départ ni intervalle attribuable. Sur les exécutions
+propres et uniquement pendant la période future, HYPO produit en moyenne 0,402
+notification par vache-jour; le 90\textsuperscript{e} percentile entre vaches est de 0,491.
+Cette quantité mesure une charge de fond, pas un taux de faux positifs, car les données
+propres ne possèdent pas d'annotation clinique exhaustive.
+
+\subsection{Typologie des modes de défaillance}
+
+Le Tableau~\ref{tab:failure_modes} décompose les résultats actuels en modes d'échec, sans
+reprendre les fréquences d'un protocole antérieur. Sur les 33 dégradations graduelles, quatre
+ne produisent aucun recouvrement attribuable et seize sont recouvertes sans localisation
+suffisante~; sur les vingt-neuf recouvertes, dix n'ouvrent aucun nouveau départ par rapport à
+l'exécution propre. Du côté des contrôles, les variations brèves sont rejetées, mais
+l'hypoactivité non locomotrice déclenche neuf alertes sur onze. Parmi les 33 instabilités
+pures, 22 sont repérées par la branche de surveillance et aucune ne produit un épisode
+nécessitant une vérification de la fusion. Ces fréquences sont régénérées par le script
+\path{scripts/compute_failure_modes.py}.
+
+\begin{table}[H]
+  \centering
+  \caption{Modes de défaillance observés.}
+  \label{tab:failure_modes}
+  \small
+  \begin{tabular}{p{0.62\textwidth}r}
+    \toprule
+    Mode & Fréquence \\
+    \midrule
+    Graduel non détecté (aucun recouvrement attribuable) & 4 / 33 \\
+    Graduel recouvert mais mal localisé (IoU $<$ 0,20) & 16 / 33 \\
+    Graduel recouvert sans nouveau départ & 10 / 29 \\
+    Confusion avec une hypoactivité non locomotrice & 9 / 11 \\
+    Instabilité pure repérée en surveillance & 22 / 33 \\
+    Instabilité pure produisant un épisode de vérification & 0 / 33 \\
+    Contrôle bref alerté à tort & 0 / 11 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Cette typologie oriente les priorités~: la localisation temporelle et la séparation causale
+avec les hypoactivités non locomotrices sont les deux limites dominantes, tandis que les pics
+brefs sont rejetés dans les conditions testées.
+
+\subsection{Robustesse locale des paramètres HYPO}
+
+L'analyse OFAT comprend la référence et vingt variantes dans lesquelles un seul des dix
+paramètres est modifié. Les 924 évaluations événement--configuration rejettent toutes le
+contrôle bref. Sur les profils progressifs, 12 variantes sur 20 reproduisent exactement le
+taux de nouveaux départs de la référence et 15 restent dans un écart maximal de 6,1 points.
+Pour IoU20, 15 variantes restent dans un écart maximal de 3,0 points. Sur l'ensemble des
+valeurs testées, le taux de nouveaux départs varie de 45,5 à 66,7\,\%, la couverture de
+63,6 à 90,9\,\%, IoU20 de 27,3 à 45,5\,\%, le délai médian de 15,5 à 24,5 heures et le fond
+de 0,187 à 0,553 notification par vache-jour.
+
+La Figure~\ref{fig:hypo_sensitivity} représente l'amplitude maximale de ces écarts. Elle
+mesure une influence locale des paramètres, et non une amélioration ni une optimisation de
+la configuration de référence. Le Tableau~\ref{tab:hypo_sensitivity} en détaille les plages
+signées pour les paramètres les plus structurants.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/hypo_parameter_sensitivity_effects.png}
+  \caption{Sensibilité locale des paramètres HYPO.}
+  \label{fig:hypo_sensitivity}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \caption{Plages d'écarts signés pour les paramètres HYPO les plus structurants.}
+  \label{tab:hypo_sensitivity}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{p{0.20\textwidth}p{0.10\textwidth}
+    >{\centering\arraybackslash}p{0.13\textwidth}
+    >{\centering\arraybackslash}p{0.15\textwidth}
+    >{\centering\arraybackslash}p{0.12\textwidth}
+    >{\centering\arraybackslash}p{0.15\textwidth}}
+    \toprule
+    Paramètre & Valeurs & $\Delta$ départ & $\Delta$ couverture & $\Delta$ IoU20 & $\Delta$ fond \\
+      & testées & (pp) & (pp) & (pp) & (/vache-jour) \\
+    \midrule
+    Familles concordantes & 2; 4 & $-12{,}1$ à $0{,}0$ & $-24{,}2$ à $+3{,}0$ & $-12{,}1$ à $+3{,}0$ & $-0{,}214$ à $+0{,}107$ \\
+    Agrégation & 6; 24 h & $-9{,}1$ à $+9{,}1$ & $-18{,}2$ à $0{,}0$ & $-12{,}1$ à $-3{,}0$ & $-0{,}098$ à $+0{,}152$ \\
+    Baisse d'activité & 5; 15\,\% & $-9{,}1$ à $-9{,}1$ & $-9{,}1$ à $+3{,}0$ & $-6{,}1$ à $-3{,}0$ & $-0{,}036$ à $+0{,}027$ \\
+    Persistance & 3; 12 h & $-6{,}1$ à $0{,}0$ & $0{,}0$ à $0{,}0$ & $-3{,}0$ à $+6{,}1$ & $-0{,}054$ à $+0{,}080$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Le nombre de familles et la fenêtre d'agrégation sont les choix les plus influents. Les
+paramètres CUSUM et de couverture ont peu d'effet dans les plages testées. Cette stabilité
+locale rend la configuration reproductible et techniquement défendable, mais ne démontre
+ni son optimalité ni sa validité physiologique.
+
+\subsection{Calibration individuelle exploratoire}
+
+Une calibration simple a été testée pour répondre à la variabilité du fond entre vaches.
+Pour chaque animal, le seuil de 0,12 est multiplié par le rapport entre l'écart-type de son
+score pendant la période de référence et la médiane de ces écarts-types. Les facteurs, estimés sans utiliser la
+période future, restent compris entre 0,98 et 1,03. La procédure ne modifie ni le fond moyen
+(0,402 notification par vache-jour), ni son coefficient de variation inter-vache (0,244),
+ni la couverture attribuable (87,9\,\%). Le taux de nouveaux départs passe de 57,6 à
+60,6\,\%, mais IoU20 diminue de 39,4 à 33,3\,\%. Cette calibration n'apporte donc aucun gain
+opérationnel et dégrade la localisation; elle n'est pas retenue. Ce résultat nul ne démontre
+pas qu'aucune calibration individualisée soit possible, seulement que la dispersion du
+score de référence n'est pas une base utile dans cette campagne.
+
+\subsection{Compromis entre réponse technique et charge de fond}
+
+Le seuil de score est ensuite parcouru de 0,04 à 0,20 sans modifier les autres paramètres.
+Les neuf configurations rejettent les onze variations brèves. Entre 0,04 et 0,12, la
+couverture, les nouveaux départs et IoU20 restent respectivement à 87,9\,\%, 57,6\,\% et
+39,4\,\%, tandis que le fond diminue légèrement de 0,419 à 0,402 notification par
+vache-jour. À 0,20, le fond atteint 0,330, mais la couverture et IoU20 baissent à 78,8\,\%
+et 30,3\,\%.
+
+Le point 0,14 atteint 45,5\,\% à IoU20 avec un fond de 0,375 et les mêmes taux de couverture
+et de nouveaux départs que la référence. Il ne constitue toutefois pas un nouvel optimum~:
+il a été observé sur le même ensemble qui sert à évaluer la configuration. Le seuil de 0,12
+reste donc inchangé; 0,14 devient seulement une hypothèse à tester après sélection sur un
+jeu de développement indépendant.
+
+Dans la Figure~\ref{fig:detection_background_curve}, la ligne pointillée repère le seuil de
+référence de 0,12, conservé malgré le résultat ponctuel observé à 0,14.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/detection_background_curve.png}
+  \caption{Compromis détection--charge de fond.}
+  \label{fig:detection_background_curve}
+\end{figure}
+
+\subsection{Ablation contre IF, LOF et comparateur pédométrique}
+
+Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. Ici, le recouvrement désigne
+tout épisode attribuable qui croise l'événement; il est donc plus permissif que le critère de
+nouveau départ utilisé précédemment. La cinquième variante, le comparateur pédométrique,
+restreint le détecteur au seul canal des pas, à la manière d'un podomètre. Le
+Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq variantes.
+
+\begin{table}[H]
+  \centering
+  \caption{Ablation attribuable du module HYPO sur les mêmes événements.}
+  \label{tab:hypo_ablation}
+  \small
+  \begin{tabular}{lrrrr}
+    \toprule
+    Variante & Recouvrement & IoU20 & IoU moyen & Fond/vache-jour \\
+    \midrule
+    A. HYPO temporel multivarié & 43,2\,\% & 29,5\,\% & 0,137 & 0,402 \\
+    B. IF + règles de persistance & 15,9\,\% & 0,0\,\% & 0,004 & 0,152 \\
+    C. IF ponctuel & 13,6\,\% & 0,0\,\% & 0,002 & 7,658 \\
+    D. LOF + règles & 15,9\,\% & 0,0\,\% & 0,005 & 0,107 \\
+    E. Comparateur pédométrique (pas seuls) & 27,3\,\% & 31,8\,\% & 0,141 & 0,518 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Après agrégation par vache, HYPO obtient un IoU supérieur à B, C et D
+($p=0{,}00098$ pour les trois comparaisons appariées de Wilcoxon~\citep{wilcoxon1945individual}).
+Son recouvrement est également
+supérieur à B et D ($p=0{,}04297$) et à C ($p=0{,}01562$). L'avantage est aussi de
+\emph{taille}~: l'écart d'IoU attribuable moyen par vache vis-à-vis des comparateurs IF et LOF
+est d'environ 0,13 (IC95 [0,106~; 0,161] contre B, [0,107~; 0,163] contre C, [0,103~; 0,161]
+contre D, tous excluant zéro), avec une corrélation rang-bisériale appariée
+\citep{kerby2014simple} de $+1{,}00$~:
+les onze vaches favorisent HYPO. La supériorité ne tient donc pas à quelques animaux.
+
+La cinquième variante isole, elle, le rôle de la combinaison de plusieurs signaux. Le comparateur
+pédométrique (E) reprend exactement la machinerie temporelle de HYPO (même période de référence
+individuelle par créneau horaire, même cumul CUSUM et même persistance), mais restreint la
+détection au seul canal des pas, à la manière du comptage d'activité d'un podomètre
+\citep{alsaaod2012electronic}; la cohérence entre familles, qu'un canal unique ne peut
+satisfaire, y est relâchée pour ne pas le désavantager. Partageant cette machinerie, E
+\emph{localise} les épisodes aussi précisément que le détecteur complet~: l'écart d'IoU
+attribuable par vache n'est que de $-0{,}004$ (IC95 [$-0{,}032$~; 0,022], $p=0{,}966$, six
+vaches sur onze le favorisant légèrement), là où les comparateurs IF et LOF s'effondrent à
+un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il recouvre moins
+d'événements (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
+sans atteindre le seuil de significativité) et laisse passer davantage de fond (0,518 contre
+0,402 notification par vache-jour, soit près d'un tiers de plus). Ce que l'architecture
+fondée sur plusieurs signaux apporte n'est donc pas une meilleure localisation, mais un meilleur compromis
+entre recouvrement et charge de fond~: c'est la cohérence entre familles, et non la seule
+machinerie temporelle, qui resserre ce compromis. Ce constat rejoint la limite connue des
+approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
+\citep{alsaaod2012electronic,oleary2020accelerometers}.
+
+L'ablation soutient donc l'apport
+de la direction du changement, de la cohérence entre signaux et de la persistance. Elle ne
+résout pas la charge opérationnelle, qui reste supérieure à celle des variantes B et D.
+
+\subsection{Temps d'exécution}
+
+L'évaluation complète inclut les variables, IF, les règles IF comparatives, HYPO,
+INSTABILITÉ, la fusion et la concaténation des sorties. Sur les 28 vaches et 37\,839 lignes,
+la médiane de cinq répétitions est de 10,64 secondes, avec une étendue de 10,58 à 10,83
+secondes et un débit médian de 3\,557 lignes par seconde. Dans le temps instrumenté, IF
+représente 82,8\,\%, les variables 8,2\,\%, HYPO+INSTABILITÉ+fusion 6,4\,\% et les règles IF
+comparatives 2,5\,\%. L'extension hybride ajoute donc un coût mesurable mais secondaire par rapport
+au comparateur IF. Ces valeurs décrivent la machine de test et ne constituent pas un test de
+charge en ferme.
+
+\section{Extension bidirectionnelle exploratoire}
+
+\subsection{Comparaison des règles de fusion}
+
+Le Tableau~\ref{tab:fusions_v3} compare les cinq stratégies sur 132 scénarios. La colonne
+``vérification'' regroupe les trois scénarios HYPO et la séquence. La surveillance mesure le
+recouvrement des trois instabilités. Les facteurs confondants regroupent l'activité de type
+œstrus et l'hypoactivité non locomotrice.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparaison exploratoire des règles de fusion sur 132 événements.}
+  \label{tab:fusions_v3}
+  \small
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Configuration & Vérification & Surveillance & Confondants & IoU20 & Fond \\
+     & (\%) & instabilité (\%) & alertés (\%) & (\%) & /vache-jour \\
+    \midrule
+    HYPO & 61,4 & 66,7 & 40,9 & 29,5 & 0,446 \\
+    INSTABILITÉ & 38,6 & 66,7 & 0,0 & 0,0 & 0,875 \\
+    OU & 65,9 & 66,7 & 31,8 & 11,4 & 0,982 \\
+    \textbf{HIÉRARCHIQUE} & \textbf{72,7} & \textbf{66,7} & 40,9 & \textbf{29,5} & 0,571 \\
+    SÉQUENTIELLE & 56,8 & 66,7 & 36,4 & 0,0 & \textbf{0,366} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Dans cette comparaison, toutes les sorties fusionnées utilisent un délai réfractaire commun
+de douze heures. Le fond HYPO de 0,446 diffère donc du 0,402 de la validation principale,
+où la notification propre à HYPO est espacée de 24 heures. Les valeurs ne doivent pas être
+comparées comme si seul l'algorithme avait changé.
+
+La fusion hiérarchique augmente la couverture des scénarios de vérification par rapport à HYPO seul, conserve
+IoU20 à 29,5\,\%, mais élève le fond de 0,446 à 0,571. Sa fonction d'utilité technique reste
+négative ($-0{,}088$), car les pénalités de confusion et de charge sont importantes. Elle est
+retenue comme configuration représentative de l'extension, non comme remplacement démontré
+de HYPO. La Figure~\ref{fig:v3_fusions} compare les cinq règles de fusion.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/v3_fusion_comparison.png}
+  \caption{Comparaison des règles de fusion.}
+  \label{fig:v3_fusions}
+\end{figure}
+
+\subsection{Résultats par scénario}
+
+La fusion hiérarchique couvre 45,5\,\% des hypoactivités légères, 72,7\,\% des modérées et
+81,8\,\% des marquées. L'instabilité légère, modérée et marquée est observée en surveillance
+dans respectivement 45,5\,\%, 54,5\,\% et 100,0\,\% des cas. La séquence synthétique
+instabilité--hypoactivité est alertée dans 90,9\,\% des cas. Le Tableau~\ref{tab:scenarios_v3}
+détaille ces réponses par scénario, que la Figure~\ref{fig:v3_scenarios} représente
+visuellement.
+
+\begin{table}[H]
+  \centering
+  \caption{Réponse de la fusion hiérarchique par scénario.}
+  \label{tab:scenarios_v3}
+  \small
+  \begin{tabular}{lrrr}
+    \toprule
+    Scénario & $n$ & Alerte de vérification (\%) & Surveillance (\%) \\
+    \midrule
+    Hypoactivité légère & 11 & 45,5 & 0,0 \\
+    Hypoactivité modérée & 11 & 72,7 & 18,2 \\
+    Hypoactivité marquée & 11 & 81,8 & 54,5 \\
+    Instabilité légère & 11 & 9,1 & 45,5 \\
+    Instabilité modérée & 11 & 9,1 & 54,5 \\
+    Instabilité marquée & 11 & 18,2 & 100,0 \\
+    Instabilité puis hypoactivité & 11 & 90,9 & 81,8 \\
+    Contrôles brefs regroupés & 33 & 0,0 & 0,0 \\
+    Activité de type œstrus & 11 & 0,0 & 0,0 \\
+    Hypoactivité non locomotrice & 11 & 81,8 & 0,0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.94\textwidth]{figures/v3_scenario_results.png}
+  \caption{Réponse par scénario contrôlé.}
+  \label{fig:v3_scenarios}
+\end{figure}
+
+Parmi les scénarios de vérification, 29,5\,\% atteignent IoU20. Le délai médian est de
+19,875 heures. Le fond hiérarchique est de 0,571 notification par vache-jour, avec une
+étendue de 0,295 à 0,884 entre vaches. Aucun des 33 contrôles brefs ne produit de nouveau
+départ de vérification ou de surveillance. Par ailleurs, l'alerte de neuf hypoactivités non
+locomotrices sur onze démontre une limite d'identifiabilité:
+des causes différentes peuvent produire la même forme sur les capteurs disponibles.
+
+\subsection{Sensibilité des paramètres INSTABILITÉ}
+
+Trois variantes proches sont comparées à la référence. La détection des scénarios de vérification reste entre
+72,7 et 75,0\,\%, tandis que la surveillance varie de 54,5 à 66,7\,\% et le fond de 0,518 à
+0,571 notification par vache-jour. Une persistance de trois heures réduit la surveillance
+et augmente les confusions; une agrégation de quatre heures réduit également la surveillance.
+Cette analyse soutient la stabilité locale de l'extension, mais elle est beaucoup moins
+complète que l'OFAT de HYPO et ne valide pas les seuils physiologiquement.
+
+\section{Concordance observationnelle avec les scores SLS}
+\label{sec:validation_mcgill}
+
+Quatorze vaches sont évaluables. Les trois vaches SLS~$\geq2$ appartiennent toutes au groupe
+\textit{Exercise}; aucune vache du groupe sans exercice n'atteint ce seuil. Dans les sept
+jours précédant le score, la fusion hiérarchique produit en moyenne 6,67 notifications chez
+les trois vaches SLS~$\geq2$, contre 4,45 chez les onze autres. L'AUC exploratoire est
+0,924, le test de Mann--Whitney donne $p=0{,}031$ et la corrélation de Spearman vaut
+$\rho=0{,}504$ avec $p=0{,}066$. Chaque point de la Figure~\ref{fig:v3_sls} représente une
+vache; l'effectif de trois animaux dans le groupe SLS~$\geq2$ impose une interprétation
+prudente.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{figures/v3_sls_notifications.png}
+  \caption{Notifications précédant le score SLS.}
+  \label{fig:v3_sls}
+\end{figure}
+
+Les mesures secondaires sont moins séparatrices: l'AUC de la fraction du temps en épisode
+est 0,712, celle du score maximum 0,606 et celle de la surveillance d'instabilité 0,348. La
+charge future atteint environ 0,755 notification par vache-jour. Le résultat est donc
+fragile et complètement confondu avec le traitement \textit{Exercise}; il ne constitue pas
+une validation clinique.
+
+\section{Inspection visuelle ciblée}
+
+La Figure~\ref{fig:v3_manual_review} montre quatre situations de la vache 8081 après le gel
+des paramètres. L'hypoactivité modérée produit un épisode de vérification; l'instabilité modérée
+reste au niveau de surveillance; le pic capteur isolé est rejeté; et l'hypoactivité non
+locomotrice produit une alerte comparable à celle d'une baisse locomotrice. Les zones grises
+représentent les fenêtres injectées et les zones rouges les épisodes de vérification. Dans
+chaque panneau, les trois signaux sont normalisés séparément par leur maximum sur la fenêtre
+affichée afin de conserver tous les pics. Cette inspection vérifie la cohérence technique des
+sorties; elle ne constitue pas une adjudication clinique.
+
+\begin{figure}[p]
+  \centering
+  \makebox[\textwidth][c]{%
+    \includegraphics[width=1.10\textwidth]{figures/v3_manual_review.png}%
+  }
+  \caption{Inspection visuelle de scénarios représentatifs.}
+  \label{fig:v3_manual_review}
+\end{figure}
+
+\section{Correspondance entre objectifs et résultats}
+
+Le Tableau~\ref{tab:objectifs_resultats} vérifie qu'aucun objectif annoncé dans
+l'introduction ne reste sans résultat et qu'aucun résultat principal n'est introduit sans
+objectif préalable.
+
+\begin{table}[H]
+  \centering
+  \caption{Correspondance entre objectifs et résultats.}
+  \label{tab:objectifs_resultats}
+  \small
+  \begin{tabular}{p{0.05\textwidth}p{0.25\textwidth}p{0.42\textwidth}p{0.13\textwidth}}
+    \toprule
+    Obj. & Attente & Résultat principal & Statut \\
+    \midrule
+    1 & Référence individuelle et chronologique
+      & Séparation 60/40, référence par vache et créneau, contrôles d'intégrité conformes.
+      & Réalisé \\
+    2 & Détection HYPO persistante
+      & 87,9\,\% de couverture attribuable et 39,4\,\% à IoU20 sur 33 profils graduels.
+      & Réalisé \\
+    3 & Ablation et sensibilité HYPO
+      & Supériorité sur IF/LOF pour l'IoU; OFAT de vingt variantes; compromis avec le
+        comparateur pédométrique explicité.
+      & Réalisé \\
+    4 & Explorer INSTABILITÉ et les fusions
+      & Surveillance de 22/33 instabilités; aucune supériorité de la fusion sur HYPO.
+      & Exploratoire \\
+    5 & Contrôles, confondants, fond et coût
+      & Contrôles brefs rejetés, 9/11 hypoactivités non locomotrices alertées,
+        fond HYPO de 0,402 et temps médian de 10,64~s.
+      & Réalisé \\
+    6 & Confrontation IceTag--SLS
+      & Association exploratoire sur 14 vaches, mais trois cas SLS~$\geq2$ entièrement
+        confondus avec le groupe \textit{Exercise}.
+      & Non concluant \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Synthèse}
+
+La validation principale montre que HYPO localise mieux les dégradations graduelles que les
+comparateurs IF et LOF, tout en conservant une charge de fond importante. Le comparateur
+pédométrique obtient une localisation proche, mais recouvre moins d'événements et produit
+une charge de fond plus élevée.
+L'extension bidirectionnelle ajoute une information de surveillance et récupère les
+séquences synthétiques, mais elle n'améliore pas IoU20, augmente le fond et reste vulnérable
+aux causes non locomotrices. Elle constitue donc un résultat exploratoire mitigé et non une
+preuve de supériorité ou de précurseur clinique.

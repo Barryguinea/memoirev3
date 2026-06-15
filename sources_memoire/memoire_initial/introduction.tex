@@ -1,0 +1,155 @@
+\begin{introduction}
+
+\newcommand{\introheading}[1]{%
+  \par\medskip
+  \noindent\textbf{#1}\par\smallskip
+}
+
+\introheading{Motivations}
+La boiterie en élevage laitier constitue un enjeu majeur de bien-être animal et de
+performance technico-économique. À l'échelle mondiale, elle est considérée comme l'un des
+trois problèmes de santé les plus fréquents chez les vaches laitières, avec des prévalences
+estimées entre 20\,\% et 55\,\% selon les études et les régions
+\citep{whay2003assessment,flower2006effect}. Le coût économique est substantiel~: les
+estimations publiées varient de 75 à plus de 300~USD par cas clinique, incluant des pertes
+de production laitière qui peuvent atteindre 270 à 574~kg par lactation, une dégradation
+de la fertilité, des augmentations de réformes anticipées et des coûts vétérinaires
+directs \citep{green2002financial,bruijnis2010assessing}. Pour un troupeau de 100~vaches
+soumis à une prévalence de 25\,\%, la perte annuelle attribuable aux seuls cas incidents
+est estimée entre 1\,900 et 7\,500~USD. Au-delà de l'impact financier, la boiterie soulève
+un enjeu éthique de bien-être animal, la douleur associée étant reconnue comme l'une des
+principales sources de souffrance chronique chez les vaches laitières
+\citep{whay2003assessment}.
+
+Face à ces enjeux, l'élevage de précision (\textit{Precision Livestock Farming}, PLF)
+propose d'automatiser le suivi comportemental des animaux à l'aide de capteurs portés
+et d'outils numériques \citep{palma2025scoping,michelena2025plf_review}. Les
+podomètres et accéléromètres aujourd'hui répandus dans les élevages laitiers génèrent
+des séries temporelles continues à faible coût marginal, ouvrant la voie à des systèmes
+de détection précoce intégrés au \textit{workflow} de ferme. Ce mémoire se positionne
+dans cette dynamique en proposant un système de détection de boiterie probable conçu
+pour être à la fois interprétable, reproductible et exploitable par l'éleveur.
+
+\introheading{Contexte et problématique}
+En pratique, l'identification précoce de la boiterie repose souvent sur des observations
+humaines, utiles mais sensibles à la charge de travail et à l'expérience des observateurs.
+La concordance inter-observateurs sur les grilles de \textit{scoring} locomoteur varie
+significativement d'une étude à l'autre
+\citep{sprecher1997lameness,flower2006effect}, ce qui motive le recours à des capteurs
+comportementaux pour une détection plus continue et plus objective.
+
+L'automatisation soulève cependant deux difficultés majeures. D'une part, les signaux
+des capteurs (activité, transitions posturales, dynamique de mouvement) sont bruyants et
+hétérogènes entre individus. D'autre part, un score d'anomalie n'est pas, à lui seul, une
+preuve clinique suffisante de boiterie~; et l'absence fréquente de labels cliniques
+synchronisés interdit de formuler le problème comme une tâche de classification supervisée
+standard \citep{alsaaod2019automatic,oleary2020accelerometers}.
+
+La littérature reflète d'ailleurs cette difficulté~: les performances rapportées varient
+de 22\,\% à 91\,\% de sensibilité selon les capteurs utilisés, les définitions cliniques
+retenues et les protocoles de validation
+\citep{oleary2020accelerometers,gonzalezgarcia2023systematic}, ce qui complique la
+comparaison directe entre travaux et la transposition d'une étude à l'autre. Plusieurs
+solutions commerciales déployées en élevage (CowManager, Heatime, IceQube) fonctionnent
+par ailleurs comme des boîtes noires propriétaires, rarement évaluées de manière
+indépendante \citep{rutten2013invited}, ce qui motive le développement d'approches
+ouvertes, documentées et auditables.
+
+Ensemble, ces constats conduisent au problème de recherche suivant~: \textit{comment construire un
+système de détection de boiterie probable, interprétable et robuste, à partir de données
+capteurs comportementaux, sans prétendre au diagnostic clinique~?}
+
+La réponse proposée repose sur une architecture hybride combinant un détecteur d'anomalies
+non supervisé (Isolation Forest) et des règles métier explicites, validée à
+travers un protocole en deux niveaux.
+
+\introheading{Objectif général et objectifs spécifiques}
+L'objectif général consiste à développer et valider une chaîne de traitement reproductible
+permettant de détecter des épisodes de boiterie probable à partir de données capteurs
+bovines, en combinant détection d'anomalies et règles métier interprétables. Cet objectif
+peut se décliner en cinq sous-objectifs spécifiques~:
+
+\begin{enumerate}
+  \item Concevoir un \textit{pipeline} complet couvrant l'ensemble de la chaîne~:
+  ingestion, prétraitement, extraction de variables dérivées, détection d'anomalies et
+  filtrage par règles métier.
+  \item Assurer l'interprétabilité opérationnelle des alertes via des règles explicites
+  comme la persistance temporelle, la cohérence comportementale multi-signaux et
+  l'espacement des notifications.
+  \item Évaluer la robustesse du système selon deux protocoles complémentaires~:
+  validation manuelle par injections contrôlées et validation robuste
+  multi-configurations.
+  \item Comparer le détecteur retenu (Isolation Forest) à une alternative non
+  supervisée (Local Outlier Factor) dans une étude d'ablation élargie.
+  \item Garantir la traçabilité et la reproductibilité des résultats par tests automatisés,
+  vérification d'intégrité et gel explicite des seuils.
+\end{enumerate}
+
+\introheading{Positionnement et portée}
+Le système proposé produit des \textit{alertes de boiterie probable}. Il s'agit d'une aide
+à la décision pour le suivi d'élevage, et non d'un dispositif de diagnostic vétérinaire.
+Un tel positionnement est volontaire et cohérent avec les limites des données disponibles
+dans le cadre du mémoire, car le corpus ne dispose d'aucun étalon clinique
+(\textit{gold standard}) vétérinaire synchronisé avec les enregistrements capteurs sur
+l'ensemble des animaux et des périodes d'observation.
+
+La prudence adoptée ici est conforme aux recommandations de la littérature, qui souligne la nécessité
+de distinguer clairement entre systèmes de détection automatisée et outils diagnostiques
+validés cliniquement \citep{alsaaod2019automatic}. Le système vise à signaler des déviations
+comportementales compatibles avec une boiterie, afin de prioriser une vérification terrain.
+
+\introheading{Méthodologie}
+La démarche méthodologique articule trois volets complémentaires. Premièrement,
+un pipeline de traitement modulaire en quatre étapes (chargement et filtrage des
+données, extraction d'environ 50~variables dérivées, détection d'anomalies par
+Isolation Forest, application de règles métier) transforme les signaux capteurs
+bruts en épisodes de boiterie probable assortis d'un score de risque continu.
+Deuxièmement, deux protocoles de validation complémentaires évaluent la robustesse du
+système~: une validation manuelle par injections contrôlées (cas détectables, \textit{borderline}
+et non-détectables) confirme la capacité du pipeline à récupérer les épisodes simulés,
+et une validation robuste multi-configurations explore systématiquement l'espace des
+hyperparamètres pour vérifier la stabilité de la calibration retenue. Troisièmement,
+une étude d'ablation compare quatre variantes du pipeline pour isoler la contribution
+de chaque composante, complétée par des tests statistiques appariés (McNemar exact et
+\textit{Wilcoxon signed-rank}), des intervalles de confiance à 95\,\% par
+rééchantillonnage \textit{bootstrap}, des courbes de sensibilité/spécificité et
+précision/rappel, ainsi qu'une calibration isotonique des scores. L'ensemble de la
+démarche s'appuie sur une traçabilité par empreintes cryptographiques SHA-256 des
+artefacts expérimentaux, qui garantit la reproductibilité bit-à-bit des résultats.
+
+\introheading{Contributions du mémoire}
+Les contributions principales sont les suivantes~:
+\begin{enumerate}
+  \item une architecture logicielle modulaire et reproductible combinant
+  Isolation Forest et règles métier explicites, couvrant toute la chaîne de
+  détection depuis les données capteurs brutes jusqu'aux notifications interprétables~;
+  \item un protocole de validation en deux niveaux (manuelle et robuste) couplé à une
+  étude d'ablation comparant quatre variantes du pipeline (règles seules,
+  Isolation Forest seul, Isolation Forest + règles, \textit{Local
+  Outlier Factor} + règles), complétée par des tests statistiques appariés (McNemar
+  exact, \textit{Wilcoxon signed-rank}) pour établir la significativité des écarts~;
+  \item une comparaison à une \textit{baseline} pédométrique historique
+  (Alsaaod 2012) et une calibration isotonique des scores, assorties d'intervalles de
+  confiance à 95\,\% par bootstrap~;
+  \item une couche d'interprétabilité associant analyse SHAP, courbes
+  sensibilité/spécificité et précision/rappel, ainsi qu'un \textit{dashboard} Streamlit
+  interactif rendant les alertes directement exploitables par l'utilisateur final~;
+  \item une matrice RACI pour l'intégration opérationnelle du système dans le
+  workflow de ferme, complétée par des mécanismes de traçabilité par
+  empreintes cryptographiques SHA-256 garantissant l'auditabilité des résultats.
+\end{enumerate}
+
+\introheading{Structure du mémoire}
+Le mémoire s'articule autour de cinq chapitres complétés par une conclusion.
+Le Chapitre~\ref{chapitre:contexte} présente le contexte scientifique et la revue de
+littérature sur la détection de boiterie bovine. Le Chapitre~\ref{chapitre:methodologie}
+détaille les données, la méthodologie et les métriques d'évaluation. Le
+Chapitre~\ref{chapitre:architecture} décrit l'architecture logicielle et les choix
+d'implémentation, incluant les détails algorithmiques d'Isolation Forest et de
+Local Outlier Factor. Le Chapitre~\ref{chapitre:validation} expose les
+protocoles de validation et les résultats expérimentaux. Le
+Chapitre~\ref{chapitre:discussion} discute les forces, les limites et les implications
+pratiques du système. La conclusion ferme le mémoire et propose des perspectives de
+recherche.
+
+\end{introduction}

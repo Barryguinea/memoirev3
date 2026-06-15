@@ -1,0 +1,11 @@
+target_branch,scenario,n_events,hypo_detection,instability_detection,hybrid_detection,hybrid_overlap,hybrid_iou20,hybrid_iou,hybrid_delay_h
+CONFONDANT,estrus_like_activity,2,0.0,0.5,0.5,0.5,0.0,0.042,4.25
+CONFONDANT,nonlocomotor_hypoactivity,2,1.0,0.0,1.0,1.0,1.0,0.361,14.875
+CONTROLE,isolated_sensor_spike,2,0.0,0.0,0.0,0.0,0.0,0.0,
+CONTROLE,short_exercise,2,0.0,0.0,0.0,0.0,0.0,0.0,
+HYPO,hypo_marked,2,1.0,0.0,1.0,1.0,0.5,0.154,12.5
+HYPO,hypo_mild,2,0.5,0.0,0.5,0.5,0.0,0.02,23.0
+HYPO,hypo_moderate,2,1.0,0.5,1.0,1.0,0.5,0.188,10.0
+INSTABILITE,instability_marked,2,0.0,0.5,0.5,1.0,0.0,0.109,5.25
+INSTABILITE,instability_mild,2,0.0,0.5,0.5,0.5,0.0,0.031,6.25
+INSTABILITE,instability_moderate,2,0.0,1.0,1.0,1.0,0.5,0.125,7.375

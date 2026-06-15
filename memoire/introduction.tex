@@ -1,0 +1,124 @@
+\begin{introduction}
+
+\newcommand{\introheading}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
+
+\introheading{Motivation}
+La boiterie désigne une altération de la locomotion, le plus souvent causée par la douleur
+d'une lésion du pied ou du membre. Elle se reconnaît cliniquement à une démarche irrégulière,
+un dos voûté, une répartition inégale du poids entre les membres et une réticence à se
+déplacer~; son évaluation de référence repose sur une notation locomotrice standardisée
+\citep{sprecher1997lameness,chapinal2010measurement}. Cette définition est importante~: tout
+le mémoire distingue la boiterie, phénomène \emph{clinique}, des changements \emph{de
+comportement} mesurés par les capteurs, qui n'en sont qu'un reflet indirect.
+
+La boiterie constitue un problème majeur de bien-être et de performance en élevage laitier.
+Les prévalences publiées varient généralement entre 20 et 55\,\%, selon la population, la
+saison et la définition clinique retenue \citep{whay2003assessment,flower2006effect}. Ses
+conséquences comprennent la douleur, la baisse de production, une fertilité dégradée, des
+soins supplémentaires et des réformes anticipées
+\citep{green2002financial,bruijnis2010assessing}. Les estimations publiées situent le coût
+entre 75 et plus de 300~USD par cas clinique, en incluant des pertes de production laitière
+pouvant atteindre plusieurs centaines de kilogrammes par lactation~; pour un troupeau de
+100~vaches soumis à une prévalence de 25\,\%, la perte annuelle attribuable aux seuls cas
+incidents se chiffre en milliers de dollars. Au-delà du coût, la douleur associée est
+reconnue comme l'une des principales sources de souffrance chronique chez la vache laitière
+\citep{whay2003assessment}. Une identification plus précoce peut donc orienter l'examen du
+pied et la prise en charge avant l'installation d'un épisode chronique.
+
+L'élevage de précision propose de compléter l'observation humaine par une surveillance
+continue au moyen de capteurs portés \citep{bewley2015precision}. Les accéléromètres et podomètres mesurent toutefois
+des comportements, non la douleur ou la lésion. Une alerte produite à partir des pas, de la
+posture ou de l'intensité de mouvement ne peut ainsi être assimilée à un diagnostic clinique
+\citep{alsaaod2019automatic,oleary2020accelerometers}.
+
+\introheading{Problématique}
+La manifestation la mieux étayée dans les données disponibles est une réduction durable de
+l'activité locomotrice: diminution des pas, du mouvement et des transitions, accompagnée de
+changements posturaux. Ces signaux restent néanmoins non spécifiques, car une autre maladie,
+la chaleur ou le contexte d'élevage peuvent produire une forme semblable. Une difficulté
+supplémentaire est que certaines situations douloureuses pourraient s'accompagner d'agitation
+ou d'instabilité avant une hypoactivité, mais cette trajectoire n'est pas démontrée dans le
+corpus principal. Une hausse brute du \textit{Motion Index} peut aussi refléter l'exercice,
+l'œstrus, une manipulation ou un artefact de capteur.
+
+La question principale est donc la suivante: \textit{comment détecter de façon reproductible
+des dégradations comportementales graduelles et persistantes à partir de séries IceQube non
+étiquetées, sans les assimiler à un diagnostic de boiterie?} Une question secondaire explore
+si une branche d'instabilité peut apporter une information complémentaire sans dégrader
+excessivement la localisation temporelle et la charge de vérification.
+
+\introheading{Objectifs}
+L'objectif général est de concevoir et d'évaluer un outil de priorisation comportementale.
+Il se décline en six objectifs spécifiques:
+\begin{enumerate}
+  \item construire une période de référence chronologique propre à chaque vache et à chaque créneau
+  horaire;
+  \item détecter les baisses multivariées persistantes par une branche HYPO;
+  \item évaluer HYPO sur des événements postérieurs à la période de référence, une ablation IF/LOF et une analyse
+  de sensibilité des paramètres;
+  \item explorer une branche INSTABILITÉ, des persistances distinctes et cinq règles de
+  fusion;
+  \item mesurer explicitement les contrôles brefs, les facteurs confondants, la charge de
+  fond et le coût d'exécution de la chaîne de traitement complète;
+  \item confronter, sans réglage a posteriori, les sorties à une cohorte IceTag--SLS
+  contemporaine des mesures capteurs.
+\end{enumerate}
+
+\introheading{Hypothèses de travail}
+L'hypothèse principale est qu'une baisse graduelle touchant plusieurs familles de signaux
+est mieux représentée par une détection directionnelle, individualisée et temporelle que par
+une succession d'anomalies ponctuelles. L'hypothèse exploratoire est qu'une instabilité
+définie par des rapports de mouvement, des transitions et une fragmentation posturale peut
+compléter HYPO, à condition de conserver une sortie de surveillance distincte et une
+persistance plus courte. Ces hypothèses portent sur le comportement du logiciel et ne
+préjugent pas de la cause clinique des événements.
+
+\introheading{Positionnement et portée}
+Le système produit des \emph{alertes comportementales à vérifier}, c'est-à-dire une aide à
+la décision pour le suivi d'élevage et non un dispositif de diagnostic vétérinaire. Ce
+positionnement est volontaire et imposé par les données~: le corpus ne dispose d'aucun étalon
+clinique synchronisé avec les enregistrements capteurs sur
+l'ensemble des animaux et des périodes. Les taux de détection rapportés caractérisent donc le
+comportement du logiciel face à des perturbations connues, et non une sensibilité ou une
+spécificité cliniques. Cette prudence rejoint les recommandations de la littérature, qui
+distingue nettement détection automatisée et outil diagnostique validé
+\citep{alsaaod2019automatic}.
+
+\introheading{Démarche méthodologique}
+Le corpus principal contient 37\,839 mesures de 28 vaches. Les 60\,\% premiers intervalles
+admissibles de chaque série constituent la période de référence et les 40\,\% suivants la période
+surveillée. HYPO utilise des totaux glissants sur douze heures, une persistance de six heures,
+un score multivarié et un CUSUM unilatéral. Sa campagne principale comporte 33 dégradations
+graduelles et 11 contrôles brefs répartis entre onze vaches. Une exécution propre de la même
+vache est soustraite afin de ne pas attribuer à l'injection une alerte préexistante.
+
+L'extension INSTABILITÉ utilise une agrégation de trois heures et une persistance de deux
+heures. Elle est évaluée avec HYPO sur 132 scénarios comprenant intensités, séquence,
+contrôles et facteurs confondants. Une fusion hiérarchique conserve l'instabilité isolée
+comme surveillance et réserve la notification de vérification à HYPO ou à une convergence. Ces
+résultats constituent une extension exploratoire: ils ne remplacent pas la validation
+technique plus ciblée de HYPO et ne mesurent ni sensibilité ni spécificité cliniques.
+
+\introheading{Contributions}
+Le mémoire apporte:
+\begin{enumerate}
+  \item un détecteur HYPO directionnel, persistant et interprétable;
+  \item une validation attribuable après la période de référence, une ablation contre IF et LOF et une
+  analyse OFAT de vingt variantes;
+  \item une extension bidirectionnelle exploratoire avec persistances séparées et cinq
+  règles de fusion;
+  \item des contrôles brefs et des facteurs confondants qui rendent visibles les limites de spécificité;
+  \item une évaluation du temps d'exécution de la chaîne complète, une analyse SLS synchronisée, une interface
+  Streamlit et une suite de tests reproductibles.
+\end{enumerate}
+
+\introheading{Structure du mémoire}
+Le Chapitre~\ref{chapitre:contexte} présente la boiterie, les signaux comportementaux et les
+méthodes de détection. Le Chapitre~\ref{chapitre:methodologie} décrit les corpus, HYPO,
+l'extension INSTABILITÉ et les protocoles d'évaluation. Le
+Chapitre~\ref{chapitre:architecture} expose l'implémentation et l'interface. Le
+Chapitre~\ref{chapitre:validation} rapporte d'abord les preuves techniques du module HYPO,
+puis les résultats de l'extension et l'analyse SLS. Le Chapitre~\ref{chapitre:discussion}
+discute séparément les conclusions établies et les hypothèses encore exploratoires.
+
+\end{introduction}

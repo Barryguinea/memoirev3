@@ -1,0 +1,354 @@
+\chapter{Reproductibilité et contrôles complémentaires}
+\label{annexe:validation}
+
+Cette annexe recense les commandes et artefacts qui soutiennent les résultats du mémoire.
+Les commandes sont exécutées depuis la racine du dépôt reproductible.
+
+\section{Environnement}
+
+\begin{verbatim}
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+\end{verbatim}
+
+L'environnement effectivement utilisé peut aussi être appelé avec le chemin absolu de son
+interpréteur Python. Les résultats ne doivent pas être mélangés avec des artefacts produits
+par une autre configuration du code.
+
+\section{Commandes de reproduction}
+
+La reproduction complète suit six étapes, dans l'ordre~:
+\begin{enumerate}
+  \item préparer l'environnement et placer \texttt{data/brut.csv} dans le projet~;
+  \item exécuter la validation et l'ablation du module HYPO~;
+  \item exécuter l'analyse OFAT, la calibration exploratoire et la courbe
+  détection--charge de HYPO~;
+  \item exécuter la comparaison exploratoire des fusions, puis l'évaluation du temps d'exécution~;
+  \item exécuter l'analyse IceTag--SLS et régénérer les figures~;
+  \item régénérer puis vérifier le manifeste SHA-256.
+\end{enumerate}
+Les commandes correspondantes sont détaillées ci-dessous.
+
+\subsection{Validation et ablation du module HYPO}
+\begin{verbatim}
+python scripts/run_hypo_module_validation.py \
+  --output-dir data/revalidation/hypo_module
+\end{verbatim}
+
+Cette commande régénère les 44 événements, les contrôles du protocole, le résumé par profil,
+l'ablation et les tests appariés regroupés par vache.
+
+\subsection{Typologie des modes de défaillance}
+\begin{verbatim}
+python scripts/compute_failure_modes.py
+\end{verbatim}
+
+Cette commande relit les sorties événementielles de HYPO et de la fusion hiérarchique, puis
+écrit les fréquences du Tableau~\ref{tab:failure_modes} dans
+\path{hypo_module/failure_modes.csv}. Elle ne relance pas les détecteurs.
+
+\subsection{Analyse OFAT du module HYPO}
+\begin{verbatim}
+python -m revalidation.sensitivity \
+  --output-dir data/revalidation/hypo_module/parameter_sensitivity
+\end{verbatim}
+
+La référence et les vingt variantes utilisent les mêmes onze vaches, les mêmes fenêtres et
+la même graine. L'analyse ne sélectionne pas de nouvelle configuration.
+
+\subsection{Traçabilité des données (provenance CowAlert)}
+\begin{verbatim}
+python scripts/cowalert_provenance.py
+\end{verbatim}
+
+Cette commande confronte \path{data/brut.csv} à l'extraction
+\path{data/cowalert_export.csv} relevée depuis le système CowAlert, et écrit les corrélations
+et la proportion d'intervalles appariés dans \path{hypo_module/cowalert_provenance.csv}. Le
+fichier source est confidentiel, demeure local et n'est pas versionné.
+
+\subsection{Intervalles de confiance et tailles d'effet}
+\begin{verbatim}
+python scripts/compute_bootstrap_ci.py
+\end{verbatim}
+
+Ce script recalcule, à graine fixée, les intervalles de confiance à 95\,\% des métriques
+attribuables (bootstrap regroupé par vache, 10\,000~rééchantillonnages) et les tailles
+d'effet de l'ablation, puis les écrit dans \path{hypo_module/bootstrap_ci.csv}.
+
+\subsection{Calibration individuelle et courbe détection--charge}
+\begin{verbatim}
+python scripts/per_cow_calibration.py
+python scripts/detection_background_curve.py
+\end{verbatim}
+
+La première commande estime les facteurs uniquement sur la période de référence et conserve le résultat
+négatif de l'expérience. La seconde réexécute neuf seuils de score sur les mêmes fenêtres,
+écrit le tableau complet et produit la Figure~\ref{fig:detection_background_curve}. Aucune
+des deux commandes ne remplace la configuration de référence.
+
+\subsection{Comparaison exploratoire des fusions}
+\begin{verbatim}
+python -m revalidation_v3.sensitivity \
+  --output-dir data/revalidation/v3_refined_full
+\end{verbatim}
+
+Cette commande exécute les cinq règles de fusion et quatre configurations de sensibilité sur
+les mêmes onze vaches et les mêmes douze scénarios.
+
+\subsection{Évaluation du temps d'exécution}
+\begin{verbatim}
+python scripts/benchmark_performance.py \
+  --input data/brut.csv \
+  --output-root data/performance \
+  --fractions 1.0 --repeats 5 --collect-output \
+  --canonical-json data/revalidation/performance_v3_full_corpus.json
+\end{verbatim}
+
+Le fichier canonique retient la médiane des cinq exécutions complètes et les temps par étape.
+
+\subsection{Analyse IceTag--SLS}
+\begin{verbatim}
+python -m revalidation_v3.mcgill_sls_validation
+\end{verbatim}
+
+Le répertoire source \texttt{mcgill\_iot\_cattle} doit être disponible selon le chemin
+documenté dans le module. Aucune observation postérieure au 12 mars 2019 n'est utilisée.
+
+\subsection{Figures du manuscrit}
+\begin{verbatim}
+python scripts/plot_parameter_sensitivity.py \
+  --summary data/revalidation/hypo_module/parameter_sensitivity/\
+parameter_sensitivity_summary.csv \
+  --pdf memoire/figures/hypo_parameter_sensitivity_effects.pdf \
+  --png memoire/figures/hypo_parameter_sensitivity_effects.png
+python scripts/plot_v3_manuscript_results.py
+python scripts/plot_cow_admissibility.py
+python scripts/audit_manuscript_numbers.py
+python scripts/update_v3_manifest.py
+shasum -a 256 -c data/revalidation/v3_artifacts.sha256
+\end{verbatim}
+
+Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et régénère les
+figures de fusion, de scénarios et de SLS; il reconstruit également quatre trajectoires
+représentatives pour l'inspection visuelle. Le script d'audit compare 95 valeurs empiriques
+du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent le
+manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
+
+\subsection{Tests et interface}
+\begin{verbatim}
+pytest -q
+python -m streamlit run app.py
+\end{verbatim}
+
+L'interface est ensuite accessible à \texttt{http://localhost:8501}. Les tests vérifient la
+cohérence logicielle, non la validité clinique.
+
+\subsection{Compilation}
+\begin{verbatim}
+cd memoire
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+\end{verbatim}
+
+\section{Artefacts principaux}
+
+Le Tableau~\ref{tab:artefacts_revalidation} liste les artefacts qui soutiennent les résultats.
+
+\begin{longtable}{p{0.43\textwidth}p{0.47\textwidth}}
+  \caption{Artefacts qui soutiennent les résultats.}
+  \label{tab:artefacts_revalidation}\\
+  \toprule
+  Fichier & Contenu \\
+  \midrule
+  \endfirsthead
+  \toprule Fichier & Contenu \\ \midrule \endhead
+  \path{hypo_module/events_primary.csv} & 44 événements de la validation principale HYPO. \\
+  \path{hypo_module/protocol_checks.csv} & Contrôles automatiques de la campagne HYPO. \\
+  \path{hypo_module/detection_summary.csv} & Résultats attribuables par profil. \\
+  \path{hypo_module/ablation_primary.csv} & Sorties des cinq variantes sur les mêmes fenêtres. \\
+  \path{hypo_module/ablation_summary.csv} & Résumé de l'ablation HYPO, IF, LOF et pédométrique. \\
+  \path{hypo_module/ablation_tests_by_cow.csv} & Tests appariés après agrégation par vache. \\
+  \path{hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv} & OFAT des dix paramètres HYPO. \\
+  \path{hypo_module/bootstrap_ci.csv} & IC95 (bootstrap par vache) et tailles d'effet de l'ablation. \\
+  \path{hypo_module/failure_modes.csv} & Fréquences reproductibles des modes de défaillance. \\
+  \path{hypo_module/per_cow_calibration.csv} & Comparaison agrégée avant et après calibration. \\
+  \path{hypo_module/per_cow_calibration_by_cow.csv} & Facteurs et charges de fond par vache. \\
+  \path{hypo_module/cowalert_provenance.csv} & Concordance IceQube--CowAlert (corrélations, identité). \\
+  \path{hypo_module/detection_background_curve/detection_background_curve.csv} & Neuf points de la courbe détection--charge. \\
+  \path{manuscript_number_audit.csv} & Correspondance entre 95 valeurs du manuscrit et leurs artefacts sources. \\
+  \path{performance_v3_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
+  \path{v3_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
+  \path{v3_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
+  \path{v3_refined_full/events_fusion_hypo_only.csv} & Résultats de la branche HYPO seule. \\
+  \path{v3_refined_full/events_fusion_instability_only.csv} & Résultats de la branche INSTABILITÉ seule. \\
+  \path{v3_refined_full/events_fusion_or.csv} & Résultats de la fusion OU. \\
+  \path{v3_refined_full/events_fusion_sequential_24_72h.csv} & Résultats de la fusion séquentielle. \\
+  \path{v3_refined_full/events_parameter_sensitivity_*.csv} & Évaluations des variantes de paramètres. \\
+  \path{v3_mcgill_sls/mcgill_v3_cohort_all_variants.csv} & Cohorte SLS et sorties des cinq fusions. \\
+  \path{v3_mcgill_sls/mcgill_v3_exclusions.csv} & Motifs d'exclusion et couverture. \\
+  \path{v3_mcgill_sls/mcgill_v3_metrics.csv} & AUC, Mann--Whitney et Spearman. \\
+  \path{v3_mcgill_sls/mcgill_v3_summary.json} & Protocole et synthèse de l'analyse SLS. \\
+  \path{memoire/figures/v3_manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
+  \bottomrule
+\end{longtable}
+
+Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
+\texttt{data/revalidation/}.
+
+\section{Amplitudes des profils d'injection}
+
+Les Tableaux~\ref{tab:amplitudes_hypo} et~\ref{tab:amplitudes_extension} donnent les
+changements relatifs appliqués aux signaux bruts. Les amplitudes des trois baisses sont
+communes aux deux campagnes, mais leurs durées diffèrent~: 36 à 60 heures dans la validation
+principale HYPO, contre 24 à 48 heures dans l'extension bidirectionnelle. Les modifications
+suivent une enveloppe progressive. Seule l'amplitude modérée des pas ($-29$\,\%) est ancrée
+sur un ordre de grandeur publié \citep{paudyal2021lying}~; les autres valeurs sont des
+hypothèses de test et non des estimations cliniques.
+
+\begin{table}[H]
+  \centering
+  \caption{Profils de la validation principale HYPO.}
+  \label{tab:amplitudes_hypo}
+  \small
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Profil & Durée & Pas & Mouvement & Transitions & Posture \\
+    \midrule
+    Graduel léger & 36 h & $-12$\,\% & $-10$\,\% & $-12$\,\% & $+3$\,\% \\
+    Graduel modéré & 48 h & $-29$\,\% & $-25$\,\% & $-25$\,\% & $+7$\,\% \\
+    Graduel marqué & 60 h & $-42$\,\% & $-38$\,\% & $-40$\,\% & $+12$\,\% \\
+    Variation brève & 3 h & $+15$\,\% & $\cdot$ & $\cdot$ & $\cdot$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Profils bidirectionnels et contrôles de confusion.}
+  \label{tab:amplitudes_extension}
+  \scriptsize
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Profil & Durée & Pas & Mouvement & Transitions & Posture/osc. \\
+    \midrule
+    \multicolumn{6}{l}{\textit{Hypoactivité de l'extension}} \\
+    Léger & 24 h & $-12$\,\% & $-10$\,\% & $-12$\,\% & $+3$/$\cdot$\,\% \\
+    Modéré & 36 h & $-29$\,\% & $-25$\,\% & $-25$\,\% & $+7$/$\cdot$\,\% \\
+    Marqué & 48 h & $-42$\,\% & $-38$\,\% & $-40$\,\% & $+12$/$\cdot$\,\% \\
+    \addlinespace
+    \multicolumn{6}{l}{\textit{Instabilité (hausses disproportionnées aux pas)}} \\
+    Léger & 8 h & $0$\,\% & $+25$\,\% & $+30$\,\% & $+6/+8$\,\% \\
+    Modéré & 12 h & $+5$\,\% & $+45$\,\% & $+50$\,\% & $+10/+12$\,\% \\
+    Marqué & 16 h & $+8$\,\% & $+65$\,\% & $+70$\,\% & $+15/+18$\,\% \\
+    \addlinespace
+    \multicolumn{6}{l}{\textit{Contrôles et confondants}} \\
+    Pic capteur & 15 min & $\cdot$ & $+200$\,\% & $\cdot$ & $\cdot$ \\
+    Exercice bref & 2 h & $+45$\,\% & $+45$\,\% & $+45$\,\% & $\cdot$/$+5$\,\% \\
+    Activité de type œstrus & 6 h & $+40$\,\% & $+40$\,\% & $+40$\,\% & $\cdot$/$+10$\,\% \\
+    Hypoactivité non locomotrice & 24 h & $-30$\,\% & $-28$\,\% & $-25$\,\% & $+8$/$\cdot$\,\% \\
+    Manipulation & 1 h & $+10$\,\% & $+55$\,\% & $+70$\,\% & $+18/+20$\,\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Dans la dernière colonne du Tableau~\ref{tab:amplitudes_extension}, la première valeur est
+le transfert ou l'oscillation posturale et la seconde l'oscillation générale appliquée aux
+signaux. Un point ($\cdot$) indique l'absence de modification correspondante.
+
+Le profil séquentiel enchaîne une instabilité ($+50$\,\% de mouvement, $+55$\,\% de
+transitions, $+12/+14$\,\% de posture/oscillation sur 12~h), un délai de 24~h, puis une
+hypoactivité ($-32$\,\% de pas, $-28$\,\% de mouvement, $-30$\,\% de transitions et
+$+8$\,\% de transfert postural sur 36~h).
+
+\section{Invariants des injections}
+
+\begin{enumerate}
+  \item chaque scénario est injecté dans une copie distincte des données;
+  \item le début est strictement postérieur à la période de référence;
+  \item les pas, le mouvement et les transitions restent non négatifs;
+  \item le temps couché plus le temps debout est conservé;
+  \item les enveloppes sont progressives et ne contiennent pas d'alternance extrême;
+  \item l'exécution propre de la même vache sert de référence d'attribution;
+  \item le fichier \texttt{data/brut.csv} n'est jamais modifié.
+\end{enumerate}
+
+\section{Unité statistique}
+
+Les 132 lignes événementielles ne représentent pas 132 animaux indépendants. Elles sont
+regroupées dans onze vaches. Les résultats par scénario sont descriptifs; toute comparaison
+inférentielle doit agréger préalablement par vache. Dans l'analyse SLS, chaque vache fournit
+une seule valeur par mesure sur la fenêtre de sept jours.
+
+La campagne HYPO comporte 44 événements mais repose sur les mêmes onze vaches. Les tests de
+l'ablation utilisent donc les moyennes par vache, jamais les 44 lignes comme observations
+indépendantes.
+
+\section{Variabilité inter-vache du fond}
+
+Le taux de fond agrégé (0,402 notification par vache-jour pour HYPO) masque une variabilité
+individuelle importante. Sur les onze vaches admissibles (45 notifications, 112~vaches-jours),
+le taux varie de 0,197 à 0,590 selon l'animal, soit un facteur d'environ trois
+(Tableau~\ref{tab:fond_par_vache}).
+
+\begin{table}[H]
+  \centering
+  \caption{Distribution du fond de notifications HYPO par vache (campagne principale).}
+  \label{tab:fond_par_vache}
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+    Groupe & $n$ vaches & Notifications ($\approx$10~j) & Taux/vache-jour \\
+    \midrule
+    Stable ($\leq 0{,}30$) & 2 & 2--3 & 0,197--0,295 \\
+    Intermédiaire (0,30--0,45) & 6 & 4 & 0,389--0,393 \\
+    Active ($> 0{,}45$) & 3 & 5--6 & 0,491--0,590 \\
+    \midrule
+    Ensemble & 11 & 45 (total) & 0,402 (agrégé) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Cette dispersion décrit une hétérogénéité de charge, mais elle ne démontre pas que le niveau
+d'activité moyen en est la cause. Une calibration simple fondée sur la dispersion du score de
+période de référence a été testée sans réduire le fond ni son coefficient de variation, et elle a dégradé
+IoU20. Elle n'est donc pas retenue. Une méthode future devrait être définie sur un jeu de
+développement distinct avant d'être évaluée. Ces chiffres décrivent une charge opérationnelle
+et ne constituent pas un taux de faux positifs, faute de labels cliniques.
+
+\section{Intégrité des fichiers}
+
+Le fichier \texttt{data/revalidation/v3\_artifacts.sha256} contient les empreintes SHA-256
+des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
+exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag--SLS. Les chemins y
+sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
+manifeste~:
+
+\begin{verbatim}
+shasum -a 256 -c data/revalidation/v3_artifacts.sha256
+\end{verbatim}
+
+Toute modification des scripts, des données, des paramètres ou de l'environnement exige une
+nouvelle exécution et un nouveau manifeste. Le PDF seul ne constitue pas une trace suffisante
+de l'expérience.
+
+\section{Règles d'interprétation}
+
+Les formulations suivantes sont exclues des conclusions:
+\begin{itemize}
+  \item appeler ``sensibilité clinique'' le taux de détection des injections;
+  \item appeler ``faux positifs'' les notifications produites sur des données sans labels;
+  \item interpréter une instabilité isolée comme une boiterie précoce confirmée;
+  \item attribuer l'association SLS au système sans mentionner le groupe \textit{Exercise};
+  \item présenter les paramètres techniques comme des seuils physiologiques optimaux;
+  \item remplacer le seuil de référence par 0,14 à partir de la courbe descriptive, sans
+  jeu de développement indépendant;
+  \item comparer directement 87,9\,\% de couverture HYPO et 72,7\,\% de détection
+  nécessitant une vérification dans l'extension hybride, car les critères et les ensembles de scénarios diffèrent;
+  \item attribuer l'écart entre 0,402 et 0,446 au seul algorithme, car le délai réfractaire
+  passe de 24 à 12 heures dans la comparaison des fusions;
+  \item traiter les intervalles de quinze minutes comme des sujets indépendants.
+\end{itemize}
+
+Ces règles font partie du protocole de reproductibilité: reproduire les calculs sans en
+respecter la portée conduirait à une conclusion scientifiquement différente.
