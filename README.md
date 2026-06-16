@@ -60,7 +60,6 @@ memoirev3/
 │   ├── run_hypo_module_validation.py   # Campagne + ablation + tests appariés
 │   ├── compute_bootstrap_ci.py         # IC95 (bootstrap par vache) + tailles d'effet
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
-│   ├── compute_alsaaod_baseline.py     # Comparateur pédométrique (Alsaaod 2012)
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
 │   ├── audit_manuscript_numbers.py     # Vérifie 248 valeurs du mémoire ↔ sources
 │   └── update_v3_manifest.py           # (Re)génère le manifeste SHA-256
