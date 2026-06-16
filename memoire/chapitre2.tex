@@ -253,8 +253,42 @@ Un candidat exige \(S_H\geq0{,}12\), au moins trois familles concordantes, l'imp
 pas ou du \textit{Motion Index}, une couverture suffisante et une position dans la période future.
 Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM, somme cumulée unilatérale de Page \citep{page1954continuous}, est défini par
 \(C_t=\max(0,C_{t-1}+e_t-0{,}07)\). Un épisode exige une persistance sur six heures et
-\(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. La
-Figure~\ref{fig:hypo_cusum_example} illustre ce mécanisme sur une vache, en comparant
+\(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. L'algorithme~\ref{alg:hypo}
+résume cette logique de détection pour une vache.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.92\textwidth}{\raggedright
+\textbf{Algorithme 1:} Détection HYPO d'une baisse comportementale persistante (par vache)
+\vspace{0.3em}\hrule\vspace{0.5em}
+\textbf{Entrée:} intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$\\
+\textbf{Sortie:} épisodes, départs et notifications (alerte à vérifier, non diagnostique)
+
+\begin{enumerate}[leftmargin=1.5em]
+\item \textit{Référence individuelle:}\\
+    Pour chaque famille (pas, \textit{Motion Index}, transitions, posture), médiane de la période
+    de référence par créneau horaire, avec repli sur la médiane globale de la vache.
+
+\item \textit{Pour chaque intervalle $t$ de la période surveillée:}\\
+    Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ à la référence (créneau et veille, comparaison
+    prudente)\\
+    Déficits $d_j(t) = \max(0,\ 1 - r_j(t))$\hspace{0.5em}(posture: excès de temps couché et déficit de temps debout)\\
+    Score $S_H(t) = 0{,}30\,d_{pas} + 0{,}30\,d_{MI} + 0{,}20\,d_{transitions} + 0{,}20\,d_{posture}$\\
+    Candidat si $S_H \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
+    impliqués, et couverture suffisante\\
+    Évidence $e_t \leftarrow S_H + 0{,}35\,(\text{baisse sur }6\,\text{h})$ si candidat, sinon $0$\\
+    CUSUM $C_t \leftarrow \max(0,\ C_{t-1} + e_t - 0{,}07)$
+
+\item \textit{Épisode et notification:}\\
+    Épisode si persistance du candidat sur $6\,$h et $C_t \geq 1{,}20$\\
+    Notifier au début d'un épisode, avec un délai réfractaire de $24\,$h
+\end{enumerate}
+}}
+\caption{Pseudocode de la détection HYPO.}
+\label{alg:hypo}
+\end{figure}
+
+La Figure~\ref{fig:hypo_cusum_example} illustre ce mécanisme sur une vache, en comparant
 l'exécution injectée à l'exécution propre de la même vache.
 
 \begin{figure}[H]
