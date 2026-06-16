@@ -253,7 +253,23 @@ Un candidat exige \(S_H\geq0{,}12\), au moins trois familles concordantes, l'imp
 pas ou du \textit{Motion Index}, une couverture suffisante et une position dans la période future.
 Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM, somme cumulée unilatérale de Page \citep{page1954continuous}, est défini par
 \(C_t=\max(0,C_{t-1}+e_t-0{,}07)\). Un épisode exige une persistance sur six heures et
-\(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures.
+\(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. La
+Figure~\ref{fig:hypo_cusum_example} illustre ce mécanisme sur une vache, en comparant
+l'exécution injectée à l'exécution propre de la même vache.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/hypo_cusum_example.png}
+  \caption[Détection attribuable au niveau de l'événement]{Détection attribuable au
+  niveau de l'événement, pour une vache et une dégradation graduelle injectée après la
+  période de référence. En haut, le score comportemental $S_H(t)$ de l'exécution injectée
+  s'élève au-dessus du seuil de candidat et de l'exécution propre pendant la fenêtre
+  injectée, puis redescend une fois l'événement terminé. En bas, l'épisode détecté de
+  l'exécution injectée se superpose à la fenêtre réelle (bonne localisation temporelle),
+  alors que l'exécution propre ne produit pas le même épisode au même endroit~: seule la
+  part attribuable à l'injection est créditée.}
+  \label{fig:hypo_cusum_example}
+\end{figure}
 
 \section{Branche INSTABILITÉ: mouvement disproportionné et posture fragmentée}
 \label{sec:instabilite}
