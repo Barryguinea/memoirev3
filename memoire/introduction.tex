@@ -54,8 +54,9 @@ Il se décline en six objectifs spécifiques:
   \item construire une période de référence chronologique propre à chaque vache et à chaque créneau
   horaire;
   \item détecter les baisses multivariées persistantes par une branche HYPO;
-  \item évaluer HYPO sur des événements postérieurs à la période de référence, une ablation IF/LOF et une analyse
-  de sensibilité des paramètres;
+  \item évaluer HYPO au niveau de l'événement et de la vache, sur des événements postérieurs à la
+  période de référence, avec une ablation contre Isolation Forest, LOF et un comparateur pédométrique,
+  et une analyse de sensibilité des paramètres;
   \item explorer une branche INSTABILITÉ, des persistances distinctes et cinq règles de
   fusion;
   \item mesurer explicitement les contrôles brefs, les facteurs confondants, la charge de
@@ -91,7 +92,17 @@ admissibles de chaque série constituent la période de référence et les 40\,\
 surveillée. HYPO utilise des totaux glissants sur douze heures, une persistance de six heures,
 un score multivarié et un CUSUM unilatéral. Sa campagne principale comporte 33 dégradations
 graduelles et 11 contrôles brefs répartis entre onze vaches. Une exécution propre de la même
-vache est soustraite afin de ne pas attribuer à l'injection une alerte préexistante.
+vache, sans injection, est soustraite (comparaison contrefactuelle) afin de ne créditer que les
+alertes réellement attribuables à l'événement.
+
+L'évaluation porte sur l'événement et sur la vache, non sur chaque intervalle de capteur: chaque
+dégradation injectée compte comme un épisode unique, dont on mesure la détection et la localisation
+temporelle par un indice de recouvrement, tandis que les indicateurs sont agrégés par vache et
+assortis d'intervalles de confiance obtenus par rééchantillonnage des vaches. Ce choix évite de
+traiter des intervalles successifs fortement corrélés comme autant d'observations indépendantes. La
+même campagne situe HYPO face aux comparateurs Isolation Forest, LOF et pédométrique, trace une
+courbe reliant la détection à la charge de vérification et scelle les résultats par un manifeste
+cryptographique.
 
 L'extension INSTABILITÉ utilise une agrégation de trois heures et une persistance de deux
 heures. Elle est évaluée avec HYPO sur 132 scénarios comprenant intensités, séquence,
@@ -106,7 +117,8 @@ reproductible. Ses contributions sont les suivantes:
 \begin{enumerate}
   \item un détecteur HYPO directionnel, persistant et interprétable, centré sur la trajectoire
   individuelle de chaque vache;
-  \item une validation attribuable après la période de référence, une ablation contre IF et LOF et une
+  \item une validation attribuable au niveau de l'événement et de la vache après la période de
+  référence, une ablation contre Isolation Forest, LOF et un comparateur pédométrique, et une
   analyse OFAT de vingt variantes;
   \item une extension bidirectionnelle exploratoire avec persistances séparées et cinq
   règles de fusion;
