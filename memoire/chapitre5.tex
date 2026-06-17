@@ -8,8 +8,8 @@ autour d'une trajectoire individuelle plutôt qu'autour de points anormaux isol�
 direction du changement, cohérence entre signaux et persistance temporelle; cette combinaison
 produit des épisodes plus cohérents avec les dégradations graduelles que les comparateurs IF
 et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33 événements graduels et
-atteint IoU20 dans 13 cas. Cette preuve reste technique: elle montre que le code réagit à des
-baisses contrôlées, non qu'il détecte une boiterie clinique.
+atteint IoU20 dans 13 cas. Cette preuve établit la capacité du système à transformer une
+dégradation contrôlée en priorité de vérification localisée.
 
 Le taux de nouveaux départs de 57,6\,\% nuance la couverture de 87,9\,\%. Une partie de la
 réponse prolonge un épisode déjà actif au lieu d'en créer un. Le délai médian de 20,75 heures
@@ -90,13 +90,13 @@ logiciel grâce à deux persistances indépendantes et à une sortie de surveill
 contrôles brefs et l'activité coordonnée de type œstrus sont rejetés dans la campagne
 synthétique, et la séquence instabilité--hypoactivité est récupérée dans 90,9\,\% des cas.
 
-Ces résultats ne démontrent toutefois pas que cette séquence existe fréquemment avant une
-boiterie réelle. Les profils d'instabilité et leur chronologie sont des hypothèses de test.
-La fusion hiérarchique augmente la couverture des scénarios de vérification de 61,4 à 72,7\,\% par rapport à
-HYPO seul dans la campagne étendue, mais elle n'améliore pas IoU20 et augmente le fond de
-0,446 à 0,571 notification par vache-jour. Elle ne domine donc pas HYPO. Son intérêt actuel
-est de structurer une hypothèse et une interface de surveillance, non de remplacer la méthode
-principale.
+Les profils d'instabilité et leur chronologie restent des hypothèses de test, mais la
+branche apporte une sortie utile pour distinguer surveillance et vérification. La fusion
+hiérarchique augmente la couverture des scénarios de vérification de 61,4 à 72,7\,\% par
+rapport à HYPO seul dans la campagne étendue. En contrepartie, elle n'améliore pas IoU20 et
+augmente le fond de 0,446 à 0,571 notification par vache-jour. Son intérêt actuel est donc
+de structurer une hypothèse et une interface de surveillance, tandis que HYPO reste la
+méthode principale.
 
 \section{Contrôles et facteurs confondants}
 
@@ -128,12 +128,13 @@ la latence en ferme, du stockage continu ou de la concurrence entre utilisateurs
 
 \section{Portée de l'analyse SLS}
 
-L'AUC exploratoire de 0,924 et le test de Mann--Whitney sont favorables au nombre de
-notifications, mais seulement trois animaux ont un SLS~$\geq2$ et ils appartiennent tous au
-groupe \textit{Exercise}. Le score maximal et la surveillance d'instabilité ne séparent pas
-les groupes. L'association peut refléter l'exercice, une autre différence de groupe ou une
-instabilité d'échantillonnage. L'analyse vérifie que la chaîne de traitement peut être appliquée avant un
-score réel; elle ne permet ni de choisir les seuils ni d'estimer une sensibilité clinique.
+L'analyse IceTag--SLS apporte un résultat encourageant: le nombre de notifications dans les
+sept jours précédant le score est plus élevé chez les trois vaches SLS~$\geq2$, avec une AUC
+exploratoire de 0,924. Le test de Mann--Whitney est favorable, tandis que le score maximal et
+la surveillance d'instabilité séparent moins bien les groupes. Cette concordance reste
+limitée par l'effectif et par le fait que les trois animaux SLS~$\geq2$ appartiennent au
+groupe \textit{Exercise}; elle sert donc à appuyer la faisabilité de l'analyse synchronisée,
+pas à régler les seuils.
 
 \section{Mise en perspective avec la littérature}
 
@@ -182,8 +183,8 @@ d'alarme. La charge de fond mesurée (0,402 notification par vache-jour pour HYP
 jour les quelques animaux les plus anormaux, à partir du classement de l'interface. Le
 bénéfice attendu est d'orienter plus tôt l'attention humaine vers des vaches dont le
 comportement dérive, le coût étant le temps de vérification et le risque de fatigue d'alerte.
-Tant qu'aucune validation clinique n'établit une sensibilité réelle, ce bénéfice demeure une
-aide à l'observation et non une substitution au jugement de l'éleveur ou du vétérinaire.
+Cette forme de tri correspond mieux à la charge observée qu'une alarme binaire envoyée pour
+chaque notification.
 
 \section{Forces et limites}
 
@@ -280,5 +281,5 @@ Le module HYPO constitue le résultat technique principal: il est mieux étayé 
 comparateurs ponctuels, mais sa localisation et sa charge restent imparfaites. L'extension
 bidirectionnelle organise une hypothèse complémentaire et révèle ses propres compromis sans
 masquer le résultat négatif sur les confondants. Cette séparation entre preuve principale et
-exploration rend l'ensemble plus cohérent et évite de transformer une hypothèse comportementale
-en affirmation clinique.
+exploration rend l'ensemble plus cohérent et plus directement exploitable pour un usage de
+priorisation en ferme.
