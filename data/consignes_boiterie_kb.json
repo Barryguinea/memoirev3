@@ -13,7 +13,7 @@
   },
   "levels": {
     "suspect": {
-      "label": "Suspect",
+      "label": "À surveiller",
       "priority": 1,
       "summary": "Surveillance active (<24h).",
       "actions_0_24h": [
@@ -38,7 +38,7 @@
       "last_review_date": "2026-02-26"
     },
     "probable": {
-      "label": "Probable",
+      "label": "À vérifier",
       "priority": 2,
       "summary": "Traiter rapidement (idéalement <24–48h).",
       "actions_0_2h": [
@@ -71,7 +71,7 @@
       "last_review_date": "2026-02-26"
     },
     "critique": {
-      "label": "Critique",
+      "label": "Vérification prioritaire",
       "priority": 3,
       "summary": "Priorité; intervention immédiate + vétérinaire si red flags.",
       "actions_0_2h": [
