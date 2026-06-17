@@ -181,7 +181,7 @@ def plot_manual_review() -> None:
         detected = bool(view.loc[in_event, "hybrid_warning_episode"].max())
         surveillance = bool(view.loc[in_event, "instability_warning_episode"].max())
         status = "alerte" if detected else ("surveillance" if surveillance else "rejet")
-        ax.set_title(f"{label} — {status}", loc="left", fontsize=10)
+        ax.set_title(f"{label} : {status}", loc="left", fontsize=10)
         ax.set_xlim(left, right)
         ax.set_ylim(0, 1.05)
         ax.set_ylabel("Signal\nnormalisé")
