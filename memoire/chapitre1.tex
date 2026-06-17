@@ -278,7 +278,13 @@ balasso2023behaviour,benaissa2019calving} et la détection d'anomalies sur des i
 \citep{qiao2021review,chandola2009anomaly}. Les revues
 récentes confirment la prédominance des approches supervisées, tout en soulignant le
 manque d'études non supervisées en conditions réelles d'élevage
-\citep{qiao2021review,oleary2020accelerometers}.
+\citep{qiao2021review,oleary2020accelerometers}. Une revue récente de la détection
+automatisée par intelligence artificielle confirme cette dynamique tout en pointant des
+freins persistants: hétérogénéité des protocoles, dépendance aux étiquettes et validation
+encore limitée en conditions réelles \citep{siachos2024automated}. Les approches récentes par
+vision et apprentissage profond atteignent de bonnes performances sur vidéo
+\citep{myint2024lameness}, mais supposent une infrastructure caméra et des données étiquetées,
+deux conditions absentes du corpus accéléromètre non étiqueté utilisé ici.
 
 La diversité de ces approches peut être organisée selon trois dimensions complémentaires:
 \textit{la source de données}, \textit{la stratégie analytique} et \textit{la nature de la
@@ -487,7 +493,11 @@ ici: les variables IceQube sont déjà agrégées par intervalles de 15~minutes 
 principal ne comporte pas de diagnostic locomoteur synchronisé. Une classification clinique
 supervisée ne serait donc pas défendable. Les méthodes non supervisées restent utiles comme
 points de comparaison, mais elles ne résolvent pas à elles seules la direction ni la
-persistance d'un changement.
+persistance d'un changement. Des travaux récents transposent la détection d'anomalies non
+supervisée à des séries capteurs d'élevage bruitées \citep{kakar2024timetector}, ce qui
+conforte l'intérêt d'approches sans étiquettes; ils restent toutefois orientés vers la
+reconstruction de signaux plutôt que vers une baisse comportementale directionnelle,
+persistante et individualisée comme celle que cible HYPO.
 
 Le Tableau~\ref{tab:revue_ciblee} résume les travaux les plus directement reliés aux choix
 méthodologiques. Il ne compare pas leurs performances numériques, car les capteurs, les
