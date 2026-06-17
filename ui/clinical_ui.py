@@ -21,6 +21,16 @@ from ui.presentation import (
 )
 
 
+# Libelles d'affichage neutres (cadrage surveillance/verification, non diagnostique).
+# Utilises par defaut si un niveau ne fournit pas son propre "label" (ex: KB de secours).
+_NEUTRAL_LEVEL_LABELS = {
+    "suspect": "À surveiller",
+    "probable": "À vérifier",
+    "critique": "Vérification prioritaire",
+    "normal": "Normal",
+}
+
+
 def _slug_source_id(name: str, idx: int) -> str:
     """Construit un identifiant source stable-ish si absent du JSON."""
     base = re.sub(r"[^a-z0-9]+", "_", str(name).strip().lower()).strip("_")
@@ -103,7 +113,7 @@ def _normalize_clinical_kb(kb: Dict[str, Any]) -> Dict[str, Any]:
     for level_key, payload in levels.items():
         lvl = str(level_key).strip().lower()
         p = dict(payload) if isinstance(payload, dict) else {"summary": str(payload)}
-        p.setdefault("label", lvl.capitalize())
+        p.setdefault("label", _NEUTRAL_LEVEL_LABELS.get(lvl, lvl.capitalize()))
         p.setdefault("priority", _level_priority(lvl))
         p.setdefault("confidence", "high" if lvl == "critique" else "medium")
         p.setdefault("last_review_date", meta.get("review_date", ""))
