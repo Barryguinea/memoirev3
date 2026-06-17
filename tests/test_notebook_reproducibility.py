@@ -4,7 +4,7 @@ from pathlib import Path
 _NB_ROOT = Path(__file__).resolve().parents[1] / "notebooks"
 
 NOTEBOOKS = [
-    _NB_ROOT / "revalidation_complete.ipynb",
+    _NB_ROOT / "validation_complete.ipynb",
 ]
 
 

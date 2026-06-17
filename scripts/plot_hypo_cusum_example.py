@@ -19,8 +19,8 @@ import pandas as pd
 
 from core.features import build_interval_features
 from core.io import COW, TIME, available_base_cols, load_csv
-from revalidation.ablation import _run_variant_a
-from revalidation.campaign import (
+from validation_hypo.ablation import _run_variant_a
+from validation_hypo.campaign import (
     _heldout_start_time,
     final_params,
     inject_events_for_cow,

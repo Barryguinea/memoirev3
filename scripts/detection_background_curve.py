@@ -27,7 +27,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from core.early_warning import EarlyWarningConfig
-from revalidation.campaign import run_clean_campaign
+from validation_hypo.campaign import run_clean_campaign
 
 GRADUAL = {"gradual_mild", "gradual_moderate", "gradual_marked"}
 DEFAULT_THRESHOLDS = (0.04, 0.06, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20)
@@ -139,7 +139,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--output-dir",
-        default="data/revalidation/hypo_module/detection_background_curve",
+        default="data/validation/hypo_module/detection_background_curve",
     )
     parser.add_argument(
         "--figure-dir",

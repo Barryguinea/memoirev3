@@ -44,7 +44,7 @@ from scripts._benchmark_performance.engine import (
 
 def _build_parser() -> argparse.ArgumentParser:
     """Construit et retourne l'analyseur d'arguments du CLI de benchmark."""
-    p = argparse.ArgumentParser(description="Benchmark performance/scalabilite du pipeline V3")
+    p = argparse.ArgumentParser(description="Benchmark performance/scalabilite du pipeline final")
     p.add_argument("--input", type=str, default="data/brut.csv", help="CSV brut a benchmarker")
     p.add_argument("--output-root", type=str, default="data/performance", help="Dossier de sortie")
     p.add_argument("--fractions", type=str, default="0.25,0.5,0.75,1.0", help="Fractions de vaches a tester (ex: 0.25,0.5,1.0)")
@@ -69,7 +69,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--canonical-json",
         type=str,
-        default="data/revalidation/performance_v3_full_corpus.json",
+        default="data/validation/performance_full_corpus.json",
         help="Résumé canonique de la plus grande fraction évaluée",
     )
     return p
@@ -168,7 +168,7 @@ def main() -> int:
     summary_df.to_csv(summary_file, index=False)
 
     meta = {
-        "benchmark_type": "pipeline_v3_hybrid_performance_scalability",
+        "benchmark_type": "pipeline_hybrid_initial_performance_scalability",
         "started_at": bench_started_at,
         "finished_at": datetime.now().isoformat(timespec="seconds"),
         "input_path": str(Path(args.input)),
@@ -191,7 +191,7 @@ def main() -> int:
         json.dump(meta, f, indent=2, ensure_ascii=False)
 
     if summary_df.empty:
-        raise RuntimeError("Le benchmark V3 n'a produit aucun résumé.")
+        raise RuntimeError("Le benchmark final n'a produit aucun résumé.")
     full = summary_df.loc[summary_df["fraction"].eq(summary_df["fraction"].max())].iloc[0]
     canonical_path = Path(args.canonical_json)
     canonical_path.parent.mkdir(parents=True, exist_ok=True)

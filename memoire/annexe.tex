@@ -34,7 +34,7 @@ Les commandes correspondantes sont détaillées ci-dessous.
 \subsection{Validation et ablation du module HYPO}
 \begin{verbatim}
 python scripts/run_hypo_module_validation.py \
-  --output-dir data/revalidation/hypo_module
+  --output-dir data/validation/hypo_module
 \end{verbatim}
 
 Cette commande régénère les 44 événements, les contrôles du protocole, le résumé par profil,
@@ -51,8 +51,8 @@ Cette commande relit les sorties événementielles de HYPO et de la fusion hiér
 
 \subsection{Analyse OFAT du module HYPO}
 \begin{verbatim}
-python -m revalidation.sensitivity \
-  --output-dir data/revalidation/hypo_module/parameter_sensitivity
+python -m validation_hypo.sensitivity \
+  --output-dir data/validation/hypo_module/parameter_sensitivity
 \end{verbatim}
 
 La référence et les vingt variantes utilisent les mêmes onze vaches, les mêmes fenêtres et
@@ -90,8 +90,8 @@ des deux commandes ne remplace la configuration de référence.
 
 \subsection{Comparaison exploratoire des fusions}
 \begin{verbatim}
-python -m revalidation_v3.sensitivity \
-  --output-dir data/revalidation/v3_refined_full
+python -m validation_hybrid.sensitivity \
+  --output-dir data/validation/hybrid_refined_full
 \end{verbatim}
 
 Cette commande exécute les cinq règles de fusion et quatre configurations de sensibilité sur
@@ -103,14 +103,14 @@ python scripts/benchmark_performance.py \
   --input data/brut.csv \
   --output-root data/performance \
   --fractions 1.0 --repeats 5 --collect-output \
-  --canonical-json data/revalidation/performance_v3_full_corpus.json
+  --canonical-json data/validation/performance_full_corpus.json
 \end{verbatim}
 
 Le fichier canonique retient la médiane des cinq exécutions complètes et les temps par étape.
 
 \subsection{Analyse IceTag--SLS}
 \begin{verbatim}
-python -m revalidation_v3.mcgill_sls_validation
+python -m validation_hybrid.mcgill_sls_validation
 \end{verbatim}
 
 Le répertoire source \texttt{mcgill\_iot\_cattle} doit être disponible selon le chemin
@@ -119,15 +119,15 @@ documenté dans le module. Aucune observation postérieure au 12 mars 2019 n'est
 \subsection{Figures du manuscrit}
 \begin{verbatim}
 python scripts/plot_parameter_sensitivity.py \
-  --summary data/revalidation/hypo_module/parameter_sensitivity/\
+  --summary data/validation/hypo_module/parameter_sensitivity/\
 parameter_sensitivity_summary.csv \
   --pdf memoire/figures/hypo_parameter_sensitivity_effects.pdf \
   --png memoire/figures/hypo_parameter_sensitivity_effects.png
-python scripts/plot_v3_manuscript_results.py
+python scripts/plot_manuscript_results.py
 python scripts/plot_cow_admissibility.py
 python scripts/audit_manuscript_numbers.py
-python scripts/update_v3_manifest.py
-shasum -a 256 -c data/revalidation/v3_artifacts.sha256
+python scripts/update_validation_manifest.py
+shasum -a 256 -c data/validation/validation_artifacts.sha256
 \end{verbatim}
 
 Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et régénère les
@@ -153,11 +153,11 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 \section{Artefacts principaux}
 
-Le Tableau~\ref{tab:artefacts_revalidation} liste les artefacts qui soutiennent les résultats.
+Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent les résultats.
 
 \begin{longtable}{p{0.43\textwidth}p{0.47\textwidth}}
   \caption{Artefacts qui soutiennent les résultats.}
-  \label{tab:artefacts_revalidation}\\
+  \label{tab:artefacts_validation}\\
   \toprule
   Fichier & Contenu \\
   \midrule
@@ -177,24 +177,24 @@ Le Tableau~\ref{tab:artefacts_revalidation} liste les artefacts qui soutiennent 
   \path{hypo_module/cowalert_provenance.csv} & Concordance IceQube--CowAlert (corrélations, identité). \\
   \path{hypo_module/detection_background_curve/detection_background_curve.csv} & Neuf points de la courbe détection--charge. \\
   \path{manuscript_number_audit.csv} & Correspondance entre 95 valeurs du manuscrit et leurs artefacts sources. \\
-  \path{performance_v3_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
-  \path{v3_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
-  \path{v3_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
-  \path{v3_refined_full/events_fusion_hypo_only.csv} & Résultats de la branche HYPO seule. \\
-  \path{v3_refined_full/events_fusion_instability_only.csv} & Résultats de la branche INSTABILITÉ seule. \\
-  \path{v3_refined_full/events_fusion_or.csv} & Résultats de la fusion OU. \\
-  \path{v3_refined_full/events_fusion_sequential_24_72h.csv} & Résultats de la fusion séquentielle. \\
-  \path{v3_refined_full/events_parameter_sensitivity_*.csv} & Évaluations des variantes de paramètres. \\
-  \path{v3_mcgill_sls/mcgill_v3_cohort_all_variants.csv} & Cohorte SLS et sorties des cinq fusions. \\
-  \path{v3_mcgill_sls/mcgill_v3_exclusions.csv} & Motifs d'exclusion et couverture. \\
-  \path{v3_mcgill_sls/mcgill_v3_metrics.csv} & AUC, Mann--Whitney et Spearman. \\
-  \path{v3_mcgill_sls/mcgill_v3_summary.json} & Protocole et synthèse de l'analyse SLS. \\
-  \path{memoire/figures/v3_manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
+  \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
+  \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
+  \path{hybrid_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
+  \path{hybrid_refined_full/events_fusion_hypo_only.csv} & Résultats de la branche HYPO seule. \\
+  \path{hybrid_refined_full/events_fusion_instability_only.csv} & Résultats de la branche INSTABILITÉ seule. \\
+  \path{hybrid_refined_full/events_fusion_or.csv} & Résultats de la fusion OU. \\
+  \path{hybrid_refined_full/events_fusion_sequential_24_72h.csv} & Résultats de la fusion séquentielle. \\
+  \path{hybrid_refined_full/events_parameter_sensitivity_*.csv} & Évaluations des variantes de paramètres. \\
+  \path{mcgill_sls/mcgill_cohort_all_variants.csv} & Cohorte SLS et sorties des cinq fusions. \\
+  \path{mcgill_sls/mcgill_exclusions.csv} & Motifs d'exclusion et couverture. \\
+  \path{mcgill_sls/mcgill_metrics.csv} & AUC, Mann--Whitney et Spearman. \\
+  \path{mcgill_sls/mcgill_summary.json} & Protocole et synthèse de l'analyse SLS. \\
+  \path{memoire/figures/manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
   \bottomrule
 \end{longtable}
 
 Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
-\texttt{data/revalidation/}.
+\texttt{data/validation/}.
 
 \section{Amplitudes des profils d'injection}
 
@@ -318,14 +318,14 @@ et ne constituent pas un taux de faux positifs, faute de labels cliniques.
 
 \section{Intégrité des fichiers}
 
-Le fichier \texttt{data/revalidation/v3\_artifacts.sha256} contient les empreintes SHA-256
+Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
 des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
 exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag--SLS. Les chemins y
 sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
 manifeste~:
 
 \begin{verbatim}
-shasum -a 256 -c data/revalidation/v3_artifacts.sha256
+shasum -a 256 -c data/validation/validation_artifacts.sha256
 \end{verbatim}
 
 Toute modification des scripts, des données, des paramètres ou de l'environnement exige une

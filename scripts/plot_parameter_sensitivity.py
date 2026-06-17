@@ -23,7 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SUMMARY = (
     PROJECT_ROOT
     / "data"
-    / "revalidation"
+    / "validation"
     / "hypo_module"
     / "parameter_sensitivity"
     / "parameter_sensitivity_summary.csv"

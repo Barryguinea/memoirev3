@@ -1,8 +1,8 @@
-# Sélection des sources de MemoireV3
+# Sélection des sources de mémoire final
 
-## Base retenue: MemoireV2
+## Base retenue: version antérieure
 
-MemoireV2 fournit la base active parce qu'elle contient:
+version antérieure fournit la base active parce qu'elle contient:
 
 - la séparation chronologique baseline/futur;
 - les injections exclusivement post-baseline;
@@ -16,7 +16,7 @@ MemoireV2 fournit la base active parce qu'elle contient:
 ## Éléments utiles du premier mémoire
 
 Les sources du premier mémoire ont été consultées lors de la construction de
-MemoireV3, puis retirées du dépôt final pour éviter de conserver une archive
+mémoire final, puis retirées du dépôt final pour éviter de conserver une archive
 redondante avec le manuscrit actif. Après audit, seuls les éléments compatibles
 avec le cadrage actuel ont été réintégrés dans `memoire/`:
 
@@ -26,7 +26,7 @@ avec le cadrage actuel ont été réintégrés dans `memoire/`:
 - certaines figures et certains tableaux de revue de littérature;
 - la description détaillée de l'interface.
 
-Le moteur IF + règles est déjà présent dans le code hérité de MemoireV2. Il
+Le moteur IF + règles est déjà présent dans le code hérité de version antérieure. Il
 n'est donc pas dupliqué une seconde fois.
 
 ## Éléments explicitement exclus comme preuves
@@ -41,11 +41,11 @@ n'est donc pas dupliqué une seconde fois.
 
 Ces éléments peuvent être étudiés hors dépôt pour comprendre l'historique du
 projet, mais ils ne doivent pas être copiés dans les résultats scientifiques de
-MemoireV3.
+mémoire final.
 
 ## Règle de réécriture
 
-Le manuscrit actif sous `memoire/` constitue la version V3 déposée dans ce dépôt:
+Le manuscrit actif sous `memoire/` constitue la version final déposée dans ce dépôt:
 il conserve le module HYPO comme résultat principal et présente l'extension
 bidirectionnelle comme exploratoire. Les archives de travail antérieures ne sont
 pas nécessaires à la compilation, aux tests ni à la reproduction des résultats.

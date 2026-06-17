@@ -27,7 +27,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 BRUT = ROOT / "data/brut.csv"
-EVENTS = ROOT / "data/revalidation/hypo_module/events_primary.csv"
+EVENTS = ROOT / "data/validation/hypo_module/events_primary.csv"
 PNG = ROOT / "memoire/figures/cow_admissibility.png"
 PDF = ROOT / "memoire/figures/cow_admissibility.pdf"
 MIN_DAYS = 14.0

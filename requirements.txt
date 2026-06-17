@@ -1,4 +1,4 @@
-# Dépendances figées — memoirev2 (re-validation assainie)
+# Dépendances figées — memoire final (validation assainie)
 # Coeur application / pipeline
 streamlit==1.51.0
 plotly==6.3.0

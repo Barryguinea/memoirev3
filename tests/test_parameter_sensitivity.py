@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 
 from core.early_warning import EarlyWarningConfig
-from revalidation.sensitivity import (
+from validation_hypo.sensitivity import (
     add_reference_deltas,
     assert_same_event_schedule,
     build_sensitivity_configurations,

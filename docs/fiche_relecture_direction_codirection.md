@@ -35,7 +35,7 @@ ____________________________________________________________________
 
 ## 3. Chiffres et traçabilité
 
-- [ ] Les valeurs principales ont été comparées à `data/revalidation/manuscript_number_audit.csv`.
+- [ ] Les valeurs principales ont été comparées à `data/validation/manuscript_number_audit.csv`.
 - [ ] Les valeurs de la campagne HYPO sont cohérentes entre résumé, chapitre 4, chapitre 5 et conclusion.
 - [ ] Les valeurs de l'extension bidirectionnelle sont cohérentes entre tableaux, figures et texte.
 - [ ] Les nombres relatifs à la cohorte IceTag--SLS sont présentés comme exploratoires.

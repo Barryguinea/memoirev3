@@ -332,4 +332,4 @@ with tab4:
 # FOOTER
 # ============================================================
 st.markdown("---")
-st.caption(f"Prototype MemoireV3 | Hash : `{file_hash}`")
+st.caption(f"Prototype mémoire final | Hash : `{file_hash}`")

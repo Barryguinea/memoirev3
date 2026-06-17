@@ -316,7 +316,7 @@ charge en ferme.
 
 \subsection{Comparaison des règles de fusion}
 
-Le Tableau~\ref{tab:fusions_v3} compare les cinq stratégies sur 132 scénarios. La colonne
+Le Tableau~\ref{tab:fusions} compare les cinq stratégies sur 132 scénarios. La colonne
 ``vérification'' regroupe les trois scénarios HYPO et la séquence. La surveillance mesure le
 recouvrement des trois instabilités. Les facteurs confondants regroupent l'activité de type
 œstrus et l'hypoactivité non locomotrice.
@@ -324,7 +324,7 @@ recouvrement des trois instabilités. Les facteurs confondants regroupent l'acti
 \begin{table}[H]
   \centering
   \caption{Comparaison exploratoire des règles de fusion sur 132 événements.}
-  \label{tab:fusions_v3}
+  \label{tab:fusions}
   \small
   \begin{tabular}{lrrrrr}
     \toprule
@@ -349,13 +349,13 @@ La fusion hiérarchique augmente la couverture des scénarios de vérification p
 IoU20 à 29,5\,\%, mais élève le fond de 0,446 à 0,571. Sa fonction d'utilité technique reste
 négative ($-0{,}088$), car les pénalités de confusion et de charge sont importantes. Elle est
 retenue comme configuration représentative de l'extension, non comme remplacement démontré
-de HYPO. La Figure~\ref{fig:v3_fusions} compare les cinq règles de fusion.
+de HYPO. La Figure~\ref{fig:fusions} compare les cinq règles de fusion.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/v3_fusion_comparison.png}
+  \includegraphics[width=0.92\textwidth]{figures/fusion_comparison.png}
   \caption{Comparaison des règles de fusion.}
-  \label{fig:v3_fusions}
+  \label{fig:fusions}
 \end{figure}
 
 \subsection{Résultats par scénario}
@@ -363,14 +363,14 @@ de HYPO. La Figure~\ref{fig:v3_fusions} compare les cinq règles de fusion.
 La fusion hiérarchique couvre 45,5\,\% des hypoactivités légères, 72,7\,\% des modérées et
 81,8\,\% des marquées. L'instabilité légère, modérée et marquée est observée en surveillance
 dans respectivement 45,5\,\%, 54,5\,\% et 100,0\,\% des cas. La séquence synthétique
-instabilité--hypoactivité est alertée dans 90,9\,\% des cas. Le Tableau~\ref{tab:scenarios_v3}
-détaille ces réponses par scénario, que la Figure~\ref{fig:v3_scenarios} représente
+instabilité--hypoactivité est alertée dans 90,9\,\% des cas. Le Tableau~\ref{tab:scenarios}
+détaille ces réponses par scénario, que la Figure~\ref{fig:scenarios} représente
 visuellement.
 
 \begin{table}[H]
   \centering
   \caption{Réponse de la fusion hiérarchique par scénario.}
-  \label{tab:scenarios_v3}
+  \label{tab:scenarios}
   \small
   \begin{tabular}{lrrr}
     \toprule
@@ -392,9 +392,9 @@ visuellement.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.94\textwidth]{figures/v3_scenario_results.png}
+  \includegraphics[width=0.94\textwidth]{figures/scenario_results.png}
   \caption{Réponse par scénario contrôlé.}
-  \label{fig:v3_scenarios}
+  \label{fig:scenarios}
 \end{figure}
 
 Parmi les scénarios de vérification, 29,5\,\% atteignent IoU20. Le délai médian est de
@@ -421,15 +421,15 @@ Quatorze vaches sont évaluables. Les trois vaches SLS~$\geq2$ appartiennent tou
 jours précédant le score, la fusion hiérarchique produit en moyenne 6,67 notifications chez
 les trois vaches SLS~$\geq2$, contre 4,45 chez les onze autres. L'AUC exploratoire est
 0,924, le test de Mann--Whitney donne $p=0{,}031$ et la corrélation de Spearman vaut
-$\rho=0{,}504$ avec $p=0{,}066$. Chaque point de la Figure~\ref{fig:v3_sls} représente une
+$\rho=0{,}504$ avec $p=0{,}066$. Chaque point de la Figure~\ref{fig:sls} représente une
 vache; l'effectif de trois animaux dans le groupe SLS~$\geq2$ impose une interprétation
 prudente.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.72\textwidth]{figures/v3_sls_notifications.png}
+  \includegraphics[width=0.72\textwidth]{figures/sls_notifications.png}
   \caption{Notifications précédant le score SLS.}
-  \label{fig:v3_sls}
+  \label{fig:sls}
 \end{figure}
 
 Les mesures secondaires sont moins séparatrices: l'AUC de la fraction du temps en épisode
@@ -440,7 +440,7 @@ une validation clinique.
 
 \section{Inspection visuelle ciblée}
 
-La Figure~\ref{fig:v3_manual_review} montre quatre situations de la vache 8081 après le gel
+La Figure~\ref{fig:manual_review} montre quatre situations de la vache 8081 après le gel
 des paramètres. L'hypoactivité modérée produit un épisode de vérification; l'instabilité modérée
 reste au niveau de surveillance; le pic capteur isolé est rejeté; et l'hypoactivité non
 locomotrice produit une alerte comparable à celle d'une baisse locomotrice. Les zones grises
@@ -452,10 +452,10 @@ sorties; elle ne constitue pas une adjudication clinique.
 \begin{figure}[p]
   \centering
   \makebox[\textwidth][c]{%
-    \includegraphics[width=1.10\textwidth]{figures/v3_manual_review.png}%
+    \includegraphics[width=1.10\textwidth]{figures/manual_review.png}%
   }
   \caption{Inspection visuelle de scénarios représentatifs.}
-  \label{fig:v3_manual_review}
+  \label{fig:manual_review}
 \end{figure}
 
 \section{Correspondance entre objectifs et résultats}

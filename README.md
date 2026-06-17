@@ -35,7 +35,7 @@ comparateurs**, pas comme détecteur principal.
 ## Structure du projet
 
 ```
-memoirev3/
+projet-memoire/
 ├── app.py                       # Tableau de bord Streamlit (point d'entrée)
 ├── requirements.txt             # Dépendances figées (reproductibilité)
 ├── core/                        # Pipeline de détection
@@ -47,11 +47,11 @@ memoirev3/
 │   ├── alerts.py                #   Règles de persistance des comparateurs
 │   └── pipeline.py              #   Orchestration vache par vache
 ├── ui/                          # Interface (fonctions pures de présentation)
-├── revalidation/                # Validation technique du module HYPO
+├── validation/                # Validation technique du module HYPO
 │   ├── campaign.py              #   Campagne post-baseline (44 événements)
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   └── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
-├── revalidation_v3/             # Extension bidirectionnelle
+├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
 │   ├── campaign.py              #   Injections post-baseline + métriques attribuables
 │   ├── sensitivity.py           #   Comparaison des fusions
@@ -62,12 +62,12 @@ memoirev3/
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
 │   ├── audit_manuscript_numbers.py     # Vérifie 248 valeurs du mémoire ↔ sources
-│   └── update_v3_manifest.py           # (Re)génère le manifeste SHA-256
+│   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
 ├── tests/                       # 98 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   ├── final_thresholds_v1.json # Seuils gelés de la configuration de référence
-│   └── revalidation/            # Artefacts + manifeste v3_artifacts.sha256
+│   └── validation/            # Artefacts + manifeste validation_artifacts.sha256
 ├── memoire/                     # Mémoire LaTeX (sources, figures, bibliographie)
 ├── docs/                        # Documentation (architecture, lecture du code, audit)
 └── notebooks/                   # Notebook de reproduction
@@ -114,7 +114,7 @@ de paramètres sur le jeu d'évaluation.
 1. **Validation technique du module HYPO** — onze vaches admissibles, quatre
    événements par vache (44 au total) :
    ```bash
-   python scripts/run_hypo_module_validation.py --output-dir data/revalidation/hypo_module
+   python scripts/run_hypo_module_validation.py --output-dir data/validation/hypo_module
    ```
    - Injections placées **strictement après** la période de référence (aucune
      contamination de la baseline).
@@ -135,13 +135,13 @@ de paramètres sur le jeu d'évaluation.
 3. **Extension bidirectionnelle** — douze scénarios (hypoactivité, instabilité,
    séquence) plus des contrôles et confondants (pic capteur, exercice, œstrus) :
    ```bash
-   python -m revalidation_v3.sensitivity --output-dir data/revalidation/v3_refined_full
+   python -m validation_hybrid.sensitivity --output-dir data/validation/hybrid_refined_full
    ```
 
 4. **Concordance clinique exploratoire** — cohorte IceTag–SLS (hiver 2019),
    mesures capteurs **strictement antérieures** au score locomoteur :
    ```bash
-   python -m revalidation_v3.mcgill_sls_validation
+   python -m validation_hybrid.mcgill_sls_validation
    ```
    Explicitement **non concluante** (trois SLS ≥ 2, tous dans le bras *Exercise*).
 
@@ -158,8 +158,8 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 - Chaque résultat est régénéré par un script ; **aucun chiffre n'est saisi à la main**.
 - Le manifeste **SHA‑256** scelle les artefacts :
   ```bash
-  python scripts/update_v3_manifest.py
-  shasum -a 256 -c data/revalidation/v3_artifacts.sha256
+  python scripts/update_validation_manifest.py
+  shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
 - Un script d'audit confronte **248 valeurs** du manuscrit à leurs CSV/JSON sources :
   ```bash
@@ -180,7 +180,7 @@ cd memoire && latexmk -lualatex -interaction=nonstopmode main.tex
 
 ## Documentation
 
-- `docs/v2_reference/architecture_memoire.md` — architecture détaillée
-- `docs/v2_reference/cartographie_projet_fr.md` — rôle de chaque dossier et fichier
-- `docs/v2_reference/guide_lecture_code_fr.md` — ordre de lecture du code
+- `docs/archive_historique/architecture_memoire.md` — architecture détaillée
+- `docs/archive_historique/cartographie_projet_fr.md` — rôle de chaque dossier et fichier
+- `docs/archive_historique/guide_lecture_code_fr.md` — ordre de lecture du code
 - `docs/source_audit/selection_sources.md` — provenance et intégrité des sources

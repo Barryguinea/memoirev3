@@ -27,9 +27,9 @@ if str(ROOT) not in sys.path:
 from core.early_warning import EarlyWarningConfig
 from core.io import COW, load_csv
 from core.pipeline import run_pipeline_one_cow
-from revalidation.campaign import final_params, run_clean_campaign
+from validation_hypo.campaign import final_params, run_clean_campaign
 
-OUT_DIR = ROOT / "data/revalidation/hypo_module"
+OUT_DIR = ROOT / "data/validation/hypo_module"
 SUMMARY_OUT = OUT_DIR / "per_cow_calibration.csv"
 DETAIL_OUT = OUT_DIR / "per_cow_calibration_by_cow.csv"
 GRAD = {"gradual_mild", "gradual_moderate", "gradual_marked"}

@@ -25,9 +25,9 @@ Le Tableau~\ref{tab:modules} récapitule les modules qui produisent les sorties 
     \texttt{core/hybrid\_warning.py} & Branche INSTABILITÉ et cinq règles de fusion. \\
     \texttt{core/pipeline.py} & Orchestration vache par vache et sortie troupeau. \\
     \texttt{core/model\_if.py} & Isolation Forest conservé comme comparateur visuel. \\
-    \texttt{revalidation/campaign.py} & Campagne principale de HYPO après la période de référence. \\
-    \texttt{revalidation/ablation.py} & Ablation HYPO contre IF et LOF. \\
-    \texttt{revalidation/sensitivity.py} & Analyse OFAT des paramètres HYPO. \\
+    Campagne HYPO & Validation principale après la période de référence. \\
+    Ablation HYPO & Comparaison contre IF, LOF et le comparateur pédométrique. \\
+    Sensibilité HYPO & Analyse OFAT des paramètres sans sélection de nouvelle configuration. \\
     \texttt{scripts/per\_cow\_calibration.py} & Test exploratoire d'un seuil individualisé. \\
     \texttt{scripts/detection\_}\\\texttt{background\_curve.py}
       & Courbe descriptive détection--charge. \\
@@ -200,7 +200,7 @@ la branche HYPO.
 
 Local Outlier Factor compare la densité locale d'un point à celle de ses voisins~: une
 densité nettement plus faible que le voisinage signale une anomalie locale
-\citep{breunig2000lof}. Il est exécuté en mode nouveauté dans \path{revalidation/ablation.py},
+\citep{breunig2000lof}. Il est exécuté en mode nouveauté dans le module d'ablation,
 avec les mêmes indices d'entraînement et la même normalisation robuste que la comparaison
 Isolation Forest, afin que l'écart mesuré reflète l'algorithme et non un changement de
 protocole. Sa complexité quadratique dans le cas général le rend moins apte au passage à
@@ -210,9 +210,9 @@ respectives.
 
 \section{Implémentation des validations}
 
-Le module \path{revalidation/campaign.py} sélectionne les vaches admissibles, exécute une
+Le module de campagne HYPO sélectionne les vaches admissibles, exécute une
 référence propre et injecte les quatre profils de la campagne HYPO. Le module
-\path{revalidation/ablation.py} réutilise les mêmes fenêtres pour les cinq variantes. Le
+d'ablation réutilise les mêmes fenêtres pour les cinq variantes. Le
 module d'extension bidirectionnelle étend ensuite le protocole aux douze scénarios
 bidirectionnels. Le harnais garantit trois propriétés~: un placement reproductible des
 perturbations, une attribution stricte de l'effet à l'injection, et le rejet de toute

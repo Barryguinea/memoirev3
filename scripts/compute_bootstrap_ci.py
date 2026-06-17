@@ -18,7 +18,7 @@ import numpy as np
 from scipy.stats import rankdata, wilcoxon
 
 ROOT = Path(__file__).resolve().parents[1]
-HYPO = ROOT / "data/revalidation/hypo_module"
+HYPO = ROOT / "data/validation/hypo_module"
 EVENTS = HYPO / "events_primary.csv"
 ABLATION = HYPO / "ablation_primary.csv"
 OUT = HYPO / "bootstrap_ci.csv"

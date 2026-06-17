@@ -24,7 +24,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 ICEQUBE = ROOT / "data/brut.csv"
 COWALERT = ROOT / "data/cowalert_export.csv"
-OUT = ROOT / "data/revalidation/hypo_module/cowalert_provenance.csv"
+OUT = ROOT / "data/validation/hypo_module/cowalert_provenance.csv"
 COLUMNS = ["Steps", "Motion Index", "Transitions"]
 KEYS = ["Cow", "Start"]
 

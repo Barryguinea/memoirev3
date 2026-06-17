@@ -1,4 +1,4 @@
-"""Calcule la typologie reproductible des limites des campagnes V3.
+"""Calcule la typologie reproductible des limites des campagnes de validation.
 
 Les fréquences sont dérivées des sorties événementielles vérifiées. Le script
 ne relance pas les détecteurs et ne modifie aucun paramètre expérimental.
@@ -14,9 +14,9 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-PRIMARY = ROOT / "data/revalidation/hypo_module/events_primary.csv"
-HYBRID = ROOT / "data/revalidation/v3_refined_full/events_fusion_hierarchical.csv"
-OUTPUT = ROOT / "data/revalidation/hypo_module/failure_modes.csv"
+PRIMARY = ROOT / "data/validation/hypo_module/events_primary.csv"
+HYBRID = ROOT / "data/validation/hybrid_refined_full/events_fusion_hierarchical.csv"
+OUTPUT = ROOT / "data/validation/hypo_module/failure_modes.csv"
 
 PURE_INSTABILITY = {
     "instability_mild",

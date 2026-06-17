@@ -1,4 +1,4 @@
-"""Pipeline V3: features, comparateur IF, deux branches et fusion.
+"""Pipeline final: features, comparateur IF, deux branches et fusion.
 
 Le comparateur historique et les sorties bidirectionnelles sont calculés sur
 les mêmes intervalles afin de préserver la traçabilité expérimentale.
@@ -95,7 +95,7 @@ def run_pipeline_one_cow(
         coverage_min_pct=float(coverage_min_pct),
     )
 
-    # Sortie primaire de MemoireV3: deux branches indépendantes, puis fusion.
+    # Sortie primaire de mémoire final: deux branches indépendantes, puis fusion.
     # Les sorties IF historiques restent présentes comme comparateur seulement.
     it = apply_hybrid_warning(
         it,

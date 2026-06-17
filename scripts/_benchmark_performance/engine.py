@@ -1,4 +1,4 @@
-"""Moteur de benchmark de performance du pipeline V3 (timing, agrégation)."""
+"""Moteur de benchmark de performance du pipeline final (timing, agrégation)."""
 
 from __future__ import annotations
 

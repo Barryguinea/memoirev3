@@ -1,6 +1,6 @@
-"""Détecteur comportemental bidirectionnel exploratoire de MemoireV3.
+"""Détecteur comportemental bidirectionnel exploratoire de mémoire final.
 
-La branche HYPO réutilise le détecteur temporel de MemoireV2. La branche
+La branche HYPO réutilise le détecteur temporel de version antérieure. La branche
 INSTABILITE ne cherche pas une hausse générale d'activité: elle recherche un
 mouvement disproportionné aux pas, une densité de transitions élevée et une
 fragmentation posturale. Cette distinction réduit la confusion avec l'exercice

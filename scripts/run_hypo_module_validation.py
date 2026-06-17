@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ruff: noqa: E402
-"""Reproduit la validation technique autonome de la branche HYPO de V3."""
+"""Reproduit la validation technique autonome de la branche HYPO de la validation finale."""
 
 from __future__ import annotations
 
@@ -12,14 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from revalidation.ablation import (
+from validation_hypo.ablation import (
     ablation_paired_tests,
     ablation_summary,
     run_clean_ablation,
 )
-from revalidation.analysis import detection_summary
-from revalidation.campaign import run_clean_campaign
-from revalidation.qa import assert_campaign_valid
+from validation_hypo.analysis import detection_summary
+from validation_hypo.campaign import run_clean_campaign
+from validation_hypo.qa import assert_campaign_valid
 
 
 def main() -> int:
@@ -28,7 +28,7 @@ def main() -> int:
     )
     parser.add_argument("--raw-csv", default="data/brut.csv")
     parser.add_argument(
-        "--output-dir", default="data/revalidation/hypo_module"
+        "--output-dir", default="data/validation/hypo_module"
     )
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()

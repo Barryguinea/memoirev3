@@ -15,7 +15,7 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "data/revalidation/manuscript_number_audit.csv"
+OUT = ROOT / "data/validation/manuscript_number_audit.csv"
 
 
 def close(actual: float, expected: float, tolerance: float = 5e-4) -> bool:
@@ -57,7 +57,7 @@ for column, mean, std, minimum, maximum in (
     check(f"{column} minimum", raw[column].min(), minimum, "data/brut.csv", 0)
     check(f"{column} maximum", raw[column].max(), maximum, "data/brut.csv", 0)
 
-provenance = pd.read_csv(ROOT / "data/revalidation/hypo_module/cowalert_provenance.csv").set_index("variable")
+provenance = pd.read_csv(ROOT / "data/validation/hypo_module/cowalert_provenance.csv").set_index("variable")
 for claim, variable, column, expected in (
     ("CowAlert matched rows", "n_observations_appariees", "n", 7631),
     ("CowAlert source rows", "n_observations_appariees", "n_source", 7823),
@@ -70,7 +70,7 @@ for claim, variable, column, expected in (
     check(claim, provenance.loc[variable, column], expected, "hypo_module/cowalert_provenance.csv", 5e-4)
 
 # HYPO primary campaign.
-hypo_dir = ROOT / "data/revalidation/hypo_module"
+hypo_dir = ROOT / "data/validation/hypo_module"
 detection = pd.read_csv(hypo_dir / "detection_summary.csv").set_index("scenario")
 for scenario, expected in {
     "gradual_mild": (11, 0.455, 0.727, 0.273, 0.087),
@@ -213,7 +213,7 @@ for pair, p_detection, p_iou in (
     check(f"Ablation {pair} IoU p", ablation_tests.loc[pair, "p_wilcoxon_iou"], p_iou, "hypo_module/ablation_tests_by_cow.csv")
 
 # Extended bidirectional campaign.
-fusion = pd.read_csv(ROOT / "data/revalidation/v3_refined_full/comparison_summary.csv")
+fusion = pd.read_csv(ROOT / "data/validation/hybrid_refined_full/comparison_summary.csv")
 fusion = fusion.loc[fusion["experiment"] == "fusion"].set_index("configuration")
 hierarchical = fusion.loc["hierarchical"]
 for claim, column, expected in (
@@ -224,7 +224,7 @@ for claim, column, expected in (
     ("Hierarchical IoU20", "actionable_iou20", 0.2955),
     ("Hierarchical background", "background_per_cow_day", 0.5711),
 ):
-    check(claim, hierarchical[column], expected, "v3_refined_full/comparison_summary.csv")
+    check(claim, hierarchical[column], expected, "hybrid_refined_full/comparison_summary.csv")
 
 for name, expected in {
     "hypo_only": (0.6136, 0.6667, 0.4091, 0.2955, 0.4461),
@@ -239,11 +239,11 @@ for name, expected in {
         expected,
         strict=True,
     ):
-        check(f"Fusion {name} {column}", row[column], value, "v3_refined_full/comparison_summary.csv")
-check("Hierarchical utility", hierarchical["technical_utility"], -0.0884, "v3_refined_full/comparison_summary.csv")
-check("Hierarchical median delay", hierarchical["actionable_delay_h_median"], 19.875, "v3_refined_full/comparison_summary.csv")
+        check(f"Fusion {name} {column}", row[column], value, "hybrid_refined_full/comparison_summary.csv")
+check("Hierarchical utility", hierarchical["technical_utility"], -0.0884, "hybrid_refined_full/comparison_summary.csv")
+check("Hierarchical median delay", hierarchical["actionable_delay_h_median"], 19.875, "hybrid_refined_full/comparison_summary.csv")
 
-hierarchical_events = pd.read_csv(ROOT / "data/revalidation/v3_refined_full/events_fusion_hierarchical.csv")
+hierarchical_events = pd.read_csv(ROOT / "data/validation/hybrid_refined_full/events_fusion_hierarchical.csv")
 hierarchical_events["hybrid_new_start"] = (hierarchical_events["hybrid_novel_start_count"] > 0).astype(float)
 hierarchical_events["instability_new_start"] = (hierarchical_events["instability_novel_start_count"] > 0).astype(float)
 scenario_rates = hierarchical_events.groupby("scenario")[["hybrid_new_start", "instability_new_start"]].mean()
@@ -261,34 +261,34 @@ for scenario, verification, surveillance in (
     ("estrus_like_activity", 0.000, 0.000),
     ("nonlocomotor_hypoactivity", 0.818, 0.000),
 ):
-    check(f"Scenario {scenario} verification", scenario_rates.loc[scenario, "hybrid_new_start"], verification, "v3_refined_full/events_fusion_hierarchical.csv", 5e-4)
-    check(f"Scenario {scenario} surveillance", scenario_rates.loc[scenario, "instability_new_start"], surveillance, "v3_refined_full/events_fusion_hierarchical.csv", 5e-4)
+    check(f"Scenario {scenario} verification", scenario_rates.loc[scenario, "hybrid_new_start"], verification, "hybrid_refined_full/events_fusion_hierarchical.csv", 5e-4)
+    check(f"Scenario {scenario} surveillance", scenario_rates.loc[scenario, "instability_new_start"], surveillance, "hybrid_refined_full/events_fusion_hierarchical.csv", 5e-4)
 brief_controls = hierarchical_events.loc[
     hierarchical_events["scenario"].isin(["isolated_sensor_spike", "short_exercise", "handling_manipulation"])
 ]
-check("Brief controls verification rate", brief_controls["hybrid_new_start"].mean(), 0.000, "v3_refined_full/events_fusion_hierarchical.csv", 0)
-check("Brief controls surveillance rate", brief_controls["instability_new_start"].mean(), 0.000, "v3_refined_full/events_fusion_hierarchical.csv", 0)
+check("Brief controls verification rate", brief_controls["hybrid_new_start"].mean(), 0.000, "hybrid_refined_full/events_fusion_hierarchical.csv", 0)
+check("Brief controls surveillance rate", brief_controls["instability_new_start"].mean(), 0.000, "hybrid_refined_full/events_fusion_hierarchical.csv", 0)
 background_by_cow = (
     hierarchical_events.groupby("cow").first()["hybrid_background_notifs"]
     / hierarchical_events.groupby("cow").first()["monitoring_days"]
 )
-check("Hierarchical background minimum", background_by_cow.min(), 0.295, "v3_refined_full/events_fusion_hierarchical.csv", 5e-4)
-check("Hierarchical background maximum", background_by_cow.max(), 0.884, "v3_refined_full/events_fusion_hierarchical.csv", 5e-4)
+check("Hierarchical background minimum", background_by_cow.min(), 0.295, "hybrid_refined_full/events_fusion_hierarchical.csv", 5e-4)
+check("Hierarchical background maximum", background_by_cow.max(), 0.884, "hybrid_refined_full/events_fusion_hierarchical.csv", 5e-4)
 
-fusion_sensitivity = pd.read_csv(ROOT / "data/revalidation/v3_refined_full/comparison_summary.csv")
+fusion_sensitivity = pd.read_csv(ROOT / "data/validation/hybrid_refined_full/comparison_summary.csv")
 fusion_sensitivity = fusion_sensitivity.loc[fusion_sensitivity["experiment"] == "parameter_sensitivity"]
 for claim, column, expected_min, expected_max in (
     ("Fusion sensitivity verification range", "actionable_detection", 0.727, 0.750),
     ("Fusion sensitivity surveillance range", "instability_surveillance_detection", 0.545, 0.667),
     ("Fusion sensitivity background range", "background_per_cow_day", 0.518, 0.571),
 ):
-    check(f"{claim} minimum", fusion_sensitivity[column].min(), expected_min, "v3_refined_full/comparison_summary.csv", 5e-4)
-    check(f"{claim} maximum", fusion_sensitivity[column].max(), expected_max, "v3_refined_full/comparison_summary.csv", 5e-4)
+    check(f"{claim} minimum", fusion_sensitivity[column].min(), expected_min, "hybrid_refined_full/comparison_summary.csv", 5e-4)
+    check(f"{claim} maximum", fusion_sensitivity[column].max(), expected_max, "hybrid_refined_full/comparison_summary.csv", 5e-4)
 
 # Observation against SLS scores.
-sls = json.loads((ROOT / "data/revalidation/v3_mcgill_sls/mcgill_v3_summary.json").read_text())
-check("SLS evaluable cows", sls["cohort"]["n_evaluable"], 14, "v3_mcgill_sls/mcgill_v3_summary.json", 0)
-check("SLS cows >=2", sls["cohort"]["n_sls_ge_2"], 3, "v3_mcgill_sls/mcgill_v3_summary.json", 0)
+sls = json.loads((ROOT / "data/validation/mcgill_sls/mcgill_summary.json").read_text())
+check("SLS evaluable cows", sls["cohort"]["n_evaluable"], 14, "mcgill_sls/mcgill_summary.json", 0)
+check("SLS cows >=2", sls["cohort"]["n_sls_ge_2"], 3, "mcgill_sls/mcgill_summary.json", 0)
 primary = sls["primary_metrics"][0]
 for claim, key, expected in (
     ("SLS notifications mean >=2", "mean_sls_ge_2", 6.6667),
@@ -298,19 +298,19 @@ for claim, key, expected in (
     ("SLS Spearman rho", "spearman_rho", 0.5044),
     ("SLS Spearman p", "spearman_p", 0.0659),
 ):
-    check(claim, primary[key], expected, "v3_mcgill_sls/mcgill_v3_summary.json")
+    check(claim, primary[key], expected, "mcgill_sls/mcgill_summary.json")
 for index, label, expected_auc in (
     (1, "SLS time fraction AUC", 0.7121),
     (2, "SLS maximum score AUC", 0.6061),
     (3, "SLS instability surveillance AUC", 0.3485),
 ):
-    check(label, sls["primary_metrics"][index]["auc"], expected_auc, "v3_mcgill_sls/mcgill_v3_summary.json")
-sls_cohort = pd.read_csv(ROOT / "data/revalidation/v3_mcgill_sls/mcgill_v3_cohort_all_variants.csv")
+    check(label, sls["primary_metrics"][index]["auc"], expected_auc, "mcgill_sls/mcgill_summary.json")
+sls_cohort = pd.read_csv(ROOT / "data/validation/mcgill_sls/mcgill_cohort_all_variants.csv")
 sls_hierarchical = sls_cohort.loc[sls_cohort["variant"] == "hierarchical"]
-check("SLS future notification load", sls_hierarchical["future_hybrid_notif_per_cow_day"].mean(), 0.7551, "v3_mcgill_sls/mcgill_v3_cohort_all_variants.csv")
+check("SLS future notification load", sls_hierarchical["future_hybrid_notif_per_cow_day"].mean(), 0.7551, "mcgill_sls/mcgill_cohort_all_variants.csv")
 
 # Runtime benchmark.
-perf = json.loads((ROOT / "data/revalidation/performance_v3_full_corpus.json").read_text())
+perf = json.loads((ROOT / "data/validation/performance_full_corpus.json").read_text())
 for claim, key, expected in (
     ("Benchmark cows", "dataset_cows", 28),
     ("Benchmark rows", "dataset_rows", 37839),
@@ -325,7 +325,7 @@ for claim, key, expected in (
     ("Comparative IF rules share", "legacy_alerts_share_of_core_median", 0.025),
 ):
     tolerance = 1.0 if key == "rows_per_sec_median" else 0.0051
-    check(claim, perf[key], expected, "performance_v3_full_corpus.json", tolerance)
+    check(claim, perf[key], expected, "performance_full_corpus.json", tolerance)
 
 audit = pd.DataFrame(records)
 OUT.parent.mkdir(parents=True, exist_ok=True)

@@ -3,7 +3,7 @@ import pandas as pd
 
 from core.hybrid_warning import HybridFusionConfig, apply_hybrid_warning
 from core.io import COW, TIME, load_csv
-from revalidation_v3.campaign import final_params, inject_profile
+from validation_hybrid.campaign import final_params, inject_profile
 from core.pipeline import run_pipeline_one_cow
 
 
