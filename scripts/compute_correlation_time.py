@@ -12,13 +12,20 @@ posture couchee), on estime sur une grille reguliere de 15 minutes:
 Agrege ensuite par mediane entre vaches et par somme des n_eff. Aucune donnee brute
 n'est ecrite: seules les statistiques derivees sont affichees.
 
-Usage : ``PYTHONPATH=. python scripts/compute_correlation_time.py``
+Usage : ``python scripts/compute_correlation_time.py``
 """
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from core.io import load_csv, COW, TIME, STEPS, MI, TRANSITIONS, LYING
 

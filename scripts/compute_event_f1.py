@@ -6,7 +6,7 @@ attribuable, IoU>=0,20), la precision, le rappel et le F1 evenementiels. Donne a
 vache (bootstrap par grappe) pour HYPO. Aucune ecriture: l'utilite est la reproductibilite
 du chiffre rapporte au Tableau d'ablation du manuscrit.
 
-Usage : ``PYTHONPATH=. python scripts/compute_event_f1.py``
+Usage : ``python scripts/compute_event_f1.py``
 """
 
 from __future__ import annotations

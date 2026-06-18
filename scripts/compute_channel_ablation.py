@@ -11,16 +11,22 @@ manuscrit). On compare ensuite chaque canal isole a HYPO complet (4 familles).
 Controle de coherence : le canal << pas seuls >> doit reproduire la variante E
 (comparateur pedometrique) et << 4 familles >> la variante A du Tableau 4.6.
 
-Usage : ``PYTHONPATH=. python scripts/compute_channel_ablation.py``
+Usage : ``python scripts/compute_channel_ablation.py``
 """
 
 from __future__ import annotations
 
 from dataclasses import replace
+import sys
+from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from core.early_warning import EarlyWarningConfig, apply_behavioral_early_warning
 from core.features import build_interval_features
