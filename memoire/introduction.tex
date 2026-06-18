@@ -26,20 +26,28 @@ reconnue comme l'une des principales sources de souffrance chronique chez la vac
 pied et la prise en charge avant l'installation d'un épisode chronique.
 
 L'élevage de précision propose de compléter l'observation humaine par une surveillance
-continue au moyen de capteurs portés \citep{bewley2015precision}. Les accéléromètres et podomètres mesurent toutefois
-des comportements, non la douleur ou la lésion. Une alerte produite à partir des pas, de la
-posture ou de l'intensité de mouvement ne peut ainsi être assimilée à un diagnostic clinique
-\citep{alsaaod2019automatic,oleary2020accelerometers}.
+continue au moyen de capteurs portés \citep{bewley2015precision}. Cette surveillance ne
+résout toutefois pas, à elle seule, le problème de terrain: les accéléromètres et podomètres
+mesurent des comportements, non la douleur ou la lésion. Une alerte produite à partir des pas,
+de la posture ou de l'intensité de mouvement ne peut ainsi être assimilée à un diagnostic
+clinique \citep{alsaaod2019automatic,oleary2020accelerometers}. L'enjeu devient donc de
+transformer des séries comportementales indirectes en priorités d'observation fiables,
+traçables et utilisables par l'éleveur.
 
 \introheading{Problématique}
-La manifestation la mieux étayée dans les données disponibles est une réduction durable de
-l'activité locomotrice: diminution des pas, du mouvement et des transitions, accompagnée de
-changements posturaux. Ces signaux restent néanmoins non spécifiques, car une autre maladie,
-la chaleur ou le contexte d'élevage peuvent produire une forme semblable. Une difficulté
-supplémentaire est que certaines situations douloureuses pourraient s'accompagner d'agitation
-ou d'instabilité avant une hypoactivité, mais cette trajectoire n'est pas démontrée dans le
-corpus principal. Une hausse brute du \textit{Motion Index} peut aussi refléter l'exercice,
-l'œstrus, une manipulation ou un artefact de capteur.
+Dans cette perspective, la manifestation la mieux étayée dans les données disponibles est une
+réduction durable de l'activité locomotrice: diminution des pas, du mouvement et des
+transitions, accompagnée de changements posturaux. Ces signaux restent néanmoins non
+spécifiques, car une autre maladie, la chaleur ou le contexte d'élevage peuvent produire une
+forme semblable. Une difficulté supplémentaire est que certaines situations douloureuses
+pourraient s'accompagner d'agitation ou d'instabilité avant une hypoactivité, mais cette
+trajectoire n'est pas démontrée dans le corpus principal. Une hausse brute du \textit{Motion
+Index} peut aussi refléter l'exercice, l'œstrus, une manipulation ou un artefact de capteur.
+
+La réponse proposée est donc graduée. Elle ne cherche pas à remplacer le jugement clinique,
+mais à ordonner le travail de vérification: repérer d'abord les trajectoires d'hypoactivité
+persistantes par HYPO, puis explorer séparément les profils d'instabilité afin de mesurer ce
+qu'ils ajoutent réellement et ce qu'ils coûtent en charge de vérification.
 
 La question principale est donc la suivante: \textit{comment détecter de façon reproductible
 des dégradations comportementales graduelles et persistantes à partir de séries IceQube non
@@ -48,7 +56,8 @@ si une branche d'instabilité peut apporter une information complémentaire sans
 excessivement la localisation temporelle et la charge de vérification.
 
 \introheading{Objectifs}
-L'objectif général est de concevoir et d'évaluer un outil de priorisation comportementale.
+L'objectif général est de concevoir et d'évaluer une chaîne de priorisation comportementale
+fondée sur HYPO, puis d'en tester l'extension par une branche INSTABILITÉ.
 Il se décline en six objectifs spécifiques:
 \begin{enumerate}
   \item construire une période de référence chronologique propre à chaque vache et à chaque créneau

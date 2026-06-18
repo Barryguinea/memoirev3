@@ -244,22 +244,22 @@ référence de 0,12, conservé malgré le résultat ponctuel observé à 0,14.
 
 \subsection{Ablation contre IF, LOF et comparateur pédométrique}
 
-Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. Ici, le recouvrement désigne
-tout épisode attribuable qui croise l'événement; il est donc plus permissif que le critère de
-nouveau départ utilisé précédemment. La cinquième variante, le comparateur pédométrique,
-restreint le détecteur au seul canal des pas, à la manière d'un podomètre. Le
+Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. La colonne de détection
+attribuable retient ici le critère de nouveau départ, c'est-à-dire l'apparition d'un épisode
+absent de l'exécution propre. La cinquième variante, le comparateur pédométrique, restreint
+le détecteur au seul canal des pas, à la manière d'un podomètre. Le
 Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq variantes.
 
 \begin{table}[H]
   \centering
   \caption[Ablation attribuable du module HYPO]{Ablation attribuable du module HYPO sur les
   mêmes événements. Le F1 événementiel oppose les 33 dégradations graduelles (positifs) aux
-  11 contrôles brefs (négatifs), sur le critère de recouvrement attribuable.}
+  11 contrôles brefs (négatifs), sur le critère de nouveau départ attribuable.}
   \label{tab:hypo_ablation}
   \small
   \begin{tabular}{lrrrrr}
     \toprule
-    Variante & Recouvrement & IoU20 & IoU moyen & Fond/vache-jour & F1 \\
+    Variante & Nouv. départ & IoU20 & IoU moyen & Fond/vache-jour & F1 \\
     \midrule
     A. HYPO temporel multivarié & 43,2\,\% & 29,5\,\% & 0,137 & 0,402 & 0,73 \\
     B. IF + règles de persistance & 15,9\,\% & 0,0\,\% & 0,004 & 0,152 & 0,35 \\
@@ -273,8 +273,9 @@ Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq va
 La dernière colonne résume détection et rejet des contrôles en un F1 événementiel: HYPO atteint
 0,73 (IC95 par vache [0,60~; 0,86]), nettement au-dessus d'IF et de LOF (au plus 0,35). Comme
 aucun contrôle n'est alerté (précision de 1,0), ce F1 ne fait toutefois que réexprimer le rappel
-et n'intègre pas la charge de fond: une détection plus permissive ferait même passer le
-comparateur pédométrique devant HYPO sur ce seul résumé, au prix d'un fond bien plus élevé. Le
+et n'intègre pas la charge de fond: avec la couverture attribuable, plus permissive que le
+nouveau départ, le comparateur pédométrique passerait même devant HYPO sur ce seul résumé, au
+prix d'un fond bien plus élevé. Le
 F1 reste donc un complément des métriques décomposées et de la charge de fond, qui demeurent
 privilégiées.
 
@@ -297,12 +298,12 @@ satisfaire, y est relâchée pour ne pas le désavantager. Partageant cette mach
 \emph{localise} les épisodes aussi précisément que le détecteur complet~: l'écart d'IoU
 attribuable par vache n'est que de $-0{,}004$ (IC95 [$-0{,}032$~; 0,022], $p=0{,}966$, six
 vaches sur onze le favorisant légèrement), là où les comparateurs IF et LOF s'effondrent à
-un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il recouvre moins
-d'événements (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
+un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il ouvre moins de nouveaux
+départs attribuables (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
 sans atteindre le seuil de significativité) et laisse passer davantage de fond (0,518 contre
 0,402 notification par vache-jour, soit près d'un tiers de plus). Ce que l'architecture
 fondée sur plusieurs signaux apporte n'est donc pas une meilleure localisation, mais un meilleur compromis
-entre recouvrement et charge de fond~: c'est la cohérence entre familles, et non la seule
+entre déclenchement attribuable et charge de fond~: c'est la cohérence entre familles, et non la seule
 machinerie temporelle, qui resserre ce compromis. Ce constat rejoint la limite connue des
 approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
 \citep{alsaaod2012electronic,oleary2020accelerometers}.

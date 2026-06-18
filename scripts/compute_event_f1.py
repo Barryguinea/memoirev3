@@ -1,8 +1,8 @@
 """F1 evenementiel des variantes d'ablation HYPO (positifs: 33 graduels; negatifs: 11 controles).
 
 Lit ``data/validation/hypo_module/ablation_primary.csv`` et calcule, pour chaque
-variante et trois definitions de detection (couverture, nouveau depart / recouvrement,
-IoU>=0,20), la precision, le rappel et le F1 evenementiels. Donne aussi un IC95 par
+variante et trois definitions de detection (couverture attribuable, nouveau depart
+attribuable, IoU>=0,20), la precision, le rappel et le F1 evenementiels. Donne aussi un IC95 par
 vache (bootstrap par grappe) pour HYPO. Aucune ecriture: l'utilite est la reproductibilite
 du chiffre rapporte au Tableau d'ablation du manuscrit.
 
@@ -20,8 +20,8 @@ N_BOOT = 10000
 
 # Colonne CSV -> libelle (et chiffre de couverture correspondant au manuscrit).
 DEFINITIONS = [
-    ("episode_overlap", "couverture (87,9%)"),
-    ("detected_any_overlap", "recouvrement / nouveau depart (57,6%)"),
+    ("episode_overlap", "couverture attribuable (87,9%)"),
+    ("detected_any_overlap", "nouveau depart attribuable (57,6%)"),
     ("detected_iou20", "IoU>=0,20 (39,4%)"),
 ]
 

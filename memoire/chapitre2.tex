@@ -438,6 +438,18 @@ l'extension, ils ajoutent les taux de surveillance, de contrôle et de confusion
 synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne
 sont jamais des sujets indépendants.
 
+Cette dépendance se quantifie. En estimant l'autocorrélation des séries par vache, on obtient
+un temps d'autocorrélation intégré $\tau$ et une taille d'échantillon effective
+$n_{\text{eff}}=n/\tau$. Au grain brut de quinze minutes, $\tau$ vaut de l'ordre d'une heure
+pour l'activité, de sorte que les 36\,879 mesures ne représentent déjà qu'environ dix mille
+observations indépendantes. Surtout, comme HYPO décide sur des totaux glissants de douze
+heures, deux fenêtres voisines partagent presque toutes leurs données et le temps de
+corrélation au niveau de la décision atteint environ huit heures: chaque vache n'apporte alors
+qu'une quinzaine de points de décision indépendants, soit de l'ordre du millier sur l'ensemble
+du corpus. Ce constat justifie quantitativement le choix de la vache comme unité de
+rééchantillonnage et le caractère conservateur des intervalles de confiance. Le calcul est
+reproductible par \path{scripts/compute_correlation_time.py}.
+
 La détection peut aussi se résumer, au niveau de l'événement, par un F1: les 33 dégradations
 graduelles sont les positifs attendus et les 11 contrôles brefs les négatifs attendus. Un vrai
 positif est un événement graduel détecté de façon attribuable, un faux positif un contrôle bref
