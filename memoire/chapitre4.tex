@@ -308,9 +308,15 @@ machinerie temporelle, qui resserre ce compromis. Ce constat rejoint la limite c
 approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
 \citep{alsaaod2012electronic,oleary2020accelerometers}.
 
-Pour généraliser ce constat au-delà des seuls pas, on rejoue la même ablation en restreignant
-tour à tour le détecteur à chacune des quatre familles
-(Tableau~\ref{tab:hypo_channels}). Chaque canal porte effectivement du signal, et certains,
+\subsection{Apport de chaque famille de signaux}
+
+Le comparateur pédométrique a montré, pour les pas, que la combinaison de signaux resserre le
+compromis entre détection et charge de fond sans changer la localisation. On généralise ici ce
+constat en rejouant la même ablation, mais en restreignant tour à tour le détecteur à chacune
+des quatre familles (Tableau~\ref{tab:hypo_channels}). Là où le Tableau~\ref{tab:hypo_ablation}
+situe HYPO face à d'autres familles d'algorithmes (IF, LOF, podomètre), celui-ci décompose ce
+qu'il doit à chacune de ses propres familles de signaux; les deux se lisent donc ensemble.
+Chaque canal porte effectivement du signal, et certains,
 pris isolément et libérés de la contrainte de cohérence, ouvrent même davantage de nouveaux
 départs que le détecteur complet~: les transitions seules atteignent 50,0\,\% (F1 de 0,80) et
 le \textit{Motion Index} seul 34,1\,\%. Cette détection brute plus élevée se paie toutefois
@@ -347,7 +353,8 @@ non un gain de détection brute, que la cohérence entre familles apporte.
 Le calcul de cette ablation par canal est reproductible par
 \path{scripts/compute_channel_ablation.py}.
 
-L'ablation soutient donc l'apport
+Prises ensemble, les deux ablations (Tableaux~\ref{tab:hypo_ablation} et~\ref{tab:hypo_channels})
+soutiennent l'apport
 de la direction du changement, de la cohérence entre signaux et de la persistance. Elle ne
 résout pas la charge opérationnelle, qui reste supérieure à celle des variantes B et D.
 
