@@ -308,6 +308,45 @@ machinerie temporelle, qui resserre ce compromis. Ce constat rejoint la limite c
 approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
 \citep{alsaaod2012electronic,oleary2020accelerometers}.
 
+Pour généraliser ce constat au-delà des seuls pas, on rejoue la même ablation en restreignant
+tour à tour le détecteur à chacune des quatre familles
+(Tableau~\ref{tab:hypo_channels}). Chaque canal porte effectivement du signal, et certains,
+pris isolément et libérés de la contrainte de cohérence, ouvrent même davantage de nouveaux
+départs que le détecteur complet~: les transitions seules atteignent 50,0\,\% (F1 de 0,80) et
+le \textit{Motion Index} seul 34,1\,\%. Cette détection brute plus élevée se paie toutefois
+exactement où on l'attend, en charge de fond~: chaque canal isolé notifie entre 0,49 et 0,52
+fois par vache-jour, contre 0,40 pour HYPO. La posture seule illustre l'écueil inverse~: son
+fond est le plus bas (0,393), mais elle ne localise presque rien (IoU20 de 2,3\,\%). Aucune
+famille ne domine donc sur tous les plans. L'intérêt de combiner les quatre n'est pas de
+maximiser la sensibilité, mais d'obtenir la charge de fond la plus basse à localisation
+comparable et de ne pas faire dépendre la décision d'un signal unique susceptible d'être
+confondu, par exemple les pas gonflés par l'exercice ou l'œstrus. C'est cette robustesse, et
+non un gain de détection brute, que la cohérence entre familles apporte.
+
+\begin{table}[H]
+  \centering
+  \caption[Ablation par famille de signaux]{Apport de chaque famille prise isolément, sur les
+  mêmes 44 événements et la même attribution. Le détecteur temporel est restreint à un seul
+  canal, la cohérence multi-familles étant relâchée. Le canal des pas reproduit la variante~E
+  du Tableau~\ref{tab:hypo_ablation}.}
+  \label{tab:hypo_channels}
+  \small
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Canal isolé & Nouv. départ & IoU20 & IoU moyen & Fond/vache-jour & F1 \\
+    \midrule
+    Pas seuls & 27,3\,\% & 31,8\,\% & 0,141 & 0,518 & 0,53 \\
+    Motion Index seul & 34,1\,\% & 25,0\,\% & 0,135 & 0,491 & 0,63 \\
+    Transitions seules & 50,0\,\% & 27,3\,\% & 0,128 & 0,518 & 0,80 \\
+    Posture seule & 27,3\,\% & 2,3\,\% & 0,042 & 0,393 & 0,53 \\
+    HYPO (quatre familles) & 43,2\,\% & 29,5\,\% & 0,137 & 0,402 & 0,73 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Le calcul de cette ablation par canal est reproductible par
+\path{scripts/compute_channel_ablation.py}.
+
 L'ablation soutient donc l'apport
 de la direction du changement, de la cohérence entre signaux et de la persistance. Elle ne
 résout pas la charge opérationnelle, qui reste supérieure à celle des variantes B et D.
