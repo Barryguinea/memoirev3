@@ -252,21 +252,31 @@ Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq va
 
 \begin{table}[H]
   \centering
-  \caption{Ablation attribuable du module HYPO sur les mêmes événements.}
+  \caption[Ablation attribuable du module HYPO]{Ablation attribuable du module HYPO sur les
+  mêmes événements. Le F1 événementiel oppose les 33 dégradations graduelles (positifs) aux
+  11 contrôles brefs (négatifs), sur le critère de recouvrement attribuable.}
   \label{tab:hypo_ablation}
   \small
-  \begin{tabular}{lrrrr}
+  \begin{tabular}{lrrrrr}
     \toprule
-    Variante & Recouvrement & IoU20 & IoU moyen & Fond/vache-jour \\
+    Variante & Recouvrement & IoU20 & IoU moyen & Fond/vache-jour & F1 \\
     \midrule
-    A. HYPO temporel multivarié & 43,2\,\% & 29,5\,\% & 0,137 & 0,402 \\
-    B. IF + règles de persistance & 15,9\,\% & 0,0\,\% & 0,004 & 0,152 \\
-    C. IF ponctuel & 13,6\,\% & 0,0\,\% & 0,002 & 7,658 \\
-    D. LOF + règles & 15,9\,\% & 0,0\,\% & 0,005 & 0,107 \\
-    E. Comparateur pédométrique (pas seuls) & 27,3\,\% & 31,8\,\% & 0,141 & 0,518 \\
+    A. HYPO temporel multivarié & 43,2\,\% & 29,5\,\% & 0,137 & 0,402 & 0,73 \\
+    B. IF + règles de persistance & 15,9\,\% & 0,0\,\% & 0,004 & 0,152 & 0,35 \\
+    C. IF ponctuel & 13,6\,\% & 0,0\,\% & 0,002 & 7,658 & 0,31 \\
+    D. LOF + règles & 15,9\,\% & 0,0\,\% & 0,005 & 0,107 & 0,35 \\
+    E. Comparateur pédométrique (pas seuls) & 27,3\,\% & 31,8\,\% & 0,141 & 0,518 & 0,53 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+La dernière colonne résume détection et rejet des contrôles en un F1 événementiel: HYPO atteint
+0,73 (IC95 par vache [0,60~; 0,86]), nettement au-dessus d'IF et de LOF (au plus 0,35). Comme
+aucun contrôle n'est alerté (précision de 1,0), ce F1 ne fait toutefois que réexprimer le rappel
+et n'intègre pas la charge de fond: une détection plus permissive ferait même passer le
+comparateur pédométrique devant HYPO sur ce seul résumé, au prix d'un fond bien plus élevé. Le
+F1 reste donc un complément des métriques décomposées et de la charge de fond, qui demeurent
+privilégiées.
 
 Après agrégation par vache, HYPO obtient un IoU supérieur à B, C et D
 ($p=0{,}00098$ pour les trois comparaisons appariées de Wilcoxon~\citep{wilcoxon1945individual}).

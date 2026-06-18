@@ -438,6 +438,14 @@ l'extension, ils ajoutent les taux de surveillance, de contrôle et de confusion
 synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne
 sont jamais des sujets indépendants.
 
+La détection peut aussi se résumer, au niveau de l'événement, par un F1: les 33 dégradations
+graduelles sont les positifs attendus et les 11 contrôles brefs les négatifs attendus. Un vrai
+positif est un événement graduel détecté de façon attribuable, un faux positif un contrôle bref
+alerté à tort, un faux négatif un événement graduel manqué et un vrai négatif un contrôle
+correctement rejeté; le F1 est la moyenne harmonique de la précision et du rappel correspondants.
+Cette synthèse reste complémentaire: elle n'intègre ni la charge de fond ni la qualité fine de
+localisation.
+
 La sélection descriptive des fusions impose trois conditions de portée: détection
 des scénarios de vérification d'au moins 60\,\%, surveillance de l'instabilité d'au moins 50\,\% et
 IoU20 d'au moins 20\,\%. Une fonction d'utilité secondaire récompense la détection et
