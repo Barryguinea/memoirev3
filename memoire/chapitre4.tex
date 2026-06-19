@@ -5,9 +5,9 @@ Ce chapitre présente les preuves techniques du système en partant du résultat
 la branche HYPO. La première partie montre sa réponse à des dégradations graduelles, son
 avantage sur les comparateurs IF/LOF et sa stabilité locale par OFAT. La deuxième partie
 examine l'extension INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
-pourcentages décrivent la réponse du logiciel à des scénarios contrôlés; ils ne sont pas des
-performances cliniques. Le Tableau~\ref{tab:cles_lecture_resultats} rassemble les clés de
-lecture mobilisées tout au long du chapitre.
+pourcentages décrivent la réponse du logiciel à des scénarios contrôlés et permettent de
+comparer détection, localisation et charge de vérification. Le Tableau~\ref{tab:cles_lecture_resultats}
+rassemble les clés de lecture mobilisées tout au long du chapitre.
 
 \begin{table}[H]
   \centering
@@ -34,10 +34,10 @@ lecture mobilisées tout au long du chapitre.
         exigeant qu'un simple recouvrement. \\
     IoU20
       & Le recouvrement temporel entre l'épisode attribuable et l'événement atteint au moins
-        0,20; il renseigne la localisation, pas la validité clinique. \\
+        0,20; il renseigne la localisation temporelle de l'épisode. \\
     Charge de fond
-      & Les notifications hors fenêtres injectées sur des données non étiquetées; sans
-        diagnostic exhaustif, elles ne peuvent pas être appelées faux positifs. \\
+      & Les notifications hors fenêtres injectées sur des données non étiquetées; elles
+        mesurent l'effort de vérification attendu. \\
     Hypoactivité non locomotrice
       & Neuf alertes sur onze montrent que les signaux disponibles ne permettent pas
         d'identifier la cause d'une baisse persistante. \\
@@ -114,8 +114,9 @@ fenêtre, tandis que le nouveau départ vérifie qu'un épisode distinct a réel
 Le contrôle bref n'engendre aucun départ ni intervalle attribuable. Sur les exécutions
 propres et uniquement pendant la période future, HYPO produit en moyenne 0,402
 notification par vache-jour; le 90\textsuperscript{e} percentile entre vaches est de 0,491.
-Cette quantité mesure une charge de fond, pas un taux de faux positifs, car les données
-propres ne possèdent pas d'annotation clinique exhaustive.
+Cette quantité mesure l'effort de vérification attendu sur la période surveillée; elle est
+rapportée séparément des métriques attribuables pour éviter de confondre charge opérationnelle
+et détection des événements injectés.
 
 \subsection{Typologie des modes de défaillance}
 
@@ -248,13 +249,13 @@ Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. La colonne de d�
 attribuable retient ici le critère de nouveau départ, c'est-à-dire l'apparition d'un épisode
 absent de l'exécution propre. La cinquième variante, le comparateur pédométrique, restreint
 le détecteur au seul canal des pas, à la manière d'un podomètre. Le
-Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq variantes.
+Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq variantes. Le
+F1 événementiel y oppose les 33 dégradations graduelles, traitées comme positifs, aux
+11 contrôles brefs, traités comme négatifs, sur le critère de nouveau départ attribuable.
 
 \begin{table}[H]
   \centering
-  \caption[Ablation attribuable du module HYPO]{Ablation attribuable du module HYPO sur les
-  mêmes événements. Le F1 événementiel oppose les 33 dégradations graduelles (positifs) aux
-  11 contrôles brefs (négatifs), sur le critère de nouveau départ attribuable.}
+  \caption{Ablation attribuable du module HYPO.}
   \label{tab:hypo_ablation}
   \small
   \begin{tabular}{lrrrrr}
@@ -316,6 +317,9 @@ constat en rejouant la même ablation, mais en restreignant tour à tour le dét
 des quatre familles (Tableau~\ref{tab:hypo_channels}). Là où le Tableau~\ref{tab:hypo_ablation}
 situe HYPO face à d'autres familles d'algorithmes (IF, LOF, podomètre), celui-ci décompose ce
 qu'il doit à chacune de ses propres familles de signaux; les deux se lisent donc ensemble.
+Dans ce test, le détecteur temporel est restreint à un seul canal et la cohérence
+multi-familles est relâchée. Le canal des pas correspond au comparateur pédométrique déjà
+rapporté comme variante~E du Tableau~\ref{tab:hypo_ablation}.
 Chaque canal porte effectivement du signal, et certains,
 pris isolément et libérés de la contrainte de cohérence, ouvrent même davantage de nouveaux
 départs que le détecteur complet~: les transitions seules atteignent 50,0\,\% (F1 de 0,80) et
@@ -332,10 +336,7 @@ non un gain de détection brute, que la cohérence entre familles apporte.
 
 \begin{table}[H]
   \centering
-  \caption[Ablation par famille de signaux]{Apport de chaque famille prise isolément, sur les
-  mêmes 44 événements et la même attribution. Le détecteur temporel est restreint à un seul
-  canal, la cohérence multi-familles étant relâchée. Le canal des pas reproduit la variante~E
-  du Tableau~\ref{tab:hypo_ablation}.}
+  \caption{Ablation par famille de signaux.}
   \label{tab:hypo_channels}
   \small
   \begin{tabular}{lrrrrr}

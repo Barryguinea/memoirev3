@@ -8,69 +8,81 @@ présentation ne change pas silencieusement les résultats
 
 \section{Organisation du logiciel}
 
-Le Tableau~\ref{tab:modules} récapitule les modules qui produisent les sorties du mémoire.
+Le Tableau~\ref{tab:modules} récapitule les composants logiciels et les campagnes de
+reproduction qui produisent les sorties du mémoire.
 
 \begin{table}[H]
   \centering
-  \caption{Modules qui produisent les sorties du mémoire.}
+  \caption{Composants logiciels et campagnes de reproduction du mémoire.}
   \label{tab:modules}
-  \small
-  \begin{tabular}{p{0.35\textwidth}p{0.55\textwidth}}
+  \begingroup
+  \normalsize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.00}
+  \begin{tabular}{p{0.31\textwidth}p{0.62\textwidth}}
     \toprule
-    Module & Responsabilité \\
+    Composant & Rôle \\
     \midrule
-    \texttt{core/io.py} & Chargement, noms de colonnes et types temporels. \\
-    \texttt{core/features.py} & Agrégation à quinze minutes, couverture et variables dérivées. \\
-    \texttt{core/early\_warning.py} & Branche HYPO, période de référence, score, CUSUM et persistance. \\
-    \texttt{core/hybrid\_warning.py} & Branche INSTABILITÉ et cinq règles de fusion. \\
-    \texttt{core/pipeline.py} & Orchestration vache par vache et sortie troupeau. \\
-    \texttt{core/model\_if.py} & Isolation Forest conservé comme comparateur visuel. \\
-    Campagne HYPO & Validation principale après la période de référence. \\
-    Ablation HYPO & Comparaison contre IF, LOF et le comparateur pédométrique. \\
-    Sensibilité HYPO & Analyse OFAT des paramètres sans sélection de nouvelle configuration. \\
-    \texttt{scripts/per\_cow\_calibration.py} & Test exploratoire d'un seuil individualisé. \\
-    \texttt{scripts/detection\_}\\\texttt{background\_curve.py}
-      & Courbe descriptive détection--charge. \\
-    Profils de l'extension bidirectionnelle & Douze scénarios synthétiques et contrôles. \\
-    Campagne de l'extension bidirectionnelle & Injections après la période de référence et métriques attribuables. \\
-    Sensibilité de la fusion & Comparaison des fusions et sensibilité technique. \\
-    Analyse IceTag--SLS synchronisée & Cohorte et mesures SLS. \\
-    \texttt{app.py}, \texttt{ui/} & Interface Streamlit de priorisation. \\
-    \texttt{tests/} & Tests unitaires, invariants et non-régression. \\
+    Chargement des données & Lecture CSV, colonnes et horodatage. \\
+    Dérivation des variables & Agrégation 15 min, couverture et variables dérivées. \\
+    Branche HYPO & Référence individuelle, score, CUSUM et persistance. \\
+    Branche INSTABILITÉ & Mouvement disproportionné, posture fragmentée et fusion. \\
+    Pipeline troupeau & Orchestration par vache et agrégation troupeau. \\
+    Comparateur Isolation Forest & Référence non supervisée pour l'ablation et l'interface. \\
+    Validation HYPO & Campagne principale après la période de référence. \\
+    Ablation HYPO & Comparaison avec IF, LOF et le comparateur pédométrique. \\
+    Sensibilité HYPO & Analyse OFAT sans sélection de nouvelle configuration. \\
+    Calibration par vache & Test exploratoire d'un seuil individualisé. \\
+    Courbe détection--charge & Compromis entre détection attribuable et charge de fond. \\
+    Validation bidirectionnelle & Scénarios HYPO, INSTABILITÉ, séquence et contrôles. \\
+    Sensibilité de la fusion & Comparaison des règles de fusion et sensibilité technique. \\
+    Analyse IceTag--SLS synchronisée & Confrontation exploratoire aux scores locomoteurs. \\
+    Interface Streamlit & Visualisation individuelle, classement troupeau et export des alertes. \\
+    Tests automatisés & Tests unitaires, invariants et non-régression. \\
     \bottomrule
   \end{tabular}
+  \endgroup
 \end{table}
 
-Les fichiers du dossier \texttt{scripts/} servent aux tâches reproductibles de soutien:
-génération des figures, orchestration de la validation HYPO et mesure de performance. Ils
-n'introduisent pas une logique de détection parallèle. Le script
-\texttt{run\_hypo\_module\_validation.py} produit les artefacts de la campagne principale et
-de l'ablation; \texttt{benchmark\_performance.py} chronomètre la chaîne de traitement complète; et
-un script dédié produit les figures de l'extension. Les scripts
-\path{per_cow_calibration.py} et \path{detection_background_curve.py} réutilisent la
-campagne HYPO sans introduire de nouvelle logique d'alerte. La
-Figure~\ref{fig:architecture_modules} schématise cette organisation.
+Les fichiers exécutables exacts sont répartis par responsabilité: \texttt{core/} porte le
+noyau de détection, \texttt{validation\_hypo/} et \texttt{validation\_hybrid/} portent les
+campagnes reproductibles, \texttt{scripts/} regroupe les tâches de soutien, \texttt{app.py}
+et \texttt{ui/} portent l'interface, et \texttt{tests/} regroupe les contrôles automatisés.
+Les scripts réutilisent les campagnes existantes sans introduire de logique d'alerte
+parallèle. La Figure~\ref{fig:architecture_modules} schématise cette organisation.
 
 \begin{figure}[H]
   \centering
-  \resizebox{0.98\textwidth}{!}{%
   \begin{tikzpicture}[
-    box/.style={rectangle, draw=black!60, rounded corners=2pt, minimum height=0.9cm,
-      text width=3.2cm, align=center, font=\small, inner sep=7pt},
-    arrow/.style={-{Stealth[length=2.3mm]}, thick, black!65}]
-    \node[box, fill=profgray!10] (data) {CSV IceQube\\par vache};
-    \node[box, fill=ifblue!10, right=0.7cm of data] (features) {Intervalles\\et couverture};
-    \node[box, fill=rulegreen!12, right=0.8cm of features, yshift=0.8cm] (hypo) {Branche HYPO\\12 h / 6 h};
-    \node[box, fill=loforange!12, right=0.8cm of features, yshift=-0.8cm] (inst) {Branche INSTABILITÉ\\3 h / 2 h};
-    \node[box, fill=ifblue!8, right=1.0cm of hypo, yshift=-0.8cm] (fusion) {Fusion\\hiérarchique};
-    \node[box, fill=profgray!8, right=0.8cm of fusion, yshift=0.7cm] (action) {Notification de\\vérification};
-    \node[box, fill=profgray!8, right=0.8cm of fusion, yshift=-0.7cm] (surv) {Surveillance\\d'instabilité};
+    box/.style={rectangle, draw=black!55, rounded corners=2pt, minimum height=1.20cm,
+      text width=2.45cm, align=center, font=\normalsize, inner sep=4pt},
+    branch/.style={box, minimum height=1.65cm},
+    line/.style={line width=0.8pt, black!65},
+    arrow/.style={line, -{Stealth[length=2.4mm, width=1.6mm]}}]
+    \node[box, fill=profgray!10] (data) at (0,0) {CSV IceQube\\par vache};
+    \node[box, fill=ifblue!10] (features) at (3.2,0) {Intervalles\\et couverture};
+    \node[branch, fill=rulegreen!12] (hypo) at (6.4,1.05) {Branche HYPO\\12 h / 6 h};
+    \node[branch, fill=loforange!12] (inst) at (6.4,-1.05) {Branche\\INSTABILITÉ\\3 h / 2 h};
+    \node[box, fill=ifblue!8] (fusion) at (9.6,0) {Fusion\\hiérarchique};
+    \node[box, fill=profgray!8] (action) at (12.8,1.05) {Notification de\\vérification};
+    \node[box, fill=profgray!8] (surv) at (12.8,-1.05) {Surveillance\\d'instabilité};
+    \coordinate (split) at (4.8,0);
+    \coordinate (merge) at (8.0,0);
+    \coordinate (dispatch) at (11.2,0);
     \draw[arrow] (data) -- (features);
-    \draw[arrow] (features.east) -- ++(0.35,0) |- (hypo.west);
-    \draw[arrow] (features.east) -- ++(0.35,0) |- (inst.west);
-    \draw[arrow] (hypo) -- (fusion); \draw[arrow] (inst) -- (fusion);
-    \draw[arrow] (fusion) -- (action); \draw[arrow] (fusion) -- (surv);
-  \end{tikzpicture}}
+    \draw[line] (features.east) -- (split);
+    \fill[black!65] (split) circle (1.25pt);
+    \draw[arrow] (split) -- (hypo.west);
+    \draw[arrow] (split) -- (inst.west);
+    \draw[line] (hypo.east) -- (merge);
+    \draw[line] (inst.east) -- (merge);
+    \fill[black!65] (merge) circle (1.25pt);
+    \draw[arrow] (merge) -- (fusion.west);
+    \draw[line] (fusion.east) -- (dispatch);
+    \fill[black!65] (dispatch) circle (1.25pt);
+    \draw[arrow] (dispatch) -- (action.west);
+    \draw[arrow] (dispatch) -- (surv.west);
+  \end{tikzpicture}
   \caption{Architecture du système.}
   \label{fig:architecture_modules}
 \end{figure}
@@ -369,7 +381,7 @@ La suite automatisée contient 98 tests. Elle couvre le chargement, les variable
 les deux détecteurs, les cinq fusions, les injections, les contrôles après la période de référence,
 l'analyse de sensibilité, l'analyse SLS et le démarrage de Streamlit. Les résultats sont
 écrits dans des fichiers tabulaires dont la provenance est explicite. Le succès des tests
-atteste la cohérence logicielle, pas la validité clinique.
+atteste la cohérence logicielle et sécurise la reproduction des résultats.
 
 Chaque résultat suit un cycle de vie traçable~: une commande de reproduction exécute un
 module de validation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
@@ -380,27 +392,38 @@ la trace de référence de l'expérience. La Figure~\ref{fig:repro_chain} illust
 
 \begin{figure}[H]
   \centering
-  \resizebox{0.98\textwidth}{!}{%
   \begin{tikzpicture}[
-    pbox/.style={rectangle, draw=black!60, rounded corners=2pt, align=center,
-      minimum height=1.15cm, text width=2.05cm, font=\small, inner sep=5pt},
-    arrow/.style={-{Stealth[length=2mm]}, thick, black!65}]
-    \node[pbox, fill=profgray!10] (csv) {CSV brut\\IceQube};
-    \node[pbox, fill=ifblue!10, right=0.5cm of csv] (split) {Référence / futur\\par vache};
-    \node[pbox, fill=loforange!10, right=0.5cm of split] (inject) {Injection\\période future};
-    \node[pbox, fill=rulegreen!12, right=0.5cm of inject] (detect) {Détection\\HYPO / fusion};
-    \node[pbox, fill=ifblue!8, below=0.95cm of detect] (attrib) {Attribution\\vs exécution propre};
-    \node[pbox, fill=profgray!10, left=0.5cm of attrib] (out) {CSV de\\résultats};
-    \node[pbox, fill=profgray!10, left=0.5cm of out] (fig) {Figures du\\manuscrit};
-    \node[pbox, fill=rawred!12, left=0.5cm of fig] (sha) {Manifeste\\SHA-256};
-    \draw[arrow] (csv) -- (split); \draw[arrow] (split) -- (inject);
-    \draw[arrow] (inject) -- (detect); \draw[arrow] (detect) -- (attrib);
-    \draw[arrow] (attrib) -- (out); \draw[arrow] (out) -- (fig); \draw[arrow] (fig) -- (sha);
-  \end{tikzpicture}}
+    procbox/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
+      minimum height=1.55cm, text width=2.15cm, font=\normalsize, inner sep=4pt},
+    arrow/.style={-{Stealth[length=2.4mm, width=1.6mm]}, line width=0.8pt, black!65}]
+    \node[procbox, fill=profgray!10] (csv) at (0,0)
+      {\textbf{1}\\Données IceQube};
+    \node[procbox, fill=ifblue!10] (split) at (3.0,0)
+      {\textbf{2}\\Séparation temporelle};
+    \node[procbox, fill=loforange!10] (inject) at (6.0,0)
+      {\textbf{3}\\Injection future};
+    \node[procbox, fill=rulegreen!12] (detect) at (9.0,0)
+      {\textbf{4}\\HYPO et fusion};
+    \node[procbox, fill=ifblue!8] (attrib) at (12.0,0)
+      {\textbf{5}\\Attribution des sorties};
+    \node[procbox, fill=profgray!10] (out) at (12.0,-2.35)
+      {\textbf{6}\\Résultats CSV};
+    \node[procbox, fill=profgray!10] (fig) at (9.0,-2.35)
+      {\textbf{7}\\Figures du mémoire};
+    \node[procbox, fill=rawred!12] (sha) at (6.0,-2.35)
+      {\textbf{8}\\Manifeste SHA-256};
+    \draw[arrow] (csv) -- (split);
+    \draw[arrow] (split) -- (inject);
+    \draw[arrow] (inject) -- (detect);
+    \draw[arrow] (detect) -- (attrib);
+    \draw[arrow] (attrib) -- (out);
+    \draw[arrow] (out) -- (fig);
+    \draw[arrow] (fig) -- (sha);
+  \end{tikzpicture}
   \caption{Chaîne de reproductibilité.}
   \label{fig:repro_chain}
 \end{figure}
 
 Le manifeste ferme la chaîne en rendant toute modification d'un artefact détectable. Il
-atteste l'identité des fichiers reproduits, mais ne remplace ni les contrôles méthodologiques
-ni une validation clinique.
+atteste l'identité des fichiers reproduits et complète les contrôles méthodologiques décrits
+dans le chapitre de validation.

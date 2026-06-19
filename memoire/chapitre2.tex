@@ -20,16 +20,16 @@ pas à régler le système. La Figure~\ref{fig:plan_etude} schématise ces trois
   \centering
   \begin{tikzpicture}[
     box/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
-      minimum height=1.0cm, text width=3.0cm, inner sep=6pt, font=\small},
+      minimum height=2.1cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
     arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
-    \node[box, fill=rulegreen!10, right=0.65cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.65cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
-    \node[box, fill=profgray!10, right=0.65cm of inject] (eval) {Comparaison propre--injectée\\unité: vache};
+    \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
+    \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre--injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
-    \node[box, fill=ifblue!7, below=1.2cm of split] (sls) {IceTag--SLS 2019\\14 vaches};
-    \node[box, fill=rulegreen!7, right=0.65cm of sls] (pre) {Sept jours\\avant le SLS};
-    \node[box, fill=profgray!7, right=0.65cm of pre] (conc) {Concordance exploratoire\\sans réglage};
+    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag--SLS 2019\\14 vaches};
+    \node[box, fill=rulegreen!7, below=0.8cm of split] (pre) {Sept jours\\avant le SLS};
+    \node[box, fill=profgray!7, below=0.8cm of inject] (conc) {Concordance exploratoire\\sans réglage};
     \draw[arrow] (sls) -- (pre); \draw[arrow] (pre) -- (conc);
   \end{tikzpicture}
   \caption{Plan d'étude.}
@@ -288,20 +288,19 @@ résume cette logique de détection pour une vache.
 \label{alg:hypo}
 \end{figure}
 
-La Figure~\ref{fig:hypo_cusum_example} illustre ce mécanisme sur une vache, en comparant
-l'exécution injectée à l'exécution propre de la même vache.
+La Figure~\ref{fig:hypo_cusum_example} illustre ce mécanisme sur une vache et une
+dégradation graduelle injectée après la période de référence. Le panneau supérieur montre que
+le score comportemental $S_H(t)$ de l'exécution injectée s'élève au-dessus du seuil de
+candidat et de l'exécution propre pendant la fenêtre injectée, puis redescend une fois
+l'événement terminé. Le panneau inférieur montre que l'épisode détecté dans l'exécution
+injectée se superpose à la fenêtre réelle. L'exécution propre déclenche elle aussi un épisode
+plus court au même moment, la vache présentant une baisse naturelle; seule la part ajoutée par
+l'injection, au-delà de ce déclenchement naturel, est créditée comme attribuable.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.95\textwidth]{figures/hypo_cusum_example.png}
-  \caption[Détection attribuable au niveau de l'événement]{Détection attribuable au
-  niveau de l'événement, pour une vache et une dégradation graduelle injectée après la
-  période de référence. En haut, le score comportemental $S_H(t)$ de l'exécution injectée
-  s'élève au-dessus du seuil de candidat et de l'exécution propre pendant la fenêtre
-  injectée, puis redescend une fois l'événement terminé. En bas, l'épisode détecté de
-  l'exécution injectée se superpose à la fenêtre réelle (bonne localisation temporelle),
-  alors que l'exécution propre ne produit pas le même épisode au même endroit~: seule la
-  part attribuable à l'injection est créditée.}
+  \caption{Détection attribuable au niveau de l'événement.}
   \label{fig:hypo_cusum_example}
 \end{figure}
 
@@ -488,7 +487,6 @@ maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann--Whitney 
 corrélation de Spearman au niveau de la vache. Avec seulement trois SLS~$\geq2$, ces mesures
 restent exploratoires.
 
-\enlargethispage{2\baselineskip}
 \section{Reproductibilité}
 
 Les configurations et les sorties sont exportées en CSV. Les tests vérifient le placement

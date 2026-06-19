@@ -3,9 +3,9 @@
 La boiterie demeure un problème majeur de bien-être et de performance en élevage laitier. Son
 repérage repose encore largement sur l'observation humaine et le score locomoteur, qui sont
 indispensables mais difficiles à maintenir de façon continue dans les troupeaux. Les capteurs
-d'activité offrent une surveillance complémentaire: ils ne diagnostiquent pas la boiterie, mais
-peuvent signaler des changements comportementaux persistants qui justifient une vérification
-terrain. Ce mémoire conçoit et évalue un système reproductible d'\textbf{alerte
+d'activité offrent une surveillance complémentaire en signalant des changements
+comportementaux persistants qui justifient une vérification terrain. Ce mémoire conçoit et
+évalue un système reproductible d'\textbf{alerte
 comportementale précoce} à partir de capteurs IceQube fixés à la patte.
 
 La contribution principale est la branche temporelle HYPO. Elle compare chaque vache à sa
@@ -27,14 +27,14 @@ reste séparée de HYPO: l'instabilité isolée produit une sortie de surveillan
 notification de vérification reste réservée aux baisses persistantes ou aux séquences
 instabilité--hypoactivité. Cette extension rend le système plus expressif, mais elle augmente
 la charge de vérification et reste vulnérable aux causes non locomotrices. Elle constitue donc
-une piste opérationnelle prudente, et non une preuve clinique.
+une piste opérationnelle prudente à consolider.
 
 Une analyse complémentaire IceTag--SLS synchronisée confronte les sorties aux scores
 locomoteurs en utilisant uniquement des données capteurs antérieures à l'évaluation. Elle est
 méthodologiquement correcte, mais limitée par le faible nombre de vaches à score élevé et par
 l'entrelacement avec le groupe \textit{Exercise}. Le résultat central du mémoire est donc un
 détecteur temporel défendable, une interface de priorisation et un protocole reproductible qui
-sépare clairement performance logicielle, hypothèse comportementale et validation clinique.
+articule performance logicielle, hypothèse comportementale et vérification clinique future.
 
 \vspace{1em}
 \textbf{Mots-clés:} boiterie bovine, alerte comportementale, capteur IceQube, détection de
@@ -48,8 +48,8 @@ changement, élevage de précision.
 Lameness remains a major welfare and performance issue in dairy farming. Its detection still
 relies largely on human observation and locomotion scoring, which are essential but difficult
 to maintain continuously at herd scale. Activity sensors provide a complementary form of
-monitoring: they do not diagnose lameness, but they can signal persistent behavioral changes
-that justify on-farm verification. This thesis designs and evaluates a reproducible
+monitoring by flagging persistent behavioral changes that justify on-farm verification. This
+thesis designs and evaluates a reproducible
 \textbf{early behavioral-alert} system based on leg-mounted IceQube sensors.
 
 The main contribution is the temporal HYPO branch. It compares each cow with her own reference
@@ -68,14 +68,14 @@ transitions or fragmented posture. It remains separated from HYPO: isolated inst
 produces a surveillance output, whereas verification notifications are reserved for persistent
 decreases or instability-to-hypoactivity sequences. This extension makes the system more
 expressive, but it also increases the verification load and remains vulnerable to
-non-locomotor causes. It is therefore a cautious operational direction, not clinical proof.
+non-locomotor causes. It is therefore a cautious operational direction to consolidate.
 
 A synchronized IceTag--SLS analysis compares the outputs with locomotion scores using only
 sensor data collected before the evaluation. It is methodologically sound, but limited by the
 small number of cows with elevated scores and by the overlap with the \textit{Exercise} group.
 The central result of the thesis is therefore a defensible temporal detector, a prioritization
-interface and a reproducible protocol that clearly separates software performance, behavioral
-hypothesis and clinical validation.
+interface and a reproducible protocol that connects software performance, behavioral
+hypotheses and future clinical verification.
 
 \vspace{1em}
 \textbf{Keywords:} bovine lameness, behavioral alert, IceQube sensor, change detection,
