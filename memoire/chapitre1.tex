@@ -284,7 +284,10 @@ freins persistants: hétérogénéité des protocoles, dépendance aux étiquett
 encore limitée en conditions réelles \citep{siachos2024automated}. Les approches récentes par
 vision et apprentissage profond atteignent de bonnes performances sur vidéo
 \citep{myint2024lameness}, mais supposent une infrastructure caméra et des données étiquetées,
-deux conditions absentes du corpus accéléromètre non étiqueté utilisé ici.
+deux conditions absentes du corpus accéléromètre non étiqueté utilisé ici. Des jeux de données
+publics annotés pour la boiterie commencent certes à apparaître, comme \textit{CowScreeningDB}
+\citep{ismail2024cowscreeningdb}, mais ils restent rares, propres à un capteur donné, et ne
+couvrent pas le corpus IceQube exploité ici.
 
 La diversité de ces approches peut être organisée selon trois dimensions complémentaires:
 \textit{la source de données}, \textit{la stratégie analytique} et \textit{la nature de la
@@ -770,6 +773,12 @@ chaîne de traitement:
     \item \textit{Transitions}: nombre total de changements de posture
     couché$\leftrightarrow$debout.
 \end{itemize}
+Le \textit{Motion Index} a d'ailleurs déjà permis de détecter des comportements précis au
+moyen de seuils validés~: \citet{mckay2024play} repèrent ainsi le jeu chez le veau sevré
+équipé d'un accéléromètre IceTag. Cela confirme la valeur discriminante du signal, tout en
+rappelant qu'un même indice recouvre des comportements variés et n'est donc pas spécifique à
+la boiterie.
+
 Les colonnes supplémentaires (\textit{Transitions Up} et \textit{Transitions Down})
 détaillent la direction des transitions mais ne sont pas exploitées directement par la
 chaîne de traitement, qui utilise leur somme.
