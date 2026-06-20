@@ -66,7 +66,6 @@ projet-memoire/
 ├── tests/                       # 98 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
-│   ├── final_thresholds_v1.json # Seuils gelés de la configuration de référence
 │   └── validation/            # Artefacts + manifeste validation_artifacts.sha256
 ├── memoire/                     # Mémoire LaTeX (sources, figures, bibliographie)
 ├── docs/                        # Documentation (architecture, lecture du code, audit)

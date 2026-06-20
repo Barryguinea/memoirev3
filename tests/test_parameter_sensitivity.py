@@ -147,7 +147,7 @@ def test_parameter_effects_use_maximum_absolute_delta_per_parameter():
 
     effects = build_parameter_effects(summary)
 
-    assert effects.loc[0, "Nouveau début"] == pytest.approx(12.0)
+    assert effects.loc[0, "Nouveau départ"] == pytest.approx(12.0)
     assert effects.loc[0, "Couverture"] == pytest.approx(24.0)
     assert effects.loc[0, "IoU20"] == pytest.approx(9.0)
     assert effects.loc[0, "Fond"] == pytest.approx(0.20)
