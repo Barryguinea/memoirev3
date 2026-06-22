@@ -36,7 +36,7 @@ profils aux fenêtres réelles. Les amplitudes cibles restent documentées sépa
 Un intervalle n'est crédité à l'injection que s'il est en alerte dans l'exécution injectée
 et ne l'est pas au même instant dans l'exécution propre.
 
-| Profil | n | Nouveau début | Couverture attribuable | IoU20 attribuable | IoU moyen attribuable |
+| Profil | n | Nouveau départ | Couverture attribuable | IoU20 attribuable | IoU moyen attribuable |
 |---|---:|---:|---:|---:|---:|
 | Léger | 11 | 45,5 % | 72,7 % | 27,3 % | 0,087 |
 | Modéré | 11 | 63,6 % | 90,9 % | 36,4 % | 0,192 |

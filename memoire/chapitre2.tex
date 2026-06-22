@@ -227,8 +227,11 @@ exploratoire, non un diagnostic imposé par le protocole source.
 Chaque série est triée chronologiquement. Les 60\,\% premiers intervalles admissibles
 constituent la période de référence; les 40\,\% suivants forment la période future. Les médianes de
 référence sont calculées pour le même créneau horaire, avec repli sur la médiane globale de
-la vache. Une deuxième référence est la valeur du jour précédent. Selon le signal, la
-comparaison la plus prudente entre ces deux références est retenue. Les sorties sont forcées
+la vache. Une deuxième référence est la valeur du jour précédent. Pour les familles
+d'activité et le temps debout, le ratio le plus faible entre ces deux références est retenu;
+pour le temps couché, le ratio le plus élevé est conservé. Ce choix sélectionne la référence
+qui fait apparaître la variation adverse la plus marquée, afin qu'une dégradation par rapport
+à l'une des deux références ne soit pas masquée par l'autre. Les sorties sont forcées
 à zéro pendant la période de référence et un intervalle dont la couverture est inférieure à 25\,\% ne
 peut devenir candidat.
 
@@ -270,8 +273,8 @@ résume cette logique de détection pour une vache.
     de référence par créneau horaire, avec repli sur la médiane globale de la vache.
 
 \item \textit{Pour chaque intervalle $t$ de la période surveillée:}\\
-    Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ à la référence (créneau et veille, comparaison
-    prudente)\\
+    Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ aux références du créneau et de la veille;
+    conserver le ratio correspondant à la variation adverse la plus marquée\\
     Déficits $d_j(t) = \max(0,\ 1 - r_j(t))$\hspace{0.5em}(posture: excès de temps couché et déficit de temps debout)\\
     Score $S_H(t) = 0{,}30\,d_{pas} + 0{,}30\,d_{MI} + 0{,}20\,d_{transitions} + 0{,}20\,d_{posture}$\\
     Candidat si $S_H \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}

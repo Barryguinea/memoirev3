@@ -1,4 +1,4 @@
-# Alerte comportementale précoce chez la vache laitière par capteurs IoT
+# Alerte comportementale précoce chez la vache laitière par capteurs IceQube
 
 Système reproductible d'**alerte comportementale précoce** à partir de données
 d'accéléromètres IceQube (pas, *Motion Index*, transitions, temps couché/debout).

@@ -282,11 +282,13 @@ privilégiées.
 
 Après agrégation par vache, HYPO obtient un IoU supérieur à B, C et D
 ($p=0{,}00098$ pour les trois comparaisons appariées de Wilcoxon~\citep{wilcoxon1945individual}).
-Son recouvrement est également
-supérieur à B et D ($p=0{,}04297$) et à C ($p=0{,}01562$). Ces comparaisons sur le recouvrement
-restent toutefois secondaires et exploratoires~: après correction de la multiplicité (méthode
-de Holm), l'avantage sur l'IoU demeure significatif, tandis que les écarts de recouvrement
-proches de $0{,}04$ ne franchissent plus le seuil. L'avantage est aussi de
+Son taux de nouveau départ est également supérieur à B et D ($p=0{,}04297$) et à C
+($p=0{,}01562$); ces valeurs sont non corrigées. Après correction de Holm pour les trois
+comparaisons, l'avantage d'IoU demeure significatif dans chaque cas ($p_{aj.}=0{,}00294$).
+Pour le nouveau départ, seule la comparaison avec C demeure juste sous le seuil
+($p_{aj.}=0{,}04686$), tandis que celles avec B et D ne le franchissent plus
+($p_{aj.}=0{,}08594$). Ces comparaisons secondaires sont donc interprétées comme
+exploratoires. L'avantage est aussi de
 \emph{taille}~: l'écart d'IoU attribuable moyen par vache vis-à-vis des comparateurs IF et LOF
 est d'environ 0,13 (IC95 [0,106~; 0,161] contre B, [0,107~; 0,163] contre C, [0,103~; 0,161]
 contre D, tous excluant zéro), avec une corrélation rang-bisériale appariée
