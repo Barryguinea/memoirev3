@@ -872,13 +872,17 @@ méthodes capables d'accumuler une évidence unilatérale plutôt que de classer
 chaque intervalle.
 
 Les sommes cumulées proposées par \citet{page1954continuous} constituent une famille
-classique de détection de changement. Appliquées à une combinaison de déficits normalisés,
+classique de détection de changement, formalisée depuis en analyse séquentielle et en
+détection de rupture \citep{basseville1993detection} et toujours au cœur des méthodes
+actuelles \citep{truong2020selective}. Appliquées à une combinaison de déficits normalisés,
 elles permettent d'oublier les fluctuations brèves, d'accumuler une baisse soutenue et de
-déclencher une alerte lorsque l'évidence franchit un seuil. Dans un contexte bovin, cette
-logique doit être associée à une période de référence individuelle, au cycle journalier, à la qualité des
-données et à la concordance de plusieurs familles de signaux. Elle reste toutefois une
-détection comportementale: seule une validation avec examens locomoteurs et diagnostics
-contemporains peut établir la relation clinique.
+déclencher une alerte lorsque l'évidence franchit un seuil. Le problème traité n'est donc pas
+seulement une classification ponctuelle, mais la décision progressive qu'une trajectoire
+individuelle s'éloigne durablement de sa référence. Dans un contexte bovin, cette logique doit
+être associée à une période de référence individuelle, au cycle journalier, à la qualité des
+données et à la concordance de plusieurs familles de signaux. Elle reste toutefois une détection
+comportementale: seule une validation avec examens locomoteurs et diagnostics contemporains
+peut établir la relation clinique.
 
 % =====================================================================
 \section{Synthèse critique}

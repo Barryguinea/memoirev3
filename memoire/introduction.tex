@@ -102,14 +102,16 @@ graduelles et 11 contrôles brefs répartis entre onze vaches. Une exécution pr
 vache, sans injection, est soustraite (comparaison contrefactuelle) afin de ne créditer que les
 alertes réellement attribuables à l'événement.
 
-L'évaluation porte sur l'événement et sur la vache, non sur chaque intervalle de capteur: chaque
-dégradation injectée compte comme un épisode unique, dont on mesure la détection et la localisation
-temporelle par un indice de recouvrement, tandis que les indicateurs sont agrégés par vache et
-assortis d'intervalles de confiance obtenus par rééchantillonnage des vaches. Ce choix évite de
-traiter des intervalles successifs fortement corrélés comme autant d'observations indépendantes. La
-même campagne situe HYPO face aux comparateurs Isolation Forest, LOF et pédométrique, trace une
-courbe reliant la détection à la charge de vérification et scelle les résultats par un manifeste
-cryptographique.
+Cette campagne est traitée comme un banc d'essai contrefactuel: les données originales restent
+intactes, chaque perturbation est ajoutée dans une copie de la période future, puis la sortie est
+comparée à l'exécution propre correspondante. L'évaluation porte sur l'événement et sur la vache,
+non sur chaque intervalle de capteur: chaque dégradation injectée compte comme un épisode unique,
+dont on mesure la détection et la localisation temporelle par un indice de recouvrement, tandis que
+les indicateurs sont agrégés par vache et assortis d'intervalles de confiance obtenus par
+rééchantillonnage des vaches. Ce choix évite de traiter des intervalles successifs fortement corrélés
+comme autant d'observations indépendantes. La même campagne situe HYPO face aux comparateurs
+Isolation Forest, LOF et pédométrique, trace une courbe reliant la détection à la charge de
+vérification et scelle les résultats par un manifeste cryptographique.
 
 L'extension INSTABILITÉ utilise une agrégation de trois heures et une persistance de deux
 heures. Elle est évaluée avec HYPO sur 132 scénarios comprenant intensités, séquence,
@@ -124,9 +126,10 @@ reproductible. Ses contributions sont les suivantes:
 \begin{enumerate}
   \item un détecteur HYPO directionnel, persistant et interprétable, centré sur la trajectoire
   individuelle de chaque vache;
-  \item une validation attribuable au niveau de l'événement et de la vache après la période de
-  référence, une ablation contre Isolation Forest, LOF et un comparateur pédométrique, et une
-  analyse OFAT de vingt variantes;
+  \item un banc d'essai contrefactuel reproductible, fondé sur des injections postérieures à la
+  période de référence, une exécution propre de comparaison et une attribution événementielle;
+  \item une validation attribuable au niveau de l'événement et de la vache, une ablation contre
+  Isolation Forest, LOF et un comparateur pédométrique, et une analyse OFAT de vingt variantes;
   \item une extension bidirectionnelle exploratoire avec persistances séparées et cinq
   règles de fusion;
   \item des contrôles brefs et des facteurs confondants qui rendent visibles les limites de spécificité
@@ -134,9 +137,11 @@ reproductible. Ses contributions sont les suivantes:
   \item une évaluation du temps d'exécution de la chaîne complète, une analyse SLS synchronisée, une interface
   Streamlit et une suite de tests reproductibles.
 \end{enumerate}
-L'originalité du travail tient moins à un modèle complexe qu'à l'articulation contrôlée de
-quatre exigences souvent séparées: individualisation, temporalité, attribution et
-reproductibilité.
+La contribution centrale n'est pas un modèle plus complexe, mais l'articulation contrôlée,
+rarement réunie dans un même système, de quatre exigences le plus souvent traitées
+séparément: individualisation, temporalité, attribution et reproductibilité. C'est cette
+combinaison, adossée à une validation dont chaque chiffre est régénérable, qui distingue ce
+travail.
 
 \introheading{Structure du mémoire}
 Le Chapitre~\ref{chapitre:contexte} présente la boiterie, les signaux comportementaux et les
