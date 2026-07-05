@@ -227,6 +227,25 @@ Les injections représentent des changements de comportement, non des cas de boi
 capteurs ne mesurent pas directement la douleur, la lésion ou l'asymétrie de démarche. Le
 seuil IoU20 est une convention technique et ne possède pas de signification clinique.
 
+Ce protocole d'injection soulève une objection légitime~: les événements synthétiques
+reproduisent une baisse graduelle, persistante et concordante, c'est-à-dire précisément la
+signature que HYPO recherche. Trois éléments limitent toutefois le risque de circularité.
+D'abord, HYPO n'est pas évalué seul, mais confronté à Isolation Forest et à LOF sur exactement
+les mêmes événements injectés~; comme ces comparateurs échouent à localiser les épisodes avec
+le critère IoU20 alors que HYPO obtient une localisation supérieure, l'avantage mesuré ne
+découle pas de la simple présence de l'événement, mais de la manière dont il est capté.
+Ensuite, le contrôle bref, une variation isolée d'une seule famille, n'appartient pas à la
+cible de HYPO et est correctement rejeté, ce qui montre que le détecteur ne réagit pas à toute
+perturbation injectée. Enfin, l'amplitude du profil modéré reprend un ordre de grandeur
+rapporté dans la littérature pour des changements comportementaux associés à des épisodes
+locomoteurs ou à un parage thérapeutique \citep{paudyal2021lying}. La forme temporelle des
+injections demeure néanmoins une hypothèse de validation technique~; une validation plus
+complète consisterait à rejouer la campagne avec des formes délibérément moins favorables,
+comme un départ abrupt, des familles désynchronisées ou une décroissance asymétrique, afin de vérifier que
+l'avantage de HYPO sur les comparateurs ne dépend pas de la forme précise retenue. Cette
+extension est directement réalisable avec le protocole décrit et constitue une étape naturelle
+de validation future.
+
 \subsection{Validité interne}
 La séparation chronologique et la soustraction de l'exécution propre réduisent la fuite et
 l'attribution erronée. Plusieurs scénarios proviennent toutefois de la même vache; l'unité
