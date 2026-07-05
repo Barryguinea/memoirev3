@@ -24,9 +24,9 @@ La reproduction complète suit six étapes, dans l'ordre~:
   \item préparer l'environnement et placer \texttt{data/brut.csv} dans le projet~;
   \item exécuter la validation et l'ablation du module HYPO~;
   \item exécuter l'analyse OFAT, la calibration exploratoire et la courbe
-  détection--charge de HYPO~;
+  détection-charge de HYPO~;
   \item exécuter la comparaison exploratoire des fusions, puis l'évaluation du temps d'exécution~;
-  \item exécuter l'analyse IceTag--SLS et régénérer les figures~;
+  \item exécuter l'analyse IceTag-SLS et régénérer les figures~;
   \item régénérer puis vérifier le manifeste SHA-256.
 \end{enumerate}
 Les commandes correspondantes sont détaillées ci-dessous.
@@ -77,7 +77,7 @@ Ce script recalcule, à graine fixée, les intervalles de confiance à 95\,\% de
 attribuables (bootstrap regroupé par vache, 10\,000~rééchantillonnages) et les tailles
 d'effet de l'ablation, puis les écrit dans \path{hypo_module/bootstrap_ci.csv}.
 
-\subsection{Calibration individuelle et courbe détection--charge}
+\subsection{Calibration individuelle et courbe détection-charge}
 \begin{verbatim}
 python scripts/per_cow_calibration.py
 python scripts/detection_background_curve.py
@@ -108,7 +108,7 @@ python scripts/benchmark_performance.py \
 
 Le fichier canonique retient la médiane des cinq exécutions complètes et les temps par étape.
 
-\subsection{Analyse IceTag--SLS}
+\subsection{Analyse IceTag-SLS}
 \begin{verbatim}
 python -m validation_hybrid.mcgill_sls_validation
 \end{verbatim}
@@ -174,8 +174,8 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{hypo_module/failure_modes.csv} & Fréquences reproductibles des modes de défaillance. \\
   \path{hypo_module/per_cow_calibration.csv} & Comparaison agrégée avant et après calibration. \\
   \path{hypo_module/per_cow_calibration_by_cow.csv} & Facteurs et charges de fond par vache. \\
-  \path{hypo_module/cowalert_provenance.csv} & Concordance IceQube--CowAlert (corrélations, identité). \\
-  \path{hypo_module/detection_background_curve/detection_background_curve.csv} & Neuf points de la courbe détection--charge. \\
+  \path{hypo_module/cowalert_provenance.csv} & Concordance IceQube-CowAlert (corrélations, identité). \\
+  \path{hypo_module/detection_background_curve/detection_background_curve.csv} & Neuf points de la courbe détection-charge. \\
   \path{manuscript_number_audit.csv} & Correspondance entre 95 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
@@ -187,7 +187,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{hybrid_refined_full/events_parameter_sensitivity_*.csv} & Évaluations des variantes de paramètres. \\
   \path{mcgill_sls/mcgill_cohort_all_variants.csv} & Cohorte SLS et sorties des cinq fusions. \\
   \path{mcgill_sls/mcgill_exclusions.csv} & Motifs d'exclusion et couverture. \\
-  \path{mcgill_sls/mcgill_metrics.csv} & AUC, Mann--Whitney et Spearman. \\
+  \path{mcgill_sls/mcgill_metrics.csv} & AUC, Mann-Whitney et Spearman. \\
   \path{mcgill_sls/mcgill_summary.json} & Protocole et synthèse de l'analyse SLS. \\
   \path{memoire/figures/manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
   \bottomrule
@@ -320,7 +320,7 @@ et ne constituent pas un taux de faux positifs, faute de labels cliniques.
 
 Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
 des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
-exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag--SLS. Les chemins y
+exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
 sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
 manifeste~:
 

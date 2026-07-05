@@ -12,7 +12,7 @@ L'étude comporte trois niveaux. Le premier valide HYPO sur 44 événements et l
 trois variantes IF/LOF. Le deuxième étend la campagne à 132 scénarios pour explorer
 INSTABILITÉ et cinq règles de fusion. À chaque niveau, un scénario est injecté dans une
 copie distincte de la période future, puis comparé à l'exécution propre de la même
-vache. Le troisième niveau est une analyse observationnelle sur une cohorte IceTag--SLS de
+vache. Le troisième niveau est une analyse observationnelle sur une cohorte IceTag-SLS de
 l'hiver 2019. Il utilise des mesures strictement antérieures au score locomoteur et ne sert
 pas à régler le système. La Figure~\ref{fig:plan_etude} schématise ces trois niveaux.
 Ce plan forme un banc d'essai contrefactuel reproductible: l'événement synthétique est le
@@ -29,9 +29,9 @@ sur les sorties observées.
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
     \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
     \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
-    \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre--injectée\\unité: vache};
+    \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
-    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag--SLS 2019\\14 vaches};
+    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
     \node[box, fill=rulegreen!7, below=0.8cm of split] (pre) {Sept jours\\avant le SLS};
     \node[box, fill=profgray!7, below=0.8cm of inject] (conc) {Concordance exploratoire\\sans réglage};
     \draw[arrow] (sls) -- (pre); \draw[arrow] (pre) -- (conc);
@@ -63,7 +63,7 @@ caractéristiques vérifiées.
     Période & 1 octobre--11 novembre 2023 \\
     Lignes par vache, médiane & 564 \\
     Lignes par vache, étendue & 244--2\,474 \\
-    Doublons vache--temps & 0 \\
+    Doublons vache-temps & 0 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -215,7 +215,7 @@ des ratios à la référence individuelle.
   \end{tabular}
 \end{table}
 
-\section{Cohorte IceTag--SLS de l'hiver 2019}
+\section{Cohorte IceTag-SLS de l'hiver 2019}
 \label{subsec:corpus_mcgill}
 
 Cette cohorte provient du même campus, mais d'une période et d'un dispositif différents.
@@ -493,7 +493,7 @@ hypothèses et non à sélectionner rétrospectivement une nouvelle valeur de se
 La configuration hiérarchique est appliquée sans consulter les scores. La mesure principale
 est le nombre de notifications dans les sept jours précédant le 12 mars 2019. Sont également
 rapportées la fraction du temps en épisode, la surveillance d'instabilité et le score
-maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann--Whitney et la
+maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann-Whitney et la
 corrélation de Spearman au niveau de la vache. Avec seulement trois SLS~$\geq2$, ces mesures
 restent exploratoires.
 
