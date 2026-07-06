@@ -16,6 +16,9 @@ memoire/*.out
 memoire/*.xmpi
 memoire/*.synctex.gz
 memoire/*.toc
+memoire/main.pdf
+memoire/presentation_directeur.pptx
+memoire/~$*
 # Donnees capteurs brutes confidentielles — NE PAS diffuser (depot autonome)
 brut.csv
 data/brut.csv
