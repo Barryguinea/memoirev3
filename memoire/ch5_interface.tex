@@ -1,0 +1,80 @@
+\chapter{Interface et valorisation opérationnelle}
+\label{chapitre:interface}
+
+% =====================================================================
+\section{Tableau de bord de priorisation}
+\label{sec:interface_streamlit}
+% =====================================================================
+L'interface est un outil de lecture et de priorisation. Elle charge par défaut
+\texttt{data/brut.csv} et accepte un CSV importé. La vue individuelle présente les signaux,
+les épisodes et les notifications. La vue troupeau ordonne les animaux à vérifier, tandis
+que la carte thermique permet une comparaison journalière. Isolation Forest reste présenté
+comme comparateur; il ne constitue pas la notification principale.
+
+Les Figures~\ref{fig:streamlit_individual} à~\ref{fig:streamlit_heatmap} illustrent les
+principales vues de l'interface. Les marqueurs affichés dans la vue individuelle signalent
+une vérification à effectuer; ils ne confirment pas une boiterie. Les vues de troupeau
+servent uniquement à ordonner les animaux et les journées à examiner.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_individual.png}
+  \caption{Analyse individuelle du tableau de bord.}
+  \label{fig:streamlit_individual}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_individual_8116.png}
+  \caption{Signaux de la vache 8116.}
+  \label{fig:streamlit_individual_8116}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_herd_table.png}
+  \caption{Classement du troupeau.}
+  \label{fig:streamlit_herd_table}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_heatmap_compact.png}
+  \caption{Alertes journalières par animal.}
+  \label{fig:streamlit_heatmap}
+\end{figure}
+
+% =====================================================================
+\section{Niveaux de priorité et action associée}
+% =====================================================================
+L'interface traduit la sortie de fusion en trois niveaux de priorité qui orientent l'effort
+de vérification, sans jamais affirmer un diagnostic (Tableau~\ref{tab:priorites}). Seules les
+priorités~2 et~3 produisent une notification de vérification~; la priorité~1 reste un signal de
+surveillance. Ce classement remplace une échelle de risque clinique~: il ordonne les animaux
+à observer, il ne quantifie pas une probabilité de boiterie.
+
+\begin{table}[H]
+  \centering
+  \caption{Niveaux de priorité de l'interface et action de vérification associée.}
+  \label{tab:priorites}
+  \small
+  \begin{tabular}{cp{0.36\textwidth}p{0.38\textwidth}}
+    \toprule
+    Priorité & Condition & Action suggérée \\
+    \midrule
+    3 & Convergence HYPO + INSTABILITÉ, ou séquence instabilité$\rightarrow$hypoactivité &
+    Vérification rapprochée, observation locomotrice \\
+    2 & Hypoactivité persistante (HYPO) & Vérification à planifier \\
+    1 & Instabilité isolée & Surveillance, sans alerte de vérification \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_priority_animals.png}
+  \caption{Animaux à vérifier en priorité.}
+  \label{fig:streamlit_priority_animals}
+\end{figure}
+
+
