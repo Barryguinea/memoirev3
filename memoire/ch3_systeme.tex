@@ -1,0 +1,275 @@
+\chapter{Système proposé et protocole d'évaluation}
+\label{chapitre:systeme}
+
+Ce chapitre définit le système proposé et le protocole selon lequel il est évalué~: la
+période de référence individuelle, la branche HYPO, l'extension bidirectionnelle
+exploratoire, la fusion des branches et les métriques. Les corpus et les campagnes
+correspondantes sont décrits au Chapitre~\ref{chapitre:donnees}. La sortie étudiée est une
+alerte comportementale à vérifier sur le terrain. Les termes de sensibilité et de faux
+positif cliniques ne sont pas employés pour l'évaluation synthétique, faute d'étalon
+vétérinaire.
+
+% =====================================================================
+\section{Vue d'ensemble du système}
+% =====================================================================
+L'étude comporte trois niveaux. Le premier valide HYPO sur 44 événements et le compare à
+trois variantes IF/LOF. Le deuxième étend la campagne à 132 scénarios pour explorer
+INSTABILITÉ et cinq règles de fusion. À chaque niveau, un scénario est injecté dans une
+copie distincte de la période future, puis comparé à l'exécution propre de la même
+vache. Le troisième niveau est une analyse observationnelle sur une cohorte IceTag-SLS de
+l'hiver 2019. Il utilise des mesures strictement antérieures au score locomoteur et ne sert
+pas à régler le système. La Figure~\ref{fig:plan_etude} schématise ces trois niveaux.
+Ce plan forme un banc d'essai contrefactuel reproductible: l'événement synthétique est le
+seul changement volontaire entre l'exécution propre et l'exécution injectée, ce qui permet de
+mesurer la réponse du détecteur sans modifier la période de référence ni optimiser les seuils
+sur les sorties observées.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+    box/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
+      minimum height=2.1cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
+    arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
+    \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
+    \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
+    \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
+    \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
+    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
+    \node[box, fill=rulegreen!7, below=0.8cm of split] (pre) {Sept jours\\avant le SLS};
+    \node[box, fill=profgray!7, below=0.8cm of inject] (conc) {Concordance exploratoire\\sans réglage};
+    \draw[arrow] (sls) -- (pre); \draw[arrow] (pre) -- (conc);
+  \end{tikzpicture}
+  \caption{Plan d'étude.}
+  \label{fig:plan_etude}
+\end{figure}
+
+% =====================================================================
+\section{Période de référence individuelle}
+% =====================================================================
+Chaque série est triée chronologiquement. Les 60\,\% premiers intervalles admissibles
+constituent la période de référence; les 40\,\% suivants forment la période future. Les médianes de
+référence sont calculées pour le même créneau horaire, avec repli sur la médiane globale de
+la vache. Une deuxième référence est la valeur du jour précédent. Pour les familles
+d'activité et le temps debout, le ratio le plus faible entre ces deux références est retenu;
+pour le temps couché, le ratio le plus élevé est conservé. Ce choix sélectionne la référence
+qui fait apparaître la variation adverse la plus marquée, afin qu'une dégradation par rapport
+à l'une des deux références ne soit pas masquée par l'autre. Les sorties sont forcées
+à zéro pendant la période de référence et un intervalle dont la couverture est inférieure à 25\,\% ne
+peut devenir candidat.
+
+% =====================================================================
+\section{Branche HYPO~: baisse comportementale persistante}
+\label{sec:hypo}
+% =====================================================================
+La branche HYPO cible la signature comportementale la mieux documentée de la boiterie~: une
+réduction de l'activité locomotrice (pas, mouvement, transitions) accompagnée d'une
+augmentation du temps couché \citep{ito2010lying,blackie2011lying,chapinal2010measurement}.
+C'est cette direction de changement, et non un écart quelconque, que le détecteur recherche.
+
+Les pas, le \textit{Motion Index}, les transitions et les temps posturaux sont cumulés sur
+douze heures. Pour les trois familles d'activité, le déficit est
+\(
+d_j(t)=\max(0,1-r_j(t))
+\), où \(r_j(t)\) est le ratio à la référence individuelle. Le changement postural combine
+l'excès de temps couché et le déficit de temps debout. Le score est
+\[
+S_H(t)=0{,}30d_{pas}+0{,}30d_{MI}+0{,}20d_{transitions}+0{,}20d_{posture}.
+\]
+Un candidat exige \(S_H\geq0{,}12\), au moins trois familles concordantes, l'implication des
+pas ou du \textit{Motion Index}, une couverture suffisante et une position dans la période future.
+Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM, somme cumulée unilatérale de Page \citep{page1954continuous}, est défini par
+\(C_t=\max(0,C_{t-1}+e_t-0{,}07)\). Un épisode exige une persistance sur six heures et
+\(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. L'algorithme~\ref{alg:hypo}
+résume cette logique de détection pour une vache.
+
+\subsection{Formalisation et pseudocode}
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.92\textwidth}{\raggedright
+\textbf{Algorithme:} Détection HYPO d'une baisse comportementale persistante (par vache)
+\vspace{0.3em}\hrule\vspace{0.5em}
+\textbf{Entrée:} intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$\\
+\textbf{Sortie:} épisodes, départs et notifications (alerte à vérifier, non diagnostique)
+
+\begin{enumerate}[leftmargin=1.5em]
+\item \textit{Référence individuelle:}\\
+    Pour chaque famille (pas, \textit{Motion Index}, transitions, posture), médiane de la période
+    de référence par créneau horaire, avec repli sur la médiane globale de la vache.
+
+\item \textit{Pour chaque intervalle $t$ de la période surveillée:}\\
+    Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ aux références du créneau et de la veille;
+    conserver le ratio correspondant à la variation adverse la plus marquée\\
+    Déficits $d_j(t) = \max(0,\ 1 - r_j(t))$\hspace{0.5em}(posture: excès de temps couché et déficit de temps debout)\\
+    Score $S_H(t) = 0{,}30\,d_{pas} + 0{,}30\,d_{MI} + 0{,}20\,d_{transitions} + 0{,}20\,d_{posture}$\\
+    Candidat si $S_H \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
+    impliqués, et couverture suffisante\\
+    Évidence $e_t \leftarrow S_H + 0{,}35\,(\text{baisse sur }6\,\text{h})$ si candidat, sinon $0$\\
+    CUSUM $C_t \leftarrow \max(0,\ C_{t-1} + e_t - 0{,}07)$
+
+\item \textit{Épisode et notification:}\\
+    Épisode si persistance du candidat sur $6\,$h et $C_t \geq 1{,}20$\\
+    Notifier au début d'un épisode, avec un délai réfractaire de $24\,$h
+\end{enumerate}
+}}
+\caption{Pseudocode de la détection HYPO.}
+\label{alg:hypo}
+\end{figure}
+
+% =====================================================================
+\section{Branche INSTABILITÉ et fusion hiérarchique}
+% =====================================================================
+\subsection{Mouvement disproportionné et posture fragmentée}
+\label{sec:instabilite}
+
+La branche INSTABILITÉ ne recherche pas une hausse globale d'activité. Elle calcule quatre
+familles sur une fenêtre de trois heures: mouvement relatif aux pas, transitions relatives
+aux pas, transitions relatives au temps postural et volatilité de la fraction couchée. Les
+hausses des quatre familles sont pondérées respectivement par 0,35, 0,30, 0,20 et 0,15.
+
+Un candidat exige un score d'au moins 0,18, deux familles, dont le mouvement relatif et au
+moins une corroboration par transitions, fragmentation ou posture. Chaque changement
+familial doit atteindre 20\,\%. Une hausse coordonnée des pas et du \textit{Motion Index}
+d'au moins 15\,\%, avec un écart inférieur à 20\,\% et sans fragmentation, est filtrée comme
+activité générale. Le CUSUM utilise une dérive de 0,06 et un seuil de 0,70. La persistance
+est de deux heures et le délai réfractaire de douze heures.
+
+Les paramètres de la branche INSTABILITÉ sont des choix techniques exploratoires. Ils ont
+été définis avant la campagne complète puis soumis à une analyse de sensibilité. Ils ne sont
+pas présentés comme des seuils physiologiques ou cliniquement optimaux.
+
+\subsection{Fusion des branches}
+Cinq stratégies sont comparées sur les mêmes événements:
+\begin{enumerate}
+  \item \textbf{HYPO}: seule la branche HYPO produit la sortie;
+  \item \textbf{INSTABILITÉ}: seule l'instabilité produit la sortie;
+  \item \textbf{OU}: toute branche active peut notifier;
+  \item \textbf{HIÉRARCHIQUE}: l'hypoactivité, la convergence ou une séquence produit une
+  alerte de vérification; l'instabilité isolée reste en surveillance;
+  \item \textbf{SÉQUENTIELLE}: une alerte exige une instabilité suivie d'une hypoactivité
+  entre 24 et 72 heures plus tard.
+\end{enumerate}
+La fusion hiérarchique est la configuration de référence de l'extension exploratoire. Sa
+période réfractaire est de douze heures. Une priorité 1 correspond à une surveillance
+d'instabilité, une priorité 2 à une hypoactivité et une priorité 3 à une convergence ou une
+séquence. Elle n'est pas présupposée supérieure à HYPO: cette comparaison fait partie des
+résultats. Le Tableau~\ref{tab:config_finale} consigne les paramètres de référence des deux
+branches.
+
+\begin{table}[H]
+  \centering
+  \caption{Paramètres de référence des deux branches.}
+  \label{tab:config_finale}
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    Paramètre & HYPO & INSTABILITÉ \\
+    \midrule
+    Agrégation & 12 h & 3 h \\
+    Persistance & 6 h & 2 h \\
+    Délai réfractaire & 24 h & 12 h \\
+    Seuil de score & 0,12 & 0,18 \\
+    Dérive CUSUM & 0,07 & 0,06 \\
+    Seuil CUSUM & 1,20 & 0,70 \\
+    Familles minimales & 3 & 2 \\
+    Couverture minimale & 25\,\% & 25\,\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+La sélection descriptive des fusions impose trois conditions de portée: détection
+des scénarios de vérification d'au moins 60\,\%, surveillance de l'instabilité d'au moins 50\,\% et
+IoU20 d'au moins 20\,\%. Une fonction d'utilité secondaire récompense la détection et
+pénalise fortement les contrôles, les confondants et la charge de fond. Ses poids sont des
+choix d'ingénierie; elle ne représente pas une utilité clinique validée.
+
+% =====================================================================
+\section{Protocole d'évaluation}
+% =====================================================================
+\subsection{Attribution et contrôles bloquants}
+La Figure~\ref{fig:hypo_cusum_example} sert de démonstration visuelle du mécanisme sur une
+vache et une dégradation graduelle injectée après la période de référence. Le panneau supérieur montre que
+le score comportemental $S_H(t)$ de l'exécution injectée s'élève au-dessus du seuil de
+candidat et de l'exécution propre pendant la fenêtre injectée, puis redescend une fois
+l'événement terminé. Le panneau inférieur montre que l'épisode détecté dans l'exécution
+injectée se superpose à la fenêtre réelle. L'exécution propre déclenche elle aussi un épisode
+plus court au même moment, la vache présentant une baisse naturelle; seule la part ajoutée par
+l'injection, au-delà de ce déclenchement naturel, est créditée comme attribuable.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/hypo_cusum_example.png}
+  \caption{Détection attribuable au niveau de l'événement.}
+  \label{fig:hypo_cusum_example}
+\end{figure}
+
+\subsection{Recouvrement temporel (IoU)}
+La localisation d'un épisode est mesurée par l'intersection sur l'union
+(\textit{Intersection over Union}, IoU), une métrique issue de la détection d'objets en
+vision par ordinateur \citep{everingham2010pascal}, entre la fenêtre injectée et l'épisode
+prédit~:
+\[
+\mathrm{IoU} = \frac{|\,\text{injecté} \cap \text{prédit}\,|}{|\,\text{injecté} \cup \text{prédit}\,|},
+\]
+exprimée en nombre d'intervalles de quinze minutes. Une valeur de~1 indique une superposition
+parfaite et une valeur de~0 une absence de chevauchement. Le seuil IoU~$\geq0{,}20$ retient
+les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
+recouvrement, qui ne compte qu'un chevauchement non nul.
+
+\subsection{Métriques attribuables et unité statistique}
+Une détection est attribuable seulement si l'exécution injectée ajoute un intervalle ou un
+départ absent de l'exécution propre. Pour HYPO, les résultats distinguent nouveau départ,
+couverture attribuable, IoU~$\geq0{,}20$, meilleur IoU, délai et notifications de fond. Ces
+quantités sont volontairement reliées à des notions connues: la couverture joue le rôle d'un
+rappel événementiel permissif, le nouveau départ d'un rappel événementiel strict, l'IoU mesure
+la localisation temporelle et les notifications de fond mesurent la charge opérationnelle. Pour
+l'extension, les métriques ajoutent les taux de surveillance, de contrôle et de confusion. Les
+synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne sont
+jamais des sujets indépendants.
+
+Cette dépendance se quantifie. En estimant l'autocorrélation des séries par vache, on obtient
+un temps d'autocorrélation intégré $\tau$ et une taille d'échantillon effective
+$n_{\text{eff}}=n/\tau$ lorsque $\tau$ est exprimé en nombre de pas d'échantillonnage. Au
+grain brut de quinze minutes, $\tau$ vaut de l'ordre d'une heure pour l'activité, de sorte que
+les 36\,879 mesures ne représentent déjà qu'environ dix mille observations indépendantes.
+Surtout, comme HYPO décide sur des totaux glissants de douze heures, deux fenêtres voisines
+partagent presque toutes leurs données et le temps de corrélation au niveau de la décision
+atteint environ huit heures: chaque vache n'apporte alors qu'une quinzaine de points de
+décision indépendants, soit de l'ordre du millier sur l'ensemble du corpus. Ce constat justifie
+quantitativement le choix de la vache comme unité de rééchantillonnage et le caractère
+conservateur des intervalles de confiance. Le calcul est reproductible par
+\path{scripts/compute_correlation_time.py}.
+
+La détection peut aussi se résumer, au niveau de l'événement, par un F1: les 33 dégradations
+graduelles sont les positifs attendus et les 11 contrôles brefs les négatifs attendus. Un vrai
+positif est un événement graduel détecté de façon attribuable, un faux positif un contrôle bref
+alerté à tort, un faux négatif un événement graduel manqué et un vrai négatif un contrôle
+correctement rejeté; le F1 est la moyenne harmonique de la précision et du rappel correspondants.
+Cette synthèse reste complémentaire: elle n'intègre ni la charge de fond ni la qualité fine de
+localisation.
+
+% =====================================================================
+\section{Analyses de sensibilité prévues}
+% =====================================================================
+L'analyse OFAT principale modifie vingt fois, une valeur à la fois, dix paramètres de HYPO.
+Une analyse plus restreinte modifie ensuite l'agrégation, la persistance et les seuils de la
+branche INSTABILITÉ. Les deux analyses servent à détecter une dépendance excessive aux
+valeurs de référence, non à optimiser les paramètres sur les événements évalués.
+
+Deux analyses exploratoires complètent ce dispositif sans modifier la configuration
+principale. La première estime, uniquement sur la période de référence de chaque vache, un facteur
+proportionnel à l'écart-type de son score, puis réexécute la campagne avec un seuil
+individualisé. La seconde fait varier le seuil de score HYPO de 0,04 à 0,20, en conservant
+les mêmes vaches, fenêtres, injections et autres paramètres. Elle décrit conjointement la
+réponse aux événements graduels et la charge produite par les exécutions propres. Ces
+analyses ont été ajoutées après la validation principale~: elles servent à examiner des
+hypothèses et non à sélectionner rétrospectivement une nouvelle valeur de seuil.
+
+% =====================================================================
+\section{Reproductibilité}
+% =====================================================================
+Les configurations et les sorties sont exportées en CSV. Les tests vérifient le placement
+postérieur à la période de référence, la conservation posturale, la fusion et les contrats
+de sortie. L'Annexe~\ref{annexe:validation} fournit les commandes de reproduction. Cette
+démarche rejoint les recommandations sur la reproductibilité en apprentissage automatique et
+la gestion FAIR des données \citep{pineau2021improving,wilkinson2016fair}.

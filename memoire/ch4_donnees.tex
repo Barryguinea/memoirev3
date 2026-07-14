@@ -1,0 +1,258 @@
+\chapter{Données et cadre expérimental}
+\label{chapitre:donnees}
+
+Ce chapitre décrit les données sur lesquelles le système est évalué, puis le cadre
+expérimental correspondant. Il présente le corpus principal IceQube 2023, sa préparation et
+ses variables dérivées, avant de détailler les campagnes injectées et la cohorte
+IceTag-SLS. Les mécanismes de détection et le protocole d'évaluation sont définis au
+Chapitre~\ref{chapitre:systeme}.
+
+% =====================================================================
+\section{Corpus principal IceQube 2023}
+% =====================================================================
+\label{sec:donnees}
+
+Le fichier \texttt{data/brut.csv} provient de la ferme du campus Macdonald de
+l'Université McGill. Il contient 37\,839 mesures de 28 vaches entre le
+1\textsuperscript{er} octobre et le 11 novembre 2023. Les variables sont agrégées à une
+résolution nominale de quinze minutes. Le Tableau~\ref{tab:dataset} en décrit les
+caractéristiques vérifiées.
+
+\begin{table}[H]
+  \centering
+  \caption{Caractéristiques vérifiées du corpus IceQube 2023.}
+  \label{tab:dataset}
+  \begin{tabular}{lr}
+    \toprule
+    Caractéristique & Valeur \\
+    \midrule
+    Vaches & 28 \\
+    Lignes & 37\,839 \\
+    Résolution nominale & 15 minutes \\
+    Période & 1 octobre--11 novembre 2023 \\
+    Lignes par vache, médiane & 564 \\
+    Lignes par vache, étendue & 244--2\,474 \\
+    Doublons vache-temps & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Variables brutes du corpus}
+Les variables utilisées sont les pas, le \textit{Motion Index}, le temps couché, le temps
+debout, les transitions et leur décomposition en levers et couchers
+(Tableau~\ref{tab:variables_brutes}). Elles décrivent la quantité de mouvement et la
+posture~; elles ne mesurent ni l'asymétrie de démarche, ni la douleur, ni une lésion du
+pied \citep{alsaaod2019automatic,oleary2020accelerometers}. Leur portée clinique est donc
+indirecte.
+
+\begin{table}[H]
+  \centering
+  \caption{Variables brutes du corpus IceQube 2023.}
+  \label{tab:variables_brutes}
+  \begin{tabular}{p{0.28\textwidth}p{0.60\textwidth}}
+    \toprule
+    Variable & Interprétation \\
+    \midrule
+    \textit{Steps} & Nombre de pas dans l'intervalle. \\
+    \textit{Motion Index} & Intensité agrégée du mouvement mesuré par le capteur. \\
+    \textit{Lying Time} & Temps couché dans l'intervalle. \\
+    \textit{Standing Time} & Temps debout dans l'intervalle. \\
+    \textit{Transitions} & Nombre total de transitions posturales. \\
+    \textit{Transitions Up/Down} & Décomposition en levers et couchers. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Statistiques descriptives et variabilité inter-individuelle}
+Les distributions sont fortement asymétriques (Tableau~\ref{tab:statistiques_brutes})~: la
+médiane des pas et des transitions par intervalle est nulle, tandis que les maxima sont
+élevés. Cette structure écarte une normalisation gaussienne globale et motive des
+comparaisons robustes propres à chaque vache et à chaque créneau horaire
+\citep{leys2013detecting}.
+
+\begin{table}[H]
+  \centering
+  \caption{Statistiques descriptives des variables de mouvement (par intervalle de 15~min).}
+  \label{tab:statistiques_brutes}
+  \begin{tabular}{lrrrr}
+    \toprule
+    Variable & Moyenne & Écart-type & Médiane & Maximum \\
+    \midrule
+    Pas & 4,0 & 15,4 & 0 & 387 \\
+    \textit{Motion Index} & 25,5 & 103,7 & 5 & 3\,351 \\
+    Transitions & 0,16 & 0,40 & 0 & 6 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+La variabilité entre vaches est considérable (Tableau~\ref{tab:variabilite}). La moyenne de
+pas par intervalle varie de 0,0 à 11,1 selon l'animal, et le coefficient de variation
+inter-vache atteint 0,50 pour les pas, 0,40 pour le \textit{Motion Index} et 0,41 pour les
+transitions. Cette hétérogénéité interdit un seuil commun à tout le troupeau et justifie le
+recours à une référence \emph{individuelle}, propre à chaque vache.
+
+\begin{table}[H]
+  \centering
+  \caption{Variabilité inter-individuelle des principales variables (moyenne par vache).}
+  \label{tab:variabilite}
+  \begin{tabular}{lrrr}
+    \toprule
+    Variable & Moyenne/vache min & Moyenne/vache max & CV inter-vache \\
+    \midrule
+    Pas & 0,0 & 11,1 & 0,50 \\
+    \textit{Motion Index} & 4,0 & 57,4 & 0,40 \\
+    Transitions & 0,00 & 0,31 & 0,41 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Préparation des données et variables dérivées}
+% =====================================================================
+Cette section décrit les traitements appliqués aux mesures brutes avant la détection~: le
+choix de la résolution, les contrôles d'admissibilité, la traçabilité des fichiers et la
+construction des variables dérivées.
+
+\subsection{Résolution temporelle}
+L'agrégation à quinze minutes est conservée comme résolution nominale. Une résolution plus
+fine multiplie le bruit et les intervalles vides sans ajouter d'information comportementale
+exploitable à l'échelle d'un épisode de plusieurs heures~; une résolution plus grossière
+masque les transitions posturales. Quinze minutes offrent un compromis entre stabilité du
+signal et granularité suffisante pour la persistance recherchée par les deux branches.
+
+\subsection{Contrôles d'intégrité et admissibilité}
+Le chargement impose des dates interprétables, des identifiants non vides et des variables
+numériques non négatives~; les durées posturales sont converties en minutes et la couverture
+de chaque intervalle est conservée. Les données originales ne sont jamais modifiées par la
+validation~: chaque injection opère sur une copie en mémoire.
+
+La durée des séries est bimodale~: seize vaches possèdent moins de quatorze jours de mesures
+et douze une série longue. Une vache est admissible à la validation synthétique si sa durée
+atteint quatorze jours, si une période future existe après la période de référence et si les pas, le
+\textit{Motion Index} et les transitions y sont informatifs. Onze vaches satisfont ces
+conditions~; les 28 restent utilisables dans l'interface, l'effectif de onze ne concernant
+que le protocole expérimental. La Figure~\ref{fig:admissibilite} montre la durée disponible
+par vache et distingue les onze vaches admissibles, en vert, des dix-sept autres, en gris~;
+le trait pointillé marque le seuil de quatorze jours. Seize des vaches grises restent sous ce
+seuil, faute d'une durée suffisante. Une barre grise le dépasse pourtant~: cette
+vache atteint la durée requise, mais ne fournit pas de signaux informatifs dans sa période
+future, ce qui ramène l'effectif admissible à onze.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{figures/cow_admissibility.png}
+  \caption{Admissibilité des vaches.}
+  \label{fig:admissibilite}
+\end{figure}
+
+\subsection{Traçabilité et provenance des données}
+La provenance du corpus a été vérifiée en confrontant ses valeurs à celles du système
+commercial CowAlert (IceRobotics), qui restitue les mêmes mesures IceQube. Pour les cinq
+vaches dont les mesures ont pu être relevées depuis ce système, les deux sources sont
+alignées un à un sur le couple (vache, début d'intervalle), après vérification de l'absence
+de doublons. Sur les 7\,631 intervalles communs parmi 7\,823 lignes CowAlert (97,5\,\%), les
+pas, le \textit{Motion Index} et les transitions \emph{coïncident exactement} (corrélation de
+1,0, valeurs identiques). Le corpus reflète donc les mesures restituées par le système
+officiel pour ces animaux. Cette vérification porte sur cinq des vingt-huit vaches~; le
+fichier source est confidentiel et n'est pas diffusé, seules les corrélations agrégées étant
+rapportées.
+
+\subsection{Variables dérivées}
+Pour chaque variable brute, la chaîne de traitement construit une famille de variables dérivées
+(Tableau~\ref{tab:features})~: des agrégats par intervalle, leurs transformations
+logarithmiques pour atténuer l'asymétrie, un z-score robuste global et un z-score robuste
+glissant (centrage par la médiane, échelle par l'écart absolu médian) et un indicateur de
+couverture. Ces variables
+alimentent principalement les comparateurs Isolation~Forest et Local~Outlier~Factor ainsi que
+les règles de cohérence~; les deux branches temporelles, elles, raisonnent directement sur
+des ratios à la référence individuelle.
+
+\begin{table}[H]
+  \centering
+  \caption{Familles de variables dérivées par variable comportementale brute.}
+  \label{tab:features}
+  \small
+  \begin{tabular}{p{0.32\textwidth}p{0.56\textwidth}}
+    \toprule
+    Famille & Description \\
+    \midrule
+    Agrégats & Somme et moyenne par intervalle de quinze minutes. \\
+    Transformations log & $\log(1+x)$ sur la somme et la moyenne. \\
+    Z-score robuste global & Centrage par la médiane, échelle par l'écart absolu médian (MAD). \\
+    Z-score robuste glissant & Même principe sur une fenêtre mobile de 24~intervalles. \\
+    Couverture & Rapport entre échantillons observés et attendus par intervalle. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Cadre expérimental}
+% =====================================================================
+Le cadre expérimental comprend deux campagnes injectées sur le corpus principal, puis une
+cohorte observationnelle indépendante.
+
+\subsection{Campagne principale et ablation du module HYPO}
+Trois profils graduels et un contrôle bref sont appliqués à chacune des onze vaches
+admissibles, soit 44 événements. Les profils léger, modéré et marqué diminuent de façon
+progressive les pas, le mouvement et les transitions, puis transfèrent une part du temps
+debout vers le temps couché pendant respectivement 36, 48 et 60 heures. Le contrôle dure
+trois heures et ne devrait pas former
+un épisode persistant. Chaque événement est placé dans une copie indépendante des données,
+strictement après le début de la période future. L'exécution propre de la même vache est
+soustraite lors du calcul des métriques attribuables.
+
+L'ablation applique cinq variantes aux mêmes fenêtres: (A) HYPO temporel multivarié;
+(B) Isolation Forest suivi des règles de persistance; (C) Isolation Forest ponctuel;
+(D) LOF suivi des règles; et (E) un comparateur pédométrique restreint au seul canal des pas. Les comparaisons appariées sont calculées après agrégation par
+vache. Une analyse OFAT conserve les mêmes onze vaches, les mêmes fenêtres et la même graine,
+puis modifie séparément dix paramètres autour de la référence. Elle évalue une robustesse
+locale et ne sélectionne pas une nouvelle configuration.
+
+\subsection{Extension bidirectionnelle et contrôles de confusion}
+Douze scénarios sont appliqués à chacune des onze vaches admissibles, soit 132 événements.
+Chaque scénario est injecté dans une copie indépendante des données, strictement après le
+début de la période future. L'enveloppe est progressive, avec montée, plateau et retour. La
+somme des temps couché et debout est conservée. Le Tableau~\ref{tab:profils_detection} décrit ces
+douze scénarios.
+
+\begin{table}[H]
+  \centering
+  \caption{Scénarios de la validation technique.}
+  \label{tab:profils_detection}
+  \small
+  \begin{tabular}{p{0.27\textwidth}p{0.18\textwidth}p{0.43\textwidth}}
+    \toprule
+    Famille & Nombre & Rôle \\
+    \midrule
+    Hypoactivité légère, modérée, marquée & 33 & Baisse progressive de plusieurs signaux sur 24 à 48 h. \\
+    Instabilité légère, modérée, marquée & 33 & Mouvement relatif, transitions et posture sur 8 à 16 h. \\
+    Instabilité puis hypoactivité & 11 & Séquence séparée par 24 h. \\
+    Pic capteur, exercice bref, manipulation & 33 & Contrôles brefs qui doivent être rejetés. \\
+    Activité de type œstrus & 11 & Confondant d'hyperactivité coordonnée. \\
+    Hypoactivité non locomotrice & 11 & Confondant causal indiscernable avec les capteurs seuls. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+L'amplitude modérée des pas atteint 29\,\%, valeur ancrée sur un ordre de grandeur publié
+autour d'un parage thérapeutique \citep{paudyal2021lying}. Les amplitudes des autres signaux
+sont des hypothèses de test et non des estimations cliniques.
+
+\subsection{Cohorte IceTag-SLS de l'hiver 2019}
+\label{subsec:corpus_mcgill}
+
+Cette cohorte provient du même campus, mais d'une période et d'un dispositif différents.
+Le SLS est la somme de quatre composantes binaires et varie de 0 à 4. L'analyse retient le
+score du 12 mars 2019 et les données capteurs strictement antérieures. Une vache doit avoir
+une période de référence suffisante et au moins 70\,\% de couverture dans les sept jours précédents.
+Quatorze vaches sont évaluables: deux ont un SLS de 0, neuf un SLS de 1 et trois un SLS de 2.
+Aucun SLS de 3 ou 4 n'est observé. Le seuil SLS~$\geq2$ constitue une séparation
+exploratoire, non un diagnostic imposé par le protocole source.
+
+\subsection{Protocole de l'analyse SLS}
+La configuration hiérarchique est appliquée sans consulter les scores. La mesure principale
+est le nombre de notifications dans les sept jours précédant le 12 mars 2019. Sont également
+rapportées la fraction du temps en épisode, la surveillance d'instabilité et le score
+maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann-Whitney et la
+corrélation de Spearman au niveau de la vache. Avec seulement trois SLS~$\geq2$, ces mesures
+restent exploratoires.
