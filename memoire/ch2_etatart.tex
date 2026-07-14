@@ -1,0 +1,450 @@
+\chapter{État de l'art et positionnement}
+\label{chapitre:etatart}
+
+% =====================================================================
+\section{Approches automatisées de détection}
+% =====================================================================
+
+Les approches basées sur des capteurs visent à détecter des déviations comportementales
+(activité, transitions, dynamique de mouvement) qui peuvent être associées à la boiterie,
+sans être spécifiques à cette affection.
+La littérature distingue trois familles principales: l'analyse de la démarche par vision
+par ordinateur \citep{vanhertem2014evaluation,lavrova2023lameness}, la classification de
+comportements par accélérométrie \citep{oleary2020accelerometers,alsaaod2019automatic,
+balasso2023behaviour,benaissa2019calving} et la détection d'anomalies sur des indicateurs dérivés
+\citep{qiao2021review,chandola2009anomaly}. Les revues
+récentes confirment la prédominance des approches supervisées, tout en soulignant le
+manque d'études non supervisées en conditions réelles d'élevage
+\citep{qiao2021review,oleary2020accelerometers}. Une revue récente de la détection
+automatisée par intelligence artificielle confirme cette dynamique tout en pointant des
+freins persistants: hétérogénéité des protocoles, dépendance aux étiquettes et validation
+encore limitée en conditions réelles \citep{siachos2024automated}. Les approches récentes par
+vision et apprentissage profond atteignent de bonnes performances sur vidéo
+\citep{myint2024lameness}, mais supposent une infrastructure caméra et des données étiquetées,
+deux conditions absentes du corpus accéléromètre non étiqueté utilisé ici. Des jeux de données
+publics annotés pour la boiterie commencent certes à apparaître, comme \textit{CowScreeningDB}
+\citep{ismail2024cowscreeningdb}, mais ils restent rares, propres à un capteur donné, et ne
+couvrent pas le corpus IceQube exploité ici.
+
+La diversité de ces approches peut être organisée selon trois dimensions complémentaires:
+\textit{la source de données}, \textit{la stratégie analytique} et \textit{la nature de la
+sortie}. Une telle lecture est importante, car elle évite de comparer directement des travaux
+qui ne visent pas le même objectif. Un modèle supervisé de classification binaire à partir
+d'images et un système d'alerte basé sur des capteurs d'activité n'ont ni les mêmes
+contraintes de données, ni le même niveau d'interprétabilité, ni le même usage en ferme.
+
+La Figure~\ref{fig:taxonomie_approches} synthétise cette organisation en trois axes~: la
+source de données (de l'observation visuelle aux accéléromètres portés), la stratégie
+analytique (règles et seuils, modèles supervisés, détection d'anomalies non supervisée,
+approches hybrides) et la sortie opérationnelle (du score locomoteur à l'alerte
+nécessitant une vérification). Le présent travail se positionne dans la branche non supervisée et hybride,
+encadrée en vert sur la figure.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        block/.style={rectangle, draw=black!70, rounded corners=3pt, minimum width=4cm,
+                      minimum height=1cm, align=center, font=\small\bfseries, inner sep=8pt},
+        small/.style={rectangle, draw=black!35, rounded corners=2pt, minimum width=2.8cm,
+                      minimum height=0.85cm, text width=2.6cm, align=center, font=\footnotesize, inner sep=6pt},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, black!55}
+    ]
+        \node[block, fill=ifblue!12] (data) at (0,0) {Sources de données};
+        \node[block, fill=loforange!12] (model) at (7,0) {Stratégie analytique};
+        \node[block, fill=rulegreen!12] (output) at (14,0) {Sortie opérationnelle};
+
+        \node[small, fill=ifblue!6] (obs) at (-1.8,-2.2) {Observation\\et notation};
+        \node[small, fill=ifblue!6] (vision) at (1.8,-2.2) {Vision\\de la démarche};
+        \node[small, fill=ifblue!6] (accel) at (-1.8,-4.0) {Accéléromètres\\activité / couchage};
+        \node[small, fill=ifblue!6] (multi) at (1.8,-4.0) {Multi-source\\capteurs + contexte};
+
+        \node[small, fill=loforange!6] (rules) at (5.2,-2.2) {Règles\\et seuils};
+        \node[small, fill=loforange!6] (sup) at (8.8,-2.2) {Supervisé};
+        \node[small, fill=loforange!6] (unsup) at (5.2,-4.0) {Non supervisé\\(anomalies)};
+        \node[small, fill=loforange!6] (hyb) at (8.8,-4.0) {Hybride\\score + règles};
+
+        \node[small, fill=rulegreen!6] (score) at (12.2,-2.2) {Score\\locomoteur};
+        \node[small, fill=rulegreen!6] (classif) at (15.8,-2.2) {Classe binaire\\boiteux / non};
+        \node[small, fill=rulegreen!6] (episode) at (12.2,-4.0) {Épisode\\d'alerte};
+        \node[small, fill=rulegreen!6] (alerte) at (15.8,-4.0) {Alerte de\\vérification};
+
+        \draw[arrow] (data) -- (model);
+        \draw[arrow] (model) -- (output);
+
+        % Lignes: parent -> rang 1 (directes, courtes)
+        \draw[black!30] (data.south) -- ++(0,-0.4) -| (obs.north);
+        \draw[black!30] (data.south) -- ++(0,-0.4) -| (vision.north);
+        \draw[black!30] (model.south) -- ++(0,-0.4) -| (rules.north);
+        \draw[black!30] (model.south) -- ++(0,-0.4) -| (sup.north);
+        \draw[black!30] (output.south) -- ++(0,-0.4) -| (score.north);
+        \draw[black!30] (output.south) -- ++(0,-0.4) -| (classif.north);
+
+        % Lignes: rang 1 -> rang 2 (verticales simples)
+        \draw[black!30] (obs.south) -- (accel.north);
+        \draw[black!30] (vision.south) -- (multi.north);
+        \draw[black!30] (rules.south) -- (unsup.north);
+        \draw[black!30] (sup.south) -- (hyb.north);
+        \draw[black!30] (score.south) -- (episode.north);
+        \draw[black!30] (classif.south) -- (alerte.north);
+
+        % Encadrement du positionnement de ce mémoire (autour des nœuds unsup et hyb)
+        \node[draw=rulegreen, thick, rounded corners=3pt, inner sep=6pt,
+              fit=(unsup)(hyb)] (encadre) {};
+        \node[font=\footnotesize\bfseries, rulegreen!80!black, below=4pt of encadre]
+            {Positionnement de ce mémoire};
+    \end{tikzpicture}%
+    }
+    \caption{Taxonomie des approches de détection automatisée.}
+    \label{fig:taxonomie_approches}
+\end{figure}
+
+Du point de vue de la stratégie analytique, les méthodes de détection se déclinent
+classiquement en deux familles:
+\begin{itemize}
+    \item[(a)] \textit{Modèles supervisés}: lorsque des labels fiables et suffisamment
+    représentatifs sont disponibles. Ces approches peuvent atteindre de bonnes performances
+    de classification
+    \citep{vanhertem2014evaluation,viazzi2013analysis}, mais leur
+    dépendance aux labels limite leur déployabilité dans des contextes où l'étiquetage est
+    incomplet ou incertain;
+    \item[(b)] \textit{Détection d'anomalies et règles expertes}: lorsque les labels sont
+    partiels ou absents. Ces approches ne nécessitent pas d'exemples positifs pour
+    l'entraînement et sont donc mieux adaptées aux situations réelles où la boiterie n'est
+    pas systématiquement diagnostiquée et enregistrée.
+\end{itemize}
+
+Dans le corpus étudié, la supervision clinique exhaustive n'est pas disponible. Cette
+contrainte motive une architecture qui combine des mesures de déviation et des règles
+temporelles explicites \citep{chandola2009anomaly,palma2025scoping}. L'étude de
+\citet{michelena2025comparative} compare plusieurs détecteurs non supervisés sur un autre
+usage bovin, la détection des chaleurs; elle soutient l'intérêt d'une comparaison empirique
+des algorithmes, mais ne fournit pas de preuve sur la boiterie.
+
+% =====================================================================
+\section{Méthodes non supervisées de référence~: Isolation Forest et LOF}
+% =====================================================================
+
+\subsection{Isolation Forest}
+L'algorithme Isolation Forest (IF), proposé par Liu et al. \citep{liu2008isolation}, repose
+sur le principe que les anomalies sont plus faciles à isoler que les points normaux dans un
+espace de variables. Son échantillonnage et ses arbres aléatoires permettent de traiter des
+jeux tabulaires sans modèle explicite de la distribution normale. Son implémentation dans
+scikit-learn \citep{sklearn_api} fournit ici un comparateur ponctuel reproductible; elle ne
+modélise toutefois pas directement la direction ni la durée d'un changement.
+
+La Figure~\ref{fig:if_principle} illustre le principe fondamental d'IF: une anomalie
+(point rouge) est isolée en seulement deux coupures aléatoires, tandis que les points
+normaux (cluster bleu) nécessitent de nombreuses partitions supplémentaires. Le score
+d'anomalie est inversement proportionnel au nombre de coupures.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.65\textwidth}{!}{%
+    \begin{tikzpicture}
+        % Cadre
+        \draw[black!50] (0,0) rectangle (12,6);
+
+        % --- Cluster normal : 15 points groupés à gauche ---
+        \foreach \x/\y in {2.0/3.0, 2.3/3.4, 2.6/2.8, 2.2/3.2, 1.9/3.5,
+                           2.5/3.0, 2.1/2.7, 2.4/3.3, 2.7/3.5, 1.8/3.1,
+                           2.2/2.9, 2.5/3.4, 2.3/2.8, 2.1/3.3, 2.6/3.2} {
+            \fill[ifblue] (\x,\y) circle (2.5pt);
+        }
+
+        % --- Anomalie : 1 point isolé à droite ---
+        \fill[rawred] (9.5,4.5) circle (4pt);
+
+        % --- Coupure 1 : verticale entre cluster et anomalie ---
+        \draw[black!70, dashed, thick] (6,0.3) -- (6,5.7);
+
+        % --- Coupure 2 : horizontale, zone droite seulement ---
+        \draw[black!70, dashed, thick] (6.3,2.8) -- (11.7,2.8);
+
+        % --- Étiquettes hors figure (marges) ---
+        % Cluster
+        \node[font=\footnotesize, black] at (2.3,1.5) {Points normaux};
+        \node[font=\scriptsize, black!50] at (2.3,1.0) {difficiles à isoler};
+
+        % Anomalie
+        \node[font=\footnotesize, black] at (9.5,5.3) {Anomalie};
+        \node[font=\scriptsize, black!50] at (9.5,3.7) {isolée en 2 coupures};
+
+        % Numéros des coupures
+        \node[font=\scriptsize, black, fill=white, inner sep=2pt] at (6,0.9) {1};
+        \node[font=\scriptsize, black, fill=white, inner sep=2pt] at (10.8,2.8) {2};
+    \end{tikzpicture}%
+    }
+    \caption{Principe d'Isolation Forest.}
+    \label{fig:if_principle}
+\end{figure}
+
+\subsection{Local Outlier Factor}
+Le Local Outlier Factor (LOF), proposé par Breunig et al. \citep{breunig2000lof}, estime la
+densité locale de chaque point par rapport à celle de ses voisins. Il vise ainsi des points
+rares dans leur voisinage, tandis qu'IF repose sur leur facilité d'isolation globale. Le coût
+de LOF dépend notamment de la recherche des voisins et de la dimension des données. Dans ce
+mémoire, il sert de second comparateur non supervisé; aucune supériorité générale ne lui est
+attribuée a priori.
+
+\subsection{Comparaison synthétique IF et LOF}
+Le Tableau~\ref{tab:if_vs_lof} synthétise les différences fondamentales entre les deux
+détecteurs utilisés dans ce projet.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparaison des propriétés d'Isolation Forest et de Local Outlier Factor.}
+    \label{tab:if_vs_lof}
+    \begin{tabular}{>{\raggedright\arraybackslash}p{3.2cm}
+                    >{\raggedright\arraybackslash}p{5.0cm}
+                    >{\raggedright\arraybackslash}p{5.0cm}}
+        \toprule
+        \textbf{Propriété}            & \textbf{Isolation Forest}
+            & \textbf{Local Outlier Factor} \\
+        \midrule
+        Principe                      & Isolabilité par partitions
+            & Densité locale relative \\
+        Type d'anomalie ciblée        & Globale (isolée dans l'espace)
+            & Locale (faible densité relative) \\
+        Référence fondatrice          & \citet{liu2008isolation}
+            & \citet{breunig2000lof} \\
+        Dépendance principale         & Nombre d'arbres et contamination
+            & Nombre de voisins et contamination \\
+        Limite pour ce projet         & Ne modélise pas la persistance
+            & Ne modélise pas la persistance \\
+        Paramètres critiques          & \texttt{contamination}, \texttt{n\_estimators}
+            & \texttt{n\_neighbors}, \texttt{contamination} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+IF fournit un comparateur fondé sur l'isolation globale, tandis que LOF apporte un contraste
+fondé sur la densité locale. La sortie principale du mémoire repose sur les détecteurs
+temporels décrits au Chapitre~\ref{chapitre:methodologie}.
+
+% =====================================================================
+\section{Détection temporelle de changements persistants}
+% =====================================================================
+
+La boiterie n'est pas nécessairement représentée par un point extrême isolé. Les changements
+rapportés dans les signaux portés concernent souvent une tendance, une rupture ou une
+modification persistante par rapport au comportement habituel de l'animal
+\citep{alsaaod2019automatic,paudyal2021lying}. Cette structure temporelle favorise les
+méthodes capables d'accumuler une évidence unilatérale plutôt que de classer indépendamment
+chaque intervalle.
+
+Les sommes cumulées proposées par \citet{page1954continuous} constituent une famille
+classique de détection de changement, formalisée depuis en analyse séquentielle et en
+détection de rupture \citep{basseville1993detection} et toujours au cœur des méthodes
+actuelles \citep{truong2020selective}. Appliquées à une combinaison de déficits normalisés,
+elles permettent d'oublier les fluctuations brèves, d'accumuler une baisse soutenue et de
+déclencher une alerte lorsque l'évidence franchit un seuil. Le problème traité n'est donc pas
+seulement une classification ponctuelle, mais la décision progressive qu'une trajectoire
+individuelle s'éloigne durablement de sa référence. Dans un contexte bovin, cette logique doit
+être associée à une période de référence individuelle, au cycle journalier, à la qualité des
+données et à la concordance de plusieurs familles de signaux. Elle reste toutefois une détection
+comportementale: seule une validation avec examens locomoteurs et diagnostics contemporains
+peut établir la relation clinique.
+
+% =====================================================================
+\section{Hétérogénéité des protocoles~: un obstacle à la comparaison}
+% =====================================================================
+
+Les revues spécialisées sur la détection automatisée de boiterie convergent vers une
+limite récurrente: l'hétérogénéité des protocoles. Le type de capteur, sa position sur
+l'animal, la définition opérationnelle de la boiterie, la taille des cohortes et l'horizon
+d'évaluation varient fortement d'une étude à l'autre, ce qui complique la comparaison
+directe des performances publiées, comme le soulignent les travaux de
+\citet{oleary2020accelerometers} et de \citet{alsaaod2019automatic}.
+
+Les travaux représentatifs du Tableau~\ref{tab:revue_ciblee}, présenté à la
+section~\ref{sec:choix_methodo}, montrent pourquoi les
+performances numériques ne doivent pas être juxtaposées sans précaution: les définitions
+cliniques, les populations, les modalités de capteurs, les découpages d'évaluation et les
+unités statistiques diffèrent. La présente section examine donc les protocoles plutôt qu'un
+classement de sensibilités.
+La revue d'O'Leary et al. \citep{oleary2020accelerometers} sur les accéléromètres pour la
+détection de boiterie confirme cette dispersion et souligne l'absence de standardisation
+dans les protocoles d'évaluation.
+Alsaaod et al. \citep{alsaaod2019automatic} soulignent en particulier l'absence
+de véritables études de longue durée ayant abouti à un système d'alerte précoce valide de
+bout en bout.
+
+Une étude longitudinale menée dans six fermes allemandes combine activité, couchage,
+production laitière et caractéristiques individuelles dans un modèle à effets mixtes
+\citep{lavrova2023lameness}. Elle illustre l'intérêt d'informations hétérogènes, mais son
+protocole supervisé et ses données contextuelles diffèrent de ceux du présent mémoire.
+
+Enfin, la qualité de la mesure amont reste déterminante: l'échantillonnage, l'édition des
+épisodes et la représentation des comportements influencent directement la fiabilité des
+variables dérivées \citep{ledgerwood2010lying,balasso2023behaviour}.
+
+Concrètement, l'hétérogénéité des protocoles se manifeste sur au moins cinq dimensions:
+\begin{enumerate}
+    \item \textit{Définition du cas}: classe clinique, score locomoteur seuil ou probabilité
+    de boiterie selon les études, d'où des phénomènes mesurés et des sensibilités
+    difficilement comparables;
+    \item \textit{Instrumentation}: position du capteur (patte
+    \citep{alsaaod2012electronic,thorup2015lameness}, collier
+    \citep{vanhertem2013lameness}, vision dorsale \citep{viazzi2013analysis}), fréquence
+    d'échantillonnage et signaux
+    contextuels varient, produisant des variables de nature différente;
+    \item \textit{Granularité analytique}: prédiction instantanée, journalière, par épisode
+    ou par vache, avec des exigences de précision temporelle très différentes;
+    \item \textit{Objectif métier}: classification clinique, alerte précoce, filtrage ou
+    score de risque, chaque objectif imposant des coûts d'erreur différents;
+    \item \textit{Évaluation}: sensibilité, spécificité, AUC, taux d'alertes, IoU ou
+    robustesse inter-fermes, un même système paraissant excellent ou médiocre selon la
+    métrique.
+\end{enumerate}
+
+Autrement dit, deux articles peuvent rapporter une ``bonne performance'' tout en répondant à
+des problèmes différents. Cette observation justifie le choix de consacrer un chapitre entier
+aux protocoles de validation et à leurs artefacts, plutôt que de se limiter à un score unique
+agrégé.
+
+\FloatBarrier
+
+% =====================================================================
+\section{Synthèse critique et positionnement du mémoire}
+% =====================================================================
+
+\subsection{Choix méthodologique et travaux directement pertinents}
+\label{sec:choix_methodo}
+La revue présentée ici est narrative et ciblée; elle ne constitue ni une revue systématique
+ni une méta-analyse. Les travaux ont été retenus parce qu'ils éclairent directement l'une
+des décisions du projet: nature indirecte des signaux comportementaux, absence de labels
+cliniques dans le corpus principal, intérêt d'une référence individuelle, nécessité d'une
+évaluation temporelle et exigence d'interprétabilité.
+
+Les modèles supervisés et les réseaux profonds peuvent exploiter des motifs complexes lorsque
+des signaux suffisamment riches et des labels contemporains sont disponibles
+\citep{vanhertem2014evaluation,balasso2023behaviour}. Ces conditions ne sont pas réunies
+ici: les variables IceQube sont déjà agrégées par intervalles de 15~minutes et le corpus
+principal ne comporte pas de diagnostic locomoteur synchronisé. Une classification clinique
+supervisée ne serait donc pas défendable. Les méthodes non supervisées restent utiles comme
+points de comparaison, mais elles ne résolvent pas à elles seules la direction ni la
+persistance d'un changement. Des travaux récents transposent la détection d'anomalies non
+supervisée à des séries capteurs d'élevage bruitées \citep{kakar2024timetector}, ce qui
+conforte l'intérêt d'approches sans étiquettes; ils restent toutefois orientés vers la
+reconstruction de signaux plutôt que vers une baisse comportementale directionnelle,
+persistante et individualisée comme celle que cible HYPO.
+
+Le Tableau~\ref{tab:revue_ciblee} résume les travaux les plus directement reliés aux choix
+méthodologiques. Il ne compare pas leurs performances numériques, car les capteurs, les
+définitions de cas et les unités statistiques diffèrent.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Travaux directement reliés aux choix méthodologiques.}
+    \label{tab:revue_ciblee}
+    \begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm}
+                    >{\raggedright\arraybackslash}p{4.7cm}
+                    >{\raggedright\arraybackslash}p{6.0cm}}
+        \toprule
+        \textbf{Travail} & \textbf{Constat utile} & \textbf{Conséquence pour ce mémoire} \\
+        \midrule
+        \citet{alsaaod2019automatic}
+        & Les systèmes automatiques reposent sur des modalités et des protocoles hétérogènes.
+        & Limiter la sortie à une alerte comportementale et documenter le protocole complet. \\
+        \addlinespace
+        \citet{oleary2020accelerometers}
+        & Les variables accélérométriques associées à la boiterie varient selon le capteur et
+          le protocole.
+        & Éviter une signature universelle et conserver plusieurs familles de signaux. \\
+        \addlinespace
+        \citet{lavrova2023lameness}
+        & Une étude multi-fermes combine activité, couchage, production et caractéristiques
+          individuelles.
+        & Comparer chaque vache à sa propre référence et reconnaître l'intérêt futur de
+          variables contextuelles. \\
+        \addlinespace
+        \citet{balasso2023behaviour}
+        & Les signaux accélérométriques bruts permettent de modéliser des motifs
+          comportementaux complexes.
+        & Ne pas transposer ces capacités à des agrégats de 15~minutes qui ne contiennent
+          plus la dynamique fine de la démarche. \\
+        \addlinespace
+        \citet{palma2025scoping}
+        & Le déploiement de l'intelligence artificielle en élevage dépend de la qualité des
+          données, de l'intégration et de l'usage.
+        & Privilégier une sortie traçable, interprétable et destinée à une vérification
+          humaine. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Ces travaux motivent une architecture classique, individualisée et temporelle. IF et LOF
+sont conservés comme comparateurs ponctuels de familles différentes; le résultat principal
+repose toutefois sur une accumulation directionnelle des baisses et sur la concordance de
+plusieurs signaux. L'apprentissage profond n'est pas rejeté en général: il est simplement
+hors de portée des données agrégées et non étiquetées utilisées dans ce mémoire.
+
+\subsection{Synthèse critique}
+La littérature et les guides pratiques indiquent trois exigences pour une solution de
+surveillance associée au risque de boiterie:
+\begin{enumerate}
+  \item \textit{Réactivité opérationnelle}: repérer des changements persistants assez tôt
+  pour prioriser l'observation;
+  \item \textit{Maîtrise de la charge d'alerte}: limiter les notifications sans suite opérationnelle
+  et la fatigue d'alerte, qui dégradent rapidement la confiance des utilisateurs
+  \citep{rutten2013invited};
+  \item \textit{Interprétabilité}: fournir des raisons explicites utiles à la vérification pour
+  chaque alerte, afin de faciliter la prise de décision terrain.
+\end{enumerate}
+
+En pratique, les méthodes purement pilotées par les données peuvent manquer d'explicabilité pour
+l'opérationnel, tandis que les approches purement à règles peuvent manquer de flexibilité
+face à la variabilité inter-animaux. Un compromis robuste consiste à coupler détection
+d'anomalies et contraintes métier explicites. Ce couplage cumule la
+capacité de généralisation des algorithmes non supervisés et des gardes-fous
+interprétables. La littérature récente confirme cette orientation: les systèmes
+d'élevage de précision les plus prometteurs combinent des signaux hétérogènes avec des
+logiques de décision interprétables, plutôt que de s'appuyer sur un modèle unique en boîte
+noire \citep{palma2025scoping,michelena2025plf_review}.
+
+L'hétérogénéité des protocoles évoquée à la section précédente a une conséquence directe
+sur l'évaluation des systèmes: de nombreux travaux comparent des capteurs, des fermes, des
+labels et des définitions de cas différents, ce qui complique l'appréciation d'une chaîne
+déployable de bout en bout. Dans ce contexte, il existe une place claire pour des
+contributions moins théoriques mais plus systémiques: une chaîne reproductible, une
+validation explicite sur plusieurs niveaux et une traçabilité des artefacts expérimentaux.
+
+La revue de littérature conduit donc à un enseignement central: la difficulté n'est pas
+seulement de proposer un détecteur performant, mais de construire une chaîne de décision
+cohérente, reproductible et défendable du point de vue métier. Une telle exigence justifie
+la structure du présent mémoire, qui traite l'algorithme, les règles métier, l'interface et
+la validation comme un ensemble cohérent plutôt que comme des blocs séparés.
+
+\subsection{Positionnement du mémoire}
+Le présent mémoire retient d'abord une approche temporelle directionnelle orientée vers les
+baisses d'activité, puis examine une extension bidirectionnelle. Cette hiérarchie reflète le
+niveau de preuve: la branche HYPO est soumise à une validation attribuable, une ablation et
+une analyse de sensibilité complètes; la branche d'instabilité teste une hypothèse
+complémentaire qui reste exploratoire. La contribution relève de l'ingénierie scientifique:
+construire une chaîne reproductible qui compare chaque vache à sa propre période de référence et évaluer
+honnêtement ce que permettent des données d'activité non étiquetées. Concrètement, le
+mémoire livre:
+\begin{enumerate}
+  \item une branche HYPO évaluée sur 44 événements postérieurs à la période de référence, avec exécution propre de
+  référence, ablation contre IF et LOF et analyse OFAT de vingt variantes;
+  \item une branche d'instabilité exploratoire et cinq stratégies de fusion, dont une règle
+  hiérarchique séparant surveillance et notification de vérification;
+  \item une campagne étendue de 132 événements incluant contrôles brefs et facteurs
+  confondants;
+  \item une évaluation du temps d'exécution de la chaîne complète sur les 28 vaches;
+  \item une analyse complémentaire IceTag-SLS synchronisée, explicitement interprétée comme
+  exploratoire et non concluante;
+  \item une traçabilité par tests et artefacts tabulaires reproductibles.
+\end{enumerate}
+
+La portée reste clairement délimitée: la sortie est une alerte de dégradation
+comportementale à vérifier, et non une classification ou un diagnostic vétérinaire de
+boiterie. Cette distinction est fondamentale et cohérente avec les recommandations de la
+littérature \citep{alsaaod2019automatic}.
+
+Le chapitre suivant détaille donc les données utilisées, les transformations appliquées aux
+signaux capteurs, le choix des variables et le protocole expérimental retenu. L'objectif n'est
+pas seulement de décrire une implémentation, mais de montrer comment la revue précédente se
+traduit en décisions méthodologiques explicites.

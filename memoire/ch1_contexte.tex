@@ -1,0 +1,524 @@
+\chapter{Contexte et fondements}
+\label{chapitre:contexte}
+
+% =====================================================================
+\section{Enjeu économique et zootechnique de la boiterie}
+% =====================================================================
+
+La boiterie bovine est un problème de santé majeur en élevage laitier, avec des conséquences
+directes sur le bien-être animal, la productivité et la rentabilité des exploitations
+\citep{rodrigues2017lameness}.
+Des études épidémiologiques rapportent des prévalences de l'ordre de 20\,\% ou davantage,
+avec des variations selon les régions, les systèmes d'élevage et les critères de diagnostic
+utilisés
+\citep{whay2003assessment,cook2003prevalence}. Les pathologies du pied, qu'elles soient
+infectieuses (\textit{dermatite digitale}, \textit{phlegmon interdigité}) ou non
+infectieuses (\textit{ulcère de la sole}, \textit{maladie de la ligne blanche}),
+comptent parmi les principales causes de boiterie chez les vaches laitières
+\citep{merck_hoof_origin_lameness_cattle,flower2006effect}.
+
+\subsection{Impact économique}
+L'impact économique de la boiterie est substantiel et multidimensionnel. Le
+Tableau~\ref{tab:impact_economique} synthétise les principales composantes du coût
+\textit{par cas clinique}, c'est-à-dire par épisode de boiterie diagnostiqué chez une
+vache au cours d'une lactation, d'après les estimations publiées dans la littérature.
+
+\begin{table}[H]
+    \centering
+    \caption{Composantes du coût économique de la boiterie par cas clinique.}
+    \label{tab:impact_economique}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Composante} & \textbf{Estimation} & \textbf{Source} \\
+        \midrule
+        Perte de production laitière & 270--574 kg/lactation & \cite{green2002financial} \\
+        Coût vétérinaire direct & 25--90 USD/cas & \cite{bruijnis2010assessing} \\
+        Dégradation de la fertilité & +30--50 jours ouverts & \cite{green2002financial} \\
+        Réforme anticipée & 75--300 USD/cas & \cite{bruijnis2010assessing} \\
+        \midrule
+        \textbf{Coût total estimé} & \textbf{75--300+ USD/cas} & \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\vspace{-0.9\baselineskip}
+
+Quatre postes principaux composent le coût d'un cas clinique: la perte de production
+laitière (270 à 574~kg par lactation), liée à la baisse de l'ingestion et de l'activité;
+le coût vétérinaire direct (25 à 90~USD par cas), qui inclut la consultation, le parage,
+les traitements et le matériel de soin; la dégradation de la fertilité, mesurée par une
+hausse de 30 à 50 \textit{jours ouverts}, soit l'intervalle entre le vêlage et la
+conception suivante, avec un décalage de la lactation suivante; et la réforme anticipée
+(75 à 300~USD par cas), liée à la perte de valeur résiduelle d'une vache écartée avant la
+fin de sa carrière productive. Ces postes se cumulent selon la sévérité et la chronicité
+de l'épisode. À l'échelle d'un troupeau de 100~vaches avec une prévalence de 25\,\%, le
+coût annuel cumulé est estimé entre 1\,900 et 7\,500~USD pour les seuls cas incidents.
+Au-delà de l'impact financier, la boiterie soulève un enjeu éthique de bien-être animal~:
+la douleur associée est reconnue comme l'une des principales sources de souffrance
+chronique chez les vaches laitières \citep{whay2003assessment,broom2017animal}. Ces conséquences
+justifient une compréhension fine des mécanismes de boiterie, afin d'orienter la
+prévention, la détection et la prise en charge.
+
+% =====================================================================
+\section{Étiologie et facteurs de risque}
+% =====================================================================
+
+Les causes de la boiterie sont multifactorielles. La Figure~\ref{fig:etiologie} les
+organise en quatre catégories~: causes directes infectieuses ou non infectieuses, et
+facteurs modulateurs environnementaux ou individuels. Les causes directes regroupent des
+affections bactériennes, comme la \textit{dermatite digitale} ou le \textit{phlegmon
+interdigité}, et des lésions mécaniques, comme l'\textit{ulcère de la sole} ou la
+\textit{maladie de la ligne blanche}. Les facteurs environnementaux (sol, hygiène,
+humidité) modulent l'exposition, tandis que les facteurs individuels (parité, âge, stade
+de lactation) modulent la susceptibilité. Cette structure multifactorielle explique
+qu'aucun indicateur unique ne suffise et justifie une approche fondée sur plusieurs signaux
+pour la détection précoce
+\citep{merck_hoof_origin_lameness_cattle,dairynz_preventing_managing_lameness_guide_2025}.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.85\textwidth}{!}{%
+    \begin{tikzpicture}[
+        cat/.style={rectangle, draw=black!70, rounded corners=3pt, minimum height=0.9cm,
+                    minimum width=3.2cm, align=center, font=\small, inner sep=10pt},
+        factor/.style={rectangle, draw=black!40, rounded corners=2pt, minimum height=0.8cm,
+                      minimum width=2.7cm, align=center, font=\small, inner sep=6pt},
+        arrow/.style={-{Stealth[length=2mm]}, thick, black!60},
+    ]
+        % Titre central
+        \node[cat, fill=rawred!15, minimum width=4cm, font=\small\bfseries] (boiterie)
+            {Boiterie bovine};
+
+        % Catégories
+        \node[cat, fill=ifblue!12, above left=1.5cm and 1cm of boiterie] (infect)
+            {Pathologies\\[-7pt]infectieuses};
+        \node[cat, fill=loforange!12, above right=1.5cm and 1cm of boiterie] (noninfect)
+            {Pathologies\\[-7pt]non infectieuses};
+        \node[cat, fill=rulegreen!12, below left=1.5cm and 1cm of boiterie] (enviro)
+            {Facteurs\\[-7pt]environnementaux};
+        \node[cat, fill=profgray!12, below right=1.5cm and 1cm of boiterie] (indiv)
+            {Facteurs\\[-7pt]individuels};
+
+        % Liens
+        \draw[arrow] (infect) -- (boiterie);
+        \draw[arrow] (noninfect) -- (boiterie);
+        \draw[arrow] (enviro) -- (boiterie);
+        \draw[arrow] (indiv) -- (boiterie);
+
+        % Sous-facteurs infectieux
+        \node[factor, fill=ifblue!6, above=0.9cm of infect, xshift=-2.0cm] (dd)
+            {Dermatite digitale};
+        \node[factor, fill=ifblue!6, above=0.9cm of infect, xshift=2.0cm] (phleg)
+            {Phlegmon interdigité};
+        \draw[black!30] (dd) -- (infect);
+        \draw[black!30] (phleg) -- (infect);
+
+        % Sous-facteurs non infectieux
+        \node[factor, fill=loforange!6, above=0.9cm of noninfect, xshift=-2.0cm] (ulcere)
+            {Ulcère de la sole};
+        \node[factor, fill=loforange!6, above=0.9cm of noninfect, xshift=2.0cm] (ligne)
+            {Maladie ligne blanche};
+        \draw[black!30] (ulcere) -- (noninfect);
+        \draw[black!30] (ligne) -- (noninfect);
+
+        % Sous-facteurs environnementaux
+        \node[factor, fill=rulegreen!6, below=0.9cm of enviro, xshift=-2.0cm] (sol)
+            {Type de sol};
+        \node[factor, fill=rulegreen!6, below=0.9cm of enviro, xshift=2.0cm] (hygiene)
+            {Hygiène, humidité};
+        \draw[black!30] (sol) -- (enviro);
+        \draw[black!30] (hygiene) -- (enviro);
+
+        % Sous-facteurs individuels
+        \node[factor, fill=profgray!6, below=0.9cm of indiv, xshift=-2.0cm] (parite)
+            {Parité, âge};
+        \node[factor, fill=profgray!6, below=0.9cm of indiv, xshift=2.0cm] (lactation)
+            {Stade de lactation};
+        \draw[black!30] (parite) -- (indiv);
+        \draw[black!30] (lactation) -- (indiv);
+    \end{tikzpicture}%
+    }
+    \caption{Étiologie multifactorielle de la boiterie bovine.}
+    \label{fig:etiologie}
+\end{figure}
+
+% =====================================================================
+\section{Notation locomotrice et détection conventionnelle}
+% =====================================================================
+
+La notation locomotrice reste la référence pratique du repérage de la boiterie. Cette
+section précise d'abord pourquoi un repérage précoce importe, puis ce que l'observation
+humaine permet et ce qu'elle ne permet pas de maintenir à l'échelle d'un troupeau.
+
+\subsection{Importance de la détection précoce}
+La littérature sur la boiterie bovine souligne l'importance d'une détection précoce pour
+limiter la dégradation du bien-être animal et les impacts de production. Les ressources
+vétérinaires de référence et les guides techniques convergent sur deux idées:
+une surveillance régulière est indispensable, et la prise en charge doit être
+structurée et rapide selon la sévérité du cas
+\citep{merck_lameness_overview,dairynz_treating_lameness}.
+
+La détection précoce (score locomoteur 2 sur une échelle de 1 à 5) ouvre la voie au
+traitement des cas avant qu'ils ne deviennent chroniques. Les études montrent qu'un
+retard de traitement de quelques jours peut multiplier la durée de récupération et le
+coût associé \citep{green2002financial}. Les capteurs portés et les systèmes de mesure de
+la démarche permettent de quantifier objectivement des modifications d'activité ou de
+locomotion associées à la boiterie
+\citep{chapinal2010measurement,pastell2009measurement}. Le délai avec lequel ces
+modifications deviennent détectables avant une observation clinique dépend toutefois du
+capteur, de la définition du cas et du protocole; il ne peut donc pas être généralisé à
+partir de ces travaux. En pratique, les boiteries légères restent difficiles à repérer de
+façon régulière par la seule observation visuelle.
+
+Des revues de synthèse en élevage de précision montrent aussi que la boiterie fait partie
+des cas d'usage les plus importants, mais également des plus difficiles à stabiliser, car
+les signaux disponibles restent indirects, multifactoriels et fortement dépendants du
+contexte d'élevage \citep{palma2025scoping,michelena2025plf_review}.
+
+\subsection{Observation et notation locomotrice}
+Les approches conventionnelles reposent principalement sur l'observation humaine et les
+grilles de notation locomotrice. La grille proposée par \citet{sprecher1997lameness}
+reste l'une des plus utilisées en pratique. Elle attribue un score de 1
+(\textit{normal}) à 5 (\textit{sévèrement boiteux}) en se basant sur la posture du dos
+et la démarche \citep{flower2006gait}. La fiche opérationnelle de l'AHDB propose une
+grille complémentaire adaptée au contexte britannique et associe le score~2 à une
+intervention rapide, généralement dans les 48~heures
+\citep{ahdb_mobility_score_sheet_48h_score2}.
+
+Les approches conventionnelles restent pertinentes en élevage car elles sont simples à
+déployer et directement interprétables par les équipes terrain. Elles présentent toutefois
+plusieurs limites opérationnelles. La première tient à la subjectivité inter-observateurs: même avec
+des grilles standardisées, la concordance entre évaluateurs peut varier significativement
+\citep{flower2006effect,march2007interobserver}. La deuxième concerne le temps requis:
+dans les grands troupeaux, l'observation systématique de chaque animal à chaque traite est
+difficile à maintenir. Enfin, les boiteries légères (score~2) restent difficiles à repérer
+de manière reproductible par la seule observation visuelle
+\citep{whay2003assessment,march2007interobserver}.
+
+Pour dépasser ces limites, le recours à des signaux capteurs vient compléter la
+surveillance humaine, sans la remplacer.
+
+\subsection{Lecture opérationnelle du score locomoteur}
+Au-delà de sa fonction descriptive, l'évaluation locomotrice est aussi un outil de
+priorisation. Dans la fiche opérationnelle de l'AHDB, le passage du score~1
+(\textit{normal}) au score~2 (\textit{boiterie légère}) appelle une intervention rapide,
+généralement dans les 48~heures
+\citep{ahdb_mobility_score_sheet_48h_score2}. Cette logique explique
+pourquoi un système automatisé peut viser une fonction plus prudente que la reproduction
+d'une note clinique: signaler une dégradation comportementale suffisamment tôt pour
+déclencher une vérification sur le terrain.
+
+La Figure~\ref{fig:sprecher_scale} synthétise la lecture opérationnelle du score
+locomoteur: le passage vers le score~2 constitue la zone d'intérêt pour une alerte
+précoce, car il marque l'entrée dans une situation où l'observation humaine ou l'examen
+du pied devient prioritaire
+\citep{sprecher1997lameness,ahdb_mobility_score_sheet_48h_score2}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        score/.style={rectangle, draw=black!60, rounded corners=3pt, minimum width=2.45cm,
+                      minimum height=1.7cm, align=center, inner sep=8pt, font=\small},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick, black!55}
+    ]
+        \node[score, fill=rulegreen!12] (s1) at (0,0.2) {\textbf{Score 1}\\[2pt]Normal};
+        \node[score, fill=ifblue!10] (s2) at (3.2,0.2) {\textbf{Score 2}\\[2pt]Léger};
+        \node[score, fill=loforange!14] (s3) at (6.4,0.2) {\textbf{Score 3}\\[2pt]Modéré};
+        \node[score, fill=rawred!14] (s4) at (9.6,0.2) {\textbf{Score 4}\\[2pt]Marqué};
+        \node[score, fill=rawred!25] (s5) at (12.8,0.2) {\textbf{Score 5}\\[2pt]Sévère};
+
+        \draw[arrow] (1.35,0.2) -- (1.95,0.2);
+        \draw[arrow] (4.55,0.2) -- (5.15,0.2);
+        \draw[arrow] (7.75,0.2) -- (8.35,0.2);
+        \draw[arrow] (10.95,0.2) -- (11.55,0.2);
+
+        \draw[decorate, decoration={brace, amplitude=6pt}, thick, ifblue]
+            (1.7,1.7) -- (4.7,1.7)
+            node[midway, above=8pt, align=center, font=\footnotesize\bfseries]
+            {Zone d'intérêt pour\\la détection précoce};
+    \end{tikzpicture}
+
+    \caption[Seuil opérationnel du score locomoteur]{Seuil opérationnel du score
+    locomoteur pour la détection précoce.}
+    \label{fig:sprecher_scale}
+\end{figure}
+
+Le Tableau~\ref{tab:score_operationnel} précise la lecture clinique simplifiée et
+l'action associée à chaque score, d'après la grille de \citet{sprecher1997lameness} et
+les recommandations AHDB \citep{ahdb_mobility_scoring_dairy_cows}.
+
+\begin{table}[H]
+    \centering
+    \caption{Lecture clinique et opérationnelle simplifiée du score locomoteur.}
+    \label{tab:score_operationnel}
+    \footnotesize
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{>{\raggedright\arraybackslash}p{1.4cm}
+                    >{\raggedright\arraybackslash}p{6.0cm}
+                    >{\raggedright\arraybackslash}p{5.2cm}}
+        \toprule
+        \textbf{Score} & \textbf{Lecture clinique simplifiée} & \textbf{Lecture opérationnelle} \\
+        \midrule
+        1 & Dos plat en station et en marche. & Surveillance usuelle. \\
+        2 & Dos plat à l'arrêt, légèrement arqué en marche. & Intervention rapide: zone clé pour la détection précoce. \\
+        3 & Dos arqué en permanence. & Vérification prioritaire. \\
+        4 & Atteinte locomotrice visible. & Prise en charge urgente. \\
+        5 & Appui très limité. & Prise en charge immédiate. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+La lecture par seuil transforme la notation locomotrice en problème d'alerte: il ne
+s'agit plus seulement de décrire une boiterie, mais de repérer l'entrée dans une zone
+d'intervention. Ce déplacement justifie le recours à des signaux capteurs et à des
+méthodes d'apprentissage capables de suivre les changements comportementaux dans le
+temps.
+
+% =====================================================================
+\section{Capteurs et variables comportementales}
+% =====================================================================
+
+\label{sec:technologies_capteurs}
+
+Cette section poursuit un double objectif: situer d'abord brièvement les grandes familles
+de capteurs disponibles pour la détection de boiterie, puis décrire le capteur
+effectivement retenu dans ce projet (IceQube) ainsi que les variables comportementales
+qu'il produit. Les systèmes de surveillance
+comportementale reposent sur plusieurs familles de capteurs, dont les caractéristiques
+conditionnent directement les variables disponibles et les performances atteignables.
+
+Le Tableau~\ref{tab:technologies_capteurs} présente les principales technologies et leurs
+caractéristiques opérationnelles. On distingue trois grandes familles: les capteurs portés
+par l'animal, tels que les accéléromètres, les podomètres et les colliers; les capteurs
+intégrés à l'infrastructure, comme les tapis de pesée et les systèmes de traite; et les
+systèmes sans contact, comme les caméras et la vision par ordinateur. Les accéléromètres
+portés constituent la technologie la plus étudiée dans la littérature récente
+\citep{oleary2020accelerometers,alsaaod2019automatic}.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Principales familles de capteurs étudiées.}
+    \label{tab:technologies_capteurs}
+    \begin{tabular}{>{\raggedright\arraybackslash}p{2.4cm}
+                    >{\raggedright\arraybackslash}p{2.8cm}
+                    >{\raggedright\arraybackslash}p{2.8cm}
+                    >{\raggedright\arraybackslash}p{2.2cm}
+                    >{\raggedright\arraybackslash}p{2.2cm}}
+        \toprule
+        \textbf{Technologie} & \textbf{Variables mesurées} & \textbf{Avantages} &
+        \textbf{Limites} & \textbf{Études repr.} \\
+        \midrule
+        Accéléromètre (patte/collier)
+        & Activité, pas, transitions couché/debout, durée couchage
+        & Continu, individuel, coût modéré
+        & Dérive, position variable
+        & \cite{alsaaod2012electronic,balasso2023behaviour} \\
+        \addlinespace
+        Podomètre
+        & Nombre de pas, distance parcourue
+        & Simple, robuste
+        & Signal limité, faible résolution
+        & \cite{flower2006effect,mazrier2006reliability} \\
+        \addlinespace
+        Passerelle sensible à la pression
+        & Pressions plantaires et paramètres spatio-temporels de la démarche
+        & Objectif, quantitatif
+        & Infrastructure fixe, coût élevé
+        & \cite{maertens2011gaitwise} \\
+        \addlinespace
+        Vision par ordinateur
+        & Posture, arc du dos, démarche
+        & Sans contact, riche en information
+        & Sensible aux conditions, calibration
+        & \cite{qiao2021review} \\
+        \addlinespace
+        Système de traite automatisé
+        & Production laitière, conductivité, fréquentation
+        & Déjà installé, données continues
+        & Signal indirect pour la boiterie
+        & \cite{lavrova2023lameness,vanhertem2013lameness} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Dans le cadre de ce mémoire, les données proviennent de capteurs IceQube
+(IceRobotics Ltd, Édimbourg, Royaume-Uni), des accéléromètres tri-axiaux conçus
+spécifiquement pour le suivi comportemental des vaches laitières. La
+Figure~\ref{fig:iceqube_capteur} montre la représentation schématique du capteur IceQube,
+dont le boîtier étanche contient l'accéléromètre tri-axial et se fixe à la patte par un
+bracelet en plastique muni d'une boucle et de trous d'ajustement. La
+Figure~\ref{fig:iceqube_position} illustre son positionnement sur le métatarse de la patte
+arrière~; les axes $x$, $y$, $z$ de l'accéléromètre permettent de distinguer la position
+debout (patte verticale, $\vec{g}$ aligné avec $z$) de la position couchée (patte
+horizontale).
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.7\textwidth}{!}{%
+    \begin{tikzpicture}[>=Stealth]
+        % --- Bracelet gauche (vers la boucle) ---
+        \fill[ifblue!35, rounded corners=2pt]
+            (-3.0,0.65) rectangle (0,1.35);
+        % Boucle de fermeture
+        \fill[ifblue!50, rounded corners=2pt]
+            (-3.6,0.5) rectangle (-3.0,1.5);
+        \draw[ifblue!70, thick, rounded corners=1pt]
+            (-3.45,0.7) rectangle (-3.15,1.3);
+
+        % --- Bracelet droit (trous) ---
+        \fill[ifblue!35, rounded corners=2pt]
+            (4.0,0.65) rectangle (7.0,1.35);
+        % Trous d'ajustement (ovales)
+        \foreach \x in {4.6, 5.2, 5.8, 6.4} {
+            \fill[white] (\x,1.0) ellipse (0.12 and 0.15);
+        }
+
+        % --- Boîtier central (vue de face) ---
+        \fill[ifblue!50, rounded corners=4pt]
+            (0,0) rectangle (4.0,2.0);
+        % Bord supérieur légèrement plus clair
+        \fill[ifblue!38, rounded corners=3pt]
+            (0.1,1.55) rectangle (3.9,1.95);
+
+        % Étiquette blanche
+        \fill[white, rounded corners=2pt]
+            (0.6,0.35) rectangle (3.4,1.4);
+        \node[font=\small\bfseries, black] at (2.0,1.05) {IceQube};
+        \node[font=\scriptsize, black!60] at (2.0,0.7) {IceRobotics};
+
+        % --- Annotations ---
+        \draw[->, black!55, thick]
+            (4.5,2.5) -- (3.5,2.05)
+            node[pos=0, anchor=south west, font=\scriptsize, black!70]
+            {Boîtier étanche};
+
+        \draw[->, black!55, thick]
+            (-3.6,0.0) -- (-3.45,0.45)
+            node[pos=0, anchor=north, font=\scriptsize, black!70]
+            {Boucle};
+
+        \draw[->, black!55, thick]
+            (7.0,0.0) -- (5.8,0.6)
+            node[pos=0, anchor=north, font=\scriptsize, black!70]
+            {Trous d'ajustement};
+    \end{tikzpicture}%
+    }%
+    \caption{Schéma du capteur IceQube.}
+    \label{fig:iceqube_capteur}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.4\textwidth}{!}{%
+    \begin{tikzpicture}[>=Stealth]
+        % --- Patte (forme simple, allongée verticalement) ---
+        \fill[brown!12, rounded corners=5pt]
+            (0,0) -- (0,6.0) -- (0.4,6.5) -- (1.4,6.5) -- (1.8,6.0)
+            -- (1.8,0) -- (1.5,-0.4) -- (0.3,-0.4) -- cycle;
+        \draw[brown!30, thick, rounded corners=5pt]
+            (0,0) -- (0,6.0) -- (0.4,6.5) -- (1.4,6.5) -- (1.8,6.0)
+            -- (1.8,0) -- (1.5,-0.4) -- (0.3,-0.4) -- cycle;
+
+        % Jarret (ligne courte, texte à droite)
+        \draw[brown!35, thick] (-0.2,4.5) -- (2.2,4.5);
+        \node[font=\scriptsize, brown!55, anchor=west] at (2.4,4.5) {Jarret};
+
+        % Zone métatarse (lignes courtes à droite seulement)
+        \draw[brown!25, dashed] (1.9,1.0) -- (2.8,1.0);
+        \draw[brown!25, dashed] (1.9,3.2) -- (2.8,3.2);
+        \draw[decorate, decoration={brace, amplitude=4pt, mirror}, brown!40]
+            (2.9,1.0) -- (2.9,3.2)
+            node[midway, right=5pt, font=\scriptsize, brown!55] {Métatarse};
+
+        % --- Bracelet autour de la patte ---
+        \fill[ifblue!35, rounded corners=2pt]
+            (-0.6,1.7) rectangle (0,2.5);
+        \fill[ifblue!35, rounded corners=2pt]
+            (1.8,1.7) rectangle (2.4,2.5);
+        % Boucle côté gauche
+        \fill[ifblue!50, rounded corners=1pt]
+            (-0.8,1.8) rectangle (-0.6,2.4);
+
+        % --- Capteur (sur la face avant de la patte) ---
+        \fill[ifblue!50, rounded corners=3pt]
+            (0.0,1.6) rectangle (1.8,2.6);
+        \fill[white, rounded corners=1pt]
+            (0.25,1.75) rectangle (1.55,2.45);
+        \node[font=\scriptsize\bfseries, black] at (0.9,2.1) {IceQube};
+
+        % --- Axes de l'accéléromètre (en bas à gauche, bien isolés) ---
+        \coordinate (AX) at (-2.2,0.0);
+
+        % z vers le haut
+        \draw[->, rawred, very thick] (AX) -- ++(0,1.4)
+            node[above, font=\small, rawred] {$z$};
+
+        % x vers la droite
+        \draw[->, rulegreen, very thick] (AX) -- ++(1.2,0)
+            node[right, font=\small, rulegreen] {$x$};
+
+        % y vers l'avant (hors plan)
+        \draw[->, ifblue!80!black, very thick] (AX) -- ++(-0.7,-0.7)
+            node[below left, font=\small, ifblue!80!black] {$y$};
+
+        % --- Gravité (à droite, au-dessus du jarret) ---
+        \draw[->, black!45, thick, dashed] (3.8,6.0) -- ++(0,-1.3)
+            node[midway, right=2pt, font=\scriptsize, black!50] {$\vec{g}$};
+    \end{tikzpicture}%
+    }%
+    \caption{Positionnement du capteur IceQube.}
+    \label{fig:iceqube_position}
+\end{figure}
+
+Le capteur se fixe au métatarse d'une patte arrière par un bracelet à boucle.
+L'accéléromètre interne mesure l'accélération sur trois axes. La composante gravitationnelle
+contribue à distinguer la position couchée de la position debout, tandis que les variations
+d'accélération alimentent les indicateurs d'activité. L'algorithme propriétaire agrège les
+mesures brutes; le présent projet exploite des intervalles de 15~minutes. Cette résolution
+est un choix analytique du mémoire et non une fréquence cliniquement optimale démontrée.
+Des études de validation de capteurs portés rapportent une forte concordance entre certaines
+mesures de posture et l'observation directe. \citet{alsaaod2012electronic} rapportent
+une forte concordance entre les mesures d'accéléromètres de patte et l'observation directe
+pour la classification couché/debout, tandis que \cite{blackie2011lying} montrent que ces
+mesures permettent de caractériser les différences de comportement couché associées à la
+boiterie.
+
+Chaque intervalle de 15~minutes génère sept colonnes de données, dont cinq sont utilisées dans la
+chaîne de traitement:
+\begin{itemize}
+    \item \textit{Steps}: nombre de pas détectés par l'accéléromètre;
+    \item \textit{Motion Index}: indice synthétique d'activité locomotrice (unité
+    propriétaire IceRobotics, dérivée des variations d'accélération);
+    \item \textit{Lying Time}: durée cumulée en position couchée (en minutes, bornée à 15);
+    \item \textit{Standing Time}: durée cumulée en position debout (en minutes, bornée à 15);
+    \item \textit{Transitions}: nombre total de changements de posture
+    couché$\leftrightarrow$debout.
+\end{itemize}
+Le \textit{Motion Index} a d'ailleurs déjà permis de détecter des comportements précis au
+moyen de seuils validés~: \citet{mckay2024play} repèrent ainsi le jeu chez le veau sevré
+équipé d'un accéléromètre IceTag. Cela confirme la valeur discriminante du signal, tout en
+rappelant qu'un même indice recouvre des comportements variés et n'est donc pas spécifique à
+la boiterie.
+
+Les colonnes supplémentaires (\textit{Transitions Up} et \textit{Transitions Down})
+détaillent la direction des transitions mais ne sont pas exploitées directement par la
+chaîne de traitement, qui utilise leur somme.
+
+Les données agrégées sont stockées dans la mémoire interne du capteur, puis récupérées
+périodiquement. Elles sont accessibles via la plateforme web CowAlert (IceRobotics), qui
+offre une interface de visualisation en ligne, et peuvent être exportées au format tabulaire
+(CSV), directement exploitable par la chaîne de traitement décrite dans ce mémoire.
+
+Le modèle IceTag, prédécesseur de l'IceQube, fournit des variables similaires (pas, temps
+couché, transitions) et a été utilisé dans plusieurs travaux sur le comportement et la
+locomotion bovins \citep{beer2016objective,alsaaod2012electronic}. Le choix de l'IceQube
+est d'abord déterminé par la disponibilité du corpus. Il est cohérent avec la place
+importante des accéléromètres portés dans la littérature sur la surveillance locomotrice
+\citep{oleary2020accelerometers,bewley2015precision}.
+
+\cite{ito2010lying} montrent que les vaches boiteuses modifient significativement leur
+comportement de couchage (durée allongée, fréquence de transitions réduite), ce qui
+justifie l'inclusion de ces variables dans la chaîne de traitement. \cite{nechanitzky2016analysis}
+montrent également que des lésions de la corne sont associées à des changements de
+comportement mesurables. Ces résultats justifient l'étude de signaux comportementaux,
+sans établir à eux seuls un délai universel de détection préclinique.
