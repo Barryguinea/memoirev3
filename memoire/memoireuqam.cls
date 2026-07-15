@@ -570,12 +570,8 @@ July\or August\or September\or October\or November\or December\fi}}
         \@hangfrom{\hskip #3\relax\@svsec}\interlinepenalty \@M #8\@@par}%
     \endgroup
     \csname #1mark\endcsname{#7}%
-	\ifnum #2>\c@tocdepth \else
-    % Le garde-fou compare le niveau a tocdepth, et non au 2 code en dur d'origine.
-    % L'espace et l'entree sont ecrits ensemble : les conditionner au meme critere
-    % evite qu'abaisser tocdepth retire les entrees en laissant leurs espaces
-    % orphelins. A tocdepth=2, valeur par defaut, le comportement est inchange.
-    \addtocontents{toc}{\protect\vspace{1.5ex}}
+	\ifnum #2>\tw@ \else
+    \addtocontents{toc}{\protect\vspace{1.5ex}} %ne pas inserer si niveau de section > 2
     \addcontentsline
     {toc}{#1}{\ifnum #2>\c@secnumdepth \else
         \protect\numberline{\csname the#1\endcsname}%
