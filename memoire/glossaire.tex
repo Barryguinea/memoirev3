@@ -1,5 +1,8 @@
 \chapter*{Liste des acronymes et abréviations}
-\addcontentsline{toc}{chapter}{Liste des acronymes et abréviations}
+% Meme motif que \listoffigures et \listoftables de la classe : espace avant
+% l'entree et titre en majuscules dans la table des matieres.
+\addtocontents{toc}{\protect\vspace{1.5ex}}
+\addcontentsline{toc}{chapter}{\texorpdfstring{\UpperRef{Liste des acronymes et abréviations}}{Liste des acronymes et abréviations}}
 
 \begin{longtable}{@{}lp{11cm}@{}}
 \textbf{AUC} & \textit{Area Under the Curve}: aire sous la courbe ROC utilisée ici comme mesure descriptive exploratoire \\[3pt]

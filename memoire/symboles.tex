@@ -1,5 +1,8 @@
 \chapter*{Liste des symboles}
-\addcontentsline{toc}{chapter}{Liste des symboles}
+% Meme motif que \listoffigures et \listoftables de la classe : espace avant
+% l'entree et titre en majuscules dans la table des matieres.
+\addtocontents{toc}{\protect\vspace{1.5ex}}
+\addcontentsline{toc}{chapter}{\texorpdfstring{\UpperRef{Liste des symboles}}{Liste des symboles}}
 
 \begin{tabular}{@{}p{1.7cm}p{\dimexpr\textwidth-1.7cm-2\tabcolsep\relax}@{}}
 $r_j(t)$ & Ratio entre le signal agrégé observé et sa référence attendue pour la famille $j$ au temps $t$ \\[3pt]
