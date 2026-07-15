@@ -201,6 +201,7 @@ des ratios à la référence individuelle.
 
 % =====================================================================
 \section{Cadre expérimental}
+\label{sec:cadre_experimental}
 % =====================================================================
 Le cadre expérimental comprend deux campagnes injectées sur le corpus principal, puis une
 cohorte observationnelle indépendante.
@@ -242,10 +243,9 @@ Trois profils graduels et un contrôle bref sont appliqués à chacune des onze 
 admissibles, soit 44 événements. Les profils léger, modéré et marqué diminuent de façon
 progressive les pas, le mouvement et les transitions, puis transfèrent une part du temps
 debout vers le temps couché pendant respectivement 36, 48 et 60 heures. Le contrôle dure
-trois heures et ne devrait pas former
-un épisode persistant. Chaque événement est placé dans une copie indépendante des données,
-strictement après le début de la période future. L'exécution propre de la même vache est
-soustraite lors du calcul des métriques attribuables.
+trois heures et ne devrait pas former un épisode persistant. Cette campagne reprend le cadre
+contrefactuel de la Section~\ref{sec:cadre_experimental}; pour HYPO, l'exécution propre de la
+même vache est soustraite lors du calcul des métriques attribuables.
 
 L'ablation applique cinq variantes aux mêmes fenêtres: (A) HYPO temporel multivarié;
 (B) Isolation Forest suivi des règles de persistance; (C) Isolation Forest ponctuel;
@@ -255,11 +255,10 @@ puis modifie séparément dix paramètres autour de la référence. Elle évalue
 locale et ne sélectionne pas une nouvelle configuration.
 
 \subsection{Extension bidirectionnelle et contrôles de confusion}
-Douze scénarios sont appliqués à chacune des onze vaches admissibles, soit 132 événements.
-Chaque scénario est injecté dans une copie indépendante des données, strictement après le
-début de la période future. L'enveloppe est progressive, avec montée, plateau et retour. La
-somme des temps couché et debout est conservée. Le Tableau~\ref{tab:profils_detection} décrit ces
-douze scénarios.
+Douze scénarios sont appliqués à chacune des onze vaches admissibles, soit 132 événements,
+selon le même cadre contrefactuel. L'enveloppe est progressive, avec montée, plateau et
+retour, et la somme des temps couché et debout est conservée. Le
+Tableau~\ref{tab:profils_detection} décrit ces douze scénarios.
 
 \begin{table}[H]
   \centering
