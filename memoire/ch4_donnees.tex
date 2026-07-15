@@ -123,11 +123,11 @@ signal et granularité suffisante pour la persistance recherchée par les deux b
 \subsection{Contrôles d'intégrité et admissibilité}
 Le chargement impose des dates interprétables, des identifiants non vides et des variables
 numériques non négatives~; les durées posturales sont converties en minutes et la couverture
-de chaque intervalle est conservée. Les données originales ne sont jamais modifiées par la
-validation~: chaque injection opère sur une copie en mémoire.
+de chaque intervalle est conservée. Les données originales ne sont jamais modifiées par
+l'évaluation~: chaque injection opère sur une copie en mémoire.
 
 La durée des séries est bimodale~: seize vaches possèdent moins de quatorze jours de mesures
-et douze une série longue. Une vache est admissible à la validation synthétique si sa durée
+et douze une série longue. Une vache est admissible à l'évaluation synthétique si sa durée
 atteint quatorze jours, si une période future existe après la période de référence et si les pas, le
 \textit{Motion Index} et les transitions y sont informatifs. Onze vaches satisfont ces
 conditions~; les 28 restent utilisables dans l'interface, l'effectif de onze ne concernant
@@ -217,7 +217,7 @@ douze scénarios.
 
 \begin{table}[H]
   \centering
-  \caption{Scénarios de la validation technique.}
+  \caption{Scénarios de l'évaluation technique.}
   \label{tab:profils_detection}
   \small
   \begin{tabular}{p{0.27\textwidth}p{0.18\textwidth}p{0.43\textwidth}}

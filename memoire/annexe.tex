@@ -23,7 +23,7 @@ par une autre configuration du code.
 La reproduction complète suit six étapes, dans l'ordre~:
 \begin{enumerate}
   \item préparer l'environnement et placer \texttt{data/brut.csv} dans le projet~;
-  \item exécuter la validation et l'ablation du module HYPO~;
+  \item exécuter l'évaluation et l'ablation du module HYPO~;
   \item exécuter l'analyse OFAT, la calibration exploratoire et la courbe
   détection-charge de HYPO~;
   \item exécuter la comparaison exploratoire des fusions, puis l'évaluation du temps d'exécution~;
@@ -32,7 +32,7 @@ La reproduction complète suit six étapes, dans l'ordre~:
 \end{enumerate}
 Les commandes correspondantes sont détaillées ci-dessous.
 
-\subsection{Validation et ablation du module HYPO}
+\subsection{Évaluation et ablation du module HYPO}
 \begin{verbatim}
 python scripts/run_hypo_module_validation.py \
   --output-dir data/validation/hypo_module
@@ -199,7 +199,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \midrule
   \endfirsthead
   \toprule Fichier & Contenu \\ \midrule \endhead
-  \path{hypo_module/events_primary.csv} & 44 événements de la validation principale HYPO. \\
+  \path{hypo_module/events_primary.csv} & 44 événements de la campagne principale HYPO. \\
   \path{hypo_module/protocol_checks.csv} & Contrôles automatiques de la campagne HYPO. \\
   \path{hypo_module/detection_summary.csv} & Résultats attribuables par profil. \\
   \path{hypo_module/ablation_primary.csv} & Sorties des cinq variantes sur les mêmes fenêtres. \\
@@ -234,7 +234,7 @@ Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
 
 \subsection{Intégrité des fichiers}
 Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
-des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
+des sorties qui alimentent ce mémoire~: performance attribuable, ablation, analyses
 exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
 sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
 manifeste~:
@@ -253,7 +253,7 @@ de l'expérience.
 \subsection{Amplitudes des profils d'injection}
 Les Tableaux~\ref{tab:amplitudes_hypo} et~\ref{tab:amplitudes_extension} donnent les
 changements relatifs appliqués aux signaux bruts. Les amplitudes des trois baisses sont
-communes aux deux campagnes, mais leurs durées diffèrent~: 36 à 60 heures dans la validation
+communes aux deux campagnes, mais leurs durées diffèrent~: 36 à 60 heures dans la campagne
 principale HYPO, contre 24 à 48 heures dans l'extension bidirectionnelle. Les modifications
 suivent une enveloppe progressive. Seule l'amplitude modérée des pas ($-29$\,\%) est ancrée
 sur un ordre de grandeur publié \citep{paudyal2021lying}~; les autres valeurs sont des
@@ -261,7 +261,7 @@ hypothèses de test et non des estimations cliniques.
 
 \begin{table}[H]
   \centering
-  \caption{Profils de la validation principale HYPO.}
+  \caption{Profils de la campagne principale HYPO.}
   \label{tab:amplitudes_hypo}
   \small
   \begin{tabular}{lrrrrr}
