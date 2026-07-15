@@ -100,10 +100,11 @@ rejetés dans la campagne synthétique, la séquence instabilité vers hypoactiv
 dans 90,9\,\% des cas, et 66,7\,\% des instabilités produisent bien une sortie de
 surveillance. La fusion hiérarchique augmente la couverture des scénarios de vérification de
 61,4 à 72,7\,\% par rapport à HYPO seul dans la campagne étendue, qui compte 132 scénarios. En contrepartie, elle
-n'améliore pas IoU20 et augmente le fond de 0,446 à 0,571 notification par vache-jour. Les
-profils d'instabilité et leur chronologie restent donc des hypothèses de test~: l'intérêt
-actuel de cette branche est de structurer une hypothèse et une interface de surveillance,
-tandis que HYPO demeure la méthode principale.
+n'améliore pas IoU20, augmente le fond de 0,446 à 0,571 notification par vache-jour et alerte
+une part notable des facteurs confondants. L'extension constitue donc un résultat mitigé, non
+une preuve de supériorité. Les profils d'instabilité et leur chronologie restent
+des hypothèses de test~: l'intérêt actuel de cette branche est de structurer une hypothèse et
+une interface de surveillance, tandis que HYPO demeure la méthode principale.
 
 Le rejet des 33 contrôles brefs vérifie qu'un pic capteur, deux heures d'exercice synthétique
 ou une manipulation d'une heure ne suffisent pas à déclencher le détecteur dans les conditions
@@ -280,7 +281,8 @@ garantir qu'une alerte n'entraîne aucune décision automatique de traitement ou
 
 Le chemin vers une revendication clinique est dès lors clairement balisé. Une validation
 clinique devrait réunir des scores locomoteurs datés, plusieurs évaluateurs, des examens des
-pieds ou diagnostics vétérinaires et les données capteurs des jours précédents. Le
+pieds ou diagnostics vétérinaires, les causes non locomotrices documentées, les métadonnées
+de contexte et les données capteurs des jours précédents. Le
 développement et le test devraient être séparés par vache, par période et, idéalement, par
 ferme, ce qui permettrait de régler les seuils sur le jeu de développement puis de les geler
 avant le test, sans optimisme. Des contrôles réels doivent inclure œstrus, exercice,
