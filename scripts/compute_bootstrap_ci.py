@@ -1,7 +1,7 @@
 """Intervalles de confiance (bootstrap regroupé par vache) et tailles d'effet.
 
 Recalcule, de façon reproductible, les IC95 des métriques attribuables du module
-HYPO et les tailles d'effet de l'ablation rapportées au Chapitre 4. L'unite de
+HYPO et les tailles d'effet de l'ablation rapportées au chapitre des resultats. L'unite de
 reechantillonnage est la vache (cluster), conformement a l'unite statistique du
 memoire. Aucun resultat n'est saisi a la main.
 

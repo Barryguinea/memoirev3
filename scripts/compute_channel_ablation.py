@@ -9,7 +9,8 @@ a un seul canal, ``min_families`` passe a 1 (comme le comparateur pedometrique d
 manuscrit). On compare ensuite chaque canal isole a HYPO complet (4 familles).
 
 Controle de coherence : le canal << pas seuls >> doit reproduire la variante E
-(comparateur pedometrique) et << 4 familles >> la variante A du Tableau 4.6.
+(comparateur pedometrique) et << 4 familles >> la variante A du tableau d'ablation
+attribuable du module HYPO.
 
 Usage : ``python scripts/compute_channel_ablation.py``
 """
@@ -148,7 +149,7 @@ def main(raw: str = RAW) -> None:
               f"{s.iou20.mean()*100:>7.1f}%{s.best_iou.mean():>9.3f}{s.bg.mean():>8.3f}{f1:>9.3f}")
 
     print("\nControle : 'Pas seuls' doit reproduire la variante E (0,533 / 27,3%) "
-          "et 'HYPO (4 familles)' la variante A (0,731 / 43,2%) du Tableau 4.6.")
+          "et 'HYPO (4 familles)' la variante A (0,731 / 43,2%) de l'ablation attribuable.")
 
 
 if __name__ == "__main__":
