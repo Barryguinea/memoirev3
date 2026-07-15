@@ -465,7 +465,7 @@ proportionnel à l'écart-type de son score, puis réexécute la campagne avec u
 individualisé. La seconde fait varier le seuil de score HYPO de 0,04 à 0,20, en conservant
 les mêmes vaches, fenêtres, injections et autres paramètres. Elle décrit conjointement la
 réponse aux événements graduels et la charge produite par les exécutions propres. Ces
-analyses ont été ajoutées après la validation principale~: elles servent à examiner des
+analyses ont été ajoutées après la campagne principale~: elles servent à examiner des
 hypothèses et non à sélectionner rétrospectivement une nouvelle valeur de seuil.
 
 % =====================================================================
@@ -499,12 +499,12 @@ reproduction qui produisent les sorties du mémoire.
     Branche INSTABILITÉ & Mouvement disproportionné, posture fragmentée et fusion. \\
     Pipeline troupeau & Orchestration par vache et agrégation troupeau. \\
     Comparateur Isolation Forest & Référence non supervisée pour l'ablation et l'interface. \\
-    Validation HYPO & Campagne principale après la période de référence. \\
+    Évaluation HYPO & Campagne principale après la période de référence. \\
     Ablation HYPO & Comparaison avec IF, LOF et le comparateur pédométrique. \\
     Sensibilité HYPO & Analyse OFAT sans sélection de nouvelle configuration. \\
     Calibration par vache & Test exploratoire d'un seuil individualisé. \\
     Courbe détection-charge & Compromis entre détection attribuable et charge de fond. \\
-    Validation bidirectionnelle & Scénarios HYPO, INSTABILITÉ, séquence et contrôles. \\
+    Évaluation bidirectionnelle & Scénarios HYPO, INSTABILITÉ, séquence et contrôles. \\
     Sensibilité de la fusion & Comparaison des règles de fusion et sensibilité technique. \\
     Analyse IceTag-SLS synchronisée & Confrontation exploratoire aux scores locomoteurs. \\
     Interface Streamlit & Visualisation individuelle, classement troupeau et export des alertes. \\
@@ -569,7 +569,7 @@ l'analyse de sensibilité, l'analyse SLS et le démarrage de Streamlit. Les rés
 atteste la cohérence logicielle et sécurise la reproduction des résultats.
 
 Chaque résultat suit un cycle de vie traçable~: une commande de reproduction exécute un
-module de validation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
+module d'évaluation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
 fige ces sorties~; et un script dédié les transforme en figures du manuscrit. Aucun résultat
 n'est saisi à la main. Une modification du code, des données ou des paramètres impose donc
 une nouvelle exécution et un nouveau manifeste, de sorte que le PDF seul ne constitue jamais
@@ -611,4 +611,4 @@ la trace de référence de l'expérience. La Figure~\ref{fig:repro_chain} illust
 
 Le manifeste ferme la chaîne en rendant toute modification d'un artefact détectable. Il
 atteste l'identité des fichiers reproduits et complète les contrôles méthodologiques décrits
-dans le chapitre de validation.
+dans le chapitre des résultats.
