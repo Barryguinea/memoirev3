@@ -500,7 +500,7 @@ July\or August\or September\or October\or November\or December\fi}}
     % La table des matieres du memoire compte 6 chapitres, 37 sections et
     % 65 sous-sections : a 1.5 elle occupait 6 pages, contre 4 ici, sans rien
     % masquer. L'interligne et demi reste applique au corps du texte.
-    \baselineskip=\simpleinter
+    \baselineskip=1.15\simpleinter
     \if@twocolumn
       \@restonecoltrue\onecolumn
     \else
