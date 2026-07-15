@@ -496,11 +496,12 @@ July\or August\or September\or October\or November\or December\fi}}
 \newcommand\l@specialchapitre {\@dottedtocline{1}{0em}{0em}}
 
 \renewcommand\tableofcontents{%
-    % Interligne simple, comme \listoffigures et \listoftables ci-dessous.
-    % La table des matieres du memoire compte 6 chapitres, 37 sections et
-    % 65 sous-sections : a 1.5 elle occupait 6 pages, contre 4 ici, sans rien
-    % masquer. L'interligne et demi reste applique au corps du texte.
-    \baselineskip=1.15\simpleinter
+    % Interligne intermediaire entre le simple des listes de figures et de
+    % tableaux et l'interligne et demi d'origine. La table de ce memoire compte
+    % pres de 180 entrees : a 1.5 elle occupe 5 pages, contre 4 a 1.3, sans rien
+    % masquer et sans paraitre serree (25,5 pt entre entrees, contre 28,2 pt a
+    % 1.5). L'interligne et demi reste applique au corps du texte.
+    \baselineskip=1.3\simpleinter
     \if@twocolumn
       \@restonecoltrue\onecolumn
     \else
