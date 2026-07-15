@@ -1,64 +1,315 @@
-\begin{conclusion}
-\label{chapitre:conclusion}
+% =====================================================================
+% Discussion generale et conclusion : texte suivi, sans intitules de
+% section, conformement au plan valide. Le mecanisme reprend celui de
+% l'environnement conclusion de la classe memoireuqam (chapitre non
+% numerote, entree de table des matieres), avec le titre retenu.
+% =====================================================================
+\chapter*{DISCUSSION GÉNÉRALE ET CONCLUSION}
+\addtocontents{toc}{\protect\vspace{1.5ex}}
+\addcontentsline{toc}{chapter}{DISCUSSION GÉNÉRALE ET CONCLUSION}
 
-\newcommand{\conclusionheading}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
+% Ce chapitre n'etant pas numerote, le compteur de chapitre n'avance pas et
+% ses tableaux heriteraient du numero du chapitre 6. On leur donne un prefixe
+% propre, comme l'annexe utilise A. La numerotation par chapitre est retablie
+% en fin de fichier, pour que l'annexe retrouve A.1 et suivants.
+\setcounter{table}{0}
+\renewcommand{\thetable}{D.\arabic{table}}
 
-\conclusionheading{Synthèse}
-Ce mémoire atteint son objectif principal: produire une chaîne reproductible qui transforme
-des mesures IceQube indirectes en priorités de vérification locomotrice. Le résultat central
-est la branche HYPO, qui recherche une réduction persistante et concordante des pas, du
-mouvement, des transitions et de la posture par rapport à la période de référence
-individuelle. Une extension exploratoire ajoute une branche INSTABILITÉ et une fusion
-hiérarchique qui distingue surveillance et notification de vérification.
+L'objectif de ce mémoire était de produire une chaîne reproductible qui transforme des
+mesures IceQube indirectes en priorités de vérification locomotrice. Son apport central est
+de montrer qu'une alerte comportementale peut être construite autour d'une trajectoire
+individuelle plutôt qu'autour de points anormaux isolés. La branche HYPO combine direction du
+changement, cohérence entre signaux et persistance temporelle, et cette combinaison produit
+des épisodes plus cohérents avec les dégradations graduelles que les comparateurs Isolation
+Forest et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33 événements
+graduels et atteint IoU20 dans 13 cas. Ce résultat établit la capacité du système à
+transformer une dégradation contrôlée en priorité de vérification localisée.
 
-\conclusionheading{Résultats principaux}
-Sur 33 dégradations graduelles injectées après la période de référence, HYPO produit une couverture attribuable dans
-87,9\,\% des cas, un nouveau départ dans 57,6\,\% et IoU20 dans 39,4\,\%. Le contrôle bref
-est rejeté et le fond atteint 0,402 notification par vache-jour. Dans l'ablation, HYPO atteint
-29,5\,\% à IoU20, contre 0\,\% pour les trois comparateurs IF/LOF. L'analyse OFAT montre que
-l'agrégation et le nombre de familles concordantes structurent principalement le compromis.
-Ces résultats soutiennent l'intérêt d'une détection temporelle individualisée plutôt qu'une
-décision fondée sur des anomalies ponctuelles.
+Deux chiffres tempèrent cette réussite. Le taux de nouveaux départs de 57,6\,\% nuance la
+couverture de 87,9\,\%~: une partie de la réponse prolonge un épisode déjà actif au lieu d'en
+créer un. Le délai médian de 20,75 heures montre par ailleurs que le terme \textit{précoce}
+doit être interprété relativement à des dégradations de 36 à 60 heures, et non comme une
+réaction immédiate. Cette nuance n'annule pas le résultat principal~; elle précise l'usage
+réaliste du système, qui est de prioriser une vérification lorsque plusieurs familles de
+signaux se dégradent de façon persistante, avec une traçabilité suffisante pour expliquer
+pourquoi une vache remonte dans le classement. Toutes les conclusions qui suivent n'ont pas
+le même statut, et le Tableau~\ref{tab:portee_conclusions} associe à chacune son niveau de
+preuve.
 
-Sur la campagne étendue de 132 scénarios, la fusion hiérarchique couvre 72,7\,\% des
-scénarios de vérification, 66,7\,\% des instabilités en surveillance et 90,9\,\% des séquences.
-Elle ne dépasse cependant pas HYPO sur toutes les dimensions: IoU20 reste à 29,5\,\%, le fond
-passe de 0,446 à 0,571 et 40,9\,\% des facteurs confondants sont alertés. L'extension constitue
-donc un résultat mitigé, non une preuve de supériorité. La chaîne de traitement complète traite le corpus
-en 10,64 secondes en médiane sur cinq répétitions.
+\begin{table}[H]
+  \centering
+  \caption{Portée des conclusions principales.}
+  \label{tab:portee_conclusions}
+  \small
+  \begin{tabular}{p{0.22\textwidth}p{0.34\textwidth}p{0.35\textwidth}}
+    \toprule
+    Niveau & Conclusion permise & Conclusion non permise \\
+    \midrule
+    Démontré techniquement
+      & HYPO réagit à des baisses graduelles après la période de référence et localise mieux ces scénarios
+        que les comparateurs IF/LOF.
+      & HYPO identifie à lui seul la cause de la dégradation. \\
+    Soutenu mais limité
+      & La persistance, la direction et la cohérence entre signaux améliorent le compromis
+        entre recouvrement et charge de fond dans cette campagne.
+      & Les paramètres constituent un optimum physiologique ou sont transférables à une
+        autre ferme sans réévaluation. \\
+    Exploratoire
+      & INSTABILITÉ peut produire une sortie de surveillance distincte et la fusion peut
+        représenter une séquence synthétique.
+      & L'instabilité précède habituellement une boiterie réelle. \\
+    À établir dans un protocole clinique
+      & Validation longitudinale avec examens locomoteurs et causes documentées.
+      & Sensibilité, spécificité, valeur prédictive ou bénéfice clinique. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-\conclusionheading{Portée et usage}
-Les résultats convergent vers un usage clair: prioriser l'observation des animaux dont le
-comportement se dégrade de façon persistante. La cohorte IceTag-SLS va dans le même sens,
-avec davantage de notifications chez les trois vaches SLS~$\geq2$, mais ces trois cas
-appartiennent tous au groupe \textit{Exercise}. La limite centrale reste donc causale:
-81,8\,\% des hypoactivités non locomotrices sont alertées. Les capteurs reconnaissent une
-forme comportementale sans identifier son origine, ce qui impose une vérification terrain.
+La comparaison aux autres détecteurs apporte un résultat méthodologique important~: la
+quantité de points anormaux n'est pas le critère décisif. Isolation Forest ponctuel produit
+7,658 départs par vache-jour sans atteindre IoU20 sur un seul événement, et les variantes IF
+et LOF suivies de persistance réduisent la charge sans localiser davantage les fenêtres. HYPO
+atteint pour sa part un IoU attribuable moyen de 0,137 et 29,5\,\% à IoU20 sur les quatre
+profils. La direction du changement, la cohérence entre familles et l'accumulation temporelle
+sont donc les éléments les mieux soutenus par l'expérience, et c'est ce qui rend HYPO plus
+défendable qu'une simple accumulation d'anomalies ponctuelles.
 
-\conclusionheading{Contributions}
-Le travail fournit une évaluation attribuable de HYPO avec intervalles de confiance, une
-ablation et ses tailles d'effet, une analyse OFAT, une courbe détection-charge, une tentative
-de calibration individuelle rapportée malgré son résultat négatif, une extension
-bidirectionnelle avec contrôles de confusion, une évaluation du temps d'exécution, une analyse
-SLS synchronisée, une interface de priorisation et des artefacts reproductibles. Sa
-contribution méthodologique est double: proposer un détecteur temporel interprétable et
-montrer comment évaluer ce type d'outil sans confondre résultats techniques, hypothèses
-exploratoires et interprétations cliniques.
+L'analyse OFAT montre ensuite que ces conclusions ne reposent pas sur une valeur unique de
+chaque seuil. Elle identifie toutefois deux choix structurants~: l'agrégation et le nombre de
+familles concordantes. Exiger quatre familles réduit fortement la couverture et le fond, alors
+que n'en exiger que deux augmente la charge~; une agrégation courte réagit plus vite mais
+localise moins bien, tandis qu'une agrégation longue perd des événements. Les valeurs de
+référence constituent donc un compromis documenté, non un optimum. Modifier les seuils après
+lecture de cette analyse aurait transformé une étude de robustesse en sélection sur les
+données d'évaluation~; aucun réglage a posteriori n'a été effectué.
 
-\conclusionheading{Disponibilité}
-Le code source, les paramètres figés, les douze profils d'injection et les scripts
-d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
-(Annexe~\ref{annexe:validation}). Les données capteurs brutes ne peuvent être diffusées pour
+Deux analyses exploratoires confirment ce principe de prudence, et il est instructif qu'elles
+soient rapportées malgré leur résultat. La calibration par la dispersion du score propre à
+chaque période de référence ne réduit ni le fond moyen ni sa variabilité, et diminue IoU20 de
+39,4 à 33,3\,\%~: elle est rejetée. La courbe reliant la détection à la charge montre par
+ailleurs qu'un seuil de 0,14 paraîtrait favorable sur cette campagne, mais l'adopter après
+observation des mêmes événements introduirait un biais de sélection. Ce résultat sert à
+formuler une hypothèse de développement ultérieur, non à améliorer rétroactivement la
+performance annoncée.
+
+L'extension bidirectionnelle répondait à une question secondaire~: peut-on représenter une
+instabilité courte sans l'assimiler automatiquement à une alerte de vérification~? Sur le plan
+logiciel, l'architecture y répond grâce à deux persistances indépendantes et à une sortie de
+surveillance distincte. Les contrôles brefs et l'activité coordonnée de type œstrus sont
+rejetés dans la campagne synthétique, la séquence instabilité vers hypoactivité est récupérée
+dans 90,9\,\% des cas, et 66,7\,\% des instabilités produisent bien une sortie de
+surveillance. La fusion hiérarchique augmente la couverture des scénarios de vérification de
+61,4 à 72,7\,\% par rapport à HYPO seul dans la campagne étendue, qui compte 132 scénarios. En contrepartie, elle
+n'améliore pas IoU20 et augmente le fond de 0,446 à 0,571 notification par vache-jour. Les
+profils d'instabilité et leur chronologie restent donc des hypothèses de test~: l'intérêt
+actuel de cette branche est de structurer une hypothèse et une interface de surveillance,
+tandis que HYPO demeure la méthode principale.
+
+Le rejet des 33 contrôles brefs vérifie qu'un pic capteur, deux heures d'exercice synthétique
+ou une manipulation d'une heure ne suffisent pas à déclencher le détecteur dans les conditions
+testées. Cette réussite dépend toutefois de la représentation choisie et ne garantit pas le
+rejet de tous les événements réels de même nature. La confusion avec l'hypoactivité non
+locomotrice constitue quant à elle la limite centrale du travail~: neuf scénarios sur onze,
+soit 81,8\,\%, sont alertés, car leur forme est volontairement identique à une dégradation
+locomotrice sur les signaux disponibles, et 40,9\,\% de l'ensemble des facteurs confondants
+déclenchent une notification. Aucun réglage temporel ne peut séparer entièrement deux causes
+qui produisent les mêmes observations. La température, l'ingestion, la production laitière,
+les traitements, le vêlage ou un examen clinique sont nécessaires pour améliorer la
+spécificité causale. Les capteurs reconnaissent une forme comportementale sans en identifier
+l'origine, ce qui impose une vérification terrain.
+
+La charge que ce dispositif représente mérite d'être regardée en face. Le fond de 0,402
+notification par vache-jour pour HYPO et de 0,571 pour la fusion hiérarchique demeure élevé
+pour un grand troupeau. Ces valeurs ne sont pas des taux de faux positifs, puisqu'une donnée
+propre peut contenir une dégradation réelle non annotée, mais elles indiquent une fatigue
+d'alerte potentielle. Un déploiement devrait regrouper les alertes par épisode, limiter les
+répétitions, prioriser les trajectoires persistantes et enregistrer le résultat de la
+vérification humaine. Du côté du coût de calcul, le temps médian de 10,64 secondes pour
+28 vaches montre que le prototype est techniquement exécutable sur le corpus étudié~;
+Isolation Forest représente la majeure partie de ce coût, tandis que le calcul
+HYPO, INSTABILITÉ et fusion ne représente que 6,4\,\% du temps instrumenté. Ce résultat ne
+préjuge pas de la latence en ferme, du stockage continu ou de la concurrence entre
+utilisateurs.
+
+L'analyse IceTag-SLS apporte un résultat encourageant~: le nombre de notifications dans les
+sept jours précédant le score est plus élevé chez les trois vaches SLS~$\geq2$, avec une AUC
+exploratoire de 0,924, et le test de Mann-Whitney est favorable, tandis que le score maximal
+et la surveillance d'instabilité séparent moins bien les groupes. Cette concordance reste
+limitée par l'effectif et par le fait que les trois animaux SLS~$\geq2$ appartiennent au
+groupe \textit{Exercise}~; elle sert donc à appuyer la faisabilité de l'analyse synchronisée,
+pas à régler les seuils.
+
+Replacés dans la littérature, ces résultats s'accordent avec la signature comportementale la
+mieux établie de la boiterie, à savoir une réduction de l'activité locomotrice et une
+augmentation du temps couché \citep{ito2010lying,blackie2011lying,chapinal2010measurement}~;
+la branche HYPO cible précisément cette direction. Les revues soulignent toutefois que les
+variables utiles et leurs amplitudes dépendent du capteur, du protocole et du contexte
+\citep{oleary2020accelerometers,alsaaod2019automatic}. La référence propre à chaque vache est
+donc un choix méthodologique prudent pour absorber une partie de l'hétérogénéité observée, et
+elle améliore la comparabilité des trajectoires individuelles.
+
+Ce choix d'une référence propre à chaque vache, et à chaque créneau horaire, répond à une
+structure de variance précise~: chez la vache laitière, l'activité varie davantage entre
+individus (âge, rang de lactation, stade, tempérament) et selon le rythme circadien lié à la
+traite et à l'alimentation qu'au sein d'une même journée pour un même animal. Un seuil de
+population serait donc dominé par l'identité de la vache et par l'heure, plutôt que par son
+changement propre. En normalisant chaque animal par sa médiane horaire de référence, HYPO
+retire cette variance de nuisance dominante et rend comparable, d'une vache à l'autre,
+l'ampleur d'une dégradation relative.
+
+Les limites du capteur doivent être rappelées avec la même franchise. L'agitation, les reports
+de poids et les changements posturaux peuvent être observés lors d'un inconfort, mais les
+agrégats IceQube ne mesurent ni l'appui relatif des membres ni la démarche. Une hausse de
+mouvement ou de transitions reste en outre compatible avec l'œstrus, l'exercice, une
+manipulation ou un artefact, ce qui explique que la branche INSTABILITÉ filtre l'activité
+coordonnée et demeure exploratoire. Enfin, les performances rapportées varient fortement d'une
+étude à l'autre \citep{oleary2020accelerometers,qiao2021review}, ce qui rappelle qu'aucune
+signature unique n'est pleinement fiable sur ces capteurs et conforte le cadrage en alerte non
+diagnostique.
+
+Une comparaison avec les systèmes commerciaux appelle la même retenue. Plusieurs solutions
+fondées sur des podomètres et des accéléromètres d'activité sont déployées en élevage, mais
+leur logique interne et leurs protocoles d'évaluation ne sont pas toujours décrits avec le
+niveau de détail nécessaire à une comparaison indépendante
+\citep{rutten2013invited,stangaferro2016use}. Le présent travail se distingue par un code
+auditable, des paramètres figés, un protocole explicite et un manifeste d'intégrité. Il ne
+revendique aucune performance supérieure à ces systèmes, faute d'étalon et de protocole
+communs.
+
+Pour l'éleveur, à l'échelle d'un troupeau, le système se positionne comme un outil de
+priorisation et non d'alarme. La charge de fond mesurée reste trop élevée pour une
+vérification systématique~; un déploiement réaliste afficherait plutôt chaque jour les
+quelques animaux les plus anormaux, à partir du classement de l'interface. Le bénéfice attendu
+est d'orienter plus tôt l'attention humaine vers des vaches dont le comportement dérive, le
+coût étant le temps de vérification et le risque de fatigue d'alerte. Cette forme de tri
+correspond mieux à la charge observée qu'une alarme binaire envoyée pour chaque notification.
+Le Tableau~\ref{tab:forces_limites} synthétise les forces et les limites de l'ensemble.
+
+\begin{table}[H]
+  \centering
+  \caption{Forces et limites du travail.}
+  \label{tab:forces_limites}
+  \small
+  \begin{tabular}{p{0.43\textwidth}p{0.48\textwidth}}
+    \toprule
+    Forces & Limites \\
+    \midrule
+    Séparation temporelle stricte et exécution propre de référence.
+      & Absence de labels cliniques dans le corpus principal. \\
+    Profils graduels, multivariés et physiquement contraints.
+      & Amplitudes partiellement hypothétiques. \\
+    Ablation sur les mêmes événements et agrégation par vache.
+      & Onze vaches seulement dans les campagnes. \\
+    OFAT de vingt variantes pour HYPO.
+      & Aucune interaction entre paramètres ni jeu de développement indépendant. \\
+    Contrôles brefs et facteurs confondants explicites.
+      & Hypoactivité locomotrice et non locomotrice non identifiables avec ces seuls signaux. \\
+    Évaluation du temps d'exécution de la chaîne complète et artefacts reproductibles.
+      & Temps mesuré sur une seule machine et un seul corpus. \\
+    Analyse SLS fondée sur des mesures antérieures au score.
+      & Trois SLS~$\geq2$, tous dans le groupe \textit{Exercise}. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Ces limites gagnent à être examinées selon la typologie classique des menaces à la validité en
+recherche empirique \citep{shadish2002experimental,wohlin2012experimentation}. Du côté du
+construit, les injections représentent des changements de comportement et non des cas de
+boiterie~; les capteurs ne mesurent directement ni la douleur, ni la lésion, ni l'asymétrie de
+démarche, et le seuil IoU20 est une convention technique dépourvue de signification clinique.
+
+Ce protocole d'injection soulève une objection légitime~: les événements synthétiques
+reproduisent une baisse graduelle, persistante et concordante, c'est-à-dire précisément la
+signature que HYPO recherche. Trois éléments limitent toutefois le risque de circularité.
+D'abord, HYPO n'est pas évalué seul, mais confronté à Isolation Forest et à LOF sur exactement
+les mêmes événements injectés~; comme ces comparateurs échouent à localiser les épisodes avec
+le critère IoU20 alors que HYPO obtient une localisation supérieure, l'avantage mesuré ne
+découle pas de la simple présence de l'événement, mais de la manière dont il est capté.
+Ensuite, le contrôle bref, une variation isolée d'une seule famille, n'appartient pas à la
+cible de HYPO et est correctement rejeté, ce qui montre que le détecteur ne réagit pas à toute
+perturbation injectée. Enfin, l'amplitude du profil modéré reprend un ordre de grandeur
+rapporté dans la littérature pour des changements comportementaux associés à des épisodes
+locomoteurs ou à un parage thérapeutique \citep{paudyal2021lying}. La forme temporelle des
+injections demeure néanmoins une hypothèse d'évaluation technique~; une évaluation plus
+complète consisterait à rejouer la campagne avec des formes délibérément moins favorables,
+comme un départ abrupt, des familles désynchronisées ou une décroissance asymétrique, afin de
+vérifier que l'avantage de HYPO sur les comparateurs ne dépend pas de la forme précise
+retenue. Cette extension est directement réalisable avec le protocole décrit et constitue une
+étape naturelle d'évaluation future.
+
+Sur le plan de la validité interne, la séparation chronologique et la soustraction de
+l'exécution propre réduisent la fuite et l'attribution erronée. Plusieurs scénarios
+proviennent toutefois de la même vache, de sorte que l'unité indépendante reste la vache~; la
+graine unique améliore la traçabilité, mais ne mesure pas toute la variabilité possible du
+placement des événements. Sur le plan de la validité externe, le corpus principal provient
+d'une seule ferme et d'une seule période~: les différences de logement, de sol, de saison, de
+conduite et de capteur peuvent modifier les distributions, et la cohorte SLS, issue du même
+site, ne constitue pas une validation inter-fermes.
+
+La validité statistique appelle enfin une lecture nuancée. Les proportions synthétiques sont
+descriptives, les tests d'ablation utilisent onze paires au niveau vache, ce qui respecte la
+structure mais limite la puissance, et les analyses OFAT et INSTABILITÉ examinent plusieurs
+variantes sans jeu de test indépendant. Cette absence appelle toutefois une précision~: la
+référence étant propre à chaque vache et les seuils étant gelés avant la campagne, aucun
+paramètre n'est ajusté sur les vaches évaluées, et la période surveillée reste temporellement
+disjointe de la période de référence. Le protocole ne présente donc pas le risque d'optimisme
+en échantillon qu'un jeu de test viendrait corriger~; l'absence de cohorte séparée reflète
+surtout l'effectif de onze vaches, une validation pleinement externe demandant un second
+troupeau. Les AUC et valeurs de $p$ de l'analyse SLS restent fragiles en raison du petit
+effectif et de la multiplicité, et la calibration individuelle comme la courbe
+détection-charge sont des analyses exploratoires postérieures à la campagne principale, dont
+aucune valeur observée n'est utilisée pour remplacer la configuration de référence.
+
+De ces limites découle un usage prévu étroit et un ensemble d'obligations éthiques. L'usage
+défendable est un tri des animaux à observer. Une notification signifie que plusieurs
+dimensions du comportement ont changé de manière persistante par rapport à la période de
+référence de l'animal~; elle ne signifie pas que la vache soit boiteuse. Une vérification doit
+inclure l'observation locomotrice, l'examen du pied si nécessaire et une consultation
+vétérinaire selon le contexte. L'absence d'alerte ne garantit pas l'absence de douleur, et le
+système ne doit automatiser ni traitement ni réforme.
+
+La gouvernance des données mérite d'être explicitée en vue d'un déploiement. Les droits de
+propriété et d'usage ne peuvent pas être présumés~: ils doivent être définis entre
+l'exploitation, le fournisseur technologique et les chercheurs, avec des règles explicites de
+consentement et de confidentialité \citep{wolfert2017big,carbonell2016ethics}. Dans ce
+travail, l'extraction CowAlert demeure locale, est exclue des artefacts diffusables et ne sert
+qu'au contrôle de provenance~; seules des sorties agrégées et leurs empreintes d'intégrité
+sont conservées dans la chaîne reproductible. Un système déployé devrait documenter la
+finalité, les droits d'accès, la sécurité, la durée de conservation et l'audit des données, et
+garantir qu'une alerte n'entraîne aucune décision automatique de traitement ou de réforme.
+
+Le chemin vers une revendication clinique est dès lors clairement balisé. Une validation
+clinique devrait réunir des scores locomoteurs datés, plusieurs évaluateurs, des examens des
+pieds ou diagnostics vétérinaires et les données capteurs des jours précédents. Le
+développement et le test devraient être séparés par vache, par période et, idéalement, par
+ferme, ce qui permettrait de régler les seuils sur le jeu de développement puis de les geler
+avant le test, sans optimisme. Des contrôles réels doivent inclure œstrus, exercice,
+manipulation, vêlage, chaleur et maladies non locomotrices. Au-delà du protocole, des signaux
+de démarche ou d'asymétrie seraient plus proches du construit clinique que la seule quantité
+de mouvement, et la charge de vérification devra être évaluée avec les utilisateurs afin de
+définir un compromis acceptable en ferme.
+
+Au terme de ce travail, les contributions peuvent être résumées ainsi. Le mémoire fournit une
+évaluation attribuable de HYPO avec intervalles de confiance, une ablation et ses tailles
+d'effet, une analyse OFAT, une courbe reliant détection et charge, une tentative de
+calibration individuelle rapportée malgré son résultat négatif, une extension bidirectionnelle
+assortie de contrôles de confusion, une évaluation du temps d'exécution, une analyse SLS
+synchronisée, une interface de priorisation et des artefacts reproductibles. Sa contribution
+méthodologique est double~: proposer un détecteur temporel interprétable, et montrer comment
+évaluer ce type d'outil sans confondre résultats techniques, hypothèses exploratoires et
+interprétations cliniques. Le code source, les paramètres figés, les douze profils d'injection
+et les scripts d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
+(Annexe~\ref{annexe:validation})~; les données capteurs brutes ne peuvent être diffusées pour
 des raisons de confidentialité, mais la procédure de reproduction et les artefacts documentés
 permettent de rejouer intégralement la démarche, des injections jusqu'aux figures du
 manuscrit.
 
-\conclusionheading{Perspectives}
-La prochaine étape est une validation longitudinale avec scores locomoteurs, examens des
-pieds, causes non locomotrices et métadonnées de contexte. Une séparation stricte entre jeu
-de développement et jeu de test permettra de régler les seuils sans optimisme. Des signaux
-de démarche ou d'asymétrie seraient plus proches du construit clinique que la seule quantité
-de mouvement. Enfin, la charge de vérification devra être évaluée avec les utilisateurs afin
-de définir un compromis acceptable en ferme.
+Le module HYPO constitue en définitive le résultat technique principal~: il est mieux étayé
+que les comparateurs ponctuels, mais sa localisation et sa charge restent imparfaites.
+L'extension bidirectionnelle organise une hypothèse complémentaire et révèle ses propres
+compromis sans masquer le résultat négatif sur les facteurs confondants. C'est cette
+séparation assumée entre preuve principale et exploration qui rend l'ensemble cohérent et
+directement exploitable pour un usage de priorisation en ferme.
 
-\end{conclusion}
+% Retablir la numerotation par chapitre : l'annexe qui suit doit repartir en A.1.
+\renewcommand{\thetable}{{\thechapter.\arabic{table}}}
