@@ -114,6 +114,27 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
 \end{figure}
 
 % =====================================================================
+\section{Export et traçabilité des alertes}
+% =====================================================================
+Une priorité affichée n'a d'utilité que si elle peut sortir de l'écran. L'interface expose
+donc un onglet d'export qui produit trois fichiers CSV~: un résumé par vache, les données
+complètes du troupeau au grain de l'intervalle, et les seules alertes comportementales,
+c'est-à-dire les débuts d'épisode retenus par la fusion. La vue individuelle permet en outre
+d'exporter la série d'un animal telle qu'elle est affichée, filtres compris. Ces fichiers
+alimentent le registre d'élevage ou une vérification hors ligne, sans imposer que l'interface
+reste ouverte.
+
+La traçabilité repose sur le nommage. Chaque fichier exporté porte la résolution temporelle
+retenue et une empreinte courte du fichier source, calculée au chargement et affichée à
+l'écran~; l'export individuel y ajoute l'identifiant de l'animal et la fenêtre de dates. Deux
+exports issus de jeux de données ou de résolutions différents ne peuvent donc pas être
+confondus, et un fichier retrouvé plusieurs semaines plus tard reste rattachable à son
+origine. Cette empreinte sert à identifier une source, non à garantir son intégrité
+cryptographique~: cette garantie relève du manifeste SHA-256 de la chaîne reproductible
+(Annexe~\ref{annexe:validation}), dont ce nommage prolonge la logique à l'échelle de
+l'interface.
+
+% =====================================================================
 \section{Portée et limites de l'usage en ferme}
 % =====================================================================
 L'interface est un prototype de démonstration. Elle s'exécute localement, charge un fichier
