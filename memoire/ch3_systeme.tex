@@ -377,7 +377,10 @@ n'alimente pas le manuscrit. La comparaison des fusions réutilise exactement le
 vaches et les mêmes scénarios, de sorte que les écarts entre variantes ne tiennent qu'à la
 règle de fusion.
 
-\subsection{Métriques et unité statistique}
+% =====================================================================
+\section{Métriques et analyses de sensibilité}
+% =====================================================================
+\subsection{Recouvrement temporel (IoU)}
 La localisation d'un épisode est mesurée par l'intersection sur l'union
 (\textit{Intersection over Union}, IoU), une métrique issue de la détection d'objets en
 vision par ordinateur \citep{everingham2010pascal}, entre la fenêtre injectée et l'épisode
@@ -390,6 +393,7 @@ parfaite et une valeur de~0 une absence de chevauchement. Le seuil IoU~$\geq0{,}
 les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
 recouvrement, qui ne compte qu'un chevauchement non nul.
 
+\subsection{Métriques attribuables et unité statistique}
 Une détection est attribuable seulement si l'exécution injectée ajoute un intervalle ou un
 départ absent de l'exécution propre. Pour HYPO, les résultats distinguent nouveau départ,
 couverture attribuable, IoU~$\geq0{,}20$, meilleur IoU, délai et notifications de fond. Ces
@@ -416,9 +420,7 @@ correctement rejeté; le F1 est la moyenne harmonique de la précision et du rap
 Cette synthèse reste complémentaire: elle n'intègre ni la charge de fond ni la qualité fine de
 localisation.
 
-% =====================================================================
-\section{Analyses de sensibilité prévues}
-% =====================================================================
+\subsection{Analyses de sensibilité prévues}
 L'analyse OFAT principale modifie vingt fois, une valeur à la fois, dix paramètres de HYPO.
 Une analyse plus restreinte modifie ensuite l'agrégation, la persistance et les seuils de la
 branche INSTABILITÉ. Les deux analyses servent à détecter une dépendance excessive aux
