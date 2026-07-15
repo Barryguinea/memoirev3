@@ -1,8 +1,5 @@
 \begin{introduction}
 
-\newcommand{\introheading}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
-
-\introheading{Motivation}
 La boiterie désigne une altération de la locomotion, le plus souvent causée par la douleur
 d'une lésion du pied ou du membre. Elle se reconnaît cliniquement à une démarche irrégulière,
 un dos voûté, une répartition inégale du poids entre les membres et une réticence à se
@@ -35,7 +32,6 @@ clinique \citep{alsaaod2019automatic,oleary2020accelerometers}. L'enjeu devient 
 transformer des séries comportementales indirectes en priorités d'observation fiables,
 traçables et utilisables par l'éleveur.
 
-\introheading{Problématique}
 Dans cette perspective, la manifestation la mieux étayée dans les données disponibles est une
 réduction durable de l'activité locomotrice: diminution des pas, du mouvement et des
 transitions, accompagnée de changements posturaux. Ces signaux restent néanmoins non
@@ -56,8 +52,7 @@ des dégradations comportementales graduelles et persistantes à partir de séri
 si une branche d'instabilité peut apporter une information complémentaire sans dégrader
 excessivement la localisation temporelle et la charge de vérification.
 
-\introheading{Objectifs}
-L'objectif général est de concevoir et d'évaluer une chaîne de priorisation comportementale
+Pour répondre à cette question, l'objectif général est de concevoir et d'évaluer une chaîne de priorisation comportementale
 fondée sur HYPO, puis d'en tester l'extension par une branche INSTABILITÉ.
 Il se décline en six objectifs spécifiques:
 \begin{enumerate}
@@ -75,8 +70,7 @@ Il se décline en six objectifs spécifiques:
   contemporaine des mesures capteurs.
 \end{enumerate}
 
-\introheading{Hypothèses de travail}
-L'hypothèse principale est qu'une baisse graduelle touchant plusieurs familles de signaux
+Cette démarche repose sur deux hypothèses de travail. L'hypothèse principale est qu'une baisse graduelle touchant plusieurs familles de signaux
 est mieux représentée par une détection directionnelle, individualisée et temporelle que par
 une succession d'anomalies ponctuelles. L'hypothèse exploratoire est qu'une instabilité
 définie par des rapports de mouvement, des transitions et une fragmentation posturale peut
@@ -84,8 +78,7 @@ compléter HYPO, à condition de conserver une sortie de surveillance distincte 
 persistance plus courte. Ces hypothèses portent sur le comportement du logiciel et ne
 préjugent pas de la cause clinique des événements.
 
-\introheading{Positionnement et portée}
-Le système produit des \emph{alertes comportementales à vérifier}, c'est-à-dire une aide à
+Dans ce cadre, le système produit des \emph{alertes comportementales à vérifier}, c'est-à-dire une aide à
 la décision pour le suivi d'élevage. Ce positionnement est volontaire~: le corpus principal
 ne contient pas d'étalon clinique synchronisé pour tous les animaux, mais il permet d'étudier
 rigoureusement la réponse du logiciel à des perturbations contrôlées. L'apport opérationnel
@@ -93,8 +86,7 @@ recherché est de transformer des signaux continus en priorités de vérificatio
 avec une portée clairement séparée d'un outil diagnostique validé
 \citep{alsaaod2019automatic}.
 
-\introheading{Démarche méthodologique}
-Le corpus principal contient 37\,839 mesures de 28 vaches. Les 60\,\% premiers intervalles
+Sur le plan méthodologique, le corpus principal contient 37\,839 mesures de 28 vaches. Les 60\,\% premiers intervalles
 admissibles de chaque série constituent la période de référence et les 40\,\% suivants la période
 surveillée. HYPO utilise des totaux glissants sur douze heures, une persistance de six heures,
 un score multivarié et un CUSUM unilatéral. Sa campagne principale comporte 33 dégradations
@@ -120,8 +112,7 @@ comme surveillance et réserve la notification de vérification à HYPO ou à un
 résultats constituent une extension exploratoire qui enrichit la lecture opérationnelle du
 système sans remplacer l'évaluation technique plus ciblée de HYPO.
 
-\introheading{Contributions}
-Le mémoire apporte une chaîne complète qui va du signal brut à une priorité de vérification
+À partir de cette démarche, le mémoire apporte une chaîne complète qui va du signal brut à une priorité de vérification
 reproductible. Ses contributions sont les suivantes:
 \begin{enumerate}
   \item un détecteur HYPO directionnel, persistant et interprétable, centré sur la trajectoire
@@ -143,8 +134,7 @@ séparément: individualisation, temporalité, attribution et reproductibilité.
 combinaison, adossée à une évaluation dont chaque chiffre est régénérable, qui distingue ce
 travail.
 
-\introheading{Structure du mémoire}
-Le Chapitre~\ref{chapitre:contexte} pose le contexte~: le coût de la boiterie, son étiologie,
+Le mémoire est organisé comme suit. Le Chapitre~\ref{chapitre:contexte} pose le contexte~: le coût de la boiterie, son étiologie,
 la notation locomotrice qui sert de référence et les capteurs qui produisent les signaux
 comportementaux. Le Chapitre~\ref{chapitre:etatart} examine l'état de l'art de la détection
 automatisée, les méthodes non supervisées qui servent de comparateurs, la détection
