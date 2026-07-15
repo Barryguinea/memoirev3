@@ -1,9 +1,18 @@
 \chapter{Reproductibilité et contrôles complémentaires}
 \label{annexe:validation}
-% Les sous-sections de l'annexe coiffent des blocs de commandes, pas des
-% developpements : elles restent numerotees dans le texte, mais n'encombrent
-% pas la table des matieres, qui n'annonce ici que A.1 a A.4.
-\setcounter{tocdepth}{1}
+% Les intertitres de l'annexe coiffent des blocs de commandes, pas des
+% developpements : ils n'ont ni numero ni entree dans la table des matieres,
+% qui n'annonce ici que A.1 a A.4.
+%
+% Mecanisme : la classe numerote jusqu'au niveau 5 (secnumdepth=5) et n'inscrit
+% dans la table que les niveaux 1 et 2. En abaissant secnumdepth a 2 ici, un
+% \subsubsection (niveau 3) depasse les deux seuils : il perd son numero et
+% n'entre pas dans la table. Son format est identique a celui d'un
+% \subsection dans cette classe, donc le rendu ne change pas.
+% \subsection* ne peut pas servir : la classe saisit l'argument avant de
+% chercher l'etoile, et ses macros starsection et nostarsection sont
+% identiques, donc l'etoile n'est jamais transmise.
+\setcounter{secnumdepth}{2}
 
 Cette annexe recense les commandes et artefacts qui soutiennent les résultats du mémoire.
 Les commandes sont exécutées depuis la racine du dépôt reproductible.
@@ -36,7 +45,7 @@ La reproduction complète suit six étapes, dans l'ordre~:
 \end{enumerate}
 Les commandes correspondantes sont détaillées ci-dessous.
 
-\subsection{Évaluation et ablation du module HYPO}
+\subsubsection{Évaluation et ablation du module HYPO}
 \begin{verbatim}
 python scripts/run_hypo_module_validation.py \
   --output-dir data/validation/hypo_module
@@ -45,7 +54,7 @@ python scripts/run_hypo_module_validation.py \
 Cette commande régénère les 44 événements, les contrôles du protocole, le résumé par profil,
 l'ablation et les tests appariés regroupés par vache.
 
-\subsection{Typologie des modes de défaillance}
+\subsubsection{Typologie des modes de défaillance}
 \begin{verbatim}
 python scripts/compute_failure_modes.py
 \end{verbatim}
@@ -54,7 +63,7 @@ Cette commande relit les sorties événementielles de HYPO et de la fusion hiér
 écrit les fréquences du Tableau~\ref{tab:failure_modes} dans
 \path{hypo_module/failure_modes.csv}. Elle ne relance pas les détecteurs.
 
-\subsection{Analyse OFAT du module HYPO}
+\subsubsection{Analyse OFAT du module HYPO}
 \begin{verbatim}
 python -m validation_hypo.sensitivity \
   --output-dir data/validation/hypo_module/parameter_sensitivity
@@ -63,7 +72,7 @@ python -m validation_hypo.sensitivity \
 La référence et les vingt variantes utilisent les mêmes onze vaches, les mêmes fenêtres et
 la même graine. L'analyse ne sélectionne pas de nouvelle configuration.
 
-\subsection{Traçabilité des données (provenance CowAlert)}
+\subsubsection{Traçabilité des données (provenance CowAlert)}
 \begin{verbatim}
 python scripts/cowalert_provenance.py
 \end{verbatim}
@@ -73,7 +82,7 @@ Cette commande confronte \path{data/brut.csv} à l'extraction
 et la proportion d'intervalles appariés dans \path{hypo_module/cowalert_provenance.csv}. Le
 fichier source est confidentiel, demeure local et n'est pas versionné.
 
-\subsection{Intervalles de confiance et tailles d'effet}
+\subsubsection{Intervalles de confiance et tailles d'effet}
 \begin{verbatim}
 python scripts/compute_bootstrap_ci.py
 \end{verbatim}
@@ -82,7 +91,7 @@ Ce script recalcule, à graine fixée, les intervalles de confiance à 95\,\% de
 attribuables (bootstrap regroupé par vache, 10\,000~rééchantillonnages) et les tailles
 d'effet de l'ablation, puis les écrit dans \path{hypo_module/bootstrap_ci.csv}.
 
-\subsection{Calibration individuelle et courbe détection-charge}
+\subsubsection{Calibration individuelle et courbe détection-charge}
 \begin{verbatim}
 python scripts/per_cow_calibration.py
 python scripts/detection_background_curve.py
@@ -93,7 +102,7 @@ négatif de l'expérience. La seconde réexécute neuf seuils de score sur les m
 écrit le tableau complet et produit la Figure~\ref{fig:detection_background_curve}. Aucune
 des deux commandes ne remplace la configuration de référence.
 
-\subsection{Comparaison exploratoire des fusions}
+\subsubsection{Comparaison exploratoire des fusions}
 \begin{verbatim}
 python -m validation_hybrid.sensitivity \
   --output-dir data/validation/hybrid_refined_full
@@ -102,7 +111,7 @@ python -m validation_hybrid.sensitivity \
 Cette commande exécute les cinq règles de fusion et quatre configurations de sensibilité sur
 les mêmes onze vaches et les mêmes douze scénarios.
 
-\subsection{Évaluation du temps d'exécution}
+\subsubsection{Évaluation du temps d'exécution}
 \begin{verbatim}
 python scripts/benchmark_performance.py \
   --input data/brut.csv \
@@ -113,7 +122,7 @@ python scripts/benchmark_performance.py \
 
 Le fichier canonique retient la médiane des cinq exécutions complètes et les temps par étape.
 
-\subsection{Analyse IceTag-SLS}
+\subsubsection{Analyse IceTag-SLS}
 \begin{verbatim}
 python -m validation_hybrid.mcgill_sls_validation
 \end{verbatim}
@@ -121,7 +130,7 @@ python -m validation_hybrid.mcgill_sls_validation
 Le répertoire source \texttt{mcgill\_iot\_cattle} doit être disponible selon le chemin
 documenté dans le module. Aucune observation postérieure au 12 mars 2019 n'est utilisée.
 
-\subsection{Figures du manuscrit}
+\subsubsection{Figures du manuscrit}
 \begin{verbatim}
 python scripts/plot_parameter_sensitivity.py \
   --summary data/validation/hypo_module/parameter_sensitivity/\
@@ -141,7 +150,7 @@ représentatives pour l'inspection visuelle. Le script d'audit compare 95 valeur
 du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent le
 manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
 
-\subsection{Tests et interface}
+\subsubsection{Tests et interface}
 \begin{verbatim}
 pytest -q
 python -m streamlit run app.py
@@ -150,7 +159,7 @@ python -m streamlit run app.py
 L'interface est ensuite accessible à \texttt{http://localhost:8501}. Les tests vérifient la
 cohérence logicielle, non la validité clinique.
 
-\subsection{Compilation}
+\subsubsection{Compilation}
 \begin{verbatim}
 cd memoire
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -159,7 +168,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 % =====================================================================
 \section{Règles d'interprétation et unité statistique}
 % =====================================================================
-\subsection{Règles d'interprétation}
+\subsubsection{Règles d'interprétation}
 Les formulations suivantes sont exclues des conclusions:
 \begin{itemize}
   \item appeler ``sensibilité clinique'' le taux de détection des injections;
@@ -179,7 +188,7 @@ Les formulations suivantes sont exclues des conclusions:
 Ces règles font partie du protocole de reproductibilité: reproduire les calculs sans en
 respecter la portée conduirait à une conclusion scientifiquement différente.
 
-\subsection{Unité statistique}
+\subsubsection{Unité statistique}
 Les 132 lignes événementielles ne représentent pas 132 animaux indépendants. Elles sont
 regroupées dans onze vaches. Les résultats par scénario sont descriptifs; toute comparaison
 inférentielle doit agréger préalablement par vache. Dans l'analyse SLS, chaque vache fournit
@@ -192,7 +201,7 @@ indépendantes.
 % =====================================================================
 \section{Données et artefacts}
 % =====================================================================
-\subsection{Artefacts principaux}
+\subsubsection{Artefacts principaux}
 Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent les résultats.
 
 \begin{longtable}{p{0.43\textwidth}p{0.47\textwidth}}
@@ -236,7 +245,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
 Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
 \texttt{data/validation/}.
 
-\subsection{Intégrité des fichiers}
+\subsubsection{Intégrité des fichiers}
 Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
 des sorties qui alimentent ce mémoire~: performance attribuable, ablation, analyses
 exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
@@ -254,7 +263,7 @@ de l'expérience.
 % =====================================================================
 \section{Profils d'injection et variabilité}
 % =====================================================================
-\subsection{Amplitudes des profils d'injection}
+\subsubsection{Amplitudes des profils d'injection}
 Les Tableaux~\ref{tab:amplitudes_hypo} et~\ref{tab:amplitudes_extension} donnent les
 changements relatifs appliqués aux signaux bruts. Les amplitudes des trois baisses sont
 communes aux deux campagnes, mais leurs durées diffèrent~: 36 à 60 heures dans la campagne
@@ -318,7 +327,7 @@ transitions, $+12/+14$\,\% de posture/oscillation sur 12~h), un délai de 24~h, 
 hypoactivité ($-32$\,\% de pas, $-28$\,\% de mouvement, $-30$\,\% de transitions et
 $+8$\,\% de transfert postural sur 36~h).
 
-\subsection{Invariants des injections}
+\subsubsection{Invariants des injections}
 \begin{enumerate}
   \item chaque scénario est injecté dans une copie distincte des données;
   \item le début est strictement postérieur à la période de référence;
@@ -329,7 +338,7 @@ $+8$\,\% de transfert postural sur 36~h).
   \item le fichier \texttt{data/brut.csv} n'est jamais modifié.
 \end{enumerate}
 
-\subsection{Variabilité inter-vache du fond}
+\subsubsection{Variabilité inter-vache du fond}
 Le taux de fond agrégé (0,402 notification par vache-jour pour HYPO) masque une variabilité
 individuelle importante. Sur les onze vaches admissibles (45 notifications, 112~vaches-jours),
 le taux varie de 0,197 à 0,590 selon l'animal, soit un facteur d'environ trois
