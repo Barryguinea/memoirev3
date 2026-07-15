@@ -6,8 +6,9 @@ Les commandes sont exécutées depuis la racine du dépôt reproductible.
 Le code source, les scripts de reproduction et les artefacts versionnés sont disponibles dans
 le dépôt GitHub du projet~: \url{https://github.com/Barryguinea/memoirev3}.
 
-\section{Environnement}
-
+% =====================================================================
+\section{Environnement et commandes de reproduction}
+% =====================================================================
 \begin{verbatim}
 python -m venv .venv
 source .venv/bin/activate
@@ -18,8 +19,6 @@ python -m pip install -r requirements.txt
 L'environnement effectivement utilisé peut aussi être appelé avec le chemin absolu de son
 interpréteur Python. Les résultats ne doivent pas être mélangés avec des artefacts produits
 par une autre configuration du code.
-
-\section{Commandes de reproduction}
 
 La reproduction complète suit six étapes, dans l'ordre~:
 \begin{enumerate}
@@ -153,8 +152,43 @@ cd memoire
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 \end{verbatim}
 
-\section{Artefacts principaux}
+% =====================================================================
+\section{Règles d'interprétation et unité statistique}
+% =====================================================================
+\subsection{Règles d'interprétation}
+Les formulations suivantes sont exclues des conclusions:
+\begin{itemize}
+  \item appeler ``sensibilité clinique'' le taux de détection des injections;
+  \item appeler ``faux positifs'' les notifications produites sur des données sans labels;
+  \item interpréter une instabilité isolée comme une boiterie précoce confirmée;
+  \item attribuer l'association SLS au système sans mentionner le groupe \textit{Exercise};
+  \item présenter les paramètres techniques comme des seuils physiologiques optimaux;
+  \item remplacer le seuil de référence par 0,14 à partir de la courbe descriptive, sans
+  jeu de développement indépendant;
+  \item comparer directement 87,9\,\% de couverture HYPO et 72,7\,\% de détection
+  nécessitant une vérification dans l'extension hybride, car les critères et les ensembles de scénarios diffèrent;
+  \item attribuer l'écart entre 0,402 et 0,446 au seul algorithme, car le délai réfractaire
+  passe de 24 à 12 heures dans la comparaison des fusions;
+  \item traiter les intervalles de quinze minutes comme des sujets indépendants.
+\end{itemize}
 
+Ces règles font partie du protocole de reproductibilité: reproduire les calculs sans en
+respecter la portée conduirait à une conclusion scientifiquement différente.
+
+\subsection{Unité statistique}
+Les 132 lignes événementielles ne représentent pas 132 animaux indépendants. Elles sont
+regroupées dans onze vaches. Les résultats par scénario sont descriptifs; toute comparaison
+inférentielle doit agréger préalablement par vache. Dans l'analyse SLS, chaque vache fournit
+une seule valeur par mesure sur la fenêtre de sept jours.
+
+La campagne HYPO comporte 44 événements mais repose sur les mêmes onze vaches. Les tests de
+l'ablation utilisent donc les moyennes par vache, jamais les 44 lignes comme observations
+indépendantes.
+
+% =====================================================================
+\section{Données et artefacts}
+% =====================================================================
+\subsection{Artefacts principaux}
 Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent les résultats.
 
 \begin{longtable}{p{0.43\textwidth}p{0.47\textwidth}}
@@ -198,8 +232,25 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
 Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
 \texttt{data/validation/}.
 
-\section{Amplitudes des profils d'injection}
+\subsection{Intégrité des fichiers}
+Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
+des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
+exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
+sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
+manifeste~:
 
+\begin{verbatim}
+shasum -a 256 -c data/validation/validation_artifacts.sha256
+\end{verbatim}
+
+Toute modification des scripts, des données, des paramètres ou de l'environnement exige une
+nouvelle exécution et un nouveau manifeste. Le PDF seul ne constitue pas une trace suffisante
+de l'expérience.
+
+% =====================================================================
+\section{Profils d'injection et variabilité}
+% =====================================================================
+\subsection{Amplitudes des profils d'injection}
 Les Tableaux~\ref{tab:amplitudes_hypo} et~\ref{tab:amplitudes_extension} donnent les
 changements relatifs appliqués aux signaux bruts. Les amplitudes des trois baisses sont
 communes aux deux campagnes, mais leurs durées diffèrent~: 36 à 60 heures dans la validation
@@ -263,8 +314,7 @@ transitions, $+12/+14$\,\% de posture/oscillation sur 12~h), un délai de 24~h, 
 hypoactivité ($-32$\,\% de pas, $-28$\,\% de mouvement, $-30$\,\% de transitions et
 $+8$\,\% de transfert postural sur 36~h).
 
-\section{Invariants des injections}
-
+\subsection{Invariants des injections}
 \begin{enumerate}
   \item chaque scénario est injecté dans une copie distincte des données;
   \item le début est strictement postérieur à la période de référence;
@@ -275,19 +325,7 @@ $+8$\,\% de transfert postural sur 36~h).
   \item le fichier \texttt{data/brut.csv} n'est jamais modifié.
 \end{enumerate}
 
-\section{Unité statistique}
-
-Les 132 lignes événementielles ne représentent pas 132 animaux indépendants. Elles sont
-regroupées dans onze vaches. Les résultats par scénario sont descriptifs; toute comparaison
-inférentielle doit agréger préalablement par vache. Dans l'analyse SLS, chaque vache fournit
-une seule valeur par mesure sur la fenêtre de sept jours.
-
-La campagne HYPO comporte 44 événements mais repose sur les mêmes onze vaches. Les tests de
-l'ablation utilisent donc les moyennes par vache, jamais les 44 lignes comme observations
-indépendantes.
-
-\section{Variabilité inter-vache du fond}
-
+\subsection{Variabilité inter-vache du fond}
 Le taux de fond agrégé (0,402 notification par vache-jour pour HYPO) masque une variabilité
 individuelle importante. Sur les onze vaches admissibles (45 notifications, 112~vaches-jours),
 le taux varie de 0,197 à 0,590 selon l'animal, soit un facteur d'environ trois
@@ -317,40 +355,3 @@ période de référence a été testée sans réduire le fond ni son coefficient
 IoU20. Elle n'est donc pas retenue. Une méthode future devrait être définie sur un jeu de
 développement distinct avant d'être évaluée. Ces chiffres décrivent une charge opérationnelle
 et ne constituent pas un taux de faux positifs, faute de labels cliniques.
-
-\section{Intégrité des fichiers}
-
-Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
-des sorties qui alimentent ce mémoire~: validation attribuable, ablation, analyses
-exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
-sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
-manifeste~:
-
-\begin{verbatim}
-shasum -a 256 -c data/validation/validation_artifacts.sha256
-\end{verbatim}
-
-Toute modification des scripts, des données, des paramètres ou de l'environnement exige une
-nouvelle exécution et un nouveau manifeste. Le PDF seul ne constitue pas une trace suffisante
-de l'expérience.
-
-\section{Règles d'interprétation}
-
-Les formulations suivantes sont exclues des conclusions:
-\begin{itemize}
-  \item appeler ``sensibilité clinique'' le taux de détection des injections;
-  \item appeler ``faux positifs'' les notifications produites sur des données sans labels;
-  \item interpréter une instabilité isolée comme une boiterie précoce confirmée;
-  \item attribuer l'association SLS au système sans mentionner le groupe \textit{Exercise};
-  \item présenter les paramètres techniques comme des seuils physiologiques optimaux;
-  \item remplacer le seuil de référence par 0,14 à partir de la courbe descriptive, sans
-  jeu de développement indépendant;
-  \item comparer directement 87,9\,\% de couverture HYPO et 72,7\,\% de détection
-  nécessitant une vérification dans l'extension hybride, car les critères et les ensembles de scénarios diffèrent;
-  \item attribuer l'écart entre 0,402 et 0,446 au seul algorithme, car le délai réfractaire
-  passe de 24 à 12 heures dans la comparaison des fusions;
-  \item traiter les intervalles de quinze minutes comme des sujets indépendants.
-\end{itemize}
-
-Ces règles font partie du protocole de reproductibilité: reproduire les calculs sans en
-respecter la portée conduirait à une conclusion scientifiquement différente.
