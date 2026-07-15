@@ -2,6 +2,42 @@
 \label{chapitre:interface}
 
 % =====================================================================
+\section{Besoin opérationnel et principes de conception}
+% =====================================================================
+L'observation humaine reste la référence du repérage de la boiterie, mais elle est difficile
+à maintenir de façon régulière sur l'ensemble d'un troupeau
+(Chapitre~\ref{chapitre:contexte}). Les branches de détection décrites au
+Chapitre~\ref{chapitre:systeme} produisent, pour chaque vache et chaque intervalle de quinze
+minutes, un score, des épisodes et des notifications. Sous cette forme, ces sorties répondent
+à la question « que dit le détecteur~? », alors que la question de terrain est « quels
+animaux dois-je aller voir aujourd'hui, et pourquoi~? ». L'interface comble cet écart~: elle
+transforme des séries de sortie en une liste ordonnée d'animaux à vérifier.
+
+Sa conception suit quatre principes, qui découlent du positionnement retenu pour le système.
+
+Le premier est la \emph{priorisation plutôt que le diagnostic}. L'interface ordonne les
+animaux à observer; elle ne quantifie pas une probabilité de boiterie et n'affiche aucun
+libellé clinique. Cette contrainte est délibérée~: le corpus principal ne comporte pas
+d'étalon vétérinaire, et un affichage qui suggérerait une conclusion clinique dépasserait ce
+que les données autorisent \citep{alsaaod2019automatic}.
+
+Le deuxième est la \emph{traçabilité de chaque alerte}. La vue individuelle présente les
+signaux, les épisodes et les notifications d'une même vache, de sorte qu'une priorité
+affichée peut toujours être remontée jusqu'aux mesures qui l'ont produite. Une alerte
+opaque serait inutilisable en ferme~: l'éleveur doit pouvoir juger lui-même si le
+comportement observé justifie un déplacement.
+
+Le troisième est la \emph{séparation entre surveillance et vérification}. Une instabilité
+isolée n'appelle pas le même geste qu'une hypoactivité persistante. L'interface conserve
+cette distinction au lieu de fondre les deux branches en un signal unique, ce qui évite de
+transformer une piste exploratoire en consigne de travail.
+
+Le quatrième est l'\emph{absence de logique d'alerte parallèle}. L'interface lit les sorties
+du noyau de détection et ne recalcule aucune règle qui lui serait propre. Une modification de
+présentation ne peut donc pas changer silencieusement les résultats rapportés au
+Chapitre~\ref{chapitre:resultats} \citep{sculley2015hidden}.
+
+% =====================================================================
 \section{Tableau de bord de priorisation}
 \label{sec:interface_streamlit}
 % =====================================================================
@@ -76,5 +112,30 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
   \caption{Animaux à vérifier en priorité.}
   \label{fig:streamlit_priority_animals}
 \end{figure}
+
+% =====================================================================
+\section{Portée et limites de l'usage en ferme}
+% =====================================================================
+L'interface est un prototype de démonstration. Elle s'exécute localement, charge un fichier
+CSV et montre que les sorties du détecteur peuvent être lues, ordonnées et rattachées à des
+animaux précis. Elle n'est pas un produit déployé~: elle ne gère ni l'acquisition continue
+des mesures, ni les comptes utilisateurs, ni l'historique des vérifications réalisées.
+
+Son usage prévu est donc étroit, et cette étroitesse est assumée. Une priorité~3 signifie que
+la vache mérite d'être regardée avant les autres, non qu'elle est boiteuse. Aucune vue
+n'autorise à conclure à une boiterie sans examen du pied, et l'interface n'affiche
+volontairement aucun libellé qui pourrait être lu comme un diagnostic. C'est la seule
+interprétation que le corpus soutient.
+
+Une limite tient à l'évaluation de l'outil lui-même~: l'interface n'a pas été soumise à des
+utilisateurs. Aucun éleveur ni technicien n'a été observé en train de s'en servir, et ni la
+lisibilité des vues, ni le temps nécessaire pour trancher un cas, ni l'acceptabilité des
+trois niveaux de priorité n'ont été mesurés. Les choix de présentation découlent du
+positionnement du mémoire et des contraintes du détecteur, non d'une étude d'usage. Une
+évaluation auprès d'utilisateurs réels constitue donc une étape nécessaire avant tout
+déploiement, au même titre que la validation clinique du détecteur.
+
+La charge de vérification que ce tri représente et ses conséquences pratiques pour l'éleveur
+sont discutées au Chapitre~\ref{chapitre:discussion}.
 
 
