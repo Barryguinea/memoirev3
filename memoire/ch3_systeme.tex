@@ -16,38 +16,6 @@ employés pour l'évaluation synthétique, faute d'étalon vétérinaire.
 % =====================================================================
 \section{Vue d'ensemble du système}
 % =====================================================================
-L'étude comporte trois niveaux. Le premier valide HYPO sur 44 événements et le compare à
-trois variantes IF/LOF. Le deuxième étend la campagne à 132 scénarios pour explorer
-INSTABILITÉ et cinq règles de fusion. À chaque niveau, un scénario est injecté dans une
-copie distincte de la période future, puis comparé à l'exécution propre de la même
-vache. Le troisième niveau est une analyse observationnelle sur une cohorte IceTag-SLS de
-l'hiver 2019. Il utilise des mesures strictement antérieures au score locomoteur et ne sert
-pas à régler le système. La Figure~\ref{fig:plan_etude} schématise ces trois niveaux.
-Ce plan forme un banc d'essai contrefactuel reproductible: l'événement synthétique est le
-seul changement volontaire entre l'exécution propre et l'exécution injectée, ce qui permet de
-mesurer la réponse du détecteur sans modifier la période de référence ni optimiser les seuils
-sur les sorties observées.
-
-\begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[
-    box/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
-      minimum height=2.1cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
-    arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
-    \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
-    \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
-    \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
-    \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
-    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
-    \node[box, fill=rulegreen!7, below=0.8cm of split] (pre) {Sept jours\\avant le SLS};
-    \node[box, fill=profgray!7, below=0.8cm of inject] (conc) {Concordance exploratoire\\sans réglage};
-    \draw[arrow] (sls) -- (pre); \draw[arrow] (pre) -- (conc);
-  \end{tikzpicture}
-  \caption{Plan d'étude.}
-  \label{fig:plan_etude}
-\end{figure}
-
 La Figure~\ref{fig:architecture_modules} schématise l'architecture retenue~: les mesures
 normalisées alimentent en parallèle les deux branches de détection, dont les épisodes sont
 ensuite fusionnés en une notification de vérification ou en une simple surveillance.
@@ -186,11 +154,9 @@ est de 50\,\% sur deux heures et le CUSUM doit franchir 0,70. Ces règles sont d
 testées séparément.
 
 % =====================================================================
-\section{Branche INSTABILITÉ et fusion hiérarchique}
-% =====================================================================
-\subsection{Mouvement disproportionné et posture fragmentée}
+\section{Branche INSTABILITÉ~: mouvement disproportionné et posture fragmentée}
 \label{sec:instabilite}
-
+% =====================================================================
 La branche INSTABILITÉ ne recherche pas une hausse globale d'activité. Elle calcule quatre
 familles sur une fenêtre de trois heures: mouvement relatif aux pas, transitions relatives
 aux pas, transitions relatives au temps postural et volatilité de la fraction couchée. Les
@@ -207,7 +173,10 @@ Les paramètres de la branche INSTABILITÉ sont des choix techniques exploratoir
 été définis avant la campagne complète puis soumis à une analyse de sensibilité. Ils ne sont
 pas présentés comme des seuils physiologiques ou cliniquement optimaux.
 
-\subsection{Fusion des branches}
+% =====================================================================
+\section{Fusion hiérarchique}
+% =====================================================================
+\subsection{Stratégies comparées}
 Cinq stratégies sont comparées sur les mêmes événements:
 \begin{enumerate}
   \item \textbf{HYPO}: seule la branche HYPO produit la sortie;
@@ -252,7 +221,7 @@ IoU20 d'au moins 20\,\%. Une fonction d'utilité secondaire récompense la déte
 pénalise fortement les contrôles, les confondants et la charge de fond. Ses poids sont des
 choix d'ingénierie; elle ne représente pas une utilité clinique validée.
 
-\subsection{Fusion hiérarchique}
+\subsection{Règle hiérarchique retenue}
 La fusion hiérarchique est volontairement asymétrique. Une instabilité seule indique une
 situation à surveiller, mais ne déclenche pas automatiquement une vérification prioritaire.
 Une hypoactivité produit une notification de vérification. La priorité augmente lorsque les deux
@@ -298,6 +267,7 @@ L'algorithme~\ref{alg:fusion} formalise cette logique de fusion pour une vache d
 \end{figure}
 
 % =====================================================================
+
 \section{Comparateurs Isolation Forest et Local Outlier Factor}
 \label{sec:comparateurs}
 % =====================================================================
@@ -430,21 +400,16 @@ l'extension, les métriques ajoutent les taux de surveillance, de contrôle et d
 synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne sont
 jamais des sujets indépendants.
 
-Cette dépendance se quantifie. En estimant l'autocorrélation des séries par vache, on obtient
-un temps d'autocorrélation intégré $\tau$ et une taille d'échantillon effective
-$n_{\text{eff}}=n/\tau$ lorsque $\tau$ est exprimé en nombre de pas d'échantillonnage. Au
-grain brut de quinze minutes, $\tau$ vaut de l'ordre d'une heure pour l'activité, de sorte que
-les 36\,879 mesures ne représentent déjà qu'environ dix mille observations indépendantes.
-Surtout, comme HYPO décide sur des totaux glissants de douze heures, deux fenêtres voisines
-partagent presque toutes leurs données et le temps de corrélation au niveau de la décision
-atteint environ huit heures: chaque vache n'apporte alors qu'une quinzaine de points de
-décision indépendants, soit de l'ordre du millier sur l'ensemble du corpus. Ce constat justifie
-quantitativement le choix de la vache comme unité de rééchantillonnage et le caractère
-conservateur des intervalles de confiance. Le calcul est reproductible par
+Cette dépendance est quantifiée sur le corpus par le temps d'autocorrélation intégré $\tau$
+et par la taille d'échantillon effective $n_{\text{eff}}=n/\tau$, lorsque $\tau$ est exprimé
+en nombre de pas d'échantillonnage. Les résultats descriptifs correspondants sont présentés
+à la Section~\ref{subsec:statistiques_corpus}. Comme les fenêtres glissantes voisines
+partagent une grande partie de leurs mesures, la vache, et non l'intervalle, constitue l'unité
+de rééchantillonnage. Le calcul est reproductible par
 \path{scripts/compute_correlation_time.py}.
 
-La détection peut aussi se résumer, au niveau de l'événement, par un F1: les 33 dégradations
-graduelles sont les positifs attendus et les 11 contrôles brefs les négatifs attendus. Un vrai
+La détection peut aussi se résumer, au niveau de l'événement, par un F1: les dégradations
+graduelles sont les positifs attendus et les contrôles brefs les négatifs attendus. Un vrai
 positif est un événement graduel détecté de façon attribuable, un faux positif un contrôle bref
 alerté à tort, un faux négatif un événement graduel manqué et un vrai négatif un contrôle
 correctement rejeté; le F1 est la moyenne harmonique de la précision et du rappel correspondants.
@@ -555,7 +520,7 @@ reposent sur \texttt{pandas} \citep{mckinney2010data} et \texttt{NumPy} \citep{h
 \subsection{Évaluation du temps d'exécution}
 L'évaluation reconstruit les variables, exécute le comparateur Isolation Forest, les règles
 IF comparatives, HYPO, INSTABILITÉ et la fusion hiérarchique. Chaque étape est chronométrée avec
-une horloge monotone. Cinq répétitions sont effectuées sur les 28 vaches et la concaténation
+une horloge monotone. Cinq répétitions sont effectuées sur l'ensemble du corpus principal et la concaténation
 des sorties intervalle est incluse. Le résultat canonique est la médiane des cinq durées; les
 valeurs minimale et maximale sont conservées pour rendre visible la variabilité de la machine.
 Ce test documente la faisabilité du prototype sur l'ordinateur utilisé, non un temps garanti
