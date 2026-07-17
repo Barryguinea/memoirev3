@@ -81,7 +81,10 @@ pour le temps couché, le ratio le plus élevé est conservé. Ce choix sélecti
 qui fait apparaître la variation adverse la plus marquée, afin qu'une dégradation par rapport
 à l'une des deux références ne soit pas masquée par l'autre. Les sorties sont forcées
 à zéro pendant la période de référence et un intervalle dont la couverture est inférieure à 25\,\% ne
-peut devenir candidat.
+peut devenir candidat. Ce découpage empêche une fuite directe de la période future vers la
+référence, mais il suppose que les premiers 60\,\% décrivent suffisamment le fonctionnement
+habituel de l'animal; il ne garantit pas à lui seul l'absence d'un épisode atypique, d'une
+dérive capteur ou d'un changement de conduite pendant cette période.
 
 % =====================================================================
 \section{Branche HYPO~: baisse comportementale persistante}
