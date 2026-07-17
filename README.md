@@ -105,12 +105,14 @@ pytest -q                                # 98 tests
 
 ---
 
-## Stratégie de validation
+## Stratégie d'évaluation
 
-La validation est **honnête par construction** : pas de fuite, pas de sélection
-de paramètres sur le jeu d'évaluation.
+L'évaluation sépare chronologiquement la période de référence et la période
+future, puis soustrait l'exécution propre afin de limiter la fuite et les
+attributions erronées. Le détecteur ayant été conçu sur le même corpus, cette
+campagne reste une **évaluation technique interne** et non un test indépendant.
 
-1. **Validation technique du module HYPO** — onze vaches admissibles, quatre
+1. **Évaluation technique du module HYPO** — onze vaches admissibles, quatre
    événements par vache (44 au total) :
    ```bash
    python scripts/run_hypo_module_validation.py --output-dir data/validation/hypo_module
@@ -120,8 +122,8 @@ de paramètres sur le jeu d'évaluation.
    - **Métriques attribuables** : chaque vache est exécutée *sans* et *avec*
      injection ; l'exécution propre est soustraite, on ne crédite que ce que
      l'injection ajoute.
-   - **Paramètres gelés** ; l'analyse OFAT teste la robustesse locale et **ne
-     sélectionne pas** de nouvelle configuration.
+   - **Configuration gelée avant la campagne finale** ; l'analyse OFAT teste la
+     robustesse locale et **ne sélectionne pas** de nouvelle configuration.
 
 2. **Ablation A–E** — HYPO comparé à : Isolation Forest + règles, IF ponctuel,
    LOF + règles, et un **comparateur pédométrique** (pas seuls, esprit

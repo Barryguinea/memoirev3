@@ -242,24 +242,32 @@ Sur le plan de la validité interne, la séparation chronologique et la soustrac
 l'exécution propre réduisent la fuite et l'attribution erronée. Plusieurs scénarios
 proviennent toutefois de la même vache, de sorte que l'unité indépendante reste la vache~; la
 graine unique améliore la traçabilité, mais ne mesure pas toute la variabilité possible du
-placement des événements. Sur le plan de la validité externe, le corpus principal provient
-d'une seule ferme et d'une seule période~: les différences de logement, de sol, de saison, de
-conduite et de capteur peuvent modifier les distributions, et la cohorte SLS, issue du même
-site, ne constitue pas une validation inter-fermes.
+placement des événements. La période de référence est en outre définie automatiquement par les
+premiers 60\,\% des intervalles admissibles, sans adjudication clinique de leur normalité. Les
+médianes par créneau horaire et la comparaison au jour précédent réduisent l'influence des
+valeurs isolées et du rythme journalier, mais une maladie présente dès le début, une dérive
+capteur, une activité exceptionnellement faible ou un changement de conduite peuvent encore
+biaiser les niveaux attendus et la charge d'alerte. Un déploiement devrait donc vérifier la
+stabilité et la couverture de cette période, permettre sa confirmation par l'utilisateur et
+prévoir sa réinitialisation après un changement majeur de contexte. Sur le plan de la validité
+externe, le corpus principal provient d'une seule ferme et d'une seule période~: les différences
+de logement, de sol, de saison, de conduite et de capteur peuvent modifier les distributions,
+et la cohorte SLS, issue du même site, ne constitue pas une validation inter-fermes.
 
 La validité statistique appelle enfin une lecture nuancée. Les proportions synthétiques sont
 descriptives, les tests d'ablation utilisent onze paires au niveau vache, ce qui respecte la
 structure mais limite la puissance, et les analyses OFAT et INSTABILITÉ examinent plusieurs
-variantes sans jeu de test indépendant. Cette absence appelle toutefois une précision~: la
-référence étant propre à chaque vache et les seuils étant gelés avant la campagne, aucun
-paramètre n'est ajusté sur les vaches évaluées, et la période surveillée reste temporellement
-disjointe de la période de référence. Le protocole ne présente donc pas le risque d'optimisme
-en échantillon qu'un jeu de test viendrait corriger~; l'absence de cohorte séparée reflète
-surtout l'effectif de onze vaches, une validation pleinement externe demandant un second
-troupeau. Les AUC et valeurs de $p$ de l'analyse SLS restent fragiles en raison du petit
-effectif et de la multiplicité, et la calibration individuelle comme la courbe
-détection-charge sont des analyses exploratoires postérieures à la campagne principale, dont
-aucune valeur observée n'est utilisée pour remplacer la configuration de référence.
+variantes sans jeu de test indépendant. Le détecteur ayant été conçu à partir du même corpus,
+la campagne principale constitue une évaluation technique interne, et non un test indépendant
+sur des animaux ou un site restés entièrement étrangers à la conception. La configuration a
+néanmoins été gelée avant cette campagne finale, la période surveillée est temporellement
+disjointe de la période de référence et aucune valeur observée dans l'OFAT, la calibration
+individuelle ou la courbe détection-charge n'est utilisée pour remplacer la configuration de
+référence. Ces précautions limitent la sélection rétrospective et la fuite temporelle, sans
+supprimer l'optimisme possible lié aux décisions de conception prises sur le même corpus. Une
+estimation pleinement externe demande donc un troupeau indépendant, avec un jeu de
+développement distinct du jeu d'évaluation. Les AUC et valeurs de $p$ de l'analyse SLS restent
+par ailleurs fragiles en raison du petit effectif et de la multiplicité.
 
 De ces limites découle un usage prévu étroit et un ensemble d'obligations éthiques. L'usage
 défendable est un tri des animaux à observer. Une notification signifie que plusieurs
