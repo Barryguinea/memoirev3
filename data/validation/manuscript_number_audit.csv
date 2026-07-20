@@ -157,6 +157,48 @@ Ablation A vs D detection p,0.04297,0.04297,hypo_module/ablation_tests_by_cow.cs
 Ablation A vs D IoU p,0.00098,0.00098,hypo_module/ablation_tests_by_cow.csv,True
 Ablation A vs E detection p,0.0625,0.0625,hypo_module/ablation_tests_by_cow.csv,True
 Ablation A vs E IoU p,0.96582,0.96582,hypo_module/ablation_tests_by_cow.csv,True
+Event F1 A. Alerte temporelle multivariée,0.73,0.7307692307692308,derived_metrics/event_f1.csv,True
+Event F1 B. IF + règles de persistance,0.35,0.35,derived_metrics/event_f1.csv,True
+Event F1 C. IF seul,0.31,0.3076923076923077,derived_metrics/event_f1.csv,True
+Event F1 D. LOF + règles,0.35,0.35,derived_metrics/event_f1.csv,True
+Event F1 E. Comparateur pédométrique (pas seuls),0.53,0.5333333333333333,derived_metrics/event_f1.csv,True
+HYPO event F1 precision,1.0,1.0,derived_metrics/event_f1.csv,True
+HYPO event F1 CI95 lower,0.6,0.5957446808510638,derived_metrics/event_f1.csv,True
+HYPO event F1 CI95 upper,0.86,0.8620689655172413,derived_metrics/event_f1.csv,True
+Channel ablation Pas seuls new_start_rate,0.273,0.2727272727272727,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Pas seuls iou20_rate,0.318,0.3181818181818182,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Pas seuls mean_best_iou,0.141,0.14078495477952,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Pas seuls background_per_cow_day,0.518,0.5176903937152328,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Pas seuls f1_new_start,0.53,0.5333333333333333,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Motion Index seul new_start_rate,0.341,0.3409090909090909,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Motion Index seul iou20_rate,0.25,0.25,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Motion Index seul mean_best_iou,0.135,0.1348205364985256,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Motion Index seul background_per_cow_day,0.491,0.4907291454136642,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Motion Index seul f1_new_start,0.63,0.625,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Transitions seules new_start_rate,0.5,0.5,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Transitions seules iou20_rate,0.273,0.2727272727272727,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Transitions seules mean_best_iou,0.128,0.1277462121212121,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Transitions seules background_per_cow_day,0.518,0.5176903937152328,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Transitions seules f1_new_start,0.8,0.8,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule new_start_rate,0.273,0.2727272727272727,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule iou20_rate,0.023,0.0227272727272727,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule mean_best_iou,0.042,0.0416982323232323,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule background_per_cow_day,0.393,0.3927137739840036,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule f1_new_start,0.53,0.5333333333333333,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation HYPO (4 familles) new_start_rate,0.432,0.4318181818181818,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation HYPO (4 familles) iou20_rate,0.295,0.2954545454545454,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation HYPO (4 familles) mean_best_iou,0.137,0.1370522052967542,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation HYPO (4 familles) background_per_cow_day,0.402,0.4016464993957464,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation HYPO (4 familles) f1_new_start,0.73,0.7307692307692308,derived_metrics/channel_ablation_summary.csv,True
+Correlation usable measures,36879.0,36879.0,derived_metrics/correlation_time.csv,True
+Correlation raw Motion Index effective observations,10000.0,10464.25176230984,derived_metrics/correlation_time.csv,True
+Correlation raw Motion Index tau hours,1.0,0.900816708238819,derived_metrics/correlation_time.csv,True
+Correlation decision Steps tau hours,7.8,7.846997770020059,derived_metrics/correlation_time.csv,True
+Correlation decision Steps median n_eff,17.0,17.364030956179448,derived_metrics/correlation_time.csv,True
+Correlation decision Steps total n_eff,1151.0,1150.8014471253443,derived_metrics/correlation_time.csv,True
+Correlation decision Motion Index tau hours,8.2,8.189014272125224,derived_metrics/correlation_time.csv,True
+Correlation decision Motion Index median n_eff,17.0,17.322699821463786,derived_metrics/correlation_time.csv,True
+Correlation decision Motion Index total n_eff,880.0,879.5264137741075,derived_metrics/correlation_time.csv,True
 Hierarchical actionable coverage,0.7273,0.7272727272727273,hybrid_refined_full/comparison_summary.csv,True
 Hierarchical instability surveillance,0.6667,0.6666666666666666,hybrid_refined_full/comparison_summary.csv,True
 Hierarchical sequence coverage,0.9091,0.9090909090909092,hybrid_refined_full/comparison_summary.csv,True

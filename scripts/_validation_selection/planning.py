@@ -87,11 +87,11 @@ def _pick_window_for_cow(
     starts = sorted(range(max_start + 1), key=lambda s: abs(s - preferred))
     for s in starts:
         e = s + duration - 1
-        l = max(0, s - margin)
-        r = min(n - 1, e + margin)
-        if occupied[l : r + 1].any():
+        left = max(0, s - margin)
+        right = min(n - 1, e + margin)
+        if occupied[left : right + 1].any():
             continue
-        occupied[l : r + 1] = True
+        occupied[left : right + 1] = True
         return s, e
     return None
 
@@ -172,4 +172,3 @@ def _manual_injection_plan(
         }
     )
     return plan
-

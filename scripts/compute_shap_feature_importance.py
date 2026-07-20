@@ -268,14 +268,14 @@ def main() -> None:
 
     # Markdown summary
     lines = [
-        f"# SHAP Feature Importance — Isolation Forest\n",
+        "# SHAP Feature Importance — Isolation Forest\n",
         f"Vache analysée : **{cow}**  ",
         f"Bins d'intervalle : {len(X_sample):,} (échantillon aléatoire, seed {SEED})  ",
         f"Features IF totales : {len(feat_cols)}  ",
         f"Hyperparamètres : n_estimators={N_ESTIMATORS}, max_features={MAX_FEATURES}, "
         f"contamination=0.06  ",
         "",
-        f"## Top 10 features par importance globale",
+        "## Top 10 features par importance globale",
         "",
         "| Rang | Feature | |SHAP| moyen | Part cumul. |",
         "|---|---|---|---|",

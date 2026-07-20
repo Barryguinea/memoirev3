@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Façade CLI du benchmark de performance (implémentation dans `scripts._benchmark_performance.cli`)."""
 
 from __future__ import annotations

@@ -11,7 +11,10 @@ from typing import List
 # Constantes historiques conservées (stables)
 MAD_FACTOR = 1.4826
 EPS = 1e-9
-MIN_PERIODS_ROLLING = lambda w: max(5, w // 4)
+
+def MIN_PERIODS_ROLLING(window: int) -> int:
+    """Nombre minimal de points exigé par les fenêtres glissantes historiques."""
+    return max(5, window // 4)
 
 
 def interval_to_minutes(interval: str) -> int:

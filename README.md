@@ -47,7 +47,7 @@ projet-memoire/
 │   ├── alerts.py                #   Règles de persistance des comparateurs
 │   └── pipeline.py              #   Orchestration vache par vache
 ├── ui/                          # Interface (fonctions pures de présentation)
-├── validation/                # Validation technique du module HYPO
+├── validation_hypo/             # Évaluation technique du module HYPO
 │   ├── campaign.py              #   Campagne post-baseline (44 événements)
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   └── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
@@ -61,12 +61,13 @@ projet-memoire/
 │   ├── compute_bootstrap_ci.py         # IC95 (bootstrap par vache) + tailles d'effet
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
-│   ├── audit_manuscript_numbers.py     # Vérifie 248 valeurs du mémoire ↔ sources
+│   ├── audit_manuscript_numbers.py     # Vérifie 290 valeurs du mémoire ↔ sources
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
 ├── tests/                       # 98 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
-│   └── validation/            # Artefacts + manifeste validation_artifacts.sha256
+│   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
+│       └── derived_metrics/     # F1, ablation par canal et autocorrélation
 ├── memoire/                     # Mémoire LaTeX (sources, figures, bibliographie)
 ├── docs/                        # Documentation (architecture, lecture du code, audit)
 └── notebooks/                   # Notebook de reproduction
@@ -157,12 +158,18 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 ## Reproductibilité
 
 - Chaque résultat est régénéré par un script ; **aucun chiffre n'est saisi à la main**.
+- Les métriques dérivées récentes sont exportées avant l'audit :
+  ```bash
+  python scripts/compute_event_f1.py
+  python scripts/compute_channel_ablation.py
+  python scripts/compute_correlation_time.py
+  ```
 - Le manifeste **SHA‑256** scelle les artefacts :
   ```bash
   python scripts/update_validation_manifest.py
   shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
-- Un script d'audit confronte **248 valeurs** du manuscrit à leurs CSV/JSON sources :
+- Un script d'audit confronte **290 valeurs** du manuscrit à leurs CSV/JSON sources :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```

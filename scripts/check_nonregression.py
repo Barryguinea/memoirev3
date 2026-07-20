@@ -115,14 +115,14 @@ def _compare_series(
     if len(left) != len(right):
         raise ValueError("Series length mismatch")
 
-    l = left.reset_index(drop=True)
-    r = right.reset_index(drop=True)
+    left_values = left.reset_index(drop=True)
+    right_values = right.reset_index(drop=True)
 
-    l_num = pd.to_numeric(l, errors="coerce")
-    r_num = pd.to_numeric(r, errors="coerce")
+    l_num = pd.to_numeric(left_values, errors="coerce")
+    r_num = pd.to_numeric(right_values, errors="coerce")
     both_num = l_num.notna() & r_num.notna()
 
-    equal = np.zeros(len(l), dtype=bool)
+    equal = np.zeros(len(left_values), dtype=bool)
     if both_num.any():
         equal[both_num.to_numpy()] = np.isclose(
             l_num[both_num].to_numpy(dtype=float),
@@ -134,9 +134,9 @@ def _compare_series(
 
     remaining = ~both_num.to_numpy()
     if remaining.any():
-        l_str = l.astype("string")
-        r_str = r.astype("string")
-        both_na = l.isna().to_numpy() & r.isna().to_numpy()
+        l_str = left_values.astype("string")
+        r_str = right_values.astype("string")
+        both_na = left_values.isna().to_numpy() & right_values.isna().to_numpy()
         str_eq = (l_str.fillna("<NA>") == r_str.fillna("<NA>")).to_numpy()
         equal[remaining] = (both_na | str_eq)[remaining]
 
@@ -463,4 +463,3 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
