@@ -573,22 +573,22 @@ def _write_report(df: pd.DataFrame, path: Path) -> None:
     sc = summaries.get("C. Sans regles", {})
     sd = summaries.get("D. LOF + regles", {})
     if sc:
-        lines.append(f"C. Sans règles (IF seul) :")
+        lines.append("C. Sans règles (IF seul) :")
         lines.append(f"   Détection = {sc['det']:.0%} — l'IF détecte presque toujours un overlap,")
         lines.append(f"   mais sans filtrage il signale {DEFAULT_CONTAMINATION:.0%} de TOUS les bins")
-        lines.append(f"   comme anomaux. Inutilisable en production (trop de bruit).")
+        lines.append("   comme anomaux. Inutilisable en production (trop de bruit).")
         lines.append("")
     if sb:
         ratio = sb["fn"] / sa["fn"] if sa.get("fn", 0) > 0 else float("nan")
         ratio_str = f"{ratio:.1f}x" if np.isfinite(ratio) else "N/A"
-        lines.append(f"B. Sans IF (règles seules) :")
+        lines.append("B. Sans IF (règles seules) :")
         lines.append(f"   Détection = {sb['det']:.0%}, mais {ratio_str} plus de fausses alertes")
         lines.append(f"   que le système complet ({sb['fn']:.2f} vs {sa.get('fn', 0):.2f}/cow-day).")
-        lines.append(f"   Les z-scores seuls ne discriminent pas assez.")
+        lines.append("   Les z-scores seuls ne discriminent pas assez.")
         lines.append("")
     if sd:
         paired_ad = _paired_counts(df, "A. Complet", "D. LOF + regles")
-        lines.append(f"D. LOF + règles (alternative non-supervisée) :")
+        lines.append("D. LOF + règles (alternative non-supervisée) :")
         lines.append(
             f"   Détection = {sd['det']:.0%} ± {sd['det_std']:.0%}, "
             f"fausses notifs = {sd['fn']:.2f} ± {sd['fn_std']:.2f}/cow-day."
@@ -603,7 +603,7 @@ def _write_report(df: pd.DataFrame, path: Path) -> None:
                 )
             else:
                 lines.append(
-                    f"   D n'est pas systématiquement supérieur à A sur l'ensemble des métriques."
+                    "   D n'est pas systématiquement supérieur à A sur l'ensemble des métriques."
                 )
             lines.append(
                 f"   Seed-par-seed, D garde une détection au moins égale sur "
@@ -618,12 +618,12 @@ def _write_report(df: pd.DataFrame, path: Path) -> None:
                 f"pas un remplacement automatique de la baseline."
             )
             lines.append(
-                f"   IF peut toutefois rester préféré en production pour la scalabilité "
-                f"(complexité O(n) vs O(n²) pour LOF) et la continuité des validations historiques."
+                "   IF peut toutefois rester préféré en production pour la scalabilité "
+                "(complexité O(n) vs O(n²) pour LOF) et la continuité des validations historiques."
             )
         lines.append("")
     if sa:
-        lines.append(f"A. Complet (IF + règles) :")
+        lines.append("A. Complet (IF + règles) :")
         lines.append(
             f"   Détection = {sa['det']:.0%} ± {sa['det_std']:.0%} et "
             f"faux = {sa['fn']:.2f} ± {sa['fn_std']:.2f}/cow-day "

@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Ablation par canal : apport de chaque famille de signaux prise isolement.
 
 Repond a la question << peut-on tester l'impact de chaque variable a part ? >>. On
@@ -12,17 +13,17 @@ Controle de coherence : le canal << pas seuls >> doit reproduire la variante E
 (comparateur pedometrique) et << 4 familles >> la variante A du tableau d'ablation
 attribuable du module HYPO.
 
+Les resultats detailles et leur synthese sont ecrits dans des artefacts CSV.
+
 Usage : ``python scripts/compute_channel_ablation.py``
 """
 
 from __future__ import annotations
 
 from dataclasses import replace
-import sys
 from pathlib import Path
-from typing import Dict, List
+import sys
 
-import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,12 +43,14 @@ from validation_hypo.campaign import (
     inject_events_for_cow,
 )
 
-RAW = "data/brut.csv"
+RAW = ROOT / "data/brut.csv"
+OUTPUT_EVENTS = ROOT / "data/validation/derived_metrics/channel_ablation_events.csv"
+OUTPUT_SUMMARY = ROOT / "data/validation/derived_metrics/channel_ablation_summary.csv"
 SEED = 11
 SCENARIOS = ("gradual_mild", "gradual_moderate", "gradual_marked", "isolated_short_variation")
 
 # Libelle -> familles actives du detecteur temporel.
-CHANNELS: Dict[str, tuple] = {
+CHANNELS: dict[str, tuple[str, ...]] = {
     "Pas seuls": ("steps",),
     "Motion Index seul": ("motion",),
     "Transitions seules": ("transitions",),
@@ -56,10 +59,13 @@ CHANNELS: Dict[str, tuple] = {
 }
 
 
-def _config(families: tuple) -> EarlyWarningConfig:
+def _config(families: tuple[str, ...]) -> EarlyWarningConfig:
     base = EarlyWarningConfig()
-    return replace(base, active_families=families,
-                   min_families=base.min_families if len(families) > 1 else 1)
+    return replace(
+        base,
+        active_families=families,
+        min_families=base.min_families if len(families) > 1 else 1,
+    )
 
 
 def _behavioral(features: pd.DataFrame, cow: str, params: dict, cfg: EarlyWarningConfig) -> pd.DataFrame:
@@ -72,7 +78,11 @@ def _behavioral(features: pd.DataFrame, cow: str, params: dict, cfg: EarlyWarnin
     return out
 
 
-def main(raw: str = RAW) -> None:
+def main(
+    raw: str | Path = RAW,
+    output_events: str | Path = OUTPUT_EVENTS,
+    output_summary: str | Path = OUTPUT_SUMMARY,
+) -> None:
     params = final_params()
     interval = str(params["interval"])
     df_all = load_csv(raw)
@@ -80,7 +90,7 @@ def main(raw: str = RAW) -> None:
     configs = {name: _config(fam) for name, fam in CHANNELS.items()}
 
     # Vaches eligibles : memes criteres que run_clean_ablation.
-    eligible: List[str] = []
+    eligible: list[str] = []
     for cow in sorted(df_all[COW].unique()):
         raw_cow = df_all[df_all[COW] == cow]
         if (raw_cow[TIME].max() - raw_cow[TIME].min()).total_seconds() / 86400.0 < 14:
@@ -92,7 +102,7 @@ def main(raw: str = RAW) -> None:
         if has_informative_heldout_signals(raw_cow, heldout_start=hs):
             eligible.append(cow)
 
-    rows: List[dict] = []
+    rows: list[dict[str, object]] = []
     for ci, cow in enumerate(eligible):
         raw_cow = df_all[df_all[COW] == cow]
         hs = _heldout_start_time(raw_cow, interval=interval,
@@ -138,18 +148,42 @@ def main(raw: str = RAW) -> None:
     print(f"{len(eligible)} vaches eligibles, {res.cow.nunique()} avec evenements, "
           f"{res.drop_duplicates(['cow','scenario']).shape[0]} evenements par canal\n")
     print(f"{'Canal':22}{'Nouv.dep':>10}{'Couv.':>8}{'IoU20':>8}{'IoU moy':>9}{'Fond':>8}{'F1 n.d.':>9}")
+    summary_rows: list[dict[str, object]] = []
     for name in CHANNELS:
         s = res[res.canal == name]
-        tp = ((s.pos) & (s.nouv_depart == 1)).sum(); fn = ((s.pos) & (s.nouv_depart == 0)).sum()
+        tp = int(((s.pos) & (s.nouv_depart == 1)).sum())
+        fn = int(((s.pos) & (s.nouv_depart == 0)).sum())
         fp = ((~s.pos) & (s.nouv_depart == 1)).sum()
         prec = tp / (tp + fp) if tp + fp else 0.0
         rec = tp / (tp + fn) if tp + fn else 0.0
         f1 = 2 * prec * rec / (prec + rec) if prec + rec else 0.0
         print(f"{name:22}{s.nouv_depart.mean()*100:>9.1f}%{s.couverture.mean()*100:>7.1f}%"
               f"{s.iou20.mean()*100:>7.1f}%{s.best_iou.mean():>9.3f}{s.bg.mean():>8.3f}{f1:>9.3f}")
+        summary_rows.append(
+            {
+                "canal": name,
+                "n_events": len(s),
+                "new_start_rate": s.nouv_depart.mean(),
+                "coverage_rate": s.couverture.mean(),
+                "iou20_rate": s.iou20.mean(),
+                "mean_best_iou": s.best_iou.mean(),
+                "background_per_cow_day": s.bg.mean(),
+                "precision_new_start": prec,
+                "recall_new_start": rec,
+                "f1_new_start": f1,
+            }
+        )
+
+    events_path = Path(output_events)
+    summary_path = Path(output_summary)
+    events_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    res.to_csv(events_path, index=False)
+    pd.DataFrame(summary_rows).to_csv(summary_path, index=False)
 
     print("\nControle : 'Pas seuls' doit reproduire la variante E (0,533 / 27,3%) "
           "et 'HYPO (4 familles)' la variante A (0,731 / 43,2%) de l'ablation attribuable.")
+    print(f"Artefacts ecrits: {events_path} ; {summary_path}")
 
 
 if __name__ == "__main__":

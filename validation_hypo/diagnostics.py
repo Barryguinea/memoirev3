@@ -13,10 +13,8 @@ from typing import Dict, Optional
 import numpy as np
 import pandas as pd
 
-from core import config as C
-from core.features import build_interval_features
 from core.io import (
-    COW, LYING, MI, STANDING, STEPS, TIME, TR_DOWN, TR_UP, TRANSITIONS, available_base_cols, load_csv,
+    COW, LYING, MI, STANDING, STEPS, TIME, TR_DOWN, TR_UP, TRANSITIONS, load_csv,
 )
 from core.pipeline import run_pipeline_one_cow
 from validation_hypo.campaign import _heldout_start_time, final_params
@@ -68,7 +66,8 @@ def diagnose(
 ) -> Dict[str, object]:
     """Injecte une signature et renvoie les signaux internes du pipeline dans la fenêtre."""
     params = params or final_params()
-    df_all = load_csv(raw_csv); df_all[COW] = df_all[COW].astype(str)
+    df_all = load_csv(raw_csv)
+    df_all[COW] = df_all[COW].astype(str)
     raw_cow = df_all[df_all[COW] == str(cow)]
 
     heldout = _heldout_start_time(

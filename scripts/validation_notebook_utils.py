@@ -1,3 +1,4 @@
+# ruff: noqa: F401
 """Moteur de validation (facade) : API stable pour notebooks, fonctions reparties par modules.
 
 Ce module conserve les noms historiques utilises par les notebooks de validation

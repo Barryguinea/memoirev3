@@ -1,3 +1,4 @@
+# ruff: noqa: F401
 """Helpers et constantes pour la comparaison inter-versions de runs robustes.
 
 Ce module reste le point d'import de compatibilité pour les autres modules

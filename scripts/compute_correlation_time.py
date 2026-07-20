@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Temps de correlation effectif (tau) et taille d'echantillon effective (n_eff).
 
 Quantifie la pseudo-replication du corpus IceQube: les mesures aux 15 minutes ne sont
@@ -6,11 +7,11 @@ posture couchee), on estime sur une grille reguliere de 15 minutes:
   - rho(k) : autocorrelation au decalage k (paires completes, gaps ignores) ;
   - tau_e : premier decalage ou rho(k) < 1/e (~0,368), temps de premiere decorrelation ;
   - tau_int : temps d'autocorrelation integre 1 + 2*somme(rho) sur la sequence positive
-              initiale (troncature de Geyer), qui donne l'inflation de variance ;
+              initiale, qui donne l'inflation de variance ;
   - n_eff = n_obs / tau_int : nombre d'observations reellement independantes.
 
 Agrege ensuite par mediane entre vaches et par somme des n_eff. Aucune donnee brute
-n'est ecrite: seules les statistiques derivees sont affichees.
+n'est ecrite: seules les statistiques derivees sont affichees et exportees en CSV.
 
 Usage : ``python scripts/compute_correlation_time.py``
 """
@@ -29,7 +30,8 @@ if str(ROOT) not in sys.path:
 
 from core.io import load_csv, COW, TIME, STEPS, MI, TRANSITIONS, LYING
 
-CSV = "data/brut.csv"
+CSV = ROOT / "data/brut.csv"
+OUTPUT = ROOT / "data/validation/derived_metrics/correlation_time.csv"
 STEP_MIN = 15            # cadence nominale du capteur (minutes)
 MAX_LAG = 192           # 48 h de decalages explores
 WINDOW = 48             # 12 h de totaux glissants = niveau de decision HYPO
@@ -73,7 +75,7 @@ def _tau_int(rho: np.ndarray) -> float:
     return max(1.0, 1.0 + 2.0 * s)
 
 
-def main(csv: str = CSV) -> None:
+def main(csv: str | Path = CSV, output: str | Path = OUTPUT) -> None:
     df = load_csv(csv)
     print(f"corpus : {len(df)} lignes, {df[COW].nunique()} vaches, cadence {STEP_MIN} min\n")
 
@@ -92,12 +94,26 @@ def main(csv: str = CSV) -> None:
 
     res = pd.DataFrame(rows)
     print(f"{'signal':16}{'tau_e (h)':>12}{'tau_int (h)':>14}{'n_obs':>9}{'n_eff':>9}{'ratio':>8}")
+    summary_rows: list[dict[str, object]] = []
     for sig in SIGNALS:
         sub = res[res.signal == sig]
         te_h = sub.tau_e.median() * STEP_MIN / 60
         ti_h = sub.tau_int.median() * STEP_MIN / 60
         n_obs, n_eff = int(sub.n_obs.sum()), sub.n_eff.sum()
         print(f"{sig:16}{te_h:>12.2f}{ti_h:>14.2f}{n_obs:>9}{n_eff:>9.0f}{n_obs / n_eff:>8.1f}")
+        summary_rows.append(
+            {
+                "level": "raw_15min",
+                "signal": sig,
+                "tau_e_h_median": te_h,
+                "tau_int_h_median": ti_h,
+                "n_obs_total": n_obs,
+                "n_eff_median_per_cow": sub.n_eff.median(),
+                "n_eff_total": n_eff,
+                "redundancy_ratio": n_obs / n_eff,
+                "n_cows": sub.cow.nunique(),
+            }
+        )
 
     n_obs_tot = int(res.groupby("cow").n_obs.first().sum())
     print(f"\nLecture (signal brut 15 min) : l'ACF retombe sous 1/e en ~"
@@ -126,10 +142,28 @@ def main(csv: str = CSV) -> None:
         sub = wres[wres.signal == sig]
         ti_h = sub.tau_int.median() * STEP_MIN / 60
         print(f"{sig:16}{ti_h:>14.1f}{sub.n_eff.median():>14.0f}{sub.n_eff.sum():>14.0f}")
+        summary_rows.append(
+            {
+                "level": "rolling_12h",
+                "signal": sig,
+                "tau_e_h_median": np.nan,
+                "tau_int_h_median": ti_h,
+                "n_obs_total": int(sub.n_obs.sum()),
+                "n_eff_median_per_cow": sub.n_eff.median(),
+                "n_eff_total": sub.n_eff.sum(),
+                "redundancy_ratio": sub.n_obs.sum() / sub.n_eff.sum(),
+                "n_cows": sub.cow.nunique(),
+            }
+        )
     print(f"\nA ce niveau, le temps de correlation atteint ~"
           f"{wres[wres.signal == MI].tau_int.median() * STEP_MIN / 60:.0f} h (ordre de la fenetre) : "
           f"chaque vache n'apporte que ~{wres[wres.signal == MI].n_eff.median():.0f} points de decision "
           f"independants, d'ou le choix de la vache (n=11) comme unite statistique.")
+
+    output_path = Path(output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(summary_rows).to_csv(output_path, index=False)
+    print(f"Artefact ecrit: {output_path}")
 
 
 if __name__ == "__main__":

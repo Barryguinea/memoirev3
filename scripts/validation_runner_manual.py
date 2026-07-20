@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Dict
 
 import pandas as pd
 
@@ -212,5 +212,4 @@ def run_manual_validation(
         "baseline_episodes": baseline_episodes,
         "injected_summary": summary_inj,
     }
-
 

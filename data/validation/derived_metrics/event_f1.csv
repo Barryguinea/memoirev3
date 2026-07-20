@@ -1,0 +1,16 @@
+definition,definition_label,variante,tp,fp,fn,tn,precision,recall,f1,f1_ci95_low,f1_ci95_high,bootstrap_clusters,bootstrap_repetitions,bootstrap_seed
+episode_overlap,"couverture attribuable (87,9%)",A. Alerte temporelle multivariée,29,0,4,11,1.0,0.8787878787878788,0.9354838709677419,0.8813559322033898,0.9846153846153847,11.0,10000.0,11.0
+episode_overlap,"couverture attribuable (87,9%)",B. IF + règles de persistance,6,0,27,11,1.0,0.18181818181818182,0.3076923076923077,,,,,
+episode_overlap,"couverture attribuable (87,9%)",C. IF seul,10,0,23,11,1.0,0.30303030303030304,0.4651162790697675,,,,,
+episode_overlap,"couverture attribuable (87,9%)",D. LOF + règles,8,0,25,11,1.0,0.24242424242424243,0.3902439024390244,,,,,
+episode_overlap,"couverture attribuable (87,9%)",E. Comparateur pédométrique (pas seuls),32,0,1,11,1.0,0.9696969696969697,0.9846153846153847,,,,,
+detected_any_overlap,"nouveau depart attribuable (57,6%)",A. Alerte temporelle multivariée,19,0,14,11,1.0,0.5757575757575758,0.7307692307692308,0.5957446808510638,0.8620689655172413,11.0,10000.0,11.0
+detected_any_overlap,"nouveau depart attribuable (57,6%)",B. IF + règles de persistance,7,0,26,11,1.0,0.21212121212121213,0.35,,,,,
+detected_any_overlap,"nouveau depart attribuable (57,6%)",C. IF seul,6,0,27,11,1.0,0.18181818181818182,0.3076923076923077,,,,,
+detected_any_overlap,"nouveau depart attribuable (57,6%)",D. LOF + règles,7,0,26,11,1.0,0.21212121212121213,0.35,,,,,
+detected_any_overlap,"nouveau depart attribuable (57,6%)",E. Comparateur pédométrique (pas seuls),12,0,21,11,1.0,0.36363636363636365,0.5333333333333333,,,,,
+detected_iou20,"IoU>=0,20 (39,4%)",A. Alerte temporelle multivariée,13,0,20,11,1.0,0.3939393939393939,0.5652173913043478,0.3902439024390244,0.7058823529411764,11.0,10000.0,11.0
+detected_iou20,"IoU>=0,20 (39,4%)",B. IF + règles de persistance,0,0,33,11,0.0,0.0,0.0,,,,,
+detected_iou20,"IoU>=0,20 (39,4%)",C. IF seul,0,0,33,11,0.0,0.0,0.0,,,,,
+detected_iou20,"IoU>=0,20 (39,4%)",D. LOF + règles,0,0,33,11,0.0,0.0,0.0,,,,,
+detected_iou20,"IoU>=0,20 (39,4%)",E. Comparateur pédométrique (pas seuls),14,0,19,11,1.0,0.42424242424242425,0.5957446808510638,,,,,

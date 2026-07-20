@@ -212,6 +212,74 @@ for pair, p_detection, p_iou in (
     check(f"Ablation {pair} detection p", ablation_tests.loc[pair, "p_wilcoxon_detection"], p_detection, "hypo_module/ablation_tests_by_cow.csv")
     check(f"Ablation {pair} IoU p", ablation_tests.loc[pair, "p_wilcoxon_iou"], p_iou, "hypo_module/ablation_tests_by_cow.csv")
 
+# Derived metrics reported after the principal campaigns.
+derived_dir = ROOT / "data/validation/derived_metrics"
+event_f1 = pd.read_csv(derived_dir / "event_f1.csv").set_index(["definition", "variante"])
+for variant, expected in {
+    "A. Alerte temporelle multivariée": 0.73,
+    "B. IF + règles de persistance": 0.35,
+    "C. IF seul": 0.31,
+    "D. LOF + règles": 0.35,
+    "E. Comparateur pédométrique (pas seuls)": 0.53,
+}.items():
+    row = event_f1.loc[("detected_any_overlap", variant)]
+    check(f"Event F1 {variant}", row["f1"], expected, "derived_metrics/event_f1.csv", 0.0051)
+check(
+    "HYPO event F1 precision",
+    event_f1.loc[("detected_any_overlap", "A. Alerte temporelle multivariée"), "precision"],
+    1.0,
+    "derived_metrics/event_f1.csv",
+    0,
+)
+check(
+    "HYPO event F1 CI95 lower",
+    event_f1.loc[("detected_any_overlap", "A. Alerte temporelle multivariée"), "f1_ci95_low"],
+    0.60,
+    "derived_metrics/event_f1.csv",
+    0.0051,
+)
+check(
+    "HYPO event F1 CI95 upper",
+    event_f1.loc[("detected_any_overlap", "A. Alerte temporelle multivariée"), "f1_ci95_high"],
+    0.86,
+    "derived_metrics/event_f1.csv",
+    0.0051,
+)
+
+channel_ablation = pd.read_csv(derived_dir / "channel_ablation_summary.csv").set_index("canal")
+for channel, expected in {
+    "Pas seuls": (0.273, 0.318, 0.141, 0.518, 0.53),
+    "Motion Index seul": (0.341, 0.250, 0.135, 0.491, 0.63),
+    "Transitions seules": (0.500, 0.273, 0.128, 0.518, 0.80),
+    "Posture seule": (0.273, 0.023, 0.042, 0.393, 0.53),
+    "HYPO (4 familles)": (0.432, 0.295, 0.137, 0.402, 0.73),
+}.items():
+    row = channel_ablation.loc[channel]
+    for column, value, tolerance in zip(
+        ("new_start_rate", "iou20_rate", "mean_best_iou", "background_per_cow_day", "f1_new_start"),
+        expected,
+        (5e-4, 5e-4, 5e-4, 5e-4, 0.0051),
+        strict=True,
+    ):
+        check(
+            f"Channel ablation {channel} {column}",
+            row[column],
+            value,
+            "derived_metrics/channel_ablation_summary.csv",
+            tolerance,
+        )
+
+correlation = pd.read_csv(derived_dir / "correlation_time.csv").set_index(["level", "signal"])
+raw_motion = correlation.loc[("raw_15min", "Motion Index")]
+check("Correlation usable measures", raw_motion["n_obs_total"], 36879, "derived_metrics/correlation_time.csv", 0)
+check("Correlation raw Motion Index effective observations", raw_motion["n_eff_total"], 10000, "derived_metrics/correlation_time.csv", 500)
+check("Correlation raw Motion Index tau hours", raw_motion["tau_int_h_median"], 1.0, "derived_metrics/correlation_time.csv", 0.11)
+for signal, expected_tau, expected_total in (("Steps", 7.8, 1151), ("Motion Index", 8.2, 880)):
+    row = correlation.loc[("rolling_12h", signal)]
+    check(f"Correlation decision {signal} tau hours", row["tau_int_h_median"], expected_tau, "derived_metrics/correlation_time.csv", 0.051)
+    check(f"Correlation decision {signal} median n_eff", row["n_eff_median_per_cow"], 17, "derived_metrics/correlation_time.csv", 0.51)
+    check(f"Correlation decision {signal} total n_eff", row["n_eff_total"], expected_total, "derived_metrics/correlation_time.csv", 0.51)
+
 # Extended bidirectional campaign.
 fusion = pd.read_csv(ROOT / "data/validation/hybrid_refined_full/comparison_summary.csv")
 fusion = fusion.loc[fusion["experiment"] == "fusion"].set_index("configuration")
