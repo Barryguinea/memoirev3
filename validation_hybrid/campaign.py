@@ -167,11 +167,40 @@ def inject_profile(
     slot = (scenario_index + schedule_index) % len(HYBRID_PROFILES)
     fraction = (slot + 1) / (len(HYBRID_PROFILES) + 1)
     start = lower + int(round(fraction * available_start_span))
+    signal_columns = [STEPS, MI, TRANSITIONS, LYING, STANDING]
+
+    # L'injection est multiplicative et ponderee par une enveloppe : sur un
+    # signal nul (ou nul la ou l'enveloppe est non nulle), elle ne change rien.
+    # On evalue donc l'effet reel par une injection d'essai sur une copie de la
+    # fenetre. Les fenetres deja effectives ne bougent pas ; seules celles qui
+    # seraient sans effet sont glissees vers la position valide la plus proche.
+    upper = len(df) - duration - 4
+    present = [column for column in signal_columns if column in df]
+
+    def _window_effective(candidate: int) -> bool:
+        window = np.arange(candidate, candidate + duration)
+        trial = df.loc[window, present].copy().reset_index(drop=True)
+        before = trial[present].to_numpy(dtype=float, copy=True)
+        _apply_profile(trial, np.arange(len(trial)), spec)
+        after = trial[present].to_numpy(dtype=float, copy=True)
+        return not np.allclose(before, after, atol=1e-9)
+
+    if not _window_effective(start):
+        for offset in range(1, available_start_span + 1):
+            moved = False
+            for candidate in (start + offset, start - offset):
+                if lower <= candidate <= upper and _window_effective(candidate):
+                    start = candidate
+                    moved = True
+                    break
+            if moved:
+                break
+
     idx = np.arange(start, start + duration)
 
     source = {
         column: float(pd.to_numeric(df.loc[idx, column], errors="coerce").fillna(0.0).sum())
-        for column in [STEPS, MI, TRANSITIONS]
+        for column in signal_columns
         if column in df
     }
     posture_before = None
@@ -185,6 +214,14 @@ def inject_profile(
         posture_after = df.loc[idx, LYING].to_numpy(float) + df.loc[idx, STANDING].to_numpy(float)
         if not np.allclose(posture_before, posture_after, atol=1e-8):
             raise RuntimeError("L'injection a modifié le temps postural total.")
+    injected = {
+        column: float(pd.to_numeric(df.loc[idx, column], errors="coerce").fillna(0.0).sum())
+        for column in signal_columns
+        if column in df
+    }
+    injection_effective = any(
+        abs(injected.get(col, 0.0) - source.get(col, 0.0)) > 1e-9 for col in signal_columns
+    )
 
     event = pd.Series(
         {
@@ -204,6 +241,7 @@ def inject_profile(
             "heldout_start": pd.Timestamp(heldout_start),
             "event_after_heldout": pd.Timestamp(df.loc[idx[0], TIME]) >= pd.Timestamp(heldout_start),
             "informative_source_window": all(source.get(col, 0.0) > 0 for col in [STEPS, MI, TRANSITIONS]),
+            "injection_effective": bool(injection_effective),
         }
     )
     return df, event
