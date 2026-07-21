@@ -150,12 +150,12 @@ donc un choix méthodologique prudent pour absorber une partie de l'hétérogén
 elle améliore la comparabilité des trajectoires individuelles.
 
 Ce choix d'une référence propre à chaque vache, et à chaque créneau horaire, répond à une
-structure de variance précise~: chez la vache laitière, l'activité varie davantage entre
+structure de variance connue~: chez la vache laitière, l'activité varie fortement entre
 individus (âge, rang de lactation, stade, tempérament) et selon le rythme circadien lié à la
-traite et à l'alimentation qu'au sein d'une même journée pour un même animal. Un seuil de
-population serait donc dominé par l'identité de la vache et par l'heure, plutôt que par son
-changement propre. En normalisant chaque animal par sa médiane horaire de référence, HYPO
-retire cette variance de nuisance dominante et rend comparable, d'une vache à l'autre,
+traite et à l'alimentation. Un seuil de population risquerait donc d'être gouverné par
+l'identité de la vache et par l'heure, plutôt que par son changement propre. En normalisant
+chaque animal par sa médiane horaire de référence, HYPO réduit l'influence de cette variance
+de nuisance interindividuelle et horaire, et rend plus comparable, d'une vache à l'autre,
 l'ampleur d'une dégradation relative.
 
 Les limites du capteur doivent être rappelées avec la même franchise. L'agitation, les reports
@@ -313,9 +313,9 @@ méthodologique est double~: proposer un détecteur temporel interprétable, et 
 interprétations cliniques. Le code source, les paramètres figés, les douze profils d'injection
 et les scripts d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
 (Annexe~\ref{annexe:validation})~; les données capteurs brutes ne peuvent être diffusées pour
-des raisons de confidentialité, mais la procédure de reproduction et les artefacts documentés
-permettent de rejouer intégralement la démarche, des injections jusqu'aux figures du
-manuscrit.
+des raisons de confidentialité. Les artefacts et leurs empreintes publiés permettent d'auditer
+les résultats, et la démarche complète, des injections jusqu'aux figures du manuscrit, reste
+reproductible par les personnes autorisées à accéder aux données.
 
 Le module HYPO constitue en définitive le résultat technique principal~: il démontre sa
 capacité à transformer des baisses graduelles en épisodes attribuables, surpasse les variantes

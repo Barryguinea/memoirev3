@@ -19,39 +19,37 @@ comptent parmi les principales causes de boiterie chez les vaches laitières
 
 \subsection{Impact économique}
 L'impact économique de la boiterie est substantiel et multidimensionnel. Le
-Tableau~\ref{tab:impact_economique} synthétise les principales composantes du coût
-\textit{par cas clinique}, c'est-à-dire par épisode de boiterie diagnostiqué chez une
-vache au cours d'une lactation, d'après les estimations publiées dans la littérature.
+Tableau~\ref{tab:impact_economique} rassemble les principales composantes documentées du
+coût de la boiterie, d'après les estimations publiées dans la littérature.
 
 \begin{table}[H]
     \centering
-    \caption{Composantes du coût économique de la boiterie par cas clinique.}
+    \caption{Composantes documentées du coût de la boiterie.}
     \label{tab:impact_economique}
     \begin{tabular}{lcc}
         \toprule
-        \textbf{Composante} & \textbf{Estimation} & \textbf{Source} \\
+        \textbf{Composante} & \textbf{Estimation publiée} & \textbf{Source} \\
         \midrule
-        Perte de production laitière & 270--574 kg/lactation & \cite{green2002financial} \\
-        Coût vétérinaire direct & 25--90 USD/cas & \cite{bruijnis2010assessing} \\
-        Dégradation de la fertilité & +30--50 jours ouverts & \cite{green2002financial} \\
-        Réforme anticipée & 75--300 USD/cas & \cite{bruijnis2010assessing} \\
-        \midrule
-        \textbf{Coût total estimé} & \textbf{75--300+ USD/cas} & \\
+        Perte de production laitière & $\approx$360 kg/lactation (305 j) & \cite{green2002financial} \\
+        Trouble du pied clinique & 95 USD/cas & \cite{bruijnis2010assessing} \\
+        Trouble du pied subclinique & 18 USD/cas & \cite{bruijnis2010assessing} \\
+        Coût par vache et par an & 75 USD & \cite{bruijnis2010assessing} \\
+        Ferme type de 65 vaches & 4\,899 USD/an & \cite{bruijnis2010assessing} \\
         \bottomrule
     \end{tabular}
 \end{table}
 \vspace{-0.9\baselineskip}
 
-Quatre postes principaux composent le coût d'un cas clinique: la perte de production
-laitière (270 à 574~kg par lactation), liée à la baisse de l'ingestion et de l'activité;
-le coût vétérinaire direct (25 à 90~USD par cas), qui inclut la consultation, le parage,
-les traitements et le matériel de soin; la dégradation de la fertilité, mesurée par une
-hausse de 30 à 50 \textit{jours ouverts}, soit l'intervalle entre le vêlage et la
-conception suivante, avec un décalage de la lactation suivante; et la réforme anticipée
-(75 à 300~USD par cas), liée à la perte de valeur résiduelle d'une vache écartée avant la
-fin de sa carrière productive. Ces postes se cumulent selon la sévérité et la chronicité
-de l'épisode. À l'échelle d'un troupeau de 100~vaches avec une prévalence de 25\,\%, le
-coût annuel cumulé est estimé entre 1\,900 et 7\,500~USD pour les seuls cas incidents.
+Le coût d'un épisode se répartit sur plusieurs postes. La perte de production laitière est
+la mieux documentée~: \citet{green2002financial} estiment une réduction moyenne d'environ
+360~kg par lactation de 305~jours chez les vaches cliniquement boiteuses, la baisse
+s'observant depuis plusieurs mois avant le diagnostic jusqu'à plusieurs mois après le
+traitement. À cette perte s'ajoutent des coûts directs et indirects (soins, parage,
+dégradation de la fertilité et réforme anticipée), dont l'ampleur varie selon la sévérité
+et la chronicité de l'épisode. En intégrant ces postes dans un modèle de simulation,
+\citet{bruijnis2010assessing} chiffrent le coût moyen d'un trouble du pied clinique à
+95~USD et celui d'un trouble subclinique à 18~USD, soit environ 75~USD par vache et par an
+et près de 4\,899~USD par an pour une ferme type de 65~vaches.
 Au-delà de l'impact financier, la boiterie soulève un enjeu éthique de bien-être animal~:
 la douleur associée est reconnue comme l'une des principales sources de souffrance
 chronique chez les vaches laitières \citep{whay2003assessment,broom2017animal}. Ces conséquences
