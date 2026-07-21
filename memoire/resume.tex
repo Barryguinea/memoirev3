@@ -25,16 +25,19 @@ INSTABILITÉ. Cette branche représente des situations où un inconfort locomote
 s'accompagner d'agitation, de transitions plus fréquentes ou de fragmentation posturale. Elle
 reste séparée de HYPO: l'instabilité isolée produit une sortie de surveillance, tandis que la
 notification de vérification reste réservée aux baisses persistantes ou aux séquences
-instabilité-hypoactivité. Cette extension rend le système plus expressif, mais elle augmente
-la charge de vérification et reste vulnérable aux causes non locomotrices. Elle constitue donc
-une piste opérationnelle prudente à consolider.
+instabilité-hypoactivité. Cette extension enrichit l'architecture en dissociant clairement
+surveillance et vérification. Son évaluation quantifie à la fois le gain de couverture, la
+charge de vérification et la sensibilité aux causes non locomotrices, fournissant ainsi un
+cadre concret pour poursuivre son amélioration.
 
 Une analyse complémentaire IceTag-SLS synchronisée confronte les sorties aux scores
-locomoteurs en utilisant uniquement des données capteurs antérieures à l'évaluation. Elle est
-méthodologiquement correcte, mais limitée par le faible nombre de vaches à score élevé et par
-l'entrelacement avec le groupe \textit{Exercise}. Le résultat central du mémoire est donc un
-détecteur temporel défendable, une interface de priorisation et un protocole reproductible qui
-articule performance logicielle, hypothèse comportementale et vérification clinique future.
+locomoteurs en utilisant uniquement des données capteurs antérieures à l'évaluation. Elle met
+en évidence davantage de notifications chez les vaches aux scores les plus élevés et confirme
+la faisabilité d'une confrontation temporelle aux observations terrain. Cette association
+reste exploratoire en raison du faible nombre de ces vaches et de leur appartenance au groupe
+\textit{Exercise}. Le mémoire aboutit ainsi à un détecteur temporel interprétable, une
+interface de priorisation et un protocole reproductible qui articulent performance logicielle,
+hypothèse comportementale et vérification clinique future.
 
 \vspace{1em}
 \textbf{Mots-clés:} boiterie bovine, alerte comportementale, capteur IceQube, détection de
@@ -66,16 +69,18 @@ The thesis also explores a bidirectional extension based on an INSTABILITY branc
 represents situations in which locomotor discomfort could involve agitation, more frequent
 transitions or fragmented posture. It remains separated from HYPO: isolated instability
 produces a surveillance output, whereas verification notifications are reserved for persistent
-decreases or instability-to-hypoactivity sequences. This extension makes the system more
-expressive, but it also increases the verification load and remains vulnerable to
-non-locomotor causes. It is therefore a cautious operational direction to consolidate.
+decreases or instability-to-hypoactivity sequences. This extension enriches the architecture
+by clearly separating surveillance from verification. Its evaluation quantifies the gain in
+coverage, the verification load and the sensitivity to non-locomotor causes, thereby providing
+a concrete framework for further improvement.
 
 A synchronized IceTag-SLS analysis compares the outputs with locomotion scores using only
-sensor data collected before the evaluation. It is methodologically sound, but limited by the
-small number of cows with elevated scores and by the overlap with the \textit{Exercise} group.
-The central result of the thesis is therefore a defensible temporal detector, a prioritization
-interface and a reproducible protocol that connects software performance, behavioral
-hypotheses and future clinical verification.
+sensor data collected before the evaluation. It identifies more notifications among cows with
+the highest scores and confirms the feasibility of temporally linking alerts with field
+observations. The small number of these cows and their membership in the \textit{Exercise}
+group require this association to remain exploratory. The thesis thus delivers an interpretable temporal
+detector, a prioritization interface and a reproducible protocol that connect software
+performance, behavioral hypotheses and future clinical verification.
 
 \vspace{1em}
 \textbf{Keywords:} bovine lameness, behavioral alert, IceQube sensor, change detection,
