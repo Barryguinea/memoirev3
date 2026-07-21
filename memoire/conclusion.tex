@@ -25,15 +25,14 @@ Forest et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33
 graduels et atteint IoU20 dans 13 cas. Ce résultat établit la capacité du système à
 transformer une dégradation contrôlée en priorité de vérification localisée.
 
-Deux chiffres tempèrent cette réussite. Le taux de nouveaux départs de 57,6\,\% nuance la
-couverture de 87,9\,\%~: une partie de la réponse prolonge un épisode déjà actif au lieu d'en
-créer un. Le délai médian de 20,75 heures montre par ailleurs que le terme \textit{précoce}
-doit être interprété relativement à des dégradations de 36 à 60 heures, et non comme une
-réaction immédiate. Cette nuance n'annule pas le résultat principal~; elle précise l'usage
-réaliste du système, qui est de prioriser une vérification lorsque plusieurs familles de
-signaux se dégradent de façon persistante, avec une traçabilité suffisante pour expliquer
-pourquoi une vache remonte dans le classement. Toutes les conclusions qui suivent n'ont pas
-le même statut, et le Tableau~\ref{tab:portee_conclusions} associe à chacune son niveau de
+Ce résultat se lit à deux niveaux complémentaires. La couverture de 87,9\,\% montre que HYPO
+réagit dans la plupart des fenêtres injectées, tandis que le taux de nouveaux départs de
+57,6\,\% distingue les épisodes réellement ouverts de ceux qui prolongent une alerte déjà
+active. Le délai médian de 20,75 heures situe le caractère \textit{précoce} relativement aux
+dégradations de 36 à 60 heures. Ces indicateurs précisent l'usage opérationnel du système~:
+prioriser une vérification lorsque plusieurs familles de signaux se dégradent de façon
+persistante, avec une traçabilité suffisante pour expliquer pourquoi une vache remonte dans le
+classement. Le Tableau~\ref{tab:portee_conclusions} associe chaque conclusion à son niveau de
 preuve.
 
 \begin{table}[H]
@@ -83,8 +82,8 @@ référence constituent donc un compromis documenté, non un optimum. Modifier l
 lecture de cette analyse aurait transformé une étude de robustesse en sélection sur les
 données d'évaluation~; aucun réglage a posteriori n'a été effectué.
 
-Deux analyses exploratoires confirment ce principe de prudence, et il est instructif qu'elles
-soient rapportées malgré leur résultat. La calibration par la dispersion du score propre à
+Deux analyses complémentaires permettent aussi d'écarter des choix moins favorables. La
+calibration par la dispersion du score propre à
 chaque période de référence ne réduit ni le fond moyen ni sa variabilité, et diminue IoU20 de
 39,4 à 33,3\,\%~: elle est rejetée. La courbe reliant la détection à la charge montre par
 ailleurs qu'un seuil de 0,14 paraîtrait favorable sur cette campagne, mais l'adopter après
@@ -101,10 +100,11 @@ dans 90,9\,\% des cas, et 66,7\,\% des instabilités produisent bien une sortie 
 surveillance. La fusion hiérarchique augmente la couverture des scénarios de vérification de
 61,4 à 72,7\,\% par rapport à HYPO seul dans la campagne étendue, qui compte 132 scénarios. En contrepartie, elle
 n'améliore pas IoU20, augmente le fond de 0,446 à 0,571 notification par vache-jour et alerte
-une part notable des facteurs confondants. L'extension constitue donc un résultat mitigé, non
-une preuve de supériorité. Les profils d'instabilité et leur chronologie restent
-des hypothèses de test~: l'intérêt actuel de cette branche est de structurer une hypothèse et
-une interface de surveillance, tandis que HYPO demeure la méthode principale.
+une part notable des facteurs confondants. Son apport démontré réside donc dans la séparation
+des sorties et dans le gain de couverture, plutôt que dans une supériorité globale sur HYPO.
+Les profils d'instabilité et leur chronologie restent des hypothèses de test~: la branche
+structure ces hypothèses dans une interface de surveillance, tandis que HYPO demeure la
+méthode principale.
 
 Le rejet des 33 contrôles brefs vérifie qu'un pic capteur, deux heures d'exercice synthétique
 ou une manipulation d'une heure ne suffisent pas à déclencher le détecteur dans les conditions
@@ -314,12 +314,14 @@ des raisons de confidentialité, mais la procédure de reproduction et les artef
 permettent de rejouer intégralement la démarche, des injections jusqu'aux figures du
 manuscrit.
 
-Le module HYPO constitue en définitive le résultat technique principal~: il est mieux étayé
-que les comparateurs ponctuels, mais sa localisation et sa charge restent imparfaites.
-L'extension bidirectionnelle organise une hypothèse complémentaire et révèle ses propres
-compromis sans masquer le résultat négatif sur les facteurs confondants. C'est cette
-séparation assumée entre preuve principale et exploration qui rend l'ensemble cohérent et
-directement exploitable pour un usage de priorisation en ferme.
+Le module HYPO constitue en définitive le résultat technique principal~: il démontre sa
+capacité à transformer des baisses graduelles en épisodes attribuables, surpasse les variantes
+IF/LOF évaluées pour la localisation et conserve une logique interprétable par vache. Sa
+performance de localisation et sa charge de vérification définissent désormais des objectifs
+d'amélioration mesurables.
+L'extension bidirectionnelle organise une hypothèse complémentaire et quantifie ses compromis.
+Cette séparation entre preuve principale et exploration rend l'ensemble cohérent et fournit
+une base reproductible pour développer et évaluer un futur usage de priorisation en ferme.
 
 % Retablir la numerotation par chapitre : l'annexe qui suit doit repartir en A.1.
 \renewcommand{\thetable}{{\thechapter.\arabic{table}}}
