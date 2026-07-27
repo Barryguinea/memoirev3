@@ -231,10 +231,7 @@ F1 événementiel y oppose les 33 dégradations graduelles, traitées comme posi
 
 \begin{table}[H]
   \centering
-  \caption[Ablation attribuable du module HYPO.]{Ablation attribuable du module HYPO.
-  La variante E localise les épisodes aussi précisément que le détecteur complet, mais elle
-  ouvre moins de nouveaux départs et produit davantage de fond~; l'analyse de ce compromis
-  suit le tableau.}
+  \caption{Ablation attribuable du module HYPO.}
   \label{tab:hypo_ablation}
   \small
   \begin{tabular}{lrrrrr}
@@ -249,6 +246,11 @@ F1 événementiel y oppose les 33 dégradations graduelles, traitées comme posi
     \bottomrule
   \end{tabular}
 \end{table}
+
+La colonne IoU20 se lit avec le reste du tableau~: le comparateur pédométrique y devance
+légèrement le détecteur complet, mais il ouvre moins de nouveaux départs (27,3 contre
+43,2\,\%) et produit davantage de fond (0,518 contre 0,402). Les deux localisent en réalité de
+façon équivalente, comme le confirme plus loin l'écart d'IoU attribuable par vache.
 
 La dernière colonne résume détection et rejet des contrôles en un F1 événementiel: HYPO atteint
 0,73 (IC95 par vache [0,60~; 0,86]), nettement au-dessus d'IF et de LOF (au plus 0,35). Comme
