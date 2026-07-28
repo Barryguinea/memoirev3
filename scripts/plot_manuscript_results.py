@@ -186,7 +186,17 @@ def plot_manual_review() -> None:
         ax.set_ylim(0, 1.05)
         ax.set_ylabel("Signal\nnormalisé")
         ax.grid(axis="y", alpha=0.2)
-    axes[0].legend(frameon=False, ncol=3, fontsize=8, loc="upper right")
+    # Legende placee au-dessus du premier panneau plutot qu'a l'interieur :
+    # elle ne recouvre plus les courbes ni les zones ombrees, et s'aligne sur
+    # la ligne du titre (titre a gauche, legende a droite).
+    axes[0].legend(
+        frameon=False,
+        ncol=3,
+        fontsize=8,
+        loc="lower right",
+        bbox_to_anchor=(1.0, 1.02),
+        borderaxespad=0.0,
+    )
     axes[-1].set_xlabel("Temps")
     _save(fig, "manual_review")
 
