@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -25,6 +26,14 @@ from validation_hybrid.campaign import final_params, inject_profile
 RESULTS = ROOT / "data" / "validation" / "hybrid_refined_full"
 SLS = ROOT / "data" / "validation" / "mcgill_sls"
 FIGURES = ROOT / "memoire" / "figures"
+
+# Zones ombrees de la figure d'inspection visuelle. Les trois issues du systeme
+# (alerte, surveillance, rejet) doivent se distinguer a l'oeil : le rejet est la
+# seule qui reste sans aplat.
+ZONE_INJECTEE = "#777777"
+ZONE_ALERTE = "#af4646"
+ZONE_SURVEILLANCE = "#d9a441"
+YMAX = 1.15
 
 
 def _save(fig: plt.Figure, name: str) -> None:
@@ -162,30 +171,56 @@ def plot_manual_review() -> None:
         left = pd.Timestamp(event["start"]) - pd.Timedelta(hours=12)
         right = pd.Timestamp(event["end"]) + pd.Timedelta(hours=12)
         view = pred[pred[TIME].between(left, right)].copy()
+        # Echelle robuste : 95e centile plutot que maximum. Divise par le
+        # maximum, un pic isole comprimait toute la courbe contre l'axe au
+        # point de rendre invisible une chute de 80 % du niveau d'activite.
+        # Le trace brut reste dessine en transparence sous une moyenne
+        # glissante de 3 h : la tendance devient lisible sans perdre les pics,
+        # ce qui reste indispensable au panneau du pic capteur isole.
+        step = pd.Series(view[TIME]).diff().median()
+        smooth_bins = max(1, int(round(pd.Timedelta(hours=1) / step))) if pd.notna(step) else 1
         for column, color in colors.items():
-            injected_values = pd.to_numeric(view[column], errors="coerce")
-            scale = max(
-                1.0,
-                float(injected_values.max()),
-            )
+            raw_values = pd.to_numeric(view[column], errors="coerce")
+            smoothed = raw_values.rolling(smooth_bins, center=True, min_periods=1).mean()
+            # Echelle calee sur la courbe lissee : celle-ci occupe alors toute
+            # la hauteur du panneau. Calee sur le maximum brut, un pic isole
+            # comprimait tout le reste contre l'axe au point de rendre
+            # invisible une chute de 80 % du niveau d'activite.
+            scale = max(1.0, float(smoothed.max()))
+            ax.plot(view[TIME], raw_values / scale, color=color, linewidth=0.7, alpha=0.18)
             ax.plot(
                 view[TIME],
-                injected_values / scale,
+                smoothed / scale,
                 color=color,
-                linewidth=1.0,
+                linewidth=1.6,
                 label=column.replace("_sum", ""),
             )
         episode = pd.to_numeric(view["hybrid_warning_episode"], errors="coerce").fillna(0).astype(bool)
+        # La surveillance etait calculee mais jamais tracee : les panneaux
+        # « surveillance » et « rejet » etaient donc visuellement identiques.
+        # Elle est dessinee la ou elle n'est pas deja couverte par une alerte,
+        # conformement a la regle de fusion (surveillance = instabilite sans HYPO).
+        instability = pd.to_numeric(view["instability_warning_episode"], errors="coerce").fillna(0).astype(bool)
+        surveillance_only = instability & ~episode
+        if surveillance_only.any():
+            ax.fill_between(view[TIME], 0, YMAX, where=surveillance_only,
+                            color=ZONE_SURVEILLANCE, alpha=0.30, step="mid")
         if episode.any():
-            ax.fill_between(view[TIME], 0, 1.03, where=episode, color="#af4646", alpha=0.16, step="mid")
-        ax.axvspan(pd.Timestamp(event["start"]), pd.Timestamp(event["end"]), color="#777777", alpha=0.10)
+            ax.fill_between(view[TIME], 0, YMAX, where=episode,
+                            color=ZONE_ALERTE, alpha=0.16, step="mid")
+        ax.axvspan(pd.Timestamp(event["start"]), pd.Timestamp(event["end"]),
+                   color=ZONE_INJECTEE, alpha=0.10)
+        # Bornes verticales : sans elles, une fenetre injectee d'un seul pas de
+        # quinze minutes est invisible sur trois jours d'axe.
+        for bound in (event["start"], event["end"]):
+            ax.axvline(pd.Timestamp(bound), color="#555555", linestyle=":", linewidth=0.9)
         in_event = view[TIME].between(event["start"], event["end"])
         detected = bool(view.loc[in_event, "hybrid_warning_episode"].max())
         surveillance = bool(view.loc[in_event, "instability_warning_episode"].max())
         status = "alerte" if detected else ("surveillance" if surveillance else "rejet")
         ax.set_title(f"({letter}) {label} : {status}", loc="left", fontsize=10)
         ax.set_xlim(left, right)
-        ax.set_ylim(0, 1.05)
+        ax.set_ylim(0, YMAX)
         ax.set_ylabel("Signal\nnormalisé")
         ax.grid(axis="y", alpha=0.2)
     # Legende placee au-dessus du premier panneau plutot qu'a l'interieur :
@@ -198,6 +233,22 @@ def plot_manual_review() -> None:
         loc="lower right",
         bbox_to_anchor=(1.0, 1.02),
         borderaxespad=0.0,
+    )
+    # Legende des aplats : sans elle, le lecteur ne pouvait pas savoir ce que
+    # signifiait une zone ombree, ni que la superposition de deux aplats
+    # translucides produisait une troisieme teinte.
+    zone_handles = [
+        Patch(facecolor=ZONE_INJECTEE, alpha=0.10, label="Fenêtre injectée"),
+        Patch(facecolor=ZONE_ALERTE, alpha=0.16, label="Épisode d'alerte"),
+        Patch(facecolor=ZONE_SURVEILLANCE, alpha=0.30, label="Surveillance seule"),
+    ]
+    fig.legend(
+        handles=zone_handles,
+        frameon=False,
+        ncol=3,
+        fontsize=8,
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.02),
     )
     axes[-1].set_xlabel("Temps")
     _save(fig, "manual_review")
