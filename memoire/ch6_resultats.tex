@@ -182,11 +182,14 @@ référence de 0,12, conservé malgré le résultat ponctuel observé à 0,14.
 La Figure~\ref{fig:manual_review} montre quatre situations de la vache 8081 après le gel
 des paramètres. L'hypoactivité modérée produit un épisode de vérification; l'instabilité modérée
 reste au niveau de surveillance; le pic capteur isolé est rejeté; et l'hypoactivité non
-locomotrice produit une alerte comparable à celle d'une baisse locomotrice. Les zones grises
-représentent les fenêtres injectées, les zones rouges les épisodes de vérification et les zones
-ambrées les périodes de surveillance sans alerte; le rejet est ainsi la seule issue qui ne
-reçoit aucun aplat. Les traits verticaux pointillés marquent les bornes exactes de la fenêtre
-injectée, y compris lorsqu'elle ne dure qu'un seul pas de temps. Dans chaque panneau, les trois
+locomotrice produit une alerte comparable à celle d'une baisse locomotrice. La fenêtre injectée
+apparaît en fond gris derrière les courbes, tandis que les sorties du système occupent un
+bandeau distinct sous l'axe des signaux~: rouge pour un épisode de vérification, ambre pour une
+période de surveillance sans alerte. Le rejet est ainsi la seule issue qui ne reçoit aucune
+marque. Séparer la vérité injectée des sorties sur deux canaux distincts évite toute teinte
+intermédiaire et rend leur recouvrement directement lisible. Les traits verticaux pointillés
+marquent les bornes exactes de la fenêtre injectée, y compris lorsqu'elle ne dure qu'un seul
+pas de temps. Dans chaque panneau, les trois
 signaux sont tracés bruts en transparence sous une moyenne glissante horaire, et normalisés
 séparément par le maximum de cette moyenne : un pic isolé ne comprime donc plus le reste de la
 courbe contre l'axe. Cette inspection vérifie la cohérence technique des sorties; elle ne

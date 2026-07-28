@@ -33,7 +33,12 @@ FIGURES = ROOT / "memoire" / "figures"
 ZONE_INJECTEE = "#777777"
 ZONE_ALERTE = "#af4646"
 ZONE_SURVEILLANCE = "#d9a441"
+# Bandeau des sorties du systeme, place sous l'axe des signaux : il occupe une
+# plage negative reservee, si bien qu'aucune courbe ne peut y descendre.
 YMAX = 1.15
+LANE_TOP = -0.05
+LANE_BOTTOM = -0.19
+YMIN = -0.23
 
 
 def _save(fig: plt.Figure, name: str) -> None:
@@ -196,20 +201,23 @@ def plot_manual_review() -> None:
                 label=column.replace("_sum", ""),
             )
         episode = pd.to_numeric(view["hybrid_warning_episode"], errors="coerce").fillna(0).astype(bool)
-        # La surveillance etait calculee mais jamais tracee : les panneaux
-        # « surveillance » et « rejet » etaient donc visuellement identiques.
-        # Elle est dessinee la ou elle n'est pas deja couverte par une alerte,
-        # conformement a la regle de fusion (surveillance = instabilite sans HYPO).
         instability = pd.to_numeric(view["instability_warning_episode"], errors="coerce").fillna(0).astype(bool)
+        # Verite terrain et sortie du systeme sur deux canaux visuels distincts,
+        # comme le fait deja la figure du chapitre 3. Empiler deux aplats
+        # translucides produisait une teinte mixte que la legende n'expliquait
+        # pas, et c'etait justement celle de la detection reussie. La fenetre
+        # injectee reste un fond gris derriere les courbes; alerte et
+        # surveillance descendent dans un bandeau qui leur est reserve, sous
+        # l'axe des signaux. Plus aucune superposition n'est donc possible.
         surveillance_only = instability & ~episode
-        if surveillance_only.any():
-            ax.fill_between(view[TIME], 0, YMAX, where=surveillance_only,
-                            color=ZONE_SURVEILLANCE, alpha=0.30, step="mid")
-        if episode.any():
-            ax.fill_between(view[TIME], 0, YMAX, where=episode,
-                            color=ZONE_ALERTE, alpha=0.16, step="mid")
+        ax.fill_between(view[TIME], LANE_BOTTOM, LANE_TOP, where=surveillance_only,
+                        color=ZONE_SURVEILLANCE, step="mid", lw=0)
+        ax.fill_between(view[TIME], LANE_BOTTOM, LANE_TOP, where=episode,
+                        color=ZONE_ALERTE, step="mid", lw=0)
+        ax.axhline(0.0, color="#999999", linewidth=0.6)
+        signal_floor = (0.0 - YMIN) / (YMAX - YMIN)
         ax.axvspan(pd.Timestamp(event["start"]), pd.Timestamp(event["end"]),
-                   color=ZONE_INJECTEE, alpha=0.10)
+                   ymin=signal_floor, ymax=1.0, color=ZONE_INJECTEE, alpha=0.12)
         # Bornes verticales : sans elles, une fenetre injectee d'un seul pas de
         # quinze minutes est invisible sur trois jours d'axe.
         for bound in (event["start"], event["end"]):
@@ -220,7 +228,10 @@ def plot_manual_review() -> None:
         status = "alerte" if detected else ("surveillance" if surveillance else "rejet")
         ax.set_title(f"({letter}) {label} : {status}", loc="left", fontsize=10)
         ax.set_xlim(left, right)
-        ax.set_ylim(0, YMAX)
+        ax.set_ylim(YMIN, YMAX)
+        # Graduations sur la seule plage des signaux : le bandeau n'est pas une
+        # echelle de valeurs, il ne doit donc pas en porter.
+        ax.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
         ax.set_ylabel("Signal\nnormalisé")
         ax.grid(axis="y", alpha=0.2)
     # Legende placee au-dessus du premier panneau plutot qu'a l'interieur :
@@ -238,9 +249,9 @@ def plot_manual_review() -> None:
     # signifiait une zone ombree, ni que la superposition de deux aplats
     # translucides produisait une troisieme teinte.
     zone_handles = [
-        Patch(facecolor=ZONE_INJECTEE, alpha=0.10, label="Fenêtre injectée"),
-        Patch(facecolor=ZONE_ALERTE, alpha=0.16, label="Épisode d'alerte"),
-        Patch(facecolor=ZONE_SURVEILLANCE, alpha=0.30, label="Surveillance seule"),
+        Patch(facecolor=ZONE_INJECTEE, alpha=0.12, label="Fenêtre injectée (fond)"),
+        Patch(facecolor=ZONE_ALERTE, label="Alerte (bandeau)"),
+        Patch(facecolor=ZONE_SURVEILLANCE, label="Surveillance seule (bandeau)"),
     ]
     fig.legend(
         handles=zone_handles,
