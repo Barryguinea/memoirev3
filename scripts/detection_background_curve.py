@@ -74,13 +74,15 @@ def _summary(events: pd.DataFrame, threshold: float) -> dict[str, float]:
 def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     ordered = summary.sort_values("score_threshold")
     # Panneaux empiles plutot que cote a cote : chaque graphique occupe toute
-    # la largeur de la figure, ce qui rend les courbes et les graduations
-    # nettement plus lisibles une fois la figure reduite a la largeur du texte.
-    # L'axe des seuils est commun, il n'est donc gradue qu'en bas.
+    # la largeur de la figure. La hauteur suit la largeur pour que les
+    # panneaux restent bien proportionnes au lieu d'etre etires. La largeur de
+    # dessin est proche de la largeur d'affichage (0,98 x 16,6 cm) afin que la
+    # figure ne soit reduite qu'a 89 % : les etiquettes et les graduations
+    # restent lisibles. L'axe des seuils est commun, gradue uniquement en bas.
     fig, (ax_metrics, ax_background) = plt.subplots(
         2,
         1,
-        figsize=(9.2, 7.6),
+        figsize=(7.2, 8.4),
         sharex=True,
     )
     series = [
@@ -127,7 +129,9 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     )
     fig.tight_layout()
     fig.savefig(pdf_out, bbox_inches="tight")
-    fig.savefig(png_out, dpi=220, bbox_inches="tight", transparent=False)
+    # 300 ppp : la figure etant moins large qu'auparavant, 220 ppp ne donnerait
+    # plus que 247 ppp effectifs une fois posee a la largeur du texte.
+    fig.savefig(png_out, dpi=300, bbox_inches="tight", transparent=False)
     plt.close(fig)
     with Image.open(png_out) as image:
         rgb = image.convert("RGB")
