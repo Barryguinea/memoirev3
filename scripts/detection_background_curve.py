@@ -73,11 +73,15 @@ def _summary(events: pd.DataFrame, threshold: float) -> dict[str, float]:
 
 def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     ordered = summary.sort_values("score_threshold")
+    # Panneaux empiles plutot que cote a cote : chaque graphique occupe toute
+    # la largeur de la figure, ce qui rend les courbes et les graduations
+    # nettement plus lisibles une fois la figure reduite a la largeur du texte.
+    # L'axe des seuils est commun, il n'est donc gradue qu'en bas.
     fig, (ax_metrics, ax_background) = plt.subplots(
-        1,
         2,
-        figsize=(9.2, 4.3),
-        gridspec_kw={"width_ratios": [1.6, 1.0]},
+        1,
+        figsize=(9.2, 7.6),
+        sharex=True,
     )
     series = [
         ("attributable_coverage", "Couverture attribuable", "#28666e", "o"),
@@ -105,8 +109,8 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
 
     for axis in (ax_metrics, ax_background):
         axis.axvline(REFERENCE_THRESHOLD, color="#333333", linestyle="--", linewidth=1.0)
-        axis.set_xlabel("Seuil de score HYPO")
         axis.grid(True, alpha=0.25)
+    ax_background.set_xlabel("Seuil de score HYPO")
     ax_metrics.set_ylabel("Événements graduels (%)")
     ax_metrics.set_ylim(0, 105)
     ax_metrics.legend(frameon=False, fontsize=8.5, loc="lower left")
