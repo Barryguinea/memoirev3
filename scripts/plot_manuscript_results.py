@@ -259,7 +259,9 @@ def plot_manual_review() -> None:
         ncol=3,
         fontsize=8,
         loc="lower center",
-        bbox_to_anchor=(0.5, -0.02),
+        # Descendue nettement sous l'etiquette « Temps » : collee a l'axe, la
+        # legende se confondait avec le dernier panneau.
+        bbox_to_anchor=(0.5, -0.065),
     )
     axes[-1].set_xlabel("Temps")
     _save(fig, "manual_review")
