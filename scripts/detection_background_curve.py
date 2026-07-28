@@ -116,9 +116,11 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     ax_metrics.set_ylabel("Événements graduels (%)")
     ax_metrics.set_ylim(0, 105)
     ax_metrics.legend(frameon=False, fontsize=8.5, loc="lower left")
-    ax_metrics.set_title("Réponse aux injections")
+    # Panneaux etiquetes (a) et (b) : empiles verticalement, ils se liraient
+    # sinon comme deux figures distinctes alors qu'ils partagent une legende.
+    ax_metrics.set_title("(a) Réponse aux injections", loc="left", fontsize=10)
     ax_background.set_ylabel("Notifications par vache-jour")
-    ax_background.set_title("Charge de fond")
+    ax_background.set_title("(b) Charge de fond", loc="left", fontsize=10)
     ax_background.annotate(
         "référence 0,12",
         (REFERENCE_THRESHOLD, float(ordered.loc[np.isclose(ordered["score_threshold"], REFERENCE_THRESHOLD), "background_per_cow_day"].iloc[0])),

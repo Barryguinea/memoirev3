@@ -101,6 +101,7 @@ def main(
                label="exécution injectée")
     ax[0].axhline(0.12, ls="--", color="C3", lw=1.0, label="seuil de candidat (0,12)")
     ax[0].set_ylabel("score comportemental $S_H(t)$")
+    ax[0].set_title("(a) Score comportemental", loc="left", fontsize=10)
     ax[0].legend(loc="upper left", fontsize=8, framealpha=0.9)
 
     ax[1].axvspan(e0, e1, color="C1", alpha=0.15)
@@ -116,6 +117,7 @@ def main(
     ax[1].set_yticklabels(["propre", "injectée"], fontsize=8)
     ax[1].set_ylim(0, 1)
     ax[1].set_ylabel("épisode\ndétecté", fontsize=8)
+    ax[1].set_title("(b) Épisode détecté", loc="left", fontsize=10)
     ax[1].set_xlabel("temps")
 
     fig.tight_layout()

@@ -56,9 +56,11 @@ def plot_fusion_comparison() -> None:
     axes[0].set_xticks(x, labels, rotation=22, ha="right")
     axes[0].legend(frameon=False, fontsize=8)
     axes[0].grid(axis="y", alpha=0.25)
+    axes[0].set_title("(a) Réponse par règle de fusion", loc="left", fontsize=10)
 
     axes[1].bar(x, data["background_per_cow_day"], color="#4b8764")
     axes[1].set_ylabel("Notifications par vache-jour")
+    axes[1].set_title("(b) Charge de fond", loc="left", fontsize=10)
     axes[1].set_xticks(x, labels, rotation=22, ha="right")
     axes[1].grid(axis="y", alpha=0.25)
     axes[1].axhline(data.loc["hierarchical", "background_per_cow_day"], color="#af4646", linestyle="--", linewidth=1)
@@ -146,7 +148,7 @@ def plot_manual_review() -> None:
     ]
     fig, axes = plt.subplots(4, 1, figsize=(13.5, 8.4), constrained_layout=True)
     colors = {"Steps_sum": "#4b8764", "Motion Index_sum": "#376078", "Transitions_sum": "#be7832"}
-    for ax, (scenario, label) in zip(axes, scenarios):
+    for letter, (ax, (scenario, label)) in zip("abcd", zip(axes, scenarios)):
         injected, event = inject_profile(
             cow_raw,
             cow=cow,
@@ -181,7 +183,7 @@ def plot_manual_review() -> None:
         detected = bool(view.loc[in_event, "hybrid_warning_episode"].max())
         surveillance = bool(view.loc[in_event, "instability_warning_episode"].max())
         status = "alerte" if detected else ("surveillance" if surveillance else "rejet")
-        ax.set_title(f"{label} : {status}", loc="left", fontsize=10)
+        ax.set_title(f"({letter}) {label} : {status}", loc="left", fontsize=10)
         ax.set_xlim(left, right)
         ax.set_ylim(0, 1.05)
         ax.set_ylabel("Signal\nnormalisé")
