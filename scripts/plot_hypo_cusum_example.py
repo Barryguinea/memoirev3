@@ -120,7 +120,7 @@ def main(
 
     fig.tight_layout()
     for ext in ("png", "pdf"):
-        fig.savefig(f"{out_stem}.{ext}", dpi=150 if ext == "png" else None,
+        fig.savefig(f"{out_stem}.{ext}", dpi=300 if ext == "png" else None,
                     bbox_inches="tight")
     print(f"Figure écrite : {out_stem}.png / .pdf")
 

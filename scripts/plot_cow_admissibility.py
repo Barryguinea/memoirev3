@@ -64,7 +64,7 @@ def main() -> None:
               loc="lower right", fontsize=8, frameon=False)
     ax.margins(y=0.01)
     fig.tight_layout()
-    fig.savefig(PNG, dpi=200)
+    fig.savefig(PNG, dpi=300)
     fig.savefig(PDF)
     plt.close(fig)
     with Image.open(PNG) as image:
