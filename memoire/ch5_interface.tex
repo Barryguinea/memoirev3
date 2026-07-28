@@ -119,7 +119,11 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
   }%
   \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/streamlit_priority_animals.png}
+    % 0,88 et non 0,95 : la capture fait 2406 px, largeur a laquelle 0,95 ne
+    % donnerait que 281 ppp. Ce leger retrait la porte a 303 ppp, au-dessus du
+    % seuil d'impression, tout en restant un quart plus large que la version
+    % portrait d'origine.
+    \includegraphics[width=0.88\linewidth]{figures/streamlit_priority_animals.png}
     \caption{Animaux à vérifier en priorité.}
     \label{fig:streamlit_priority_animals}
   \end{figure}
