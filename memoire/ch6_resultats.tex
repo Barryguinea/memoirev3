@@ -187,14 +187,23 @@ chaque panneau, les trois signaux sont normalisés séparément par leur maximum
 affichée afin de conserver tous les pics. Cette inspection vérifie la cohérence technique des
 sorties; elle ne constitue pas une adjudication clinique.
 
-\begin{figure}[p]
-  \centering
-  \makebox[\textwidth][c]{%
-    \includegraphics[width=1.10\textwidth]{figures/manual_review.png}%
-  }
-  \caption{Inspection visuelle de scénarios représentatifs.}
-  \label{fig:manual_review}
-\end{figure}
+% Page paysage. Le folio normal tomberait sur le bord gauche une fois la page
+% pivotee : on le neutralise et on le replace, pivote, au bas de la vue paysage
+% pour qu'il se lise comme sur toutes les autres pages. Le flottant est fixe par
+% [H] afin que la figure ne se deplace pas d'une compilation a l'autre.
+\begin{landscape}
+  \thispagestyle{empty}%
+  \AddToShipoutPictureFG*{%
+    \AtPageLowerLeft{\raisebox{0.5\paperheight}{\makebox[\paperwidth][r]{%
+      \rotatebox{90}{\makebox[0pt][c]{\thepage}}\hspace{1.9cm}}}}%
+  }%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/manual_review.png}
+    \caption{Inspection visuelle de scénarios représentatifs.}
+    \label{fig:manual_review}
+  \end{figure}
+\end{landscape}
 
 \subsection{Calibration individuelle exploratoire}
 Une calibration simple a été testée pour répondre à la variabilité du fond entre vaches.
