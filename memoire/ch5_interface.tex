@@ -107,12 +107,23 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
   \end{tabular}
 \end{table}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.98\textwidth]{figures/streamlit_priority_animals.png}
-  \caption{Animaux à vérifier en priorité.}
-  \label{fig:streamlit_priority_animals}
-\end{figure}
+% Page paysage. Six vignettes juxtaposees restent illisibles a la largeur du
+% texte : la vue pivotee leur donne un tiers de largeur en plus. Meme dispositif
+% qu'au chapitre 6 : le folio normal tomberait sur le bord gauche une fois la
+% page pivotee, on le neutralise et on le replace, pivote, au bas de la vue.
+\begin{landscape}
+  \thispagestyle{empty}%
+  \AddToShipoutPictureFG*{%
+    \AtPageLowerLeft{\raisebox{0.5\paperheight}{\makebox[\paperwidth][r]{%
+      \rotatebox{90}{\makebox[0pt][c]{\thepage}}\hspace{1.9cm}}}}%
+  }%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/streamlit_priority_animals.png}
+    \caption{Animaux à vérifier en priorité.}
+    \label{fig:streamlit_priority_animals}
+  \end{figure}
+\end{landscape}
 
 % =====================================================================
 \section{Export et traçabilité des alertes}
