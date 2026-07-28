@@ -13,12 +13,16 @@ from ui.presentation import compact_feature_title, pretty_feature_name
 
 # Style par defaut (duplique volontairement pour garder des fonctions pures et reusables)
 C_LINE_WIDTH = 2
-COLOR_ANOM = "#38BDF8"
+# Les quatre marqueurs portent le sens, la courbe n'est que le contexte : ils
+# reprennent donc la semantique du manuscrit, ou le rouge signale une alerte et
+# l'ambre une surveillance. Le cyan precedent se confondait avec la courbe bleu
+# pale, et l'orange de l'episode HYPO avec le rouge de la notification.
+COLOR_ANOM = "#2196A6"
 ANOM_MARKER_SIZE = 6.5
-COLOR_LAME = "#fb923c"
+COLOR_LAME = "#AF4646"
 LAME_MARKER_SIZE = 7.5
-COLOR_INSTABILITY = "#a855f7"
-COLOR_EP = "#ef4444"
+COLOR_INSTABILITY = "#D9A441"
+COLOR_EP = "#6A3D9A"
 EP_MARKER_SIZE = 9.0
 
 # Vignettes « Animaux a verifier en priorite ». Le bleu tres pale employe
@@ -45,7 +49,11 @@ def build_multi_panel_figure(df: pd.DataFrame, plot_cols: List[str], title: str 
         subplot_titles=[compact_feature_title(c) for c in plot_cols[:n_panels]],
     )
 
-    colors = ["#9bd3ff", "#a7f3d0", "#fcd34d"]
+    # Une seule teinte neutre pour les trois panneaux. Le bleu, vert et jaune
+    # pales employes jusqu'ici variaient sans rien signifier -- chaque panneau
+    # porte deja son titre -- tout en volant du contraste aux marqueurs, qui
+    # eux distinguent quatre etats du systeme.
+    colors = ["#5B6670", "#5B6670", "#5B6670"]
 
     for i, col in enumerate(plot_cols[:n_panels], start=1):
         if col not in df.columns:
