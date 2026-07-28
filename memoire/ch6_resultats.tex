@@ -59,7 +59,6 @@ garantissent l'intégrité et la comparabilité de ces deux campagnes.
   \centering
   \caption{Contrôles automatiques communs aux campagnes techniques.}
   \label{tab:protocol_checks}
-  \small
   \begin{tabular}{p{0.68\textwidth}c}
     \toprule
     Contrôle & Résultat \\
@@ -188,9 +187,11 @@ chaque panneau, les trois signaux sont normalisés séparément par leur maximum
 affichée afin de conserver tous les pics. Cette inspection vérifie la cohérence technique des
 sorties; elle ne constitue pas une adjudication clinique.
 
-\begin{figure}[htbp]
+\begin{figure}[p]
   \centering
-  \includegraphics[width=\textwidth]{figures/manual_review.png}
+  \makebox[\textwidth][c]{%
+    \includegraphics[width=1.10\textwidth]{figures/manual_review.png}%
+  }
   \caption{Inspection visuelle de scénarios représentatifs.}
   \label{fig:manual_review}
 \end{figure}
@@ -377,14 +378,13 @@ signées pour les paramètres les plus structurants.
   \centering
   \caption{Plages d'écarts signés pour les paramètres HYPO les plus structurants.}
   \label{tab:hypo_sensitivity}
-  \small
-  \setlength{\tabcolsep}{2.5pt}
-  \begin{tabular}{>{\raggedright\arraybackslash}p{0.19\textwidth}
-    >{\raggedright\arraybackslash}p{0.09\textwidth}
-    >{\centering\arraybackslash}p{0.14\textwidth}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{p{0.20\textwidth}p{0.10\textwidth}
+    >{\centering\arraybackslash}p{0.13\textwidth}
     >{\centering\arraybackslash}p{0.15\textwidth}
-    >{\centering\arraybackslash}p{0.14\textwidth}
-    >{\centering\arraybackslash}p{0.17\textwidth}}
+    >{\centering\arraybackslash}p{0.12\textwidth}
+    >{\centering\arraybackslash}p{0.15\textwidth}}
     \toprule
     Paramètre & Valeurs & $\Delta$ départ & $\Delta$ couverture & $\Delta$ IoU20 & $\Delta$ fond \\
       & testées & (pp) & (pp) & (pp) & (/vache-jour) \\
