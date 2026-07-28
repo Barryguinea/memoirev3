@@ -21,6 +21,15 @@ COLOR_INSTABILITY = "#a855f7"
 COLOR_EP = "#ef4444"
 EP_MARKER_SIZE = 9.0
 
+# Vignettes « Animaux a verifier en priorite ». Le bleu tres pale employe
+# jusqu'ici se lisait mal une fois la vignette reduite. Ces deux teintes sont
+# celles du memoire (ifblue et rawred de main.tex), ce qui accorde la capture
+# d'ecran du chapitre 5 aux figures generees du chapitre 6.
+# Variantes essayees : bleu marine + terre cuite #BE7832, ardoise #4A5568 +
+# rouge franc #C0392B. Changer les deux constantes suffit a basculer.
+MINI_COLOR_LINE = "#375A7F"
+MINI_COLOR_ALERT = "#AF4646"
+
 
 def build_multi_panel_figure(df: pd.DataFrame, plot_cols: List[str], title: str = "") -> go.Figure:
     """Graphique multi-panel avec superposition des alertes comportementales."""
@@ -173,7 +182,7 @@ def build_small_fig(df: pd.DataFrame, col: str) -> go.Figure:
             x=df["T"],
             y=df[col],
             mode="lines",
-            line=dict(color="#9bd3ff", width=1.5),
+            line=dict(color=MINI_COLOR_LINE, width=1.5),
             showlegend=False,
         )
     )
@@ -187,7 +196,7 @@ def build_small_fig(df: pd.DataFrame, col: str) -> go.Figure:
                     x=lame["T"],
                     y=lame[col],
                     mode="markers",
-                    marker=dict(color=COLOR_LAME, size=5),
+                    marker=dict(color=MINI_COLOR_ALERT, size=5),
                     showlegend=False,
                 )
             )
