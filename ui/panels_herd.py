@@ -124,11 +124,14 @@ def render_tab_herd(
     # qui le rend capturable d'un seul tenant. Lignes resserrees a 22 px au lieu
     # des 35 par defaut : a 35, les vingt-huit vaches depassaient la hauteur
     # d'ecran et aucune capture ne pouvait les prendre d'un seul coup.
+    # L'en-tete de la grille garde une hauteur fixe, independante de row_height :
+    # le compter comme une ligne de plus tronquait la vingt-huitieme vache.
     row_height = 22
+    header_height = 36
     st.dataframe(
         summary_display,
         width="stretch",
-        height=(len(summary_display) + 1) * row_height + 3,
+        height=header_height + len(summary_display) * row_height + 6,
         hide_index=True,
         row_height=row_height,
     )
