@@ -152,10 +152,11 @@ vue individuelle de chaque vache.
   \vspace*{\fill}
   \begin{figure}[H]
     \centering
-    % 0,95 : largeur maximale utile sur la page paysage. La capture faisant
-    % 2236 px, cette largeur la ramene a 261 ppp, sous le seuil d'impression de
-    % 300 ; une capture de 2716 px tiendrait ce seuil a la meme largeur.
-    \includegraphics[width=0.95\linewidth]{figures/streamlit_priority_animals.png}
+    % 0,90 et non davantage : la capture des neuf vignettes a un rapport de
+    % 1,40, si bien qu'a 0,95 la figure et sa legende totalisent 6,54 pouces
+    % pour 6,53 disponibles. Ce depassement d'un centieme suffisait a repousser
+    % le flottant et a laisser une page blanche derriere lui.
+    \includegraphics[width=0.90\linewidth]{figures/streamlit_priority_animals.png}
     \caption{Vaches à vérifier en priorité.}
     \label{fig:streamlit_priority_animals}
   \end{figure}
