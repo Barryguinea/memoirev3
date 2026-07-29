@@ -203,7 +203,7 @@ Ces règles font partie du protocole de reproductibilité: reproduire les calcul
 respecter la portée conduirait à une conclusion scientifiquement différente.
 
 \subsubsection{Unité statistique}
-Les 132 lignes événementielles ne représentent pas 132 animaux indépendants. Elles sont
+Les 132 lignes événementielles ne représentent pas 132 vaches indépendantes. Elles sont
 regroupées dans onze vaches. Les résultats par scénario sont descriptifs; toute comparaison
 inférentielle doit agréger préalablement par vache. Dans l'analyse SLS, chaque vache fournit
 une seule valeur par mesure sur la fenêtre de sept jours.
@@ -218,6 +218,8 @@ indépendantes.
 \subsubsection{Artefacts principaux}
 Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent les résultats.
 
+\begingroup
+\small
 \begin{longtable}{p{0.43\textwidth}p{0.47\textwidth}}
   \caption{Artefacts qui soutiennent les résultats.}
   \label{tab:artefacts_validation}\\
@@ -259,6 +261,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{memoire/figures/manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
   \bottomrule
 \end{longtable}
+\endgroup
 
 Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
 \texttt{data/validation/}.
@@ -311,7 +314,7 @@ hypothèses de test et non des estimations cliniques.
   \centering
   \caption{Profils bidirectionnels et contrôles de confusion.}
   \label{tab:amplitudes_extension}
-  \scriptsize
+  \small
   \begin{tabular}{lrrrrr}
     \toprule
     Profil & Durée & Pas & Mouvement & Transitions & Posture/osc. \\
@@ -361,7 +364,7 @@ $+8$\,\% de transfert postural sur 36~h).
 \subsubsection{Variabilité inter-vache du fond}
 Le taux de fond agrégé (0,402 notification par vache-jour pour HYPO) masque une variabilité
 individuelle importante. Sur les onze vaches admissibles (45 notifications, 112~vaches-jours),
-le taux varie de 0,197 à 0,590 selon l'animal, soit un facteur d'environ trois
+le taux varie de 0,197 à 0,590 selon la vache, soit un facteur d'environ trois
 (Tableau~\ref{tab:fond_par_vache}).
 
 \begin{table}[H]

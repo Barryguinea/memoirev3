@@ -22,6 +22,7 @@ caractéristiques vérifiées.
   \centering
   \caption{Caractéristiques vérifiées du corpus IceQube 2023.}
   \label{tab:dataset}
+  \small
   \begin{tabular}{lr}
     \toprule
     Caractéristique & Valeur \\
@@ -49,6 +50,7 @@ indirecte.
   \centering
   \caption{Variables brutes du corpus IceQube 2023.}
   \label{tab:variables_brutes}
+  \small
   \begin{tabular}{p{0.28\textwidth}p{0.60\textwidth}}
     \toprule
     Variable & Interprétation \\
@@ -75,6 +77,7 @@ comparaisons robustes propres à chaque vache et à chaque créneau horaire
   \centering
   \caption{Statistiques descriptives des variables de mouvement (par intervalle de 15~min).}
   \label{tab:statistiques_brutes}
+  \small
   \begin{tabular}{lrrrr}
     \toprule
     Variable & Moyenne & Écart-type & Médiane & Maximum \\
@@ -100,7 +103,7 @@ rééchantillonnage groupé employés dans l'évaluation; il évite que la dépe
 intervalles produise des intervalles de confiance artificiellement étroits.
 
 La variabilité entre vaches est considérable (Tableau~\ref{tab:variabilite}). La moyenne de
-pas par intervalle varie de 0,0 à 11,1 selon l'animal, et le coefficient de variation
+pas par intervalle varie de 0,0 à 11,1 selon la vache, et le coefficient de variation
 inter-vache atteint 0,50 pour les pas, 0,40 pour le \textit{Motion Index} et 0,41 pour les
 transitions. Cette hétérogénéité interdit un seuil commun à tout le troupeau et justifie le
 recours à une référence \emph{individuelle}, propre à chaque vache.
@@ -109,6 +112,7 @@ recours à une référence \emph{individuelle}, propre à chaque vache.
   \centering
   \caption{Variabilité inter-individuelle des principales variables (moyenne par vache).}
   \label{tab:variabilite}
+  \small
   \begin{tabular}{lrrr}
     \toprule
     Variable & Moyenne/vache min & Moyenne/vache max & CV inter-vache \\
@@ -167,7 +171,7 @@ alignées un à un sur le couple (vache, début d'intervalle), après vérificat
 de doublons. Sur les 7\,631 intervalles communs parmi 7\,823 lignes CowAlert (97,5\,\%), les
 pas, le \textit{Motion Index} et les transitions \emph{coïncident exactement} (corrélation de
 1,0, valeurs identiques). Le corpus reflète donc les mesures restituées par le système
-officiel pour ces animaux. Cette vérification porte sur cinq des vingt-huit vaches~; le
+officiel pour ces vaches. Cette vérification porte sur cinq des vingt-huit vaches~; le
 fichier source est confidentiel et n'est pas diffusé, seules les corrélations agrégées étant
 rapportées.
 

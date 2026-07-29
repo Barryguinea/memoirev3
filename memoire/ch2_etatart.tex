@@ -140,7 +140,7 @@ d'anomalie est inversement proportionnel au nombre de coupures.
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.65\textwidth}{!}{%
+    \resizebox{0.72\textwidth}{!}{%
     \begin{tikzpicture}
         % Cadre
         \draw[black!50] (0,0) rectangle (12,6);
@@ -164,15 +164,15 @@ d'anomalie est inversement proportionnel au nombre de coupures.
         % --- Étiquettes hors figure (marges) ---
         % Cluster
         \node[font=\footnotesize, black] at (2.3,1.5) {Points normaux};
-        \node[font=\scriptsize, black!50] at (2.3,1.0) {difficiles à isoler};
+        \node[font=\footnotesize, black!70] at (2.3,1.0) {difficiles à isoler};
 
         % Anomalie
         \node[font=\footnotesize, black] at (9.5,5.3) {Anomalie};
-        \node[font=\scriptsize, black!50] at (9.5,3.7) {isolée en 2 coupures};
+        \node[font=\footnotesize, black!70] at (9.5,3.7) {isolée en 2 coupures};
 
         % Numéros des coupures
-        \node[font=\scriptsize, black, fill=white, inner sep=2pt] at (6,0.9) {1};
-        \node[font=\scriptsize, black, fill=white, inner sep=2pt] at (10.8,2.8) {2};
+        \node[font=\footnotesize\bfseries, black, fill=white, inner sep=2pt] at (6,0.9) {1};
+        \node[font=\footnotesize\bfseries, black, fill=white, inner sep=2pt] at (10.8,2.8) {2};
     \end{tikzpicture}%
     }
     \caption{Principe d'Isolation Forest.}
@@ -195,6 +195,7 @@ détecteurs utilisés dans ce projet.
     \centering
     \caption{Comparaison des propriétés d'Isolation Forest et de Local Outlier Factor.}
     \label{tab:if_vs_lof}
+    \small
     \begin{tabular}{>{\raggedright\arraybackslash}p{3.2cm}
                     >{\raggedright\arraybackslash}p{5.0cm}
                     >{\raggedright\arraybackslash}p{5.0cm}}
