@@ -130,6 +130,24 @@ priorités~2 et~3 produisent une notification de vérification~; la priorité~1 
 surveillance. Ce classement remplace une échelle de risque clinique~: il ordonne les vaches
 à observer, il ne quantifie pas une probabilité de boiterie.
 
+Le choix de trois niveaux discrets, plutôt que d'un score continu, tient à la décision qu'ils
+doivent servir. Sur le terrain, la question n'est pas de comparer des dixièmes entre deux
+vaches, mais de trancher entre trois gestes~: se déplacer aujourd'hui, planifier une
+observation, ou ne rien faire. Trois niveaux couvrent exactement ces trois issues. Un score
+continu, lui, suggérerait une finesse de discrimination que les données n'autorisent pas~:
+le corpus principal ne comporte aucun étalon vétérinaire qui permettrait de calibrer une
+échelle, et afficher deux décimales reviendrait à donner du crédit à des écarts que rien ne
+valide.
+
+Ces niveaux reprennent directement la règle de fusion hiérarchique décrite au
+Chapitre~\ref{chapitre:systeme}, sans la réinterpréter. La priorité~3 correspond aux
+situations où les deux branches concordent, par convergence simultanée ou par séquence~: le
+comportement s'y écarte de plusieurs manières à la fois, ce qui rend l'écart plus difficile à
+attribuer au hasard ou à un artefact de mesure. La priorité~2 correspond à une hypoactivité
+persistante seule, la branche dont le Chapitre~\ref{chapitre:resultats} montre qu'elle est la
+mieux étayée. La priorité~1 correspond à une instabilité isolée, tenue à distance de la
+notification tant qu'aucune baisse d'activité ne l'accompagne.
+
 \begin{table}[H]
   \centering
   \caption{Niveaux de priorité de l'interface et action de vérification associée.}
@@ -146,6 +164,21 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
     \bottomrule
   \end{tabular}
 \end{table}
+
+Cette gradation traduit une asymétrie de coût plutôt qu'une échelle de gravité. Un déplacement
+inutile coûte quelques minutes~; une dégradation ignorée coûte du temps d'évolution, et c'est
+précisément ce temps que la détection précoce cherche à récupérer. Les priorités~2 et~3
+déclenchent donc une notification, quitte à ce qu'une part d'entre elles ne débouche sur rien.
+La priorité~1, à l'inverse, se contente d'attirer l'attention~: elle signale une situation à
+regarder si l'occasion se présente, sans imposer de geste ni entrer dans le décompte des
+vérifications à effectuer. Séparer ces deux régimes évite qu'une piste exploratoire, dont le
+lien avec la boiterie reste à établir, ne se transforme en charge de travail quotidienne.
+
+Une même situation ne remonte pas indéfiniment~: une période réfractaire suit chaque
+notification, de sorte qu'un épisode qui se prolonge apparaît une fois plutôt que d'occuper la
+liste à chaque intervalle. Ce mécanisme, décrit au Chapitre~\ref{chapitre:systeme}, importe
+autant que le seuil lui-même~: sans lui, une seule vache en dégradation lente saturerait le
+classement et masquerait les autres.
 
 À l'écran, chaque vache retenue est accompagnée du décompte de ses notifications fusionnées,
 HYPO et INSTABILITÉ, et d'une vignette qui situe ses épisodes dans la période observée, comme
