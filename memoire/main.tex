@@ -37,6 +37,11 @@
 \usepackage{multirow}       % cellules fusionnées
 \usepackage{longtable}      % tableaux qui se brisent sur plusieurs pages
 \usepackage{array}          % colonnes personnalisées
+% Interligne des tableaux, valeur unique pour tout le mémoire. Sans elle, les
+% lignes se touchaient presque : les tableaux longs paraissaient plus denses que
+% les courts, alors que leur espacement etait identique. Aucun tableau ne doit
+% redéfinir localement \arraystretch, sous peine de rompre cette uniformité.
+\renewcommand{\arraystretch}{1.15}
 \usepackage{float}          % option [H] pour certains flottants
 \usepackage{tikz}           % diagrammes
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, decorations.pathreplacing, backgrounds}
