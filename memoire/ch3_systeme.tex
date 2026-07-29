@@ -396,6 +396,29 @@ parfaite et une valeur de~0 une absence de chevauchement. Le seuil IoU~$\geq0{,}
 les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
 recouvrement, qui ne compte qu'un chevauchement non nul.
 
+Le recours à l'IoU plutôt qu'au seul recouvrement tient à ce qu'il sanctionne les deux écarts
+possibles. Un chevauchement non nul est acquis dès qu'un intervalle est partagé, quelle que
+soit la durée de l'épisode prédit~: une alerte qui couvrirait toute la période surveillée
+obtiendrait le même crédit qu'une alerte parfaitement ajustée. En rapportant l'intersection à
+l'union, l'IoU pénalise aussi bien l'épisode trop court que l'épisode trop long. Il mesure donc
+la localisation, là où le recouvrement ne mesure que la présence.
+
+Le seuil retenu est délibérément plus bas que celui de~0,5 usuel en détection d'objets, et
+deux raisons le justifient. D'une part, la fenêtre injectée possède des bornes nettes par
+construction, alors qu'une dégradation comportementale réelle n'en a pas~: exiger un
+recouvrement élevé reviendrait à demander au détecteur de retrouver des limites qui n'existent
+que dans le protocole. D'autre part, la chaîne de détection agrège les signaux sur plusieurs
+heures et impose une persistance avant de déclarer un épisode~; sa réponse est nécessairement
+étalée par rapport à la fenêtre, et un seuil sévère pénaliserait le lissage qui fait sa
+robustesse.
+
+Cette métrique n'est jamais lue seule. Un IoU faible peut correspondre à une alerte qui
+commence au bon moment mais se prolonge au-delà de l'événement, ce qui reste exploitable en
+ferme, comme à une alerte franchement décalée, qui ne l'est pas. Les résultats la présentent
+donc systématiquement à côté de la couverture attribuable et du nouveau départ~: la première
+indique si le système a réagi, le second s'il a réagi par un épisode distinct de son
+comportement habituel, et l'IoU indique où il a réagi.
+
 \subsection{Métriques attribuables et unité statistique}
 Une détection est attribuable seulement si l'exécution injectée ajoute un intervalle ou un
 départ absent de l'exécution propre. Pour HYPO, les résultats distinguent nouveau départ,
