@@ -60,6 +60,15 @@ vérification.
   \label{fig:streamlit_individual}
 \end{figure}
 
+La Figure~\ref{fig:streamlit_individual} présente la vue individuelle sur une fenêtre de
+trois jours. Les trois panneaux superposent les variables retenues à l'affichage~: l'indice
+de mouvement, les pas et le temps couché. Les marqueurs y localisent les intervalles à
+examiner~: le bleu-vert signale une anomalie du comparateur, le rouge un épisode HYPO,
+l'ambre une période d'instabilité, et l'étoile violette la notification qui ouvre l'épisode.
+Superposer ces marqueurs aux signaux bruts permet de vérifier qu'une notification s'appuie
+sur une dégradation étendue dans le temps plutôt que sur une valeur isolée. Les anomalies du
+comparateur restent affichées à titre de repère~; elles ne déclenchent aucune notification.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{figures/streamlit_herd_table.png}
@@ -67,12 +76,28 @@ vérification.
   \label{fig:streamlit_herd_table}
 \end{figure}
 
+La Figure~\ref{fig:streamlit_herd_table} ordonne les animaux exploitables par priorité de
+vérification. La colonne de rang donne l'ordre dans lequel les aborder, tandis que les
+colonnes HYPO et INSTABILITÉ séparent les deux branches à l'origine des notifications
+fusionnées~: un même rang peut provenir d'une hypoactivité persistante ou d'une instabilité
+isolée, ce que le seul décompte fusionné ne dirait pas. Les colonnes de couverture qualifient
+la fiabilité de la donnée sous-jacente~; un rang élevé associé à une couverture faible appelle
+d'abord une vérification du capteur avant une observation de l'animal. La colonne d'anomalies
+Isolation Forest est présente au même titre que dans la vue individuelle, comme comparateur.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{figures/streamlit_heatmap_compact.png}
   \caption{Alertes journalières par animal.}
   \label{fig:streamlit_heatmap}
 \end{figure}
+
+La Figure~\ref{fig:streamlit_heatmap} déplace enfin la lecture de l'animal vers le troupeau.
+Chaque ligne correspond à une vache, chaque colonne à une journée, et l'intensité traduit la
+sévérité des alertes de la journée. Cette vue fait apparaître des regroupements qu'un
+classement cumulé masque~: une suite de journées consécutives sur une même vache ne se lit
+pas comme quelques journées dispersées, et plusieurs vaches alertées le même jour orientent
+vers une cause commune, de conduite ou de logement, plutôt que vers un problème individuel.
 
 % =====================================================================
 \section{Niveaux de priorité et action associée}
@@ -99,6 +124,12 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
     \bottomrule
   \end{tabular}
 \end{table}
+
+La Figure~\ref{fig:streamlit_priority_animals} montre la traduction de ce classement à
+l'écran. Chaque animal y est accompagné du décompte de ses notifications fusionnées, HYPO et
+INSTABILITÉ, et d'une vignette qui situe ses épisodes dans la période observée. L'ordre de
+vérification et le motif qui le justifie se lisent ainsi sur un même écran, sans qu'il soit
+nécessaire de revenir à la vue individuelle de chaque animal.
 
 % Page paysage. Six vignettes juxtaposees restent illisibles a la largeur du
 % texte : la vue pivotee leur donne un tiers de largeur en plus. Meme dispositif
