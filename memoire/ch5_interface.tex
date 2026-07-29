@@ -136,32 +136,20 @@ le représente la Figure~\ref{fig:streamlit_priority_animals}. L'ordre de vérif
 motif qui le justifie se lisent ainsi ensemble, sans qu'il soit nécessaire de revenir à la
 vue individuelle de chaque vache.
 
-% Page paysage. Six vignettes juxtaposees restent illisibles a la largeur du
-% texte : la vue pivotee leur donne un tiers de largeur en plus. Meme dispositif
-% qu'au chapitre 6 : le folio normal tomberait sur le bord gauche une fois la
-% page pivotee, on le neutralise et on le replace, pivote, au bas de la vue.
-\begin{landscape}
-  \thispagestyle{empty}%
-  \AddToShipoutPictureFG*{%
-    \AtPageLowerLeft{\raisebox{0.5\paperheight}{\makebox[\paperwidth][r]{%
-      \rotatebox{90}{\makebox[0pt][c]{\thepage}}\hspace{1.9cm}}}}%
-  }%
-  % Ressorts elastiques de part et d'autre : la figure se cale au milieu de la
-  % hauteur de page au lieu de rester en haut, le blanc se repartissant alors
-  % egalement au-dessus et au-dessous.
-  \vspace*{\fill}
-  \begin{figure}[H]
-    \centering
-    % 0,90 et non davantage : la capture des neuf vignettes a un rapport de
-    % 1,40, si bien qu'a 0,95 la figure et sa legende totalisent 6,54 pouces
-    % pour 6,53 disponibles. Ce depassement d'un centieme suffisait a repousser
-    % le flottant et a laisser une page blanche derriere lui.
-    \includegraphics[width=0.90\linewidth]{figures/streamlit_priority_animals.png}
-    \caption{Vaches à vérifier en priorité.}
-    \label{fig:streamlit_priority_animals}
-  \end{figure}
-  \vfill
-\end{landscape}
+% Retour au portrait. La page paysage se justifiait quand la capture ne
+% montrait que six vignettes sur deux rangees : tres large et peu haute, elle
+% avait besoin de la largeur pivotee. Sur trois rangees, son rapport tombe a
+% 1,40 et le portrait lui suffit. Surtout, l'image ne fait que 1952 px : la
+% poser sur toute la largeur paysage la ramenait a 240 ppp, sous le seuil
+% d'impression, alors qu'a la largeur du texte elle en donne 305 pour une
+% taille pratiquement identique. Le portrait supprime en outre la page dediee
+% et son blanc, et replace la figure a la suite immediate de son paragraphe.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_priority_animals.png}
+  \caption{Vaches à vérifier en priorité.}
+  \label{fig:streamlit_priority_animals}
+\end{figure}
 
 % =====================================================================
 \section{Export et traçabilité des alertes}
