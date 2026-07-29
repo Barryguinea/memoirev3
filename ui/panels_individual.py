@@ -31,11 +31,11 @@ def render_tab_individual(
     pipeline_kwargs: PipelineKwargs,
 ) -> None:
     """Rend l'onglet d'analyse individuelle."""
-    st.subheader("Analyse détaillée par animal")
+    st.subheader("Analyse détaillée par vache")
 
-    cow_sel = st.selectbox("Sélectionner un animal", cows, index=0, key="tab1_cow")
+    cow_sel = st.selectbox("Sélectionner une vache", cows, index=0, key="tab1_cow")
 
-    with st.spinner(f"Analyse de l'animal {cow_sel}..."):
+    with st.spinner(f"Analyse de la vache {cow_sel}..."):
         it = compute_cow_cached(df, cow_sel, **pipeline_kwargs)
 
     c1, c2, c3 = st.columns(3)
@@ -81,7 +81,7 @@ def render_tab_individual(
             plot_cols = raw_pool[:3]
 
     if len(plot_cols) > 0:
-        fig_multi = build_multi_panel_figure(it_filt, plot_cols, title=f"Animal {cow_sel} ({d1} à {d2})")
+        fig_multi = build_multi_panel_figure(it_filt, plot_cols, title=f"Vache {cow_sel} ({d1} à {d2})")
         st_plotly(fig_multi, "tab1", cow_sel, d1, d2, file_hash, width="stretch")
 
     kb = load_clinical_kb()
@@ -133,9 +133,9 @@ def render_tab_individual(
     st.dataframe(table_df, width="stretch", height=430)
 
     st.download_button(
-        "Telecharger les donnees de cet animal",
+        "Telecharger les donnees de cette vache",
         data=table_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"animal_{cow_sel}_{interval}_{d1}_{d2}.csv",
+        file_name=f"vache_{cow_sel}_{interval}_{d1}_{d2}.csv",
         mime="text/csv",
         key=mk_key("dl_cow", cow_sel, file_hash),
     )

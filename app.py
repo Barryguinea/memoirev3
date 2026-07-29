@@ -1,7 +1,7 @@
 """Tableau de bord Streamlit d'alerte comportementale bidirectionnelle.
 
 Fournit quatre onglets : analyse individuelle, classement du troupeau par severite,
-comparaison journaliere inter-animaux (heatmap) et export CSV.  Tous les parametres
+comparaison journaliere inter-vaches (heatmap) et export CSV.  Tous les parametres
 du pipeline sont exposes dans la barre laterale et l'analyse s'execute a la volee
 via le pipeline principal.
 """
@@ -212,7 +212,7 @@ if uploaded_file is None and not use_builtin:
     #### Format CSV attendu
 
     Colonnes minimales requises :
-    - `Cow` (ou ID, Animal) : Identifiant animal
+    - `Cow` (ou ID, Animal) : Identifiant de la vache
     - `T` (ou Time, Timestamp) : Date/heure
     - `Motion Index` (ou Steps) : Données d'activité
 
@@ -241,7 +241,7 @@ with st.spinner("Chargement et normalisation des données..."):
         st.stop()
 
 cows = sorted(df[COW].astype(str).unique().tolist())
-st.success(f"Données chargées : **{len(df):,}** lignes | **{len(cows)}** animaux | Hash `{file_hash}`")
+st.success(f"Données chargées : **{len(df):,}** lignes | **{len(cows)}** vaches | Hash `{file_hash}`")
 st.caption(f"Source analysée : {source_label}")
 
 # ============================================================

@@ -25,7 +25,7 @@ COLOR_INSTABILITY = "#D9A441"
 COLOR_EP = "#6A3D9A"
 EP_MARKER_SIZE = 9.0
 
-# Vignettes « Animaux a verifier en priorite ». Le bleu tres pale employe
+# Vignettes « Vaches a verifier en priorite ». Le bleu tres pale employe
 # jusqu'ici se lisait mal une fois la vignette reduite. Ces deux teintes sont
 # celles du memoire (ifblue et rawred de main.tex), ce qui accorde la capture
 # d'ecran du chapitre 5 aux figures generees du chapitre 6.

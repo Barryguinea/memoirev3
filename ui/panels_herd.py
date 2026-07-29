@@ -57,7 +57,7 @@ def render_tab_herd(
     """Rend l'onglet de classement troupeau."""
     st.subheader("Classement du troupeau par priorité de vérification")
 
-    max_cows = st.number_input("Nombre max. d'animaux a analyser (0 = tous)", value=0, step=1, key="tab2_max")
+    max_cows = st.number_input("Nombre max. de vaches a analyser (0 = tous)", value=0, step=1, key="tab2_max")
     max_cows = None if int(max_cows) <= 0 else int(max_cows)
 
     cache_key = (
@@ -85,12 +85,12 @@ def render_tab_herd(
     summary_df = st.session_state["summary_df"]
     out_df = st.session_state["out_df"]
 
-    st.caption(f"Analyse terminée : {len(summary_df)} animaux")
+    st.caption(f"Analyse terminée : {len(summary_df)} vaches")
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Animaux analysés", len(summary_df))
+    k1.metric("Vaches analysées", len(summary_df))
     k2.metric("Notifications fusionnées", int(summary_df["hybrid_warning_notifs"].sum()))
-    k3.metric("Animaux à vérifier", int((summary_df["hybrid_warning_notifs"] > 0).sum()))
+    k3.metric("Vaches à vérifier", int((summary_df["hybrid_warning_notifs"] > 0).sum()))
     k4.metric("Moy. anomalies IF (comparateur)", f"{summary_df['if_anomaly_points'].mean():.1f}")
 
     display_cols = [
@@ -105,7 +105,7 @@ def render_tab_herd(
     ]
     display_cols = [col for col in display_cols if col in summary_df.columns]
     display_names = {
-        COW: "Animal",
+        COW: "Vache",
         "n_bins": "Intervalles",
         "hybrid_warning_notifs": "Notifications fusionnées",
         "behavioral_warning_notifs": "Notifications HYPO",
@@ -130,7 +130,7 @@ def render_tab_herd(
         hide_index=True,
     )
 
-    st.markdown("### Animaux à vérifier en priorité")
+    st.markdown("### Vaches à vérifier en priorité")
     top_cows = summary_df.head(9)[COW].tolist()
     cols_grid = st.columns(3)
     slot = 0
@@ -148,7 +148,7 @@ def render_tab_herd(
         if plot_col:
             with cols_grid[slot % 3]:
                 r = summary_df[summary_df[COW] == cid].iloc[0]
-                st.markdown(f"**Animal {cid}**")
+                st.markdown(f"**Vache {cid}**")
                 st.caption(
                     f"Fusion : {int(r['hybrid_warning_notifs'])} | "
                     f"HYPO : {int(r['behavioral_warning_notifs'])} | "
@@ -175,8 +175,8 @@ def render_tab_daily_comparison(
     build_cache_key_full: CacheKeyFn,
     pipeline_kwargs: PipelineKwargs,
 ) -> None:
-    """Rend l'onglet de comparaison journalière inter-animaux."""
-    st.subheader("Comparaison inter-animaux (vue journalière)")
+    """Rend l'onglet de comparaison journalière inter-vaches."""
+    st.subheader("Comparaison inter-vaches (vue journalière)")
     _ensure_full_herd_cache(
         df=df,
         pipeline_kwargs=pipeline_kwargs,
@@ -223,7 +223,7 @@ def render_tab_daily_comparison(
         data=go.Heatmap(
             z=pivot.values,
             x=x_days,
-            y=[f"Animal {c}" for c in pivot.index],
+            y=[f"Vache {c}" for c in pivot.index],
             colorscale="YlOrRd",
             zmin=0, zmax=1,
             hovertemplate="Jour=%{x}<br>%{y}<br>Sévérité=%{z:.0%}<extra></extra>",
@@ -245,7 +245,7 @@ def render_tab_daily_comparison(
         x="Day",
         y="pct_alert",
         markers=True,
-        title="Pourcentage d'animaux en alerte par jour",
+        title="Pourcentage de vaches en alerte par jour",
     )
     fig_line.update_layout(height=300, margin=dict(l=10, r=10, t=50, b=10))
     st_plotly(fig_line, "tab3", "line", file_hash, width="stretch")
