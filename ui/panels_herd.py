@@ -121,13 +121,16 @@ def render_tab_herd(
     summary_display.insert(0, "Rang", range(1, len(summary_display) + 1))
     # Hauteur calee sur le nombre de lignes plutot que figee a 400 px : le
     # tableau s'affiche en entier au lieu de defiler dans son propre cadre, ce
-    # qui le rend capturable d'un seul tenant.
-    row_height = 35
+    # qui le rend capturable d'un seul tenant. Lignes resserrees a 22 px au lieu
+    # des 35 par defaut : a 35, les vingt-huit vaches depassaient la hauteur
+    # d'ecran et aucune capture ne pouvait les prendre d'un seul coup.
+    row_height = 22
     st.dataframe(
         summary_display,
         width="stretch",
         height=(len(summary_display) + 1) * row_height + 3,
         hide_index=True,
+        row_height=row_height,
     )
 
     st.markdown("### Vaches à vérifier en priorité")
