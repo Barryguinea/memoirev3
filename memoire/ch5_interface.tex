@@ -62,12 +62,29 @@ vérifier qu'une notification s'appuie sur une dégradation étendue dans le tem
 sur une valeur isolée. Les anomalies du comparateur restent affichées à titre de repère~;
 elles ne déclenchent aucune notification.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.98\textwidth]{figures/streamlit_individual.png}
-  \caption{Analyse individuelle du tableau de bord.}
-  \label{fig:streamlit_individual}
-\end{figure}
+% Page paysage, meme dispositif que la figure des vaches a verifier et que
+% celle du chapitre 6 : trois panneaux superposes sur trois jours restent
+% denses a la largeur du texte, la vue pivotee leur donne un tiers de largeur
+% en plus. Le folio normal tomberait sur le bord gauche une fois la page
+% pivotee, on le neutralise et on le replace, pivote, au bas de la vue.
+\begin{landscape}
+  \thispagestyle{empty}%
+  \AddToShipoutPictureFG*{%
+    \AtPageLowerLeft{\raisebox{0.5\paperheight}{\makebox[\paperwidth][r]{%
+      \rotatebox{90}{\makebox[0pt][c]{\thepage}}\hspace{1.9cm}}}}%
+  }%
+  \vspace*{\fill}
+  \begin{figure}[H]
+    \centering
+    % 0,95 : la capture faisant 2844 px, cette largeur laisse encore 331 ppp,
+    % au-dessus du seuil d'impression. Le passage en paysage ne coute donc rien
+    % en finesse et gagne un tiers de largeur.
+    \includegraphics[width=0.95\linewidth]{figures/streamlit_individual.png}
+    \caption{Analyse individuelle du tableau de bord.}
+    \label{fig:streamlit_individual}
+  \end{figure}
+  \vfill
+\end{landscape}
 
 Le classement ordonne ensuite les vaches exploitables par priorité de vérification
 (Figure~\ref{fig:streamlit_herd_table}). La colonne de rang donne l'ordre dans lequel les
