@@ -146,15 +146,20 @@ vue individuelle de chaque vache.
     \AtPageLowerLeft{\raisebox{0.5\paperheight}{\makebox[\paperwidth][r]{%
       \rotatebox{90}{\makebox[0pt][c]{\thepage}}\hspace{1.9cm}}}}%
   }%
+  % Ressorts elastiques de part et d'autre : la figure se cale au milieu de la
+  % hauteur de page au lieu de rester en haut, le blanc se repartissant alors
+  % egalement au-dessus et au-dessous.
+  \vspace*{\fill}
   \begin{figure}[H]
     \centering
-    % 0,90 : la figure occupait le seul tiers superieur de la page paysage. La
-    % capture faisant 2236 px, cette largeur la ramene a 275 ppp, sous le seuil
-    % d'impression de 300 ; une capture de 2573 px permettrait 0,95 en le tenant.
-    \includegraphics[width=0.90\linewidth]{figures/streamlit_priority_animals.png}
+    % 0,95 : largeur maximale utile sur la page paysage. La capture faisant
+    % 2236 px, cette largeur la ramene a 261 ppp, sous le seuil d'impression de
+    % 300 ; une capture de 2716 px tiendrait ce seuil a la meme largeur.
+    \includegraphics[width=0.95\linewidth]{figures/streamlit_priority_animals.png}
     \caption{Vaches à vérifier en priorité.}
     \label{fig:streamlit_priority_animals}
   \end{figure}
+  \vfill
 \end{landscape}
 
 % =====================================================================
