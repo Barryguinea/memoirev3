@@ -9,14 +9,14 @@ L'observation humaine reste la référence du repérage de la boiterie, mais ell
 (Chapitre~\ref{chapitre:contexte}). Les branches de détection décrites au
 Chapitre~\ref{chapitre:systeme} produisent, pour chaque vache et chaque intervalle de quinze
 minutes, un score, des épisodes et des notifications. Sous cette forme, ces sorties répondent
-à la question « que dit le détecteur~? », alors que la question de terrain est « quels
-animaux dois-je aller voir aujourd'hui, et pourquoi~? ». L'interface comble cet écart~: elle
-transforme des séries de sortie en une liste ordonnée d'animaux à vérifier.
+à la question « que dit le détecteur~? », alors que la question de terrain est « quelles
+vaches dois-je aller voir aujourd'hui, et pourquoi~? ». L'interface comble cet écart~: elle
+transforme des séries de sortie en une liste ordonnée de vaches à vérifier.
 
 Sa conception suit quatre principes, qui découlent du positionnement retenu pour le système.
 
 Le premier est la \emph{priorisation plutôt que le diagnostic}. L'interface ordonne les
-animaux à observer; elle ne quantifie pas une probabilité de boiterie et n'affiche aucun
+vaches à observer; elle ne quantifie pas une probabilité de boiterie et n'affiche aucun
 libellé clinique. Cette contrainte est délibérée~: le corpus principal ne comporte pas
 d'étalon vétérinaire, et un affichage qui suggérerait une conclusion clinique dépasserait ce
 que les données autorisent \citep{alsaaod2019automatic}.
@@ -43,12 +43,12 @@ Chapitre~\ref{chapitre:resultats} \citep{sculley2015hidden}.
 % =====================================================================
 L'interface est un outil de lecture et de priorisation. Elle charge par défaut
 \texttt{data/brut.csv} et accepte un CSV importé. La vue individuelle présente les signaux,
-les épisodes et les notifications. La vue troupeau ordonne les animaux à vérifier, tandis
+les épisodes et les notifications. La vue troupeau ordonne les vaches à vérifier, tandis
 que la carte thermique permet une comparaison journalière. Isolation Forest reste présenté
 comme comparateur; il ne constitue pas la notification principale.
 
 Les Figures~\ref{fig:streamlit_individual} à~\ref{fig:streamlit_heatmap} montrent comment une
-même alerte est examinée à trois échelles complémentaires~: les signaux d'un animal, son rang
+même alerte est examinée à trois échelles complémentaires~: les signaux d'une vache, son rang
 dans le troupeau et la distribution journalière des alertes. Les marqueurs localisent les
 intervalles à examiner, tandis que le classement et la carte thermique organisent l'ordre de
 vérification.
@@ -69,14 +69,14 @@ elles ne déclenchent aucune notification.
   \label{fig:streamlit_individual}
 \end{figure}
 
-Le classement ordonne ensuite les animaux exploitables par priorité de vérification
+Le classement ordonne ensuite les vaches exploitables par priorité de vérification
 (Figure~\ref{fig:streamlit_herd_table}). La colonne de rang donne l'ordre dans lequel les
 aborder, tandis que les colonnes HYPO et INSTABILITÉ séparent les deux branches à l'origine
 des notifications fusionnées~: un même rang peut provenir d'une hypoactivité persistante ou
 d'une instabilité isolée, ce que le seul décompte fusionné ne dirait pas. Les colonnes de
 couverture qualifient la fiabilité de la donnée sous-jacente~; un rang élevé associé à une
 couverture faible appelle d'abord une vérification du capteur avant une observation de
-l'animal. La colonne d'anomalies Isolation Forest y figure au même titre que dans la vue
+la vache. La colonne d'anomalies Isolation Forest y figure au même titre que dans la vue
 individuelle, comme comparateur.
 
 \begin{figure}[H]
@@ -88,7 +88,7 @@ individuelle, comme comparateur.
 
 Chaque ligne de la Figure~\ref{fig:streamlit_heatmap} correspond enfin à une vache, chaque
 colonne à une journée, et l'intensité traduit la sévérité des alertes de la journée. Cette
-lecture déplace le regard de l'animal vers le troupeau et fait apparaître des regroupements
+lecture déplace le regard de la vache vers le troupeau et fait apparaître des regroupements
 qu'un classement cumulé masque~: une suite de journées consécutives sur une même vache ne se
 lit pas comme quelques journées dispersées, et plusieurs vaches alertées le même jour
 orientent vers une cause commune, de conduite ou de logement, plutôt que vers un problème
@@ -97,7 +97,7 @@ individuel.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{figures/streamlit_heatmap_compact.png}
-  \caption{Alertes journalières par animal.}
+  \caption{Alertes journalières par vache.}
   \label{fig:streamlit_heatmap}
 \end{figure}
 
@@ -107,7 +107,7 @@ individuel.
 L'interface traduit la sortie de fusion en trois niveaux de priorité qui orientent l'effort
 de vérification, sans jamais affirmer un diagnostic (Tableau~\ref{tab:priorites}). Seules les
 priorités~2 et~3 produisent une notification de vérification~; la priorité~1 reste un signal de
-surveillance. Ce classement remplace une échelle de risque clinique~: il ordonne les animaux
+surveillance. Ce classement remplace une échelle de risque clinique~: il ordonne les vaches
 à observer, il ne quantifie pas une probabilité de boiterie.
 
 \begin{table}[H]
@@ -127,11 +127,11 @@ surveillance. Ce classement remplace une échelle de risque clinique~: il ordonn
   \end{tabular}
 \end{table}
 
-À l'écran, chaque animal retenu est accompagné du décompte de ses notifications fusionnées,
+À l'écran, chaque vache retenue est accompagnée du décompte de ses notifications fusionnées,
 HYPO et INSTABILITÉ, et d'une vignette qui situe ses épisodes dans la période observée, comme
 le représente la Figure~\ref{fig:streamlit_priority_animals}. L'ordre de vérification et le
 motif qui le justifie se lisent ainsi ensemble, sans qu'il soit nécessaire de revenir à la
-vue individuelle de chaque animal.
+vue individuelle de chaque vache.
 
 % Page paysage. Six vignettes juxtaposees restent illisibles a la largeur du
 % texte : la vue pivotee leur donne un tiers de largeur en plus. Meme dispositif
@@ -162,13 +162,13 @@ Une priorité affichée n'a d'utilité que si elle peut sortir de l'écran. L'in
 donc un onglet d'export qui produit trois fichiers CSV~: un résumé par vache, les données
 complètes du troupeau au grain de l'intervalle, et les seules alertes comportementales,
 c'est-à-dire les débuts d'épisode retenus par la fusion. La vue individuelle permet en outre
-d'exporter la série d'un animal telle qu'elle est affichée, filtres compris. Ces fichiers
+d'exporter la série d'une vache telle qu'elle est affichée, filtres compris. Ces fichiers
 alimentent le registre d'élevage ou une vérification hors ligne, sans imposer que l'interface
 reste ouverte.
 
 La traçabilité repose sur le nommage. Chaque fichier exporté porte la résolution temporelle
 retenue et une empreinte courte du fichier source, calculée au chargement et affichée à
-l'écran~; l'export individuel y ajoute l'identifiant de l'animal et la fenêtre de dates. Deux
+l'écran~; l'export individuel y ajoute l'identifiant de la vache et la fenêtre de dates. Deux
 exports issus de jeux de données ou de résolutions différents ne peuvent donc pas être
 confondus, et un fichier retrouvé plusieurs semaines plus tard reste rattachable à son
 origine. Cette empreinte sert à identifier une source, non à garantir son intégrité
@@ -181,7 +181,7 @@ l'interface.
 % =====================================================================
 L'interface est un prototype de démonstration. Elle s'exécute localement, charge un fichier
 CSV et montre que les sorties du détecteur peuvent être lues, ordonnées et rattachées à des
-animaux précis. Elle n'est pas un produit déployé~: elle ne gère ni l'acquisition continue
+vaches précises. Elle n'est pas un produit déployé~: elle ne gère ni l'acquisition continue
 des mesures, ni les comptes utilisateurs, ni l'historique des vérifications réalisées.
 
 Son usage prévu est donc étroit, et cette étroitesse est assumée. Une priorité~3 signifie que
