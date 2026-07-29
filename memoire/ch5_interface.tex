@@ -81,7 +81,10 @@ individuelle, comme comparateur.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{figures/streamlit_herd_table.png}
+  % 0,92 et non 0,98 : la capture des vingt-huit rangs fait 1816 px de large,
+  % largeur a laquelle 0,98 ne donnerait que 284 ppp. Ce retrait la porte a
+  % 302 ppp, au-dessus du seuil d'impression.
+  \includegraphics[width=0.92\textwidth]{figures/streamlit_herd_table.png}
   \caption{Classement du troupeau.}
   \label{fig:streamlit_herd_table}
 \end{figure}
