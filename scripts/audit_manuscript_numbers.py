@@ -221,6 +221,27 @@ for pair, p_detection, p_iou in (
     check(f"Ablation {pair} detection p", ablation_tests.loc[pair, "p_wilcoxon_detection"], p_detection, "hypo_module/ablation_tests_by_cow.csv")
     check(f"Ablation {pair} IoU p", ablation_tests.loc[pair, "p_wilcoxon_iou"], p_iou, "hypo_module/ablation_tests_by_cow.csv")
 
+# Resolution des tests apparies de detection: effectif informatif, unanimite du
+# sens et plancher du test exact bilateral, cites au chapitre 6.
+for pair, n_informative, n_favorable, p_floor in (
+    ("A vs E", 5, 5, 0.0625),
+    ("A vs C", 7, 7, 0.01562),
+):
+    check(f"Ablation {pair} effectif informatif detection", ablation_tests.loc[pair, "n_informatif_detection"], n_informative, "hypo_module/ablation_tests_by_cow.csv")
+    check(f"Ablation {pair} paires favorables a HYPO", ablation_tests.loc[pair, "n_favorables_1_detection"], n_favorable, "hypo_module/ablation_tests_by_cow.csv")
+    check(f"Ablation {pair} plancher exact bilateral", ablation_tests.loc[pair, "p_min_atteignable_detection"], p_floor, "hypo_module/ablation_tests_by_cow.csv")
+
+# Charge de fond HYPO contre comparateur pedometrique: le manuscrit retient
+# desormais la valeur bilaterale, pour s'aligner sur le test de detection.
+bootstrap = pd.read_csv(hypo_dir / "bootstrap_ci.csv")
+background_effect = bootstrap.loc[bootstrap["cible"].eq("E_moins_HYPO"), "effet"].iloc[0]
+check(
+    "Charge de fond E moins HYPO p exact bilateral",
+    float(background_effect.split("p_exact_bilateral=")[1].split(";")[0]),
+    0.02344,
+    "hypo_module/bootstrap_ci.csv",
+)
+
 # Derived metrics reported after the principal campaigns.
 derived_dir = ROOT / "data/validation/derived_metrics"
 event_f1 = pd.read_csv(derived_dir / "event_f1.csv").set_index(["definition", "variante"])

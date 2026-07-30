@@ -134,6 +134,10 @@ def background_effect(rng: np.random.Generator) -> list[dict[str, object]]:
         [np.mean(diff * np.asarray(signs, dtype=float)) for signs in product((-1, 1), repeat=len(diff))]
     )
     p_one_sided = float(np.mean(null_means >= observed - 1e-12))
+    # Le bilatéral est la valeur retenue au manuscrit, pour aligner cette
+    # comparaison sur celle de la détection (Wilcoxon bilatéral) qui porte sur
+    # la même paire et les mêmes vaches. L'unilatéral reste consigné.
+    p_two_sided = float(np.mean(np.abs(null_means) >= abs(observed) - 1e-12))
     return [
         {
             "analyse": "ablation_fond",
@@ -143,6 +147,7 @@ def background_effect(rng: np.random.Generator) -> list[dict[str, object]]:
             "ic95_haut": round(float(hi), 4),
             "effet": (
                 f"HYPO_plus_faible={int((diff > 0).sum())}/{len(cows)}; "
+                f"p_exact_bilateral={p_two_sided:.5f}; "
                 f"p_exact_unilateral={p_one_sided:.5f}"
             ),
         }

@@ -160,6 +160,13 @@ Ablation A vs D detection p,0.04297,0.04297,hypo_module/ablation_tests_by_cow.cs
 Ablation A vs D IoU p,0.00098,0.00098,hypo_module/ablation_tests_by_cow.csv,True
 Ablation A vs E detection p,0.0625,0.0625,hypo_module/ablation_tests_by_cow.csv,True
 Ablation A vs E IoU p,0.96582,0.96582,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs E effectif informatif detection,5.0,5.0,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs E paires favorables a HYPO,5.0,5.0,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs E plancher exact bilateral,0.0625,0.0625,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs C effectif informatif detection,7.0,7.0,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs C paires favorables a HYPO,7.0,7.0,hypo_module/ablation_tests_by_cow.csv,True
+Ablation A vs C plancher exact bilateral,0.01562,0.01562,hypo_module/ablation_tests_by_cow.csv,True
+Charge de fond E moins HYPO p exact bilateral,0.02344,0.02344,hypo_module/bootstrap_ci.csv,True
 Event F1 A. Alerte temporelle multivariée,0.73,0.7307692307692308,derived_metrics/event_f1.csv,True
 Event F1 B. IF + règles de persistance,0.35,0.35,derived_metrics/event_f1.csv,True
 Event F1 C. IF seul,0.31,0.3076923076923077,derived_metrics/event_f1.csv,True

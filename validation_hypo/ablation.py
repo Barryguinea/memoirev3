@@ -367,6 +367,29 @@ def _paired_wilcoxon(a: np.ndarray, b: np.ndarray) -> float:
     return float(wilcoxon(a, b, zero_method="wilcox").pvalue)
 
 
+def _paired_resolution(a: np.ndarray, b: np.ndarray) -> dict[str, float]:
+    """Effectif informatif et plancher du test exact bilatéral.
+
+    Le Wilcoxon signé écarte les différences nulles (zero_method="wilcox").
+    Avec des taux discrets, plusieurs vaches peuvent être à égalité exacte et
+    l'effectif informatif tombe sous l'effectif apparié. La plus petite valeur
+    de p atteignable vaut alors 2/2**n_informatif: si elle dépasse le seuil
+    retenu, le test ne peut pas conclure, quelle que soit l'ampleur de l'écart.
+    Ces colonnes existent pour que cette limite soit lisible dans l'artefact et
+    ne se déduise pas d'un calcul fait à la main.
+    """
+    difference = np.asarray(a, dtype=float) - np.asarray(b, dtype=float)
+    informative = difference[difference != 0]
+    n_informative = int(len(informative))
+    return {
+        "n_informatif": n_informative,
+        "n_favorables_premier": int((informative > 0).sum()),
+        "p_min_atteignable": (
+            round(2.0 / 2**n_informative, 5) if n_informative else float("nan")
+        ),
+    }
+
+
 def ablation_paired_tests(df: pd.DataFrame) -> pd.DataFrame:
     """Tests appariés sur moyennes PAR VACHE, unité indépendante de l'étude."""
     unique = df.drop_duplicates(subset=["event_id", "variante"])
@@ -392,6 +415,8 @@ def ablation_paired_tests(df: pd.DataFrame) -> pd.DataFrame:
         mean_det_second = float(det_second.mean())
         mean_iou_first = float(iou_first.mean())
         mean_iou_second = float(iou_second.mean())
+        resolution_det = _paired_resolution(det_first, det_second)
+        resolution_iou = _paired_resolution(iou_first, iou_second)
         rows.append(
             {
                 "paire": f"{first[0]} vs {second[0]}",
@@ -404,6 +429,9 @@ def ablation_paired_tests(df: pd.DataFrame) -> pd.DataFrame:
                     else second if mean_det_second > mean_det_first else "égalité"
                 ),
                 "p_wilcoxon_detection": round(_paired_wilcoxon(det_first, det_second), 5),
+                "n_informatif_detection": resolution_det["n_informatif"],
+                "n_favorables_1_detection": resolution_det["n_favorables_premier"],
+                "p_min_atteignable_detection": resolution_det["p_min_atteignable"],
                 "iou_1": round(mean_iou_first, 3),
                 "iou_2": round(mean_iou_second, 3),
                 "iou_favori": (
@@ -412,6 +440,9 @@ def ablation_paired_tests(df: pd.DataFrame) -> pd.DataFrame:
                     else second if mean_iou_second > mean_iou_first else "égalité"
                 ),
                 "p_wilcoxon_iou": round(_paired_wilcoxon(iou_first, iou_second), 5),
+                "n_informatif_iou": resolution_iou["n_informatif"],
+                "n_favorables_1_iou": resolution_iou["n_favorables_premier"],
+                "p_min_atteignable_iou": resolution_iou["p_min_atteignable"],
             }
         )
     return pd.DataFrame(rows)

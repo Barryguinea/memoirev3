@@ -313,11 +313,18 @@ satisfaire, y est relâchée pour ne pas le désavantager. Partageant cette mach
 attribuable par vache n'est que de $-0{,}004$ (IC95 [$-0{,}032$~; 0,022], $p=0{,}966$, six
 vaches sur onze le favorisant légèrement), là où les comparateurs IF et LOF s'effondrent à
 un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il ouvre moins de nouveaux
-    départs attribuables (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
-    sans atteindre le seuil de significativité) et laisse passer davantage de fond (0,518 contre
-    0,402 notification par vache-jour). L'écart pédomètre moins HYPO atteint 0,116
+    départs attribuables (27,3 contre 43,2~\%) et laisse passer davantage de fond (0,518 contre
+    0,402 notification par vache-jour). Le test apparié sur la détection vaut $p=0{,}0625$ et
+    n'atteint donc pas le seuil de significativité, mais cette valeur doit se lire avec la
+    résolution du test~: chaque vache ne portant que quatre événements, son taux de détection ne
+    peut prendre que cinq valeurs, six vaches sur onze sont à égalité exacte et l'effectif
+    informatif tombe à cinq paires. Le plancher du test exact bilatéral y vaut précisément
+    0,0625, de sorte que cette comparaison ne peut pas être significative à 5~\%, quelle que soit
+    l'ampleur de l'écart. Les cinq paires informatives favorisent toutes HYPO. La conclusion
+    prudente est donc que la supériorité en détection n'est pas établie faute de résolution, et
+    non qu'elle est infirmée. L'écart pédomètre moins HYPO sur le fond atteint 0,116
     notification par vache-jour (IC95 [0,045~; 0,187]); huit vaches sur onze présentent moins de
-    fond avec HYPO et le test exact apparié unilatéral vaut $p=0{,}01172$. Cette comparaison de
+    fond avec HYPO et le test exact apparié bilatéral vaut $p=0{,}02344$. Cette comparaison de
     fond, ajoutée après examen des autres métriques et non corrigée pour leur multiplicité, reste
     exploratoire. Elle soutient néanmoins une hypothèse utile~: plusieurs signaux pourraient
     réduire la charge de revue sans améliorer la localisation. Elle ne suffit pas à démontrer un
@@ -353,8 +360,9 @@ l'écueil inverse~: son fond est le plus bas (0,393), mais elle ne localise pres
 famille ne domine donc sur tous les plans. Dans cette campagne, combiner les quatre obtient une
 charge de fond basse à localisation comparable et évite de faire dépendre la décision d'un signal
 unique susceptible d'être confondu, par exemple les pas gonflés par l'exercice ou l'œstrus. Ce
-profil est compatible avec un gain de robustesse par cohérence, mais l'absence d'avantage
-significatif sur le comparateur pédométrique empêche de l'établir comme effet causal indépendant.
+profil est compatible avec un gain de robustesse par cohérence, mais la résolution insuffisante du
+test de détection face au comparateur pédométrique empêche de l'établir comme effet causal
+indépendant~: l'écart y va constamment dans le même sens sans pouvoir être certifié.
 
 \begin{table}[H]
   \centering
@@ -472,6 +480,7 @@ garantit pas une variation comportementale physique identique entre vaches ou en
   \end{tabular}
 \end{table}
 
+Le Tableau~\ref{tab:hypo_stress} détaille la réponse forme par forme.
 Sur les 165 événements positifs, la moyenne des cinq taux par forme atteint 97,0\,\% de
 couverture attribuable, 71,5\,\% de nouveaux départs et 30,9\,\% à IoU20. HYPO conserve
 donc une forte couverture lorsque la forme s'écarte du profil graduel concordant, mais sa
@@ -496,8 +505,12 @@ recouvrement attribuable, alors qu'IoU20 reste à 24,2\,\%.
   \end{tabular}
 \end{table}
 
-Les tests exacts utilisent la moyenne de chaque vache, et non les 165 lignes comme
-observations indépendantes. HYPO conserve un avantage net sur IF et LOF, mais aucun avantage
+Les tests exacts du Tableau~\ref{tab:hypo_stress_comparisons} utilisent la moyenne de chaque
+vache, et non les 165 lignes comme
+observations indépendantes. Portant sur onze vaches, ils disposent de $2^{11}=2048$
+permutations et d'un plancher de 0,000977~: contrairement à la comparaison de détection de la
+section précédente, leur absence de conclusion face au comparateur pédométrique n'est pas un
+manque de résolution. HYPO conserve un avantage net sur IF et LOF, mais aucun avantage
 n'est démontré face au comparateur pédométrique doté de la même machinerie temporelle. De
 plus, le contrôle pas-seuls échoue au critère principal de spécificité~: il présente un
 recouvrement attribuable dans 78,8\,\% des cas et produit un nouveau départ dans 30,3\,\%.
@@ -653,7 +666,11 @@ de concordance intéressant. Cependant, les trois vaches SLS~$\geq2$ se trouvent
 groupe \textit{Exercise}, contre trois des dix vaches sous le seuil dont le traitement est
 connu; le test exact de Fisher donne $p=0{,}070$. Dans le seul groupe
 \textit{Exercise}, l'AUC reste orientée dans le même sens (0,778), mais le test exact
-bilatéral est non concluant ($p=0{,}40$). Le groupe sans exercice ne contient aucun cas
+bilatéral est non concluant ($p=0{,}40$). Comme pour la détection face au comparateur
+pédométrique, cette absence de conclusion tient d'abord à la résolution~: six vaches réparties
+en trois positives et trois négatives n'autorisent que vingt permutations, et le plancher du
+test exact bilatéral y vaut 0,10. Ce test ne pouvait donc pas être significatif à 5~\%. Le
+groupe sans exercice ne contient aucun cas
 SLS~$\geq2$, donc aucune AUC interne n'y est estimable. Malgré la stabilité du classement
 global au retrait d'une vache positive, sa portée clinique demeure limitée par le petit
 effectif, la multiplicité et la confusion avec le traitement.

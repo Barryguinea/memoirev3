@@ -177,7 +177,7 @@ Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et r�
 figures de fusion, de scénarios et de SLS; il reconstruit également quatre trajectoires
 représentatives pour l'inspection visuelle. Les trois scripts suivants écrivent les métriques
 F1, l'ablation par famille et les temps d'autocorrélation dans
-\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 367 valeurs
+\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 374 valeurs
 empiriques du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent
 le manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
 
@@ -193,8 +193,15 @@ cohérence logicielle, non la validité clinique.
 \subsubsection{Compilation}
 \begin{verbatim}
 cd memoire
+latexmk -C
 latexmk -lualatex -interaction=nonstopmode -halt-on-error main.tex
 \end{verbatim}
+
+Le nettoyage préalable n'est pas facultatif. La conformité PDF/A-1b est obtenue avec
+\texttt{pdfx}, qui charge lui-même \texttt{hyperref}~; sur une recompilation effectuée sans
+nettoyage, la première passe relit les fichiers auxiliaires de la compilation précédente avant
+que cette machinerie ne soit disponible et s'interrompt sur une séquence de contrôle non
+définie. La compilation à froid, elle, aboutit sans avertissement.
 
 % =====================================================================
 \section{Règles d'interprétation et unité statistique}
@@ -271,7 +278,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{derived_metrics/channel_ablation_summary.csv} & Synthèse de l'ablation par famille de signaux. \\
   \path{derived_metrics/channel_ablation_events.csv} & Sorties événementielles détaillées de l'ablation par famille. \\
   \path{derived_metrics/correlation_time.csv} & Temps d'autocorrélation et tailles effectives aux deux grains d'analyse. \\
-  \path{manuscript_number_audit.csv} & Correspondance entre 367 valeurs du manuscrit et leurs artefacts sources. \\
+  \path{manuscript_number_audit.csv} & Correspondance entre 374 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
   \path{hybrid_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
