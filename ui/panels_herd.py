@@ -57,7 +57,7 @@ def render_tab_herd(
     """Rend l'onglet de classement troupeau."""
     st.subheader("Classement du troupeau par priorité de vérification")
 
-    max_cows = st.number_input("Nombre max. de vaches a analyser (0 = tous)", value=0, step=1, key="tab2_max")
+    max_cows = st.number_input("Nombre max. de vaches à analyser (0 = tous)", value=0, step=1, key="tab2_max")
     max_cows = None if int(max_cows) <= 0 else int(max_cows)
 
     cache_key = (
@@ -165,7 +165,7 @@ def render_tab_herd(
             slot += 1
 
     st.download_button(
-        "Telecharger le resume troupeau",
+        "Télécharger le résumé troupeau",
         data=summary_df.to_csv(index=False).encode("utf-8"),
         file_name=f"herd_summary_{interval}_{file_hash}.csv",
         mime="text/csv",
@@ -187,7 +187,7 @@ def render_tab_daily_comparison(
         df=df,
         pipeline_kwargs=pipeline_kwargs,
         build_cache_key_full=build_cache_key_full,
-        spinner_text="Calcul des donnees troupeau (complet)...",
+        spinner_text="Calcul des données troupeau (complet)...",
     )
 
     out_df = st.session_state["out_df_full"]
@@ -267,12 +267,12 @@ def render_tab_export(
     pipeline_kwargs: PipelineKwargs,
 ) -> None:
     """Rend l'onglet export des résultats CSV."""
-    st.subheader("Export des resultats")
+    st.subheader("Export des résultats")
     _ensure_full_herd_cache(
         df=df,
         pipeline_kwargs=pipeline_kwargs,
         build_cache_key_full=build_cache_key_full,
-        spinner_text="Calcul des donnees troupeau pour l'export...",
+        spinner_text="Calcul des données troupeau pour l'export...",
     )
 
     summary_df = st.session_state["summary_df_full"]
@@ -281,7 +281,7 @@ def render_tab_export(
     st.markdown("### Fichiers disponibles")
 
     st.download_button(
-        "Resume troupeau (CSV)",
+        "Résumé troupeau (CSV)",
         data=summary_df.to_csv(index=False).encode("utf-8"),
         file_name=f"summary_{interval}_{file_hash}.csv",
         mime="text/csv",
@@ -289,7 +289,7 @@ def render_tab_export(
     )
 
     st.download_button(
-        "Donnees completes troupeau (CSV)",
+        "Données complètes troupeau (CSV)",
         data=out_df.to_csv(index=False).encode("utf-8"),
         file_name=f"full_herd_{interval}_{file_hash}.csv",
         mime="text/csv",

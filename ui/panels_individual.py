@@ -61,10 +61,10 @@ def render_tab_individual(
     it_filt = it[(it["T"].dt.date >= d1) & (it["T"].dt.date <= d2)].copy()
 
     if len(it_filt) == 0:
-        st.warning("Aucune donnee dans cette periode.")
+        st.warning("Aucune donnée dans cette période.")
         return
 
-    st.caption(f"Periode : {d1} à {d2} ({len(it_filt)} intervalles)")
+    st.caption(f"Période : {d1} à {d2} ({len(it_filt)} intervalles)")
 
     st.markdown("### Graphiques multi-variables")
     plot_cols = [c for c in plot_pref if c in it_filt.columns]

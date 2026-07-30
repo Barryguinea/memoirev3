@@ -49,12 +49,12 @@ def _normalize_clinical_kb(kb: Dict[str, Any]) -> Dict[str, Any]:
     meta.setdefault("version", "1.1.0")
     meta.setdefault("date", "")
     meta.setdefault("language", "fr")
-    meta.setdefault("disclaimer", "Aide a l'interpretation. Ne remplace pas l'avis veterinaire.")
+    meta.setdefault("disclaimer", "Aide à l'interprétation. Ne remplace pas l'avis vétérinaire.")
     meta.setdefault("owner", "Equipe projet")
     meta.setdefault("reviewed_by", "A renseigner")
     meta.setdefault("review_date", meta.get("date", ""))
     meta.setdefault("next_review_date", "")
-    meta.setdefault("source_policy", "Sources de reference veterinaires / institutionnelles priorisees")
+    meta.setdefault("source_policy", "Sources de référence vétérinaires / institutionnelles priorisées")
     out["meta"] = meta
 
     # Sources: ajoute id + metadonnees minimales si absents.
@@ -280,7 +280,7 @@ def load_clinical_kb() -> Dict[str, Any]:
                 "summary": "Surveillance active (<24h).",
                 "actions_0_24h": [
                     "Observer locomotion et appui.",
-                    "Verifier hygiene du pied et environnement.",
+                    "Vérifier hygiène du pied et environnement.",
                     "Consigner le cas et suivre l'evolution.",
                 ],
             },
@@ -296,13 +296,13 @@ def load_clinical_kb() -> Dict[str, Any]:
                 ],
             },
             "critique": {
-                "summary": "Priorite immediate + vet si signes d'urgence.",
+                "summary": "Priorité immédiate + vet si signes d'urgence.",
                 "actions_0_2h": [
                     "Isoler et limiter la marche.",
                     "Contacter le veterinaire si red flags.",
                 ],
                 "red_flags": [
-                    "Incapacite a se lever/boire/manger.",
+                    "Incapacité à se lever/boire/manger.",
                     "Fievre, abattement ou douleur extreme.",
                 ],
             },
@@ -401,7 +401,7 @@ def render_clinical_guidance(levels: List[str], kb: Dict[str, Any]) -> None:
 
     all_sources = kb.get("sources", [])
     if isinstance(all_sources, list) and all_sources:
-        with st.expander("Sources de reference (KB)", expanded=False):
+        with st.expander("Sources de référence (KB)", expanded=False):
             for s in all_sources:
                 if not isinstance(s, dict):
                     st.markdown(f"- {s}")

@@ -17,11 +17,11 @@ def pretty_feature_name(col: Optional[str]) -> str:
 
     def _base_label(n: str) -> str:
         if "motion index" in n:
-            return "Activite — Motion Index"
+            return "Activité — Motion Index"
         if "steps" in n:
-            return "Activite — Pas"
+            return "Activité — Pas"
         if "lying time" in n:
-            return "Repos — Temps couche"
+            return "Repos — Temps couché"
         if "standing time" in n:
             return "Repos — Temps debout"
         if "transitions" in n:
@@ -34,9 +34,9 @@ def pretty_feature_name(col: Optional[str]) -> str:
         base = f"{base} (log)"
 
     if name.endswith("_rrz"):
-        return f"{base} — ecart robuste glissant"
+        return f"{base} — écart robuste glissant"
     if name.endswith("_rz"):
-        return f"{base} — ecart robuste global"
+        return f"{base} — écart robuste global"
     if name.endswith("_sum"):
         return f"{base} — somme"
     if name.endswith("_mean"):
@@ -49,11 +49,11 @@ def compact_feature_title(col: Optional[str], max_len: int = 38) -> str:
     """Libelle feature raccourci pour les titres de sous-graphiques (tronque a *max_len*)."""
     label = pretty_feature_name(col)
     replacements = [
-        ("Activite — ", ""),
+        ("Activité — ", ""),
         ("Repos — ", ""),
         ("Transitions — ", "Transitions "),
-        (" — ecart robuste glissant", " (rrz)"),
-        (" — ecart robuste global", " (rz)"),
+        (" — écart robuste glissant", " (rrz)"),
+        (" — écart robuste global", " (rz)"),
         (" — somme", " (sum)"),
         (" — moyenne", " (mean)"),
     ]
@@ -284,7 +284,7 @@ def clinical_payload(level: str, kb: Dict[str, Any]) -> Dict[str, Any]:
         }
     return {
         "summary": "Niveau non documente.",
-        "actions_0_24h": ["Verifier le dossier clinique et reevaluer le cas."],
+        "actions_0_24h": ["Vérifier le dossier clinique et réévaluer le cas."],
     }
 
 
