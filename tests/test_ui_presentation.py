@@ -7,6 +7,7 @@ from ui.presentation import (
     clinical_payload,
     clinical_short,
     compact_feature_title,
+    filter_detection_table,
     level_priority,
     normalize_alert_level,
     plot_options_for_mode,
@@ -79,10 +80,54 @@ def test_build_reason_row_and_filterable_table_behaviors():
 
     df = pd.DataFrame(
         [
-            {"T": pd.Timestamp("2024-01-01 01:00:00"), "if_score": -0.2, "alert_level": "suspect", "extra": 1},
-            {"T": pd.Timestamp("2024-01-01 03:00:00"), "if_score": -0.5, "alert_level": "critique", "extra": 2},
+            {
+                "T": pd.Timestamp("2024-01-01 01:00:00"),
+                "hybrid_warning_episode": 0,
+                "behavioral_warning_candidate": 1,
+                "if_score": -0.2,
+                "pred_lameness_episode": 1,
+                "extra": 1,
+            },
+            {
+                "T": pd.Timestamp("2024-01-01 03:00:00"),
+                "hybrid_warning_episode": 1,
+                "behavioral_warning_candidate": 0,
+                "if_score": -0.5,
+                "pred_lameness_episode": 0,
+                "extra": 2,
+            },
         ]
     )
     out = build_filterable_table(df)
-    assert list(out.columns) == ["T", "if_score", "alert_level"]
+    assert list(out.columns) == [
+        "T",
+        "hybrid_warning_episode",
+        "behavioral_warning_candidate",
+        "if_score",
+    ]
     assert out.iloc[0]["T"] == pd.Timestamp("2024-01-01 03:00:00")
+    assert "pred_lameness_episode" not in out
+
+
+def test_filter_detection_table_uses_current_pipeline_outputs() -> None:
+    frame = pd.DataFrame(
+        {
+            "T": pd.date_range("2024-01-01", periods=4, freq="15min"),
+            "hybrid_warning_episode": [0, 1, 1, 0],
+            "hybrid_warning_notification": [0, 1, 0, 0],
+            "behavioral_warning_candidate": [1, 1, 0, 0],
+            "if_anomaly_point": [0, 0, 1, 1],
+        }
+    )
+
+    assert len(filter_detection_table(frame, only_episode=True)) == 2
+    assert len(filter_detection_table(frame, only_notification=True)) == 1
+    assert len(filter_detection_table(frame, only_hypo_candidate=True)) == 2
+    assert len(filter_detection_table(frame, only_if=True)) == 2
+    combined = filter_detection_table(
+        frame,
+        only_episode=True,
+        only_notification=True,
+        only_hypo_candidate=True,
+    )
+    assert list(combined.index) == [1]

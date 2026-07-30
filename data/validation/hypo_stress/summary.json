@@ -1,16 +1,17 @@
 {
-  "protocol_sha256": "f1a2ca013245cb0877351c41316e348c07827f85a06b450918da9dfcbab8ba6f",
+  "protocol_sha256": "ae6b5604b139f11787525cb48f4376946b63a1b753b707b347dcfd1117c88282",
   "protocol": {
-    "protocol_name": "HYPO dose-matched less-favourable stress campaign",
+    "protocol_name": "HYPO envelope-area-matched less-favourable stress campaign",
     "version": "2.0",
     "frozen_on": "2026-07-29",
-    "purpose": "Evaluate the frozen HYPO detector under less-favourable synthetic shapes at matched injected dose.",
+    "purpose": "Evaluate the frozen HYPO detector under less-favourable synthetic shapes with matched discrete perturbation-envelope area.",
     "clinical_scope": "Technical validation only; injected events are not clinical lameness cases.",
     "no_retuning": true,
     "dose_matching": {
       "reference_scenario": "gradual_moderate",
       "reference_duration_hours": 48,
       "definition": "Discrete area under each perturbation envelope on retained raw intervals.",
+      "scope": "Controls numerical envelope area, not realized physical behavioral magnitude across cows or signal families.",
       "relative_tolerance": 1e-10
     },
     "input_csv": "data/brut.csv",
@@ -70,7 +71,7 @@
         "name": "single_family_only",
         "duration_hours": 48,
         "expected_alert": 0,
-        "description": "Negative control: dose-matched decline in steps only."
+        "description": "Negative control: envelope-area-matched decline in steps only."
       }
     ]
   },

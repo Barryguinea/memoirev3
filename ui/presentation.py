@@ -165,37 +165,89 @@ def build_reason_row(row: pd.Series) -> str:
 
 
 def build_filterable_table(df: pd.DataFrame) -> pd.DataFrame:
-    """Sous-ensemble des colonnes de detection, tri recent-en-premier, pour filtrage interactif."""
+    """Sorties du détecteur actuel et du comparateur IF, triées du plus récent au plus ancien."""
     x = df.copy().sort_values("T", ascending=False)
     cols = [
         c
         for c in [
             "T",
             "Day",
+            "dataset_split",
+            "coverage_pct",
+            "hybrid_warning_priority",
+            "hybrid_warning_type",
+            "hybrid_warning_score",
+            "hybrid_warning_episode",
+            "hybrid_warning_start",
+            "hybrid_warning_notification",
+            "hybrid_warning_surveillance",
+            "hybrid_warning_sequence_start",
+            "hybrid_warning_fusion_mode",
+            "hybrid_warning_scope",
+            "behavioral_warning_score",
+            "behavioral_warning_cusum",
+            "behavioral_warning_families",
+            "behavioral_warning_candidate",
+            "behavioral_warning_episode",
+            "behavioral_warning_start",
+            "behavioral_warning_notification",
+            "behavioral_warning_scope",
+            "instability_warning_score",
+            "instability_warning_cusum",
+            "instability_warning_families",
+            "instability_warning_candidate",
+            "instability_warning_episode",
+            "instability_warning_start",
+            "instability_warning_notification",
+            "instability_coordinated_activity",
+            "instability_warning_scope",
             "if_score",
             "if_score_q05",
             "if_score_pct",
-            "is_critique",
             "if_anomaly_point",
-            "if_anom_k",
-            "anom_rate_k",
-            "K",
-            "mi_spike",
-            "mi_spike_k",
-            "n_families",
-            "flag_coherent_episode",
-            "coherence_boiterie",
-            "pred_problem_episode",
-            "pred_lameness_episode",
-            "pred_lameness_start",
-            "notif_lameness",
-            "in_cooldown",
-            "alert_level",
-            "lame_confidence",
         ]
         if c in x.columns
     ]
     return x[cols]
+
+
+def filter_detection_table(
+    df: pd.DataFrame,
+    *,
+    only_episode: bool = False,
+    only_notification: bool = False,
+    only_hypo_candidate: bool = False,
+    only_if: bool = False,
+) -> pd.DataFrame:
+    """Applique les filtres de la vue individuelle sans revenir aux alertes historiques."""
+    out = df.copy()
+    if only_episode:
+        episode_col = (
+            "hybrid_warning_episode"
+            if "hybrid_warning_episode" in out
+            else "behavioral_warning_episode"
+        )
+        if episode_col in out:
+            out = out[pd.to_numeric(out[episode_col], errors="coerce").fillna(0).astype(int) == 1]
+    if only_notification and "hybrid_warning_notification" in out:
+        out = out[
+            pd.to_numeric(out["hybrid_warning_notification"], errors="coerce")
+            .fillna(0)
+            .astype(int)
+            == 1
+        ]
+    if only_hypo_candidate and "behavioral_warning_candidate" in out:
+        out = out[
+            pd.to_numeric(out["behavioral_warning_candidate"], errors="coerce")
+            .fillna(0)
+            .astype(int)
+            == 1
+        ]
+    if only_if and "if_anomaly_point" in out:
+        out = out[
+            pd.to_numeric(out["if_anomaly_point"], errors="coerce").fillna(0).astype(int) == 1
+        ]
+    return out
 
 
 def normalize_alert_level(level: Any) -> str:

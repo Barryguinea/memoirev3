@@ -51,7 +51,7 @@ projet-memoire/
 │   ├── campaign.py              #   Campagne post-baseline (44 événements)
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   ├── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
-│   ├── stress_campaign.py       #   Stress test à dose appariée
+│   ├── stress_campaign.py       #   Stress test à aire d'enveloppe appariée
 │   └── stress_protocol.json     #   Protocole gelé du stress test
 ├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
@@ -65,9 +65,9 @@ projet-memoire/
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
-│   ├── audit_manuscript_numbers.py     # Vérifie 348 valeurs du mémoire ↔ sources
+│   ├── audit_manuscript_numbers.py     # Vérifie 354 valeurs du mémoire ↔ sources
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 107 tests (unitaires, invariants, non-régression)
+├── tests/                       # 109 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 107 tests
+pytest -q                                # 109 tests
 ```
 
 ---
@@ -138,14 +138,16 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    python scripts/compute_bootstrap_ci.py
    ```
 
-3. **Stress test HYPO à dose appariée** — cinq formes moins favorables et un
+3. **Stress test HYPO à aire d'enveloppe appariée** — cinq formes moins favorables et un
    contrôle pas-seuls, à trois positions par vache :
    ```bash
    python -m scripts.run_hypo_stress_validation
    ```
    Le protocole est gelé, les paramètres de détection restent inchangés et
-   chaque famille reçoit la même aire de perturbation que le profil graduel
+   chaque famille reçoit la même aire numérique d'enveloppe que le profil graduel
    modéré de référence, y compris après le retrait du bloc de données manquantes.
+   Cet appariement ne garantit pas une modification comportementale physique
+   identique entre vaches ou familles de signaux.
 
 4. **Extension bidirectionnelle** — douze scénarios (hypoactivité, instabilité,
    séquence) plus des contrôles et confondants (pic capteur, exercice, œstrus) :
@@ -159,7 +161,10 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    python -m validation_hybrid.mcgill_sls_validation
    ```
    L'AUC globale est descriptive; l'analyse exacte dans le seul bras
-   *Exercise* est **non concluante** (AUC 0,778; `p = 0,40`).
+   *Exercise* est **non concluante** (AUC 0,778; `p = 0,40`). Un contrôle
+   max-stat exact exploratoire reste favorable pour les cinq variantes de notifications
+   (`p = 0,0467`), mais devient non concluant sur les vingt combinaisons
+   variante-métrique (`p = 0,0742` en unilatéral).
 
 ### Limites assumées
 
@@ -188,7 +193,7 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   python scripts/update_validation_manifest.py
   shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
-- Un script d'audit confronte **348 valeurs** du manuscrit à leurs sources :
+- Un script d'audit confronte **354 valeurs** du manuscrit à leurs sources :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```

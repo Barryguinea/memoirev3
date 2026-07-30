@@ -41,7 +41,7 @@ def _inject(scenario: str, duration_hours: float = 48) -> tuple[pd.DataFrame, pd
     )
 
 
-def test_protocol_is_frozen_dose_matched_and_has_three_placements() -> None:
+def test_protocol_is_frozen_envelope_area_matched_and_has_three_placements() -> None:
     protocol = load_protocol()
     assert protocol["no_retuning"] is True
     assert protocol["dose_matching"]["reference_scenario"] == "gradual_moderate"

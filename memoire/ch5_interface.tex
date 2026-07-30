@@ -226,6 +226,14 @@ d'exporter la série d'une vache telle qu'elle est affichée, filtres compris. C
 alimentent le registre d'élevage ou une vérification hors ligne, sans imposer que l'interface
 reste ouverte.
 
+La table individuelle et son export correspondent à la chaîne actuelle: épisodes et
+notifications de la fusion, candidats HYPO, surveillance d'instabilité, couverture et
+partition chronologique. Les sorties d'Isolation Forest y sont conservées uniquement comme
+comparateur explicitement nommé. Les anciennes colonnes cliniques de la première chaîne ne
+sont ni affichées ni exportées, afin qu'un résultat historique ne puisse être confondu avec
+une sortie du système évalué dans ce mémoire. Le fichier CSV individuel contient exactement
+les lignes visibles après application des filtres.
+
 La traçabilité repose sur le nommage. Chaque fichier exporté porte la résolution temporelle
 retenue et une empreinte courte du fichier source, calculée au chargement et affichée à
 l'écran~; l'export individuel y ajoute l'identifiant de la vache et la fenêtre de dates. Deux
@@ -260,4 +268,3 @@ déploiement, au même titre que la validation clinique du détecteur.
 
 La charge de vérification que ce tri représente et ses conséquences pratiques pour l'éleveur
 sont examinées dans la discussion générale.
-

@@ -4,7 +4,7 @@
     "sensor_window": "strictement antérieure au score SLS",
     "primary_window_days": 7,
     "statistical_unit": "vache",
-    "primary_variant": "hierarchical, prédéfinie sans consulter les SLS",
+    "primary_variant": "hierarchical, retenue comme analyse principale; valeur p globale non ajustée, avec sensibilité max-stat rapportée séparément",
     "interpretation": "concordance observationnelle exploratoire, non validation diagnostique"
   },
   "cohort": {
@@ -117,5 +117,25 @@
     "leave_one_positive_out_auc_max": 0.9545454545454545,
     "interpretation": "Signal descriptif global positif; après restriction au groupe Exercise, la direction persiste mais l'inférence est non concluante."
   },
-  "verdict_rule": "Le classement global est encourageant, mais aucune variante ne peut être déclarée cliniquement validée avec trois SLS>=2, tous dans le groupe Exercise."
+  "multiplicity_sensitivity": [
+    {
+      "family": "notifications_5_variantes",
+      "n_tests": 5,
+      "n_unique_score_vectors": 5,
+      "observed_primary_auc": 0.9242424242424242,
+      "exact_maxstat_p_one_sided": 0.046703296703296704,
+      "exact_maxstat_p_two_sided": 0.06868131868131869,
+      "n_permutations": 364
+    },
+    {
+      "family": "toutes_20_combinaisons",
+      "n_tests": 20,
+      "n_unique_score_vectors": 11,
+      "observed_primary_auc": 0.9242424242424242,
+      "exact_maxstat_p_one_sided": 0.07417582417582418,
+      "exact_maxstat_p_two_sided": 0.12362637362637363,
+      "n_permutations": 364
+    }
+  ],
+  "verdict_rule": "Le classement global et sa stabilité au retrait d'une vache positive sont encourageants. La sensibilité max-stat et la restriction au groupe Exercise bornent toutefois l'inférence: aucune variante n'est cliniquement validée."
 }

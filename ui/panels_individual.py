@@ -10,7 +10,7 @@ import streamlit as st
 
 from ui.clinical_ui import build_episode_why_table, load_clinical_kb, render_clinical_guidance
 from ui.plots import build_multi_panel_figure
-from ui.presentation import build_filterable_table
+from ui.presentation import build_filterable_table, filter_detection_table
 
 PipelineKwargs = Dict[str, Any]
 PlotFn = Callable[..., Any]
@@ -101,41 +101,42 @@ def render_tab_individual(
     st.markdown("### Table filtrable")
     f1, f2, f3, f4 = st.columns(4)
     with f1:
-        only_episode = st.checkbox("Seulement alertes (épisode)", key=mk_key("flt_ep", cow_sel, d1, d2))
+        only_episode = st.checkbox(
+            "Épisodes fusionnés",
+            key=mk_key("flt_ep", cow_sel, d1, d2),
+        )
     with f2:
-        only_if = st.checkbox("Seulement anomalies IF", key=mk_key("flt_if", cow_sel, d1, d2))
+        only_notification = st.checkbox(
+            "Notifications fusionnées",
+            key=mk_key("flt_notif", cow_sel, d1, d2),
+        )
     with f3:
-        only_coherent = st.checkbox("Seulement cohérentes", key=mk_key("flt_coh", cow_sel, d1, d2))
+        only_hypo_candidate = st.checkbox(
+            "Candidats HYPO",
+            key=mk_key("flt_hypo", cow_sel, d1, d2),
+        )
     with f4:
-        out_cooldown = st.checkbox("Hors cooldown", key=mk_key("flt_cd", cow_sel, d1, d2))
+        only_if = st.checkbox(
+            "Anomalies IF (comparateur)",
+            key=mk_key("flt_if", cow_sel, d1, d2),
+        )
 
     table_df = build_filterable_table(it_filt)
-    if only_episode:
-        if "hybrid_warning_episode" in table_df.columns:
-            table_df = table_df[table_df["hybrid_warning_episode"].astype(int) == 1]
-        elif "behavioral_warning_episode" in table_df.columns:
-            table_df = table_df[table_df["behavioral_warning_episode"].astype(int) == 1]
-        elif "pred_lameness_episode" in table_df.columns:
-            table_df = table_df[table_df["pred_lameness_episode"].astype(int) == 1]
-        elif "pred_problem_episode" in table_df.columns:
-            table_df = table_df[table_df["pred_problem_episode"].astype(int) == 1]
-    if only_if and "if_anomaly_point" in table_df.columns:
-        table_df = table_df[table_df["if_anomaly_point"].astype(int) == 1]
-    if only_coherent:
-        if "coherence_boiterie" in table_df.columns:
-            table_df = table_df[table_df["coherence_boiterie"].astype(int) == 1]
-        elif "flag_coherent_episode" in table_df.columns:
-            table_df = table_df[table_df["flag_coherent_episode"].astype(int) == 1]
-    if out_cooldown and "in_cooldown" in table_df.columns:
-        table_df = table_df[table_df["in_cooldown"].astype(int) == 0]
+    table_df = filter_detection_table(
+        table_df,
+        only_episode=only_episode,
+        only_notification=only_notification,
+        only_hypo_candidate=only_hypo_candidate,
+        only_if=only_if,
+    )
 
-    st.caption(f"{len(table_df)} ligne(s) apres filtres")
-    st.dataframe(table_df, width="stretch", height=430)
+    st.caption(f"{len(table_df)} ligne(s) après filtres")
+    st.dataframe(table_df, width="stretch", height=430, hide_index=True)
 
     st.download_button(
-        "Telecharger les donnees de cette vache",
+        "Télécharger les données affichées",
         data=table_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"vache_{cow_sel}_{interval}_{d1}_{d2}.csv",
+        file_name=f"vache_{cow_sel}_{interval}_{d1}_{d2}_{file_hash[:8]}.csv",
         mime="text/csv",
         key=mk_key("dl_cow", cow_sel, file_hash),
     )

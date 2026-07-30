@@ -6,3 +6,4 @@ ablation_effet,HYPO_vs_B,0.1335,0.1057,0.1612,rang_biseriale=+1.00; favorables=1
 ablation_effet,HYPO_vs_C,0.1349,0.1066,0.1634,rang_biseriale=+1.00; favorables=11/11; p=0.00098
 ablation_effet,HYPO_vs_D,0.1321,0.1034,0.1608,rang_biseriale=+1.00; favorables=11/11; p=0.00098
 ablation_effet,HYPO_vs_E,-0.0037,-0.0315,0.0217,rang_biseriale=-0.03; favorables=5/11; p=0.96582
+ablation_fond,E_moins_HYPO,0.116,0.0447,0.1874,HYPO_plus_faible=8/11; p_exact_unilateral=0.01172

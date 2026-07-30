@@ -12,6 +12,7 @@ Usage:
 from __future__ import annotations
 
 import csv
+from itertools import product
 from pathlib import Path
 
 import numpy as np
@@ -99,11 +100,64 @@ def ablation_effects(rng: np.random.Generator) -> list[dict[str, object]]:
     return results
 
 
+def background_effect(rng: np.random.Generator) -> list[dict[str, object]]:
+    """Compare la charge de fond HYPO au comparateur pédométrique, par vache."""
+    rows = _rows(ABLATION)
+    variants = sorted({r["variante"] for r in rows})
+    hypo_name = next(v for v in variants if v.upper().startswith("A."))
+    pedometer_name = next(v for v in variants if v.upper().startswith("E."))
+    cows = sorted({r["cow"] for r in rows})
+
+    def background_by_cow(variant: str) -> np.ndarray:
+        return np.array(
+            [
+                float(
+                    next(
+                        r["false_notif_cow_day"]
+                        for r in rows
+                        if r["variante"] == variant and r["cow"] == cow
+                    )
+                )
+                for cow in cows
+            ]
+        )
+
+    hypo = background_by_cow(hypo_name)
+    pedometer = background_by_cow(pedometer_name)
+    diff = pedometer - hypo
+    boot = np.array(
+        [np.mean(diff[rng.choice(len(cows), len(cows), replace=True)]) for _ in range(N_BOOT)]
+    )
+    lo, hi = np.percentile(boot, [2.5, 97.5])
+    observed = float(diff.mean())
+    null_means = np.array(
+        [np.mean(diff * np.asarray(signs, dtype=float)) for signs in product((-1, 1), repeat=len(diff))]
+    )
+    p_one_sided = float(np.mean(null_means >= observed - 1e-12))
+    return [
+        {
+            "analyse": "ablation_fond",
+            "cible": "E_moins_HYPO",
+            "valeur": round(observed, 4),
+            "ic95_bas": round(float(lo), 4),
+            "ic95_haut": round(float(hi), 4),
+            "effet": (
+                f"HYPO_plus_faible={int((diff > 0).sum())}/{len(cows)}; "
+                f"p_exact_unilateral={p_one_sided:.5f}"
+            ),
+        }
+    ]
+
+
 def main() -> None:
     rng = np.random.default_rng(SEED)
-    rows = hypo_metrics(rng) + ablation_effects(rng)
+    rows = hypo_metrics(rng) + ablation_effects(rng) + background_effect(rng)
     with open(OUT, "w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["analyse", "cible", "valeur", "ic95_bas", "ic95_haut", "effet"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["analyse", "cible", "valeur", "ic95_bas", "ic95_haut", "effet"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
     for r in rows:

@@ -83,6 +83,9 @@ Bootstrap nouveau_depart upper,0.7576,0.7576,hypo_module/bootstrap_ci.csv,True
 Bootstrap iou20 point,0.3939,0.3939,hypo_module/bootstrap_ci.csv,True
 Bootstrap iou20 lower,0.2424,0.2424,hypo_module/bootstrap_ci.csv,True
 Bootstrap iou20 upper,0.5455,0.5455,hypo_module/bootstrap_ci.csv,True
+Pedometer minus HYPO background difference,0.116,0.116,hypo_module/bootstrap_ci.csv,True
+Pedometer minus HYPO background CI lower,0.0447,0.0447,hypo_module/bootstrap_ci.csv,True
+Pedometer minus HYPO background CI upper,0.1874,0.1874,hypo_module/bootstrap_ci.csv,True
 Calibration Fond moyen / vache-jour reference,0.4016,0.4016,hypo_module/per_cow_calibration.csv,True
 Calibration Fond moyen / vache-jour calibrated,0.4016,0.4016,hypo_module/per_cow_calibration.csv,True
 Calibration Fond CV inter-vache reference,0.2437,0.2437,hypo_module/per_cow_calibration.csv,True
@@ -332,6 +335,9 @@ SLS Exercise-only exact two-sided p,0.4,0.4,mcgill_sls/mcgill_summary.json,True
 SLS treatment Fisher p,0.06993,0.06993006993006992,mcgill_sls/mcgill_summary.json,True
 SLS leave-one-positive-out AUC minimum,0.90909,0.9090909090909091,mcgill_sls/mcgill_summary.json,True
 SLS leave-one-positive-out AUC maximum,0.95455,0.9545454545454545,mcgill_sls/mcgill_summary.json,True
+SLS notification variants max-stat one-sided p,0.0467,0.046703296703296704,mcgill_sls/mcgill_summary.json,True
+SLS all combinations max-stat one-sided p,0.07418,0.07417582417582418,mcgill_sls/mcgill_summary.json,True
+SLS all combinations max-stat two-sided p,0.12363,0.12362637362637363,mcgill_sls/mcgill_summary.json,True
 SLS future notification load,0.7551,0.7550796482467383,mcgill_sls/mcgill_cohort_all_variants.csv,True
 Bibliography references,73.0,73.0,memoire/references.bib,True
 Bibliography DOI references,58.0,58.0,memoire/references.bib,True

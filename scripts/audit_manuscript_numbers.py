@@ -146,6 +146,13 @@ for target, point, low, high in (
     check(f"Bootstrap {target} point", row["valeur"], point, "hypo_module/bootstrap_ci.csv")
     check(f"Bootstrap {target} lower", row["ic95_bas"], low, "hypo_module/bootstrap_ci.csv")
     check(f"Bootstrap {target} upper", row["ic95_haut"], high, "hypo_module/bootstrap_ci.csv")
+background_effect = bootstrap.loc[("ablation_fond", "E_moins_HYPO")]
+for claim, key, expected in (
+    ("Pedometer minus HYPO background difference", "valeur", 0.1160),
+    ("Pedometer minus HYPO background CI lower", "ic95_bas", 0.0447),
+    ("Pedometer minus HYPO background CI upper", "ic95_haut", 0.1874),
+):
+    check(claim, background_effect[key], expected, "hypo_module/bootstrap_ci.csv", 5e-5)
 
 calibration = pd.read_csv(hypo_dir / "per_cow_calibration.csv").set_index("indicateur")
 for indicator, reference_value, calibrated_value in (
@@ -514,6 +521,34 @@ for claim, key, expected in (
     ("SLS leave-one-positive-out AUC maximum", "leave_one_positive_out_auc_max", 0.95455),
 ):
     check(claim, diagnostics[key], expected, "mcgill_sls/mcgill_summary.json", 5e-5)
+multiplicity = {row["family"]: row for row in sls["multiplicity_sensitivity"]}
+for claim, family, key, expected in (
+    (
+        "SLS notification variants max-stat one-sided p",
+        "notifications_5_variantes",
+        "exact_maxstat_p_one_sided",
+        0.04670,
+    ),
+    (
+        "SLS all combinations max-stat one-sided p",
+        "toutes_20_combinaisons",
+        "exact_maxstat_p_one_sided",
+        0.07418,
+    ),
+    (
+        "SLS all combinations max-stat two-sided p",
+        "toutes_20_combinaisons",
+        "exact_maxstat_p_two_sided",
+        0.12363,
+    ),
+):
+    check(
+        claim,
+        multiplicity[family][key],
+        expected,
+        "mcgill_sls/mcgill_summary.json",
+        5e-5,
+    )
 sls_cohort = pd.read_csv(ROOT / "data/validation/mcgill_sls/mcgill_cohort_all_variants.csv")
 sls_hierarchical = sls_cohort.loc[sls_cohort["variant"] == "hierarchical"]
 check("SLS future notification load", sls_hierarchical["future_hybrid_notif_per_cow_day"].mean(), 0.7551, "mcgill_sls/mcgill_cohort_all_variants.csv")

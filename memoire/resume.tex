@@ -18,10 +18,10 @@ que les alertes attribuables. Sur les dégradations graduelles, HYPO recouvre la
 des événements et localise mieux les épisodes qu'Isolation Forest et Local Outlier Factor; le
 contrôle bref isolé est rejeté. Un stress test sans nouveau réglage étend l'évaluation à des
 départs abrupts, des familles désynchronisées, une récupération asymétrique, du bruit et un
-bloc de données manquantes, à dose de perturbation appariée. HYPO y conserve son avantage sur
-ces comparateurs, mais non sur un comparateur pédométrique doté de la même logique temporelle:
-la robustesse temporelle est donc mieux établie que l'apport propre de la cohérence
-multivariée.
+bloc de données manquantes, à aire numérique d'enveloppe appariée. HYPO y conserve son avantage
+sur IF et LOF et présente moins de fond que le comparateur pédométrique dans la campagne
+principale, mais il ne dépasse pas ce dernier pour la localisation: la robustesse temporelle est
+donc mieux établie que l'apport propre de la cohérence multivariée.
 
 Le mémoire explore aussi une extension bidirectionnelle fondée sur une branche INSTABILITÉ,
 qui représente des situations où un inconfort locomoteur pourrait s'accompagner d'agitation, de
@@ -65,10 +65,10 @@ run with a clean run of the same cow, so that only attributable alerts are credi
 degradations, HYPO recovers most events and localizes episodes better than Isolation Forest and
 Local Outlier Factor; the isolated brief variation is rejected. A no-retuning stress test
 extends the evaluation to abrupt onset, desynchronized families, asymmetric recovery, noise and
-a missing-data block under matched perturbation dose. HYPO retains its advantage over these
-comparators, but not over a pedometric comparator using the same temporal logic: temporal
-robustness is therefore better established than the independent contribution of multivariate
-coherence.
+a missing-data block with matched numerical perturbation-envelope area. HYPO retains its
+advantage over IF and LOF and has less background load than the pedometric comparator in the
+main campaign, but it does not outperform that comparator in localization: temporal robustness
+is therefore better established than the independent contribution of multivariate coherence.
 
 The thesis also explores a bidirectional extension based on an INSTABILITY branch, which
 represents situations in which locomotor discomfort could involve agitation, more frequent

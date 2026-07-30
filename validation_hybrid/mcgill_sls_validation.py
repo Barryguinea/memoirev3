@@ -166,6 +166,83 @@ def treatment_sensitivity(
     return pd.DataFrame(analyses), diagnostics
 
 
+def multiplicity_sensitivity(
+    all_cohorts: pd.DataFrame,
+    *,
+    primary_variant: str = "hierarchical",
+    primary_metric: str = "pre7_hybrid_notifs",
+) -> pd.DataFrame:
+    """Test max-stat exact pour les variantes et métriques observées dans la cohorte SLS."""
+    metrics = [
+        "pre7_hybrid_notifs",
+        "pre7_hybrid_frac_time",
+        "pre7_hybrid_score_max",
+        "pre7_instability_surveillance_frac",
+    ]
+    primary = (
+        all_cohorts[all_cohorts["variant"].eq(primary_variant)]
+        .sort_values("cow")
+        .reset_index(drop=True)
+    )
+    cows = primary["cow"].astype(str).tolist()
+    labels = primary["sls_ge_2"].astype(int).to_numpy()
+    n_positive = int(labels.sum())
+    if n_positive == 0 or n_positive == len(labels):
+        raise ValueError("Le test max-stat exige deux classes SLS.")
+
+    score_vectors: dict[tuple[str, str], np.ndarray] = {}
+    for variant, cohort in all_cohorts.groupby("variant"):
+        indexed = cohort.assign(cow=cohort["cow"].astype(str)).set_index("cow").reindex(cows)
+        for metric in metrics:
+            values = pd.to_numeric(indexed[metric], errors="raise").to_numpy(float)
+            score_vectors[(str(variant), metric)] = values
+
+    primary_values = score_vectors[(primary_variant, primary_metric)]
+    observed_primary_auc = float(roc_auc_score(labels, primary_values))
+    families = {
+        "notifications_5_variantes": [
+            key for key in score_vectors if key[1] == "pre7_hybrid_notifs"
+        ],
+        "toutes_20_combinaisons": list(score_vectors),
+    }
+    rows: list[dict[str, object]] = []
+    for family, keys in families.items():
+        max_one_sided: list[float] = []
+        max_two_sided: list[float] = []
+        for positive_indices in combinations(range(len(labels)), n_positive):
+            permuted = np.zeros(len(labels), dtype=int)
+            permuted[list(positive_indices)] = 1
+            aucs = np.asarray(
+                [roc_auc_score(permuted, score_vectors[key]) for key in keys],
+                dtype=float,
+            )
+            max_one_sided.append(float(aucs.max()))
+            max_two_sided.append(float(np.abs(aucs - 0.5).max()))
+        unique_vectors = {
+            tuple(np.round(score_vectors[key], 12).tolist())
+            for key in keys
+        }
+        rows.append(
+            {
+                "family": family,
+                "n_tests": len(keys),
+                "n_unique_score_vectors": len(unique_vectors),
+                "observed_primary_auc": observed_primary_auc,
+                "exact_maxstat_p_one_sided": float(
+                    np.mean(np.asarray(max_one_sided) >= observed_primary_auc - 1e-12)
+                ),
+                "exact_maxstat_p_two_sided": float(
+                    np.mean(
+                        np.asarray(max_two_sided)
+                        >= abs(observed_primary_auc - 0.5) - 1e-12
+                    )
+                ),
+                "n_permutations": len(max_one_sided),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def run_variant(
     name: str,
     fusion: HybridFusionConfig,
@@ -286,6 +363,8 @@ def run_all(output_dir: str = "data/validation/mcgill_sls") -> dict[str, object]
     primary = all_cohorts[all_cohorts["variant"] == "hierarchical"]
     treatment_frame, treatment_diagnostics = treatment_sensitivity(primary)
     treatment_frame.to_csv(output / "mcgill_treatment_sensitivity.csv", index=False)
+    multiplicity_frame = multiplicity_sensitivity(all_cohorts)
+    multiplicity_frame.to_csv(output / "mcgill_multiplicity_sensitivity.csv", index=False)
     treatment_records = (
         treatment_frame.astype(object)
         .where(pd.notna(treatment_frame), None)
@@ -297,7 +376,10 @@ def run_all(output_dir: str = "data/validation/mcgill_sls") -> dict[str, object]
             "sensor_window": "strictement antérieure au score SLS",
             "primary_window_days": PRIMARY_WINDOW_DAYS,
             "statistical_unit": "vache",
-            "primary_variant": "hierarchical, prédéfinie sans consulter les SLS",
+            "primary_variant": (
+                "hierarchical, retenue comme analyse principale; valeur p globale non ajustée, "
+                "avec sensibilité max-stat rapportée séparément"
+            ),
             "interpretation": "concordance observationnelle exploratoire, non validation diagnostique",
         },
         "cohort": {
@@ -317,9 +399,11 @@ def run_all(output_dir: str = "data/validation/mcgill_sls") -> dict[str, object]
         ].to_dict(orient="records"),
         "treatment_sensitivity": treatment_records,
         "treatment_diagnostics": treatment_diagnostics,
+        "multiplicity_sensitivity": multiplicity_frame.to_dict(orient="records"),
         "verdict_rule": (
-            "Le classement global est encourageant, mais aucune variante ne peut être "
-            "déclarée cliniquement validée avec trois SLS>=2, tous dans le groupe Exercise."
+            "Le classement global et sa stabilité au retrait d'une vache positive sont "
+            "encourageants. La sensibilité max-stat et la restriction au groupe Exercise "
+            "bornent toutefois l'inférence: aucune variante n'est cliniquement validée."
         ),
     }
     (output / "mcgill_summary.json").write_text(

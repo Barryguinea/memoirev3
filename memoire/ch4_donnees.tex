@@ -225,11 +225,12 @@ référence ni optimiser les seuils sur les sorties observées.
 Une campagne de stress complémentaire réexécute aussi HYPO et les quatre comparateurs sur
 six formes moins favorables, à trois positions par vache. Elle est séparée des résultats qui
 ont servi à construire le système. Son protocole JSON interdit tout nouveau réglage et
-apparie la dose de perturbation: pour chaque famille modifiée, l'aire discrète sous
+apparie l'aire de l'enveloppe numérique: pour chaque famille modifiée, l'aire discrète sous
 l'enveloppe, calculée sur les intervalles effectivement conservés, est égale à celle du
 profil modéré graduel de 48 heures. Cette contrainte évite d'attribuer à la forme temporelle
-un effet qui proviendrait seulement d'une perturbation plus forte. Le contrôle négatif
-modifie uniquement les pas avec la même dose; le scénario de données manquantes retire un
+un effet qui proviendrait seulement d'une enveloppe programmée plus intense; elle ne garantit
+pas une amplitude physiologique ou comportementale identique. Le contrôle négatif modifie
+uniquement les pas avec la même aire numérique; le scénario de données manquantes retire un
 bloc contigu de douze heures après cet appariement.
 
 \begin{figure}[H]
@@ -309,8 +310,9 @@ Aucun SLS de 3 ou 4 n'est observé. Le seuil SLS~$\geq2$ constitue une séparati
 exploratoire, non un diagnostic imposé par le protocole source.
 
 \subsection{Protocole de l'analyse SLS}
-La configuration hiérarchique est appliquée sans consulter les scores. La mesure principale
-est le nombre de notifications dans les sept jours précédant le 12 mars 2019. Sont également
+La configuration hiérarchique est appliquée sans utiliser les scores pour entraîner le
+détecteur ou régler ses seuils. Dans l'analyse finale, cette fusion et le nombre de notifications
+dans les sept jours précédant le 12 mars 2019 sont retenus comme analyse principale. Sont également
 rapportées la fraction du temps en épisode, la surveillance d'instabilité et le score
 maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann-Whitney et la
 corrélation de Spearman au niveau de la vache. Avec seulement trois SLS~$\geq2$, ces mesures
@@ -320,4 +322,8 @@ les répartitions possibles des trois étiquettes positives parmi les quatorze v
 \textit{Exercise}; le groupe sans exercice ne contient aucun SLS~$\geq2$ et son AUC n'est
 donc pas estimable. Un test exact de Fisher quantifie l'association entre traitement et
 classe SLS, et une analyse leave-one-positive-out vérifie l'influence de chacune des trois
-vaches positives.
+vaches positives. Enfin, une analyse de sensibilité ajoutée après l'analyse principale emploie
+un test exact max-stat pour contrôler la recherche parmi les cinq variantes de fusion pour le
+nombre de notifications, puis parmi les vingt combinaisons formées par les cinq variantes et
+les quatre métriques. Son caractère postérieur impose une portée exploratoire; la valeur $p$
+globale non ajustée est conservée comme résultat descriptif.

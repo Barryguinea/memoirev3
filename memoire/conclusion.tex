@@ -49,7 +49,8 @@ preuve.
         que les comparateurs IF/LOF.
       & HYPO identifie à lui seul la cause de la dégradation. \\
     Soutenu mais limité
-      & Le mécanisme temporel reste robuste à cinq formes moins favorables à dose appariée.
+      & Le mécanisme temporel reste robuste à cinq formes moins favorables à aire
+        d'enveloppe appariée.
       & La cohérence multivariée apporte un gain démontré sur un comparateur pédométrique
         doté de la même machinerie temporelle. \\
     Exploratoire
@@ -73,15 +74,18 @@ que la simple accumulation d'anomalies ponctuelles. La contribution propre de la
 entre familles demande toutefois une comparaison supplémentaire, car le comparateur
 pédométrique partage la même machinerie temporelle.
 
-Le stress test à dose appariée apporte cette comparaison sur cinq formes moins favorables,
+Le stress test à aire d'enveloppe appariée apporte cette comparaison sur cinq formes moins favorables,
 trois positions et onze vaches. Sur les 165 événements positifs, HYPO atteint en moyenne
 97,0\,\% de couverture attribuable, 71,5\,\% de nouveaux départs et 30,9\,\% à IoU20. Il
 conserve un avantage exact sur IF, IF avec persistance et LOF avec persistance
-($p=0{,}000488$ pour chaque comparaison). En revanche, sa couverture ne dépasse pas celle du
-comparateur pédométrique temporel (différence $-0{,}012$, $p=0{,}844$), et le contrôle
-pas-seuls produit un nouveau départ dans 30,3\,\% des cas. Cette campagne renforce donc la
-robustesse de l'architecture temporelle aux formes moins favorables, mais ne permet pas
-d'attribuer un gain indépendant à la cohérence multivariée.
+($p=0{,}000488$ pour chaque comparaison). Ce résultat positif montre que l'avantage de HYPO
+sur les détecteurs ponctuels ne dépend pas uniquement de la forme graduelle initiale. En
+revanche, sa couverture ne dépasse pas celle du comparateur pédométrique temporel
+(différence $-0{,}012$, $p=0{,}844$), et le contrôle pas-seuls échoue au critère principal de
+spécificité: 78,8\,\% de recouvrement attribuable et 30,3\,\% de nouveaux départs. Ce contrôle
+reste toutefois mal localisé (IoU moyen de 0,038 et aucun événement à IoU20). La campagne
+soutient donc la robustesse temporelle de HYPO aux formes moins favorables, mais ne démontre
+pas un gain indépendant de spécificité multivariée.
 
 L'analyse OFAT montre ensuite que ces conclusions ne reposent pas sur une valeur unique de
 chaque seuil. Elle identifie toutefois deux choix structurants~: l'agrégation et le nombre de
@@ -165,8 +169,12 @@ utilisateurs.
 L'analyse IceTag-SLS apporte un résultat encourageant~: le nombre de notifications dans les
 sept jours précédant le score est plus élevé chez les trois vaches SLS~$\geq2$, avec une AUC
 exploratoire de 0,924 et un test exact bilatéral global à $p=0{,}030$, tandis que le score
-maximal et la surveillance d'instabilité séparent moins bien les groupes. Cette concordance
-reste limitée par l'effectif et par le fait que les trois vaches SLS~$\geq2$ appartiennent
+maximal et la surveillance d'instabilité séparent moins bien les groupes. L'AUC reste entre
+0,909 et 0,955 lorsqu'une vache positive est retirée, et un test max-stat unilatéral
+exploratoire demeure favorable parmi les cinq variantes de notifications ($p=0{,}0467$). En revanche, il devient
+non concluant sur les vingt combinaisons variante-métrique ($p=0{,}0742$), ce qui borne la
+portée inférentielle sans effacer le signal descriptif. Cette concordance
+reste aussi limitée par l'effectif et par le fait que les trois vaches SLS~$\geq2$ appartiennent
 au groupe \textit{Exercise}. Dans ce seul groupe, l'AUC est de 0,778 et le test exact
 bilatéral est non concluant ($p=0{,}40$); aucune AUC interne n'est estimable dans le groupe
 sans exercice, faute de cas SLS~$\geq2$. Le résultat appuie donc la faisabilité de l'analyse
@@ -261,15 +269,18 @@ le critère IoU20 alors que HYPO obtient une localisation supérieure, l'avantag
 découle pas de la simple présence de l'événement, mais de la manière dont il est capté.
 Ensuite, le contrôle bref, une variation isolée d'une seule famille, n'appartient pas à la
 cible de HYPO et est correctement rejeté, ce qui montre que le détecteur ne réagit pas à toute
-perturbation injectée. Enfin, l'amplitude du profil modéré reprend un ordre de grandeur
+perturbation injectée. L'amplitude du profil modéré reprend par ailleurs un ordre de grandeur
 rapporté dans la littérature pour des changements comportementaux associés à des épisodes
 locomoteurs ou à un parage thérapeutique \citep{paudyal2021lying}. Enfin, le stress test
 réexécute la comparaison sur un départ abrupt, des familles désynchronisées, une récupération
-asymétrique, du bruit et un bloc manquant. L'aire de perturbation est identique entre les
-formes et le comparateur pédométrique est inclus. Il confirme que l'avantage sur IF et LOF
-ne dépend pas de la seule forme graduelle, tout en révélant honnêtement que l'apport propre
-de la cohérence multivariée n'est pas isolé. Les formes injectées demeurent néanmoins des
-hypothèses d'évaluation technique et non des trajectoires cliniques observées.
+asymétrique, du bruit et un bloc manquant. L'aire numérique sous l'enveloppe est appariée
+entre les formes et le comparateur pédométrique est inclus; cet appariement ne garantit pas
+une amplitude physique ou comportementale identique. Le test confirme que l'avantage sur IF
+et LOF ne dépend pas de la seule forme graduelle. Il révèle aussi une limite importante: le
+contrôle pas-seuls atteint 78,8\,\% de recouvrement attribuable, même s'il reste très mal
+localisé. L'apport propre de la cohérence multivariée n'est donc pas isolé. Les formes
+injectées demeurent des hypothèses d'évaluation technique et non des trajectoires cliniques
+observées.
 
 Sur le plan de la validité interne, la séparation chronologique et la soustraction de
 l'exécution propre réduisent la fuite et l'attribution erronée. Plusieurs scénarios

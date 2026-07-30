@@ -4,7 +4,7 @@
 Ce chapitre présente les preuves techniques du système en partant du résultat le plus solide:
 la branche HYPO. La première partie montre sa réponse à des dégradations graduelles, son
 avantage sur les comparateurs IF/LOF et sa stabilité locale par OFAT. La deuxième partie
-teste sa robustesse à des formes moins favorables à dose appariée, puis examine l'extension
+teste sa robustesse à des formes moins favorables à aire d'enveloppe appariée, puis examine l'extension
 INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
 pourcentages décrivent la réponse du logiciel à des scénarios contrôlés et permettent de
 comparer détection, localisation et charge de vérification. Le Tableau~\ref{tab:cles_lecture_resultats}
@@ -72,7 +72,7 @@ l'intégrité et la comparabilité de ces campagnes.
     Injections strictement postérieures à la période de référence & Conforme \\
     Signaux sources informatifs et couverture admissible & Conforme \\
     Non-négativité et conservation du temps postural & Conforme \\
-    Dose appariée sur les intervalles conservés du stress test & Conforme \\
+    Aire d'enveloppe appariée sur les intervalles conservés du stress test & Conforme \\
     Trois positions postérieures à la période de référence & Conforme \\
     Exécution propre utilisée pour l'attribution & Conforme \\
     \bottomrule
@@ -313,12 +313,15 @@ satisfaire, y est relâchée pour ne pas le désavantager. Partageant cette mach
 attribuable par vache n'est que de $-0{,}004$ (IC95 [$-0{,}032$~; 0,022], $p=0{,}966$, six
 vaches sur onze le favorisant légèrement), là où les comparateurs IF et LOF s'effondrent à
 un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il ouvre moins de nouveaux
-départs attribuables (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
-sans atteindre le seuil de significativité) et laisse passer davantage de fond (0,518 contre
-0,402 notification par vache-jour, soit près d'un tiers de plus). Ce que l'architecture
-fondée sur plusieurs signaux apporte n'est donc pas une meilleure localisation, mais un meilleur compromis
-entre déclenchement attribuable et charge de fond~: c'est la cohérence entre familles, et non la seule
-machinerie temporelle, qui resserre ce compromis. Ce constat rejoint la limite connue des
+    départs attribuables (27,3 contre 43,2~\%; tendance en faveur de HYPO, $p=0{,}0625$ sur onze vaches,
+    sans atteindre le seuil de significativité) et laisse passer davantage de fond (0,518 contre
+    0,402 notification par vache-jour). L'écart pédomètre moins HYPO atteint 0,116
+    notification par vache-jour (IC95 [0,045~; 0,187]); huit vaches sur onze présentent moins de
+    fond avec HYPO et le test exact apparié unilatéral vaut $p=0{,}01172$. Cette comparaison de
+    fond, ajoutée après examen des autres métriques et non corrigée pour leur multiplicité, reste
+    exploratoire. Elle soutient néanmoins une hypothèse utile~: plusieurs signaux pourraient
+    réduire la charge de revue sans améliorer la localisation. Elle ne suffit pas à démontrer un
+    avantage indépendant de la cohérence multivariée. Ce constat rejoint la limite connue des
 approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
 \citep{alsaaod2012electronic,oleary2020accelerometers}.
 
@@ -330,9 +333,9 @@ retenues puis aux valeurs de paramètres. Elles évaluent une robustesse locale 
 sélectionnent aucune nouvelle configuration.
 
 \subsection{Apport de chaque famille de signaux}
-Le comparateur pédométrique a montré, pour les pas, que la combinaison de signaux resserre le
-compromis entre détection et charge de fond sans changer la localisation. On généralise ici ce
-constat en rejouant la même ablation, mais en restreignant tour à tour le détecteur à chacune
+Le comparateur pédométrique suggère, pour les pas, que la combinaison de signaux peut réduire la
+charge de fond sans changer la localisation. On examine ici si ce motif descriptif se retrouve
+en rejouant la même ablation, mais en restreignant tour à tour le détecteur à chacune
 des quatre familles (Tableau~\ref{tab:hypo_channels}). Là où le Tableau~\ref{tab:hypo_ablation}
 situe HYPO face à d'autres familles d'algorithmes (IF, LOF, podomètre), celui-ci décompose ce
 qu'il doit à chacune de ses propres familles de signaux; les deux se lisent donc ensemble.
@@ -347,11 +350,11 @@ exactement où on l'attend, en charge de fond~: les trois canaux d'activité iso
 entre 0,49 et 0,52 fois par vache-jour, contre 0,40 pour HYPO. La posture seule illustre
 l'écueil inverse~: son fond est le plus bas (0,393), mais elle ne localise presque rien
 (IoU20 de 2,3\,\%). Aucune
-famille ne domine donc sur tous les plans. L'intérêt de combiner les quatre n'est pas de
-maximiser la sensibilité, mais d'obtenir la charge de fond la plus basse à localisation
-comparable et de ne pas faire dépendre la décision d'un signal unique susceptible d'être
-confondu, par exemple les pas gonflés par l'exercice ou l'œstrus. C'est cette robustesse, et
-non un gain de détection brute, que la cohérence entre familles apporte.
+famille ne domine donc sur tous les plans. Dans cette campagne, combiner les quatre obtient une
+charge de fond basse à localisation comparable et évite de faire dépendre la décision d'un signal
+unique susceptible d'être confondu, par exemple les pas gonflés par l'exercice ou l'œstrus. Ce
+profil est compatible avec un gain de robustesse par cohérence, mais l'absence d'avantage
+significatif sur le comparateur pédométrique empêche de l'établir comme effet causal indépendant.
 
 \begin{table}[H]
   \centering
@@ -375,9 +378,10 @@ Le calcul de cette ablation par canal est reproductible par
 \path{scripts/compute_channel_ablation.py}.
 
 Prises ensemble, les deux ablations (Tableaux~\ref{tab:hypo_ablation} et~\ref{tab:hypo_channels})
-soutiennent l'apport
-de la direction du changement, de la cohérence entre signaux et de la persistance. Elles ne
-résolvent pas la charge opérationnelle, qui reste supérieure à celle des variantes B et D.
+soutiennent surtout l'apport de la direction du changement et de la persistance. Elles font de la
+cohérence entre signaux une hypothèse crédible de réduction du fond, sans démontrer son apport
+indépendant sur la détection ou la localisation. Elles ne résolvent pas la charge opérationnelle,
+qui reste supérieure à celle des variantes B et D.
 
 \subsection{Robustesse locale des paramètres HYPO}
 L'analyse OFAT comprend la référence et vingt variantes dans lesquelles un seul des dix
@@ -438,19 +442,20 @@ Cette analyse soutient la stabilité locale de l'extension, mais elle est beauco
 complète que l'OFAT de HYPO et ne valide pas les seuils physiologiquement.
 
 % =====================================================================
-\section{Stress test HYPO à dose appariée}
+\section{Stress test HYPO à aire d'enveloppe appariée}
 % =====================================================================
 La campagne gelée applique six formes à trois positions chez chacune des onze vaches, soit
 198 événements physiques et 990 évaluations pour les cinq variantes. Les cinq formes
 positives modifient plusieurs familles; le contrôle négatif modifie uniquement les pas.
-Chaque famille perturbée reçoit une aire d'enveloppe de 36 heures, identique à celle du
+Chaque famille perturbée reçoit une aire numérique d'enveloppe de 36 heures, identique à celle du
 profil graduel modéré de référence. Ce contrôle est satisfait pour tous les événements, avec
 une erreur relative maximale inférieure à $4\times10^{-16}$. Aucun paramètre du détecteur
-n'est modifié après le gel du protocole.
+n'est modifié après le gel du protocole. L'appariement porte sur l'enveloppe numérique; il ne
+garantit pas une variation comportementale physique identique entre vaches ou entre familles.
 
 \begin{table}[H]
   \centering
-  \caption{Réponse de HYPO aux formes moins favorables à dose appariée.}
+  \caption{Réponse de HYPO aux formes moins favorables à aire d'enveloppe appariée.}
   \label{tab:hypo_stress}
   \small
   \begin{tabular}{lrrrr}
@@ -494,10 +499,13 @@ recouvrement attribuable, alors qu'IoU20 reste à 24,2\,\%.
 Les tests exacts utilisent la moyenne de chaque vache, et non les 165 lignes comme
 observations indépendantes. HYPO conserve un avantage net sur IF et LOF, mais aucun avantage
 n'est démontré face au comparateur pédométrique doté de la même machinerie temporelle. De
-plus, le contrôle pas-seuls produit un nouveau départ attribuable dans 30,3\,\% des cas,
-même s'il n'atteint jamais IoU20. Le stress test renforce donc la robustesse de la détection
-temporelle face aux formes moins favorables; il ne démontre ni la spécificité de la cohérence
-multivariée ni une validité clinique.
+plus, le contrôle pas-seuls échoue au critère principal de spécificité~: il présente un
+recouvrement attribuable dans 78,8\,\% des cas et produit un nouveau départ dans 30,3\,\%.
+Le côté favorable est que ces épisodes localisent mal la fenêtre~: aucun n'atteint IoU20 et
+l'IoU moyen n'est que de 0,038. Le stress test établit donc une robustesse temporelle positive
+face aux cinq formes moins favorables et un avantage net sur IF et LOF, tout en révélant
+précisément la limite à corriger~: avec les signaux disponibles, la spécificité de la cohérence
+multivariée n'est pas démontrée et une vérification contextuelle reste nécessaire.
 
 % =====================================================================
 \section{Extension bidirectionnelle exploratoire}
@@ -605,6 +613,17 @@ Mann-Whitney ($p=0{,}031$). La corrélation de Spearman vaut $\rho=0{,}504$ avec
 $p=0{,}066$. Chaque point de la Figure~\ref{fig:sls} représente une vache; l'effectif de
 trois vaches dans le groupe SLS~$\geq2$ impose une interprétation prudente.
 
+Deux contrôles précisent ce résultat positif. D'abord, retirer successivement chacune des trois
+vaches SLS~$\geq2$ maintient l'AUC globale entre 0,909 et 0,955~: le classement n'est donc pas
+porté par une seule vache. Ensuite, le test max-stat exact reste favorable lorsqu'il contrôle
+les cinq variantes de fusion pour la mesure de notifications ($p=0{,}0467$ en unilatéral).
+Lorsqu'il englobe les vingt combinaisons variante-métrique examinées, il devient non concluant
+($p=0{,}0742$ en unilatéral et $p=0{,}1236$ en bilatéral). Le signal favorable est donc
+spécifique au nombre de notifications et suffisamment stable pour justifier une étude plus
+grande, mais il ne constitue pas une confirmation familiale sur toutes les analyses explorées.
+Ce contrôle de multiplicité ayant été ajouté après l'analyse principale, il demeure lui-même
+exploratoire.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.72\textwidth]{figures/sls_notifications.png}
@@ -620,10 +639,9 @@ groupe \textit{Exercise}, contre trois des dix vaches sous le seuil dont le trai
 connu; le test exact de Fisher donne $p=0{,}070$. Dans le seul groupe
 \textit{Exercise}, l'AUC reste orientée dans le même sens (0,778), mais le test exact
 bilatéral est non concluant ($p=0{,}40$). Le groupe sans exercice ne contient aucun cas
-SLS~$\geq2$, donc aucune AUC interne n'y est estimable. Enfin, le retrait successif d'une
-vache positive conserve une AUC globale entre 0,909 et 0,955. Le classement descriptif n'est
-donc pas porté par une seule vache, mais sa portée clinique demeure limitée par le petit
-effectif et la confusion avec le traitement.
+SLS~$\geq2$, donc aucune AUC interne n'y est estimable. Malgré la stabilité du classement
+global au retrait d'une vache positive, sa portée clinique demeure limitée par le petit
+effectif, la multiplicité et la confusion avec le traitement.
 
 % =====================================================================
 \section{Correspondance entre objectifs et résultats}
@@ -648,8 +666,8 @@ objectif préalable.
       & 87,9\,\% de couverture attribuable et 39,4\,\% à IoU20 sur 33 profils graduels.
       & Réalisé \\
     3 & Ablation et sensibilité HYPO
-      & Supériorité sur IF/LOF; OFAT de vingt variantes; stress test à dose appariée robuste
-        aux formes, sans avantage démontré sur le comparateur pédométrique temporel.
+      & Supériorité sur IF/LOF; OFAT de vingt variantes; forte couverture des formes de stress
+        à aire d'enveloppe appariée, mais contrôle pas-seuls non rejeté sur le recouvrement.
       & Réalisé \\
     4 & Explorer INSTABILITÉ et les fusions
       & Surveillance de 22/33 instabilités; aucune supériorité de la fusion sur HYPO.

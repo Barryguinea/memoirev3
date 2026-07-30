@@ -494,7 +494,7 @@ reproduction qui produisent les sorties du mémoire.
     Évaluation HYPO & Campagne principale après la période de référence. \\
     Ablation HYPO & Comparaison avec IF, LOF et le comparateur pédométrique. \\
     Sensibilité HYPO & Analyse OFAT sans sélection de nouvelle configuration. \\
-    Stress test HYPO & Formes moins favorables à dose appariée, sans nouveau réglage. \\
+    Stress test HYPO & Formes moins favorables à aire d'enveloppe appariée, sans nouveau réglage. \\
     Calibration par vache & Test exploratoire d'un seuil individualisé. \\
     Courbe détection-charge & Compromis entre détection attribuable et charge de fond. \\
     Évaluation bidirectionnelle & Scénarios HYPO, INSTABILITÉ, séquence et contrôles. \\
@@ -538,6 +538,7 @@ reposent sur \texttt{pandas} \citep{mckinney2010data} et \texttt{NumPy} \citep{h
     scikit-learn & 1.7.2 & Comparateurs IF et LOF \\
     SciPy & 1.16.2 & Tests et statistiques descriptives \\
     statsmodels & 0.14.5 & Compléments statistiques \\
+    openpyxl & 3.1.5 & Lecture du classeur SLS \\
     Streamlit & 1.51.0 & Interface interactive \\
     Plotly & 6.3.0 & Tracés interactifs de l'interface \\
     pytest & 8.4.2 & Tests automatisés \\
@@ -555,9 +556,9 @@ Ce test documente la faisabilité du prototype sur l'ordinateur utilisé, non un
 en production.
 
 \subsection{Tests et traçabilité}
-La suite automatisée contient 107 tests et couvre le chargement, les variables dérivées,
+La suite automatisée contient 109 tests et couvre le chargement, les variables dérivées,
 les deux détecteurs, les cinq fusions, les injections, les contrôles après la période de référence,
-l'appariement de dose, l'analyse de sensibilité, l'analyse SLS exacte et le démarrage de
+l'appariement de l'aire d'enveloppe, l'analyse de sensibilité, l'analyse SLS exacte et le démarrage de
 Streamlit. Les résultats sont
 écrits dans des fichiers tabulaires dont la provenance est explicite. Le succès des tests
 atteste la cohérence logicielle et sécurise la reproduction des résultats.
