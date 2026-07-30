@@ -502,10 +502,25 @@ n'est démontré face au comparateur pédométrique doté de la même machinerie
 plus, le contrôle pas-seuls échoue au critère principal de spécificité~: il présente un
 recouvrement attribuable dans 78,8\,\% des cas et produit un nouveau départ dans 30,3\,\%.
 Le côté favorable est que ces épisodes localisent mal la fenêtre~: aucun n'atteint IoU20 et
-l'IoU moyen n'est que de 0,038. Le stress test établit donc une robustesse temporelle positive
-face aux cinq formes moins favorables et un avantage net sur IF et LOF, tout en révélant
-précisément la limite à corriger~: avec les signaux disponibles, la spécificité de la cohérence
-multivariée n'est pas démontrée et une vérification contextuelle reste nécessaire.
+l'IoU moyen n'est que de 0,038.
+
+La comparaison des variantes sur ce même contrôle précise toutefois la portée de cet échec.
+Le comparateur pédométrique, restreint au canal perturbé, recouvre la fenêtre dans 100,0\,\%
+des cas, ouvre un nouveau départ dans 57,6\,\% et atteint IoU20 dans 54,5\,\%~: il localise
+donc correctement une perturbation mono-famille. Le détecteur multivarié, lui, n'y parvient
+jamais. Sur les 165 événements positifs, les deux restent proches, à 97,0 contre 98,2\,\% de
+recouvrement et 30,9 contre 33,9\,\% à IoU20. L'exigence de concordance entre familles ne
+supprime donc pas le déclenchement sur un canal isolé, mais elle empêche de le localiser~;
+c'est la seule dimension où sa contribution propre se manifeste dans ce stress test. IF et LOF
+rejettent ce contrôle plus franchement, à 0,0\,\% de recouvrement pour les variantes dotées de
+règles de persistance et 12,1\,\% pour IF ponctuel, mais au prix d'un recouvrement de 12,7 à
+44,2\,\% seulement sur les événements positifs.
+
+Le stress test établit ainsi une robustesse temporelle positive face aux cinq formes moins
+favorables et un avantage net sur IF et LOF, tout en délimitant précisément l'apport de la
+cohérence multivariée~: démontré sur la localisation d'un stimulus mono-famille, non démontré
+sur le déclenchement. Avec les signaux disponibles, une vérification contextuelle reste
+nécessaire.
 
 % =====================================================================
 \section{Extension bidirectionnelle exploratoire}

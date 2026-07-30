@@ -445,6 +445,35 @@ for claim, column, expected in (
         expected,
         "hypo_stress/scenario_summary.csv",
     )
+# Comparaison des variantes sur le controle negatif mono-famille et sur les
+# evenements positifs. C'est la seule mesure ou la contribution propre de la
+# coherence multi-familles se manifeste : par l'incapacite a localiser.
+stress_variants = pd.read_csv(
+    ROOT / "data/validation/hypo_stress/variant_summary.csv"
+).set_index(["variant", "expected_alert"])
+PEDO = "E. Comparateur pédométrique (pas seuls)"
+MULTI = "A. Alerte temporelle multivariée"
+for variant, expected_alert, column, expected in (
+    (PEDO, 0, "attributable_coverage", 1.0000),
+    (PEDO, 0, "novel_start_rate", 0.5758),
+    (PEDO, 0, "iou20_rate", 0.5455),
+    (MULTI, 0, "iou20_rate", 0.0000),
+    (MULTI, 1, "attributable_coverage", 0.9697),
+    (MULTI, 1, "iou20_rate", 0.3091),
+    (PEDO, 1, "attributable_coverage", 0.9818),
+    (PEDO, 1, "iou20_rate", 0.3394),
+    ("B. IF + règles de persistance", 0, "attributable_coverage", 0.0000),
+    ("D. LOF + règles", 0, "attributable_coverage", 0.0000),
+    ("C. IF seul", 0, "attributable_coverage", 0.1212),
+    ("B. IF + règles de persistance", 1, "attributable_coverage", 0.1273),
+    ("C. IF seul", 1, "attributable_coverage", 0.4424),
+):
+    check(
+        f"HYPO stress {variant} expected={expected_alert} {column}",
+        stress_variants.loc[(variant, expected_alert), column],
+        expected,
+        "hypo_stress/variant_summary.csv",
+    )
 stress_comparisons = pd.read_csv(
     ROOT / "data/validation/hypo_stress/paired_comparisons.csv"
 ).set_index("comparator")
