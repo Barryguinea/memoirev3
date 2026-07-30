@@ -1,8 +1,8 @@
 {
   "module_version": 1,
-  "created_utc": "2026-06-13T01:36:26.868218+00:00",
+  "created_utc": "2026-07-30T03:30:18.956019+00:00",
   "scope": "descriptive_one_factor_at_a_time_not_model_selection",
-  "raw_csv": "/Users/alioubarry/PROJECT/memoirev3/data/brut.csv",
+  "raw_csv": "/Users/alioubarry/memoirev3-repo/data/brut.csv",
   "raw_sha256": "ba0c2a2927379f3824a258357a09f744723e6cb5a0f21b649f66fda94b826146",
   "seed": 11,
   "requested_cows": null,
@@ -44,7 +44,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "aggregation_hours__6p0",
@@ -61,7 +67,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "aggregation_hours__24p0",
@@ -78,7 +90,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "persistence_hours__3p0",
@@ -95,7 +113,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "persistence_hours__12p0",
@@ -112,7 +136,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cooldown_hours__12p0",
@@ -129,7 +159,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cooldown_hours__48p0",
@@ -146,7 +182,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "family_min_change__0p05",
@@ -163,7 +205,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "family_min_change__0p15",
@@ -180,7 +228,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "posture_min_change__0p025",
@@ -197,7 +251,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "posture_min_change__0p1",
@@ -214,7 +274,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "score_threshold__0p08",
@@ -231,7 +297,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "score_threshold__0p16",
@@ -248,7 +320,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cusum_drift__0p04",
@@ -265,7 +343,13 @@
       "cusum_drift": 0.04,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cusum_drift__0p1",
@@ -282,7 +366,13 @@
       "cusum_drift": 0.1,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cusum_threshold__0p8",
@@ -299,7 +389,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 0.8,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "cusum_threshold__1p6",
@@ -316,7 +412,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.6,
       "min_families": 3,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "min_families__2",
@@ -333,7 +435,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 2,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "min_families__4",
@@ -350,7 +458,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 4,
-      "coverage_min_pct": 25.0
+      "coverage_min_pct": 25.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "coverage_min_pct__50p0",
@@ -367,7 +481,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 50.0
+      "coverage_min_pct": 50.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     },
     {
       "name": "coverage_min_pct__75p0",
@@ -384,7 +504,13 @@
       "cusum_drift": 0.07,
       "cusum_threshold": 1.2,
       "min_families": 3,
-      "coverage_min_pct": 75.0
+      "coverage_min_pct": 75.0,
+      "active_families": [
+        "steps",
+        "motion",
+        "transitions",
+        "posture"
+      ]
     }
   ]
 }
