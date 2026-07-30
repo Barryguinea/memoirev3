@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "data/validation/validation_artifacts.sha256"
 
 PATTERNS = (
+    "data/validation/bibliography_audit.csv",
     "data/validation/manuscript_number_audit.csv",
     "data/validation/derived_metrics/*.csv",
     "data/validation/hypo_module/*.csv",
@@ -16,11 +17,14 @@ PATTERNS = (
     "data/validation/hypo_module/parameter_sensitivity/*.csv",
     "data/validation/hypo_module/parameter_sensitivity/*.json",
     "data/validation/hypo_module/parameter_sensitivity/runs/*.csv",
+    "data/validation/hypo_stress/*.csv",
+    "data/validation/hypo_stress/*.json",
     "data/validation/performance_full_corpus.json",
     "data/validation/mcgill_sls/*.csv",
     "data/validation/mcgill_sls/*.json",
     "data/validation/hybrid_refined_full/*.csv",
     "data/validation/hybrid_sensitivity_full/*.csv",
+    "validation_hypo/stress_protocol.json",
 )
 
 

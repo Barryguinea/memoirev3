@@ -50,7 +50,9 @@ projet-memoire/
 ├── validation_hypo/             # Évaluation technique du module HYPO
 │   ├── campaign.py              #   Campagne post-baseline (44 événements)
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
-│   └── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
+│   ├── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
+│   ├── stress_campaign.py       #   Stress test à dose appariée
+│   └── stress_protocol.json     #   Protocole gelé du stress test
 ├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
 │   ├── campaign.py              #   Injections post-baseline + métriques attribuables
@@ -61,9 +63,11 @@ projet-memoire/
 │   ├── compute_bootstrap_ci.py         # IC95 (bootstrap par vache) + tailles d'effet
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
-│   ├── audit_manuscript_numbers.py     # Vérifie 290 valeurs du mémoire ↔ sources
+│   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
+│   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
+│   ├── audit_manuscript_numbers.py     # Vérifie 348 valeurs du mémoire ↔ sources
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 98 tests (unitaires, invariants, non-régression)
+├── tests/                       # 107 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -101,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 98 tests
+pytest -q                                # 107 tests
 ```
 
 ---
@@ -134,18 +138,28 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    python scripts/compute_bootstrap_ci.py
    ```
 
-3. **Extension bidirectionnelle** — douze scénarios (hypoactivité, instabilité,
+3. **Stress test HYPO à dose appariée** — cinq formes moins favorables et un
+   contrôle pas-seuls, à trois positions par vache :
+   ```bash
+   python -m scripts.run_hypo_stress_validation
+   ```
+   Le protocole est gelé, les paramètres de détection restent inchangés et
+   chaque famille reçoit la même aire de perturbation que le profil graduel
+   modéré de référence, y compris après le retrait du bloc de données manquantes.
+
+4. **Extension bidirectionnelle** — douze scénarios (hypoactivité, instabilité,
    séquence) plus des contrôles et confondants (pic capteur, exercice, œstrus) :
    ```bash
    python -m validation_hybrid.sensitivity --output-dir data/validation/hybrid_refined_full
    ```
 
-4. **Concordance clinique exploratoire** — cohorte IceTag–SLS (hiver 2019),
+5. **Concordance clinique exploratoire** — cohorte IceTag–SLS (hiver 2019),
    mesures capteurs **strictement antérieures** au score locomoteur :
    ```bash
    python -m validation_hybrid.mcgill_sls_validation
    ```
-   Explicitement **non concluante** (trois SLS ≥ 2, tous dans le bras *Exercise*).
+   L'AUC globale est descriptive; l'analyse exacte dans le seul bras
+   *Exercise* est **non concluante** (AUC 0,778; `p = 0,40`).
 
 ### Limites assumées
 
@@ -158,6 +172,11 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 ## Reproductibilité
 
 - Chaque résultat est régénéré par un script ; **aucun chiffre n'est saisi à la main**.
+- Les 73 références sont auditées : 58 DOI sont confrontés aux métadonnées
+  Crossref/DataCite et 15 sources sans DOI à leur URL d'autorité :
+  ```bash
+  python scripts/audit_bibliography.py
+  ```
 - Les métriques dérivées récentes sont exportées avant l'audit :
   ```bash
   python scripts/compute_event_f1.py
@@ -169,7 +188,7 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   python scripts/update_validation_manifest.py
   shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
-- Un script d'audit confronte **290 valeurs** du manuscrit à leurs CSV/JSON sources :
+- Un script d'audit confronte **348 valeurs** du manuscrit à leurs sources :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```

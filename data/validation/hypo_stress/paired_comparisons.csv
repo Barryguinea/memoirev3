@@ -1,0 +1,5 @@
+primary,comparator,n_cows,primary_cow_mean,comparator_cow_mean,mean_paired_difference,exact_sign_flip_p_one_sided
+A. Alerte temporelle multivariée,B. IF + règles de persistance,11,0.9696969696969696,0.12727272727272726,0.8424242424242425,0.00048828125
+A. Alerte temporelle multivariée,C. IF seul,11,0.9696969696969696,0.4424242424242424,0.5272727272727273,0.00048828125
+A. Alerte temporelle multivariée,D. LOF + règles,11,0.9696969696969696,0.2666666666666667,0.7030303030303031,0.00048828125
+A. Alerte temporelle multivariée,E. Comparateur pédométrique (pas seuls),11,0.9696969696969696,0.9818181818181819,-0.012121212121212118,0.84375

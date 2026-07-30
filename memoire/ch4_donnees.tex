@@ -207,10 +207,10 @@ des ratios à la référence individuelle.
 \section{Cadre expérimental}
 \label{sec:cadre_experimental}
 % =====================================================================
-Le cadre expérimental comprend deux campagnes injectées sur le corpus principal, puis une
+Le cadre expérimental comprend trois campagnes injectées sur le corpus principal, puis une
 cohorte observationnelle distincte.
 
-L'étude comporte trois niveaux. Le premier évalue HYPO sur 44 événements et le compare aux
+L'étude comporte trois niveaux principaux et une extension de stress. Le premier évalue HYPO sur 44 événements et le compare aux
 trois variantes fondées sur IF ou LOF ainsi qu'au comparateur pédométrique. Le deuxième étend
 la campagne à 132 scénarios pour explorer INSTABILITÉ et cinq règles de fusion. À chaque
 niveau, un scénario est injecté dans une copie distincte de la période future, puis comparé à
@@ -222,6 +222,16 @@ synthétique est le seul changement volontaire entre l'exécution propre et l'ex
 injectée, ce qui permet de mesurer la réponse du détecteur sans modifier la période de
 référence ni optimiser les seuils sur les sorties observées.
 
+Une campagne de stress complémentaire réexécute aussi HYPO et les quatre comparateurs sur
+six formes moins favorables, à trois positions par vache. Elle est séparée des résultats qui
+ont servi à construire le système. Son protocole JSON interdit tout nouveau réglage et
+apparie la dose de perturbation: pour chaque famille modifiée, l'aire discrète sous
+l'enveloppe, calculée sur les intervalles effectivement conservés, est égale à celle du
+profil modéré graduel de 48 heures. Cette contrainte évite d'attribuer à la forme temporelle
+un effet qui proviendrait seulement d'une perturbation plus forte. Le contrôle négatif
+modifie uniquement les pas avec la même dose; le scénario de données manquantes retire un
+bloc contigu de douze heures après cet appariement.
+
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[
@@ -230,7 +240,7 @@ référence ni optimiser les seuils sur les sorties observées.
     arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
     \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44 événements\\extension: 132 scénarios};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44\\stress: 198\\extension: 132};
     \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
     \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
@@ -304,4 +314,10 @@ est le nombre de notifications dans les sept jours précédant le 12 mars 2019. 
 rapportées la fraction du temps en épisode, la surveillance d'instabilité et le score
 maximum. Les comparaisons utilisent l'AUC descriptive, le test de Mann-Whitney et la
 corrélation de Spearman au niveau de la vache. Avec seulement trois SLS~$\geq2$, ces mesures
-restent exploratoires.
+restent exploratoires. Pour tenir compte exactement du petit effectif et des ex æquo, toutes
+les répartitions possibles des trois étiquettes positives parmi les quatorze vaches sont
+énumérées pour l'AUC. L'analyse est ensuite répétée dans le seul groupe
+\textit{Exercise}; le groupe sans exercice ne contient aucun SLS~$\geq2$ et son AUC n'est
+donc pas estimable. Un test exact de Fisher quantifie l'association entre traitement et
+classe SLS, et une analyse leave-one-positive-out vérifie l'influence de chacune des trois
+vaches positives.

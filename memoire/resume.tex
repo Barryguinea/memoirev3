@@ -20,6 +20,12 @@ graduelles évaluées, HYPO recouvre la grande majorité des événements et loc
 est rejeté, ce qui montre que le système ne réagit pas simplement à toute fluctuation
 ponctuelle.
 
+Un stress test sans nouveau réglage étend l'évaluation à des départs abrupts, des familles
+désynchronisées, une récupération asymétrique, du bruit et un bloc de données manquantes,
+avec une dose de perturbation appariée. HYPO conserve un avantage sur IF et LOF, mais pas sur
+le comparateur pédométrique doté de la même logique temporelle; la robustesse temporelle est
+donc mieux établie que l'apport propre de la cohérence multivariée.
+
 Le mémoire explore aussi une extension bidirectionnelle fondée sur une branche
 INSTABILITÉ. Cette branche représente des situations où un inconfort locomoteur pourrait
 s'accompagner d'agitation, de transitions plus fréquentes ou de fragmentation posturale. Elle
@@ -33,9 +39,10 @@ cadre concret pour poursuivre son amélioration.
 Une analyse complémentaire IceTag-SLS synchronisée confronte les sorties aux scores
 locomoteurs en utilisant uniquement des données capteurs antérieures à l'évaluation. Elle met
 en évidence davantage de notifications chez les vaches aux scores les plus élevés et confirme
-la faisabilité d'une confrontation temporelle aux observations terrain. Cette association
-reste exploratoire en raison du faible nombre de ces vaches et de leur appartenance au groupe
-\textit{Exercise}. Le mémoire aboutit ainsi à un détecteur temporel interprétable, une
+la faisabilité d'une confrontation temporelle aux observations terrain. L'AUC descriptive
+globale est élevée, mais l'analyse exacte dans le seul groupe \textit{Exercise} demeure non
+concluante. Cette association reste donc exploratoire en raison du faible nombre de vaches
+aux scores élevés et de leur appartenance à ce groupe. Le mémoire aboutit ainsi à un détecteur temporel interprétable, une
 interface de priorisation et un protocole reproductible qui articulent performance logicielle,
 hypothèse comportementale et vérification clinique future.
 
@@ -65,6 +72,12 @@ On gradual degradations, HYPO recovers most events and localizes episodes better
 Forest and Local Outlier Factor comparators. The isolated brief variation is rejected, showing
 that the system does not simply react to any short fluctuation.
 
+A no-retuning stress test extends the evaluation to abrupt onset, desynchronized families,
+asymmetric recovery, noise and a missing-data block under matched perturbation dose. HYPO
+retains an advantage over IF and LOF, but not over the pedometric comparator using the same
+temporal logic; temporal robustness is therefore better established than the independent
+contribution of multivariate coherence.
+
 The thesis also explores a bidirectional extension based on an INSTABILITY branch. This branch
 represents situations in which locomotor discomfort could involve agitation, more frequent
 transitions or fragmented posture. It remains separated from HYPO: isolated instability
@@ -78,7 +91,9 @@ A synchronized IceTag-SLS analysis compares the outputs with locomotion scores u
 sensor data collected before the evaluation. It identifies more notifications among cows with
 the highest scores and confirms the feasibility of temporally linking alerts with field
 observations. The small number of these cows and their membership in the \textit{Exercise}
-group require this association to remain exploratory. The thesis thus delivers an interpretable temporal
+group require this association to remain exploratory: the overall descriptive AUC is high,
+but the exact analysis restricted to the \textit{Exercise} group is inconclusive. The thesis
+thus delivers an interpretable temporal
 detector, a prioritization interface and a reproducible protocol that connect software
 performance, behavioral hypotheses and future clinical verification.
 

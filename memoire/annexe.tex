@@ -48,8 +48,8 @@ La reproduction complète suit six étapes, dans l'ordre~:
   \item exécuter l'évaluation et l'ablation du module HYPO~;
   \item exécuter l'analyse OFAT, la calibration exploratoire et la courbe
   détection-charge de HYPO~;
-  \item exécuter la comparaison exploratoire des fusions, puis l'évaluation du temps d'exécution~;
-  \item exécuter l'analyse IceTag-SLS et régénérer les figures~;
+  \item exécuter le stress test HYPO à dose appariée, puis la comparaison exploratoire des fusions~;
+  \item exécuter l'analyse IceTag-SLS, l'audit bibliographique et régénérer les figures~;
   \item régénérer puis vérifier le manifeste SHA-256.
 \end{enumerate}
 Les commandes correspondantes sont détaillées ci-dessous.
@@ -62,6 +62,17 @@ python scripts/run_hypo_module_validation.py \
 
 Cette commande régénère les 44 événements, les contrôles du protocole, le résumé par profil,
 l'ablation et les tests appariés regroupés par vache.
+
+\subsubsection{Stress test HYPO à dose appariée}
+\begin{verbatim}
+python -m scripts.run_hypo_stress_validation
+\end{verbatim}
+
+La commande applique cinq formes moins favorables et un contrôle pas-seuls à trois positions
+par vache. Le protocole est lu depuis \path{validation_hypo/stress_protocol.json}; il interdit
+le réglage du détecteur et impose, pour chaque famille modifiée, la même aire discrète de
+perturbation que le profil graduel modéré de 48 heures. Les intervalles supprimés du scénario
+de données manquantes sont exclus du calcul de cette aire.
 
 \subsubsection{Typologie des modes de défaillance}
 \begin{verbatim}
@@ -151,16 +162,19 @@ python scripts/plot_cow_admissibility.py
 python scripts/compute_event_f1.py
 python scripts/compute_channel_ablation.py
 python scripts/compute_correlation_time.py
+python scripts/audit_bibliography.py
 python scripts/audit_manuscript_numbers.py
 python scripts/update_validation_manifest.py
 shasum -a 256 -c data/validation/validation_artifacts.sha256
 \end{verbatim}
 
+Le script bibliographique contrôle les 73 références~: 58 DOI sont confrontés aux métadonnées
+Crossref ou DataCite et les 15 références sans DOI à une URL d'autorité préalablement revue.
 Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et régénère les
 figures de fusion, de scénarios et de SLS; il reconstruit également quatre trajectoires
 représentatives pour l'inspection visuelle. Les trois scripts suivants écrivent les métriques
 F1, l'ablation par famille et les temps d'autocorrélation dans
-\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 290 valeurs
+\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 348 valeurs
 empiriques du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent
 le manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
 
@@ -212,6 +226,11 @@ La campagne HYPO comporte 44 événements mais repose sur les mêmes onze vaches
 l'ablation utilisent donc les moyennes par vache, jamais les 44 lignes comme observations
 indépendantes.
 
+Le stress test comporte 198 événements physiques et 990 lignes après application des cinq
+variantes. Les trois positions et les six formes restent imbriquées dans les mêmes onze
+vaches. Les intervalles de confiance rééchantillonnent donc les vaches, et les tests exacts
+appariés portent sur onze différences moyennes par vache.
+
 % =====================================================================
 \section{Données et artefacts}
 % =====================================================================
@@ -241,11 +260,15 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{hypo_module/per_cow_calibration_by_cow.csv} & Facteurs et charges de fond par vache. \\
   \path{hypo_module/cowalert_provenance.csv} & Concordance IceQube-CowAlert (corrélations, identité). \\
   \path{hypo_module/detection_background_curve/detection_background_curve.csv} & Neuf points de la courbe détection-charge. \\
+  \path{hypo_stress/events.csv} & Sorties des cinq variantes sur les événements de stress à dose appariée. \\
+  \path{hypo_stress/scenario_summary.csv} & Résultats HYPO par forme moins favorable. \\
+  \path{hypo_stress/paired_comparisons.csv} & Tests exacts appariés après agrégation par vache. \\
+  \path{hypo_stress/summary.json} & Protocole, empreinte et contrôle d'intégrité des doses. \\
   \path{derived_metrics/event_f1.csv} & Précision, rappel, F1 et IC95 selon trois définitions événementielles. \\
   \path{derived_metrics/channel_ablation_summary.csv} & Synthèse de l'ablation par famille de signaux. \\
   \path{derived_metrics/channel_ablation_events.csv} & Sorties événementielles détaillées de l'ablation par famille. \\
   \path{derived_metrics/correlation_time.csv} & Temps d'autocorrélation et tailles effectives aux deux grains d'analyse. \\
-  \path{manuscript_number_audit.csv} & Correspondance entre 290 valeurs du manuscrit et leurs artefacts sources. \\
+  \path{manuscript_number_audit.csv} & Correspondance entre 348 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
   \path{hybrid_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
@@ -257,7 +280,9 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{mcgill_sls/mcgill_cohort_all_variants.csv} & Cohorte SLS et sorties des cinq fusions. \\
   \path{mcgill_sls/mcgill_exclusions.csv} & Motifs d'exclusion et couverture. \\
   \path{mcgill_sls/mcgill_metrics.csv} & AUC, Mann-Whitney et Spearman. \\
+  \path{mcgill_sls/mcgill_treatment_sensitivity.csv} & Tests exacts globaux et stratifiés par traitement. \\
   \path{mcgill_sls/mcgill_summary.json} & Protocole et synthèse de l'analyse SLS. \\
+  \path{bibliography_audit.csv} & Audit des 73 références par DOI ou URL d'autorité. \\
   \path{memoire/figures/manual_review.png} & Planche reproductible de l'inspection visuelle ciblée. \\
   \bottomrule
 \end{longtable}

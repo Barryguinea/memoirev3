@@ -11,10 +11,12 @@ from __future__ import annotations
 
 import argparse
 import json
+from itertools import combinations
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
-from scipy.stats import mannwhitneyu, spearmanr
+from scipy.stats import fisher_exact, mannwhitneyu, spearmanr
 from sklearn.metrics import roc_auc_score
 
 from core.hybrid_warning import HybridFusionConfig, InstabilityWarningConfig
@@ -67,6 +69,101 @@ def _group_metric(frame: pd.DataFrame, score: str) -> dict[str, object]:
         "spearman_rho": float(rho),
         "spearman_p": float(rho_p),
     }
+
+
+def _exact_permutation_auc(
+    frame: pd.DataFrame,
+    *,
+    score: str,
+) -> dict[str, float | int | None]:
+    clean = frame.dropna(subset=["sls_ge_2", score]).copy()
+    labels = clean["sls_ge_2"].astype(int).to_numpy()
+    values = pd.to_numeric(clean[score], errors="coerce").to_numpy(float)
+    n_positive = int(labels.sum())
+    n_negative = int(len(labels) - n_positive)
+    if n_positive == 0 or n_negative == 0:
+        return {
+            "n": int(len(labels)),
+            "n_sls_ge_2": n_positive,
+            "n_sls_lt_2": n_negative,
+            "auc": None,
+            "exact_permutation_p_one_sided": None,
+            "exact_permutation_p_two_sided": None,
+            "n_permutations": 0,
+        }
+
+    observed = float(roc_auc_score(labels, values))
+    permutation_aucs = []
+    for positive_indices in combinations(range(len(labels)), n_positive):
+        permuted = np.zeros(len(labels), dtype=int)
+        permuted[list(positive_indices)] = 1
+        permutation_aucs.append(float(roc_auc_score(permuted, values)))
+    permutation_aucs_array = np.asarray(permutation_aucs, dtype=float)
+    return {
+        "n": int(len(labels)),
+        "n_sls_ge_2": n_positive,
+        "n_sls_lt_2": n_negative,
+        "auc": observed,
+        "exact_permutation_p_one_sided": float(
+            np.mean(permutation_aucs_array >= observed - 1e-12)
+        ),
+        "exact_permutation_p_two_sided": float(
+            np.mean(
+                np.abs(permutation_aucs_array - 0.5)
+                >= abs(observed - 0.5) - 1e-12
+            )
+        ),
+        "n_permutations": int(len(permutation_aucs_array)),
+    }
+
+
+def treatment_sensitivity(
+    primary: pd.DataFrame,
+    *,
+    score: str = "pre7_hybrid_notifs",
+) -> tuple[pd.DataFrame, dict[str, object]]:
+    analyses = []
+    for analysis, subset in (
+        ("global", primary),
+        ("exercise_only", primary[primary["treatment"].eq("Exercise")]),
+        ("no_exercise_only", primary[primary["treatment"].eq("No_Exercise")]),
+    ):
+        analyses.append(
+            {"analysis": analysis, **_exact_permutation_auc(subset, score=score)}
+        )
+
+    known_treatment = primary.dropna(subset=["treatment", "sls_ge_2"])
+    treatment_table = pd.crosstab(
+        known_treatment["treatment"],
+        known_treatment["sls_ge_2"],
+    ).reindex(index=["Exercise", "No_Exercise"], columns=[0, 1], fill_value=0)
+    fisher_p = (
+        float(fisher_exact(treatment_table.to_numpy(), alternative="two-sided").pvalue)
+        if treatment_table.shape == (2, 2)
+        else None
+    )
+
+    leave_one_out_aucs = []
+    for index in primary.index[primary["sls_ge_2"].eq(1)]:
+        auc = _safe_auc(primary.drop(index=index), score)
+        if auc is not None:
+            leave_one_out_aucs.append(auc)
+    diagnostics = {
+        "score": score,
+        "known_treatment_n": int(len(known_treatment)),
+        "treatment_sls_fisher_p_two_sided": fisher_p,
+        "leave_one_positive_out_auc_min": (
+            float(min(leave_one_out_aucs)) if leave_one_out_aucs else None
+        ),
+        "leave_one_positive_out_auc_max": (
+            float(max(leave_one_out_aucs)) if leave_one_out_aucs else None
+        ),
+        "interpretation": (
+            "Signal descriptif global positif; après restriction au groupe Exercise, "
+            "la direction persiste mais l'inférence est non concluante."
+        ),
+    }
+    return pd.DataFrame(analyses), diagnostics
 
 
 def run_variant(
@@ -187,6 +284,13 @@ def run_all(output_dir: str = "data/validation/mcgill_sls") -> dict[str, object]
     metric_frame.to_csv(output / "mcgill_metrics.csv", index=False)
 
     primary = all_cohorts[all_cohorts["variant"] == "hierarchical"]
+    treatment_frame, treatment_diagnostics = treatment_sensitivity(primary)
+    treatment_frame.to_csv(output / "mcgill_treatment_sensitivity.csv", index=False)
+    treatment_records = (
+        treatment_frame.astype(object)
+        .where(pd.notna(treatment_frame), None)
+        .to_dict(orient="records")
+    )
     summary = {
         "protocol": {
             "endpoint": str(SCORE_TIME),
@@ -211,9 +315,11 @@ def run_all(output_dir: str = "data/validation/mcgill_sls") -> dict[str, object]
         "primary_metrics": metric_frame[
             metric_frame["variant"] == "hierarchical"
         ].to_dict(orient="records"),
+        "treatment_sensitivity": treatment_records,
+        "treatment_diagnostics": treatment_diagnostics,
         "verdict_rule": (
-            "Aucune variante ne peut être déclarée cliniquement validée avec trois "
-            "SLS>=2 et un entrelacement du traitement Exercise."
+            "Le classement global est encourageant, mais aucune variante ne peut être "
+            "déclarée cliniquement validée avec trois SLS>=2, tous dans le groupe Exercise."
         ),
     }
     (output / "mcgill_summary.json").write_text(

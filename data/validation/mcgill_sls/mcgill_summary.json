@@ -77,5 +77,45 @@
       "variant": "hierarchical"
     }
   ],
-  "verdict_rule": "Aucune variante ne peut être déclarée cliniquement validée avec trois SLS>=2 et un entrelacement du traitement Exercise."
+  "treatment_sensitivity": [
+    {
+      "analysis": "global",
+      "n": 14,
+      "n_sls_ge_2": 3,
+      "n_sls_lt_2": 11,
+      "auc": 0.9242424242424242,
+      "exact_permutation_p_one_sided": 0.019230769230769232,
+      "exact_permutation_p_two_sided": 0.03021978021978022,
+      "n_permutations": 364
+    },
+    {
+      "analysis": "exercise_only",
+      "n": 6,
+      "n_sls_ge_2": 3,
+      "n_sls_lt_2": 3,
+      "auc": 0.7777777777777779,
+      "exact_permutation_p_one_sided": 0.2,
+      "exact_permutation_p_two_sided": 0.4,
+      "n_permutations": 20
+    },
+    {
+      "analysis": "no_exercise_only",
+      "n": 7,
+      "n_sls_ge_2": 0,
+      "n_sls_lt_2": 7,
+      "auc": null,
+      "exact_permutation_p_one_sided": null,
+      "exact_permutation_p_two_sided": null,
+      "n_permutations": 0
+    }
+  ],
+  "treatment_diagnostics": {
+    "score": "pre7_hybrid_notifs",
+    "known_treatment_n": 13,
+    "treatment_sls_fisher_p_two_sided": 0.06993006993006992,
+    "leave_one_positive_out_auc_min": 0.9090909090909091,
+    "leave_one_positive_out_auc_max": 0.9545454545454545,
+    "interpretation": "Signal descriptif global positif; après restriction au groupe Exercise, la direction persiste mais l'inférence est non concluante."
+  },
+  "verdict_rule": "Le classement global est encourageant, mais aucune variante ne peut être déclarée cliniquement validée avec trois SLS>=2, tous dans le groupe Exercise."
 }

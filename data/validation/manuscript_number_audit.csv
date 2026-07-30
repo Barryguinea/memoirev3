@@ -266,6 +266,53 @@ Fusion sensitivity surveillance range minimum,0.545,0.5454545454545454,hybrid_re
 Fusion sensitivity surveillance range maximum,0.667,0.6666666666666666,hybrid_refined_full/comparison_summary.csv,True
 Fusion sensitivity background range minimum,0.518,0.5175273216488926,hybrid_refined_full/comparison_summary.csv,True
 Fusion sensitivity background range maximum,0.571,0.5711236741193494,hybrid_refined_full/comparison_summary.csv,True
+HYPO stress cows,11.0,11.0,hypo_stress/summary.json,True
+HYPO stress physical events,198.0,198.0,hypo_stress/summary.json,True
+HYPO stress evaluation rows,990.0,990.0,hypo_stress/summary.json,True
+HYPO stress all doses matched,1.0,1.0,hypo_stress/summary.json,True
+HYPO stress maximum relative dose error,0.0,3.9474596431116675e-16,hypo_stress/summary.json,True
+HYPO stress abrupt_persistent n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress abrupt_persistent attributable_coverage,0.9394,0.9393939393939394,hypo_stress/scenario_summary.csv,True
+HYPO stress abrupt_persistent novel_start_rate,0.5455,0.5454545454545454,hypo_stress/scenario_summary.csv,True
+HYPO stress abrupt_persistent iou20_rate,0.2727,0.2727272727272727,hypo_stress/scenario_summary.csv,True
+HYPO stress abrupt_persistent matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress desynchronized_families n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress desynchronized_families attributable_coverage,1.0,1.0,hypo_stress/scenario_summary.csv,True
+HYPO stress desynchronized_families novel_start_rate,0.7273,0.7272727272727273,hypo_stress/scenario_summary.csv,True
+HYPO stress desynchronized_families iou20_rate,0.303,0.303030303030303,hypo_stress/scenario_summary.csv,True
+HYPO stress desynchronized_families matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress asymmetric_recovery n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress asymmetric_recovery attributable_coverage,0.9394,0.9393939393939394,hypo_stress/scenario_summary.csv,True
+HYPO stress asymmetric_recovery novel_start_rate,0.6364,0.6363636363636364,hypo_stress/scenario_summary.csv,True
+HYPO stress asymmetric_recovery iou20_rate,0.2121,0.2121212121212121,hypo_stress/scenario_summary.csv,True
+HYPO stress asymmetric_recovery matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress noisy_gradual n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress noisy_gradual attributable_coverage,0.9697,0.9696969696969696,hypo_stress/scenario_summary.csv,True
+HYPO stress noisy_gradual novel_start_rate,0.6667,0.6666666666666666,hypo_stress/scenario_summary.csv,True
+HYPO stress noisy_gradual iou20_rate,0.5152,0.5151515151515151,hypo_stress/scenario_summary.csv,True
+HYPO stress noisy_gradual matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress contiguous_dropout n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress contiguous_dropout attributable_coverage,1.0,1.0,hypo_stress/scenario_summary.csv,True
+HYPO stress contiguous_dropout novel_start_rate,1.0,1.0,hypo_stress/scenario_summary.csv,True
+HYPO stress contiguous_dropout iou20_rate,0.2424,0.2424242424242424,hypo_stress/scenario_summary.csv,True
+HYPO stress contiguous_dropout matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress single_family_only n_events,33.0,33.0,hypo_stress/scenario_summary.csv,True
+HYPO stress single_family_only attributable_coverage,0.7879,0.7878787878787878,hypo_stress/scenario_summary.csv,True
+HYPO stress single_family_only novel_start_rate,0.303,0.303030303030303,hypo_stress/scenario_summary.csv,True
+HYPO stress single_family_only iou20_rate,0.0,0.0,hypo_stress/scenario_summary.csv,True
+HYPO stress single_family_only matched dose,36.0,36.0,hypo_stress/scenario_summary.csv,True
+HYPO stress positive physical events,165.0,165.0,hypo_stress/scenario_summary.csv,True
+HYPO stress positive coverage,0.9697,0.9696969696969697,hypo_stress/scenario_summary.csv,True
+HYPO stress positive new start,0.7152,0.7151515151515151,hypo_stress/scenario_summary.csv,True
+HYPO stress positive IoU20,0.3091,0.3090909090909091,hypo_stress/scenario_summary.csv,True
+HYPO stress difference vs B. IF + règles de persistance,0.8424,0.8424242424242425,hypo_stress/paired_comparisons.csv,True
+HYPO stress exact p vs B. IF + règles de persistance,0.000488,0.00048828125,hypo_stress/paired_comparisons.csv,True
+HYPO stress difference vs C. IF seul,0.5273,0.5272727272727273,hypo_stress/paired_comparisons.csv,True
+HYPO stress exact p vs C. IF seul,0.000488,0.00048828125,hypo_stress/paired_comparisons.csv,True
+HYPO stress difference vs D. LOF + règles,0.703,0.7030303030303031,hypo_stress/paired_comparisons.csv,True
+HYPO stress exact p vs D. LOF + règles,0.000488,0.00048828125,hypo_stress/paired_comparisons.csv,True
+HYPO stress difference vs E. Comparateur pédométrique (pas seuls),-0.0121,-0.0121212121212121,hypo_stress/paired_comparisons.csv,True
+HYPO stress exact p vs E. Comparateur pédométrique (pas seuls),0.84375,0.84375,hypo_stress/paired_comparisons.csv,True
 SLS evaluable cows,14.0,14.0,mcgill_sls/mcgill_summary.json,True
 SLS cows >=2,3.0,3.0,mcgill_sls/mcgill_summary.json,True
 SLS notifications mean >=2,6.6667,6.666666666666667,mcgill_sls/mcgill_summary.json,True
@@ -277,7 +324,18 @@ SLS Spearman p,0.0659,0.06587892641408946,mcgill_sls/mcgill_summary.json,True
 SLS time fraction AUC,0.7121,0.7121212121212122,mcgill_sls/mcgill_summary.json,True
 SLS maximum score AUC,0.6061,0.6060606060606061,mcgill_sls/mcgill_summary.json,True
 SLS instability surveillance AUC,0.3485,0.3484848484848485,mcgill_sls/mcgill_summary.json,True
+SLS exact global permutations,364.0,364.0,mcgill_sls/mcgill_summary.json,True
+SLS global exact one-sided p,0.01923,0.019230769230769232,mcgill_sls/mcgill_summary.json,True
+SLS global exact two-sided p,0.03022,0.03021978021978022,mcgill_sls/mcgill_summary.json,True
+SLS Exercise-only AUC,0.77778,0.7777777777777779,mcgill_sls/mcgill_summary.json,True
+SLS Exercise-only exact two-sided p,0.4,0.4,mcgill_sls/mcgill_summary.json,True
+SLS treatment Fisher p,0.06993,0.06993006993006992,mcgill_sls/mcgill_summary.json,True
+SLS leave-one-positive-out AUC minimum,0.90909,0.9090909090909091,mcgill_sls/mcgill_summary.json,True
+SLS leave-one-positive-out AUC maximum,0.95455,0.9545454545454545,mcgill_sls/mcgill_summary.json,True
 SLS future notification load,0.7551,0.7550796482467383,mcgill_sls/mcgill_cohort_all_variants.csv,True
+Bibliography references,73.0,73.0,memoire/references.bib,True
+Bibliography DOI references,58.0,58.0,memoire/references.bib,True
+Bibliography authoritative-URL references,15.0,15.0,memoire/references.bib,True
 Benchmark cows,28.0,28.0,performance_full_corpus.json,True
 Benchmark rows,37839.0,37839.0,performance_full_corpus.json,True
 Benchmark repeats,5.0,5.0,performance_full_corpus.json,True

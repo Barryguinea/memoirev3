@@ -4,7 +4,8 @@
 Ce chapitre présente les preuves techniques du système en partant du résultat le plus solide:
 la branche HYPO. La première partie montre sa réponse à des dégradations graduelles, son
 avantage sur les comparateurs IF/LOF et sa stabilité locale par OFAT. La deuxième partie
-examine l'extension INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
+teste sa robustesse à des formes moins favorables à dose appariée, puis examine l'extension
+INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
 pourcentages décrivent la réponse du logiciel à des scénarios contrôlés et permettent de
 comparer détection, localisation et charge de vérification. Le Tableau~\ref{tab:cles_lecture_resultats}
 rassemble les clés de lecture mobilisées tout au long du chapitre.
@@ -49,11 +50,13 @@ rassemble les clés de lecture mobilisées tout au long du chapitre.
 \end{table}
 
 Les onze vaches admissibles fournissent quatre événements par vache à la campagne HYPO, soit
-44 événements, et douze scénarios par vache à la campagne étendue, soit 132 scénarios. Ces
-effectifs ne sont pas regroupés~: la première campagne mesure la réponse attribuable de HYPO,
-tandis que la seconde examine INSTABILITÉ et les règles de fusion sur un éventail plus large
-de situations. Le Tableau~\ref{tab:protocol_checks} récapitule les contrôles automatiques qui
-garantissent l'intégrité et la comparabilité de ces deux campagnes.
+44 événements, six formes à trois positions dans le stress test, soit 198 événements, et
+douze scénarios par vache à la campagne étendue, soit 132 scénarios. Ces effectifs ne sont
+pas regroupés~: la première campagne mesure la réponse attribuable de HYPO, la deuxième
+éprouve la forme temporelle sans changer la dose, tandis que la troisième examine
+INSTABILITÉ et les règles de fusion sur un éventail plus large de situations. Le
+Tableau~\ref{tab:protocol_checks} récapitule les contrôles automatiques qui garantissent
+l'intégrité et la comparabilité de ces campagnes.
 
 \begin{table}[H]
   \centering
@@ -69,6 +72,8 @@ garantissent l'intégrité et la comparabilité de ces deux campagnes.
     Injections strictement postérieures à la période de référence & Conforme \\
     Signaux sources informatifs et couverture admissible & Conforme \\
     Non-négativité et conservation du temps postural & Conforme \\
+    Dose appariée sur les intervalles conservés du stress test & Conforme \\
+    Trois positions postérieures à la période de référence & Conforme \\
     Exécution propre utilisée pour l'attribution & Conforme \\
     \bottomrule
   \end{tabular}
@@ -433,6 +438,68 @@ Cette analyse soutient la stabilité locale de l'extension, mais elle est beauco
 complète que l'OFAT de HYPO et ne valide pas les seuils physiologiquement.
 
 % =====================================================================
+\section{Stress test HYPO à dose appariée}
+% =====================================================================
+La campagne gelée applique six formes à trois positions chez chacune des onze vaches, soit
+198 événements physiques et 990 évaluations pour les cinq variantes. Les cinq formes
+positives modifient plusieurs familles; le contrôle négatif modifie uniquement les pas.
+Chaque famille perturbée reçoit une aire d'enveloppe de 36 heures, identique à celle du
+profil graduel modéré de référence. Ce contrôle est satisfait pour tous les événements, avec
+une erreur relative maximale inférieure à $4\times10^{-16}$. Aucun paramètre du détecteur
+n'est modifié après le gel du protocole.
+
+\begin{table}[H]
+  \centering
+  \caption{Réponse de HYPO aux formes moins favorables à dose appariée.}
+  \label{tab:hypo_stress}
+  \small
+  \begin{tabular}{lrrrr}
+    \toprule
+    Forme & $n$ & Couverture (\%) & Nouveau départ (\%) & IoU20 (\%) \\
+    \midrule
+    Départ abrupt & 33 & 93,9 & 54,5 & 27,3 \\
+    Familles désynchronisées & 33 & 100,0 & 72,7 & 30,3 \\
+    Récupération asymétrique & 33 & 93,9 & 63,6 & 21,2 \\
+    Graduel bruité & 33 & 97,0 & 66,7 & 51,5 \\
+    Bloc manquant de 12 h & 33 & 100,0 & 100,0 & 24,2 \\
+    Pas seuls (contrôle) & 33 & 78,8 & 30,3 & 0,0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Sur les 165 événements positifs, la moyenne des cinq taux par forme atteint 97,0\,\% de
+couverture attribuable, 71,5\,\% de nouveaux départs et 30,9\,\% à IoU20. HYPO conserve
+donc une forte couverture lorsque la forme s'écarte du profil graduel concordant, mais sa
+localisation demeure modeste et varie selon la forme. Le bloc de données manquantes ne doit
+pas être interprété comme favorable en soi: la métrique de couverture crédite tout
+recouvrement attribuable, alors qu'IoU20 reste à 24,2\,\%.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparaisons appariées sur les cinq formes positives du stress test.}
+  \label{tab:hypo_stress_comparisons}
+  \small
+  \begin{tabular}{lrr}
+    \toprule
+    Comparateur & Différence de couverture & $p$ exact unilatéral \\
+    \midrule
+    IF + persistance & +0,842 & 0,000488 \\
+    IF ponctuel & +0,527 & 0,000488 \\
+    LOF + persistance & +0,703 & 0,000488 \\
+    Pédométrique, pas seuls & $-0,012$ & 0,843750 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Les tests exacts utilisent la moyenne de chaque vache, et non les 165 lignes comme
+observations indépendantes. HYPO conserve un avantage net sur IF et LOF, mais aucun avantage
+n'est démontré face au comparateur pédométrique doté de la même machinerie temporelle. De
+plus, le contrôle pas-seuls produit un nouveau départ attribuable dans 30,3\,\% des cas,
+même s'il n'atteint jamais IoU20. Le stress test renforce donc la robustesse de la détection
+temporelle face aux formes moins favorables; il ne démontre ni la spécificité de la cohérence
+multivariée ni une validité clinique.
+
+% =====================================================================
 \section{Extension bidirectionnelle exploratoire}
 % =====================================================================
 \subsection{Comparaison des règles de fusion}
@@ -532,10 +599,11 @@ Quatorze vaches sont évaluables. Les trois vaches SLS~$\geq2$ appartiennent tou
 \textit{Exercise}; aucune vache du groupe sans exercice n'atteint ce seuil. Dans les sept
 jours précédant le score, la fusion hiérarchique produit en moyenne 6,67 notifications chez
 les trois vaches SLS~$\geq2$, contre 4,45 chez les onze autres. L'AUC exploratoire est
-0,924, le test de Mann-Whitney donne $p=0{,}031$ et la corrélation de Spearman vaut
-$\rho=0{,}504$ avec $p=0{,}066$. Chaque point de la Figure~\ref{fig:sls} représente une
-vache; l'effectif de trois vaches dans le groupe SLS~$\geq2$ impose une interprétation
-prudente.
+0,924. L'énumération exhaustive des 364 répartitions possibles des trois étiquettes positives
+donne $p=0{,}019$ en unilatéral et $p=0{,}030$ en bilatéral, en accord avec le test de
+Mann-Whitney ($p=0{,}031$). La corrélation de Spearman vaut $\rho=0{,}504$ avec
+$p=0{,}066$. Chaque point de la Figure~\ref{fig:sls} représente une vache; l'effectif de
+trois vaches dans le groupe SLS~$\geq2$ impose une interprétation prudente.
 
 \begin{figure}[H]
   \centering
@@ -547,8 +615,15 @@ prudente.
 Les mesures secondaires sont moins séparatrices: l'AUC de la fraction du temps en épisode
 est 0,712, celle du score maximum 0,606 et celle de la surveillance d'instabilité 0,348. La
 charge future atteint environ 0,755 notification par vache-jour. L'ensemble forme un signal
-de concordance intéressant, mais l'effectif réduit et l'entrelacement complet avec le
-traitement \textit{Exercise} limitent son interprétation.
+de concordance intéressant. Cependant, les trois vaches SLS~$\geq2$ se trouvent dans le
+groupe \textit{Exercise}, contre trois des dix vaches sous le seuil dont le traitement est
+connu; le test exact de Fisher donne $p=0{,}070$. Dans le seul groupe
+\textit{Exercise}, l'AUC reste orientée dans le même sens (0,778), mais le test exact
+bilatéral est non concluant ($p=0{,}40$). Le groupe sans exercice ne contient aucun cas
+SLS~$\geq2$, donc aucune AUC interne n'y est estimable. Enfin, le retrait successif d'une
+vache positive conserve une AUC globale entre 0,909 et 0,955. Le classement descriptif n'est
+donc pas porté par une seule vache, mais sa portée clinique demeure limitée par le petit
+effectif et la confusion avec le traitement.
 
 % =====================================================================
 \section{Correspondance entre objectifs et résultats}
@@ -573,8 +648,8 @@ objectif préalable.
       & 87,9\,\% de couverture attribuable et 39,4\,\% à IoU20 sur 33 profils graduels.
       & Réalisé \\
     3 & Ablation et sensibilité HYPO
-      & Supériorité sur IF/LOF pour l'IoU; OFAT de vingt variantes; compromis avec le
-        comparateur pédométrique explicité.
+      & Supériorité sur IF/LOF; OFAT de vingt variantes; stress test à dose appariée robuste
+        aux formes, sans avantage démontré sur le comparateur pédométrique temporel.
       & Réalisé \\
     4 & Explorer INSTABILITÉ et les fusions
       & Surveillance de 22/33 instabilités; aucune supériorité de la fusion sur HYPO.
@@ -584,8 +659,8 @@ objectif préalable.
         fond HYPO de 0,402 et temps médian de 10,64~s.
       & Réalisé \\
     6 & Confrontation IceTag-SLS
-      & Association exploratoire sur 14 vaches, mais trois cas SLS~$\geq2$ entièrement
-        confondus avec le groupe \textit{Exercise}.
+      & AUC globale de 0,924; analyse interne au groupe \textit{Exercise} non concluante
+        (AUC 0,778; test exact bilatéral $p=0{,}40$).
       & Exploratoire \\
     \bottomrule
   \end{tabular}

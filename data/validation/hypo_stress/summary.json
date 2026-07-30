@@ -1,0 +1,214 @@
+{
+  "protocol_sha256": "f1a2ca013245cb0877351c41316e348c07827f85a06b450918da9dfcbab8ba6f",
+  "protocol": {
+    "protocol_name": "HYPO dose-matched less-favourable stress campaign",
+    "version": "2.0",
+    "frozen_on": "2026-07-29",
+    "purpose": "Evaluate the frozen HYPO detector under less-favourable synthetic shapes at matched injected dose.",
+    "clinical_scope": "Technical validation only; injected events are not clinical lameness cases.",
+    "no_retuning": true,
+    "dose_matching": {
+      "reference_scenario": "gradual_moderate",
+      "reference_duration_hours": 48,
+      "definition": "Discrete area under each perturbation envelope on retained raw intervals.",
+      "relative_tolerance": 1e-10
+    },
+    "input_csv": "data/brut.csv",
+    "primary_algorithm": "A. Alerte temporelle multivariée",
+    "comparators": [
+      "B. IF + règles de persistance",
+      "C. IF seul",
+      "D. LOF + règles",
+      "E. Comparateur pédométrique (pas seuls)"
+    ],
+    "placement_fractions": [
+      0.18,
+      0.5,
+      0.82
+    ],
+    "primary_endpoint": "attributable episode overlap after subtraction of the clean run",
+    "secondary_endpoints": [
+      "novel alert start",
+      "IoU >= 0.20",
+      "best IoU"
+    ],
+    "inference_unit": "cow; placements are repeated measurements nested within cow",
+    "bootstrap_resamples": 10000,
+    "paired_test": "exact one-sided sign-flip test on cow-level mean differences",
+    "scenarios": [
+      {
+        "name": "abrupt_persistent",
+        "duration_hours": 48,
+        "expected_alert": 1,
+        "description": "Abrupt onset and persistent multichannel decline."
+      },
+      {
+        "name": "desynchronized_families",
+        "duration_hours": 60,
+        "expected_alert": 1,
+        "description": "Decline with 0, 8, 12 and 16 hour onset lags across signal families."
+      },
+      {
+        "name": "asymmetric_recovery",
+        "duration_hours": 60,
+        "expected_alert": 1,
+        "description": "Fast onset followed by a slow recovery."
+      },
+      {
+        "name": "noisy_gradual",
+        "duration_hours": 48,
+        "expected_alert": 1,
+        "description": "Gradual decline perturbed by deterministic seeded noise."
+      },
+      {
+        "name": "contiguous_dropout",
+        "duration_hours": 60,
+        "expected_alert": 1,
+        "description": "Gradual decline with a contiguous 12 hour raw-data dropout."
+      },
+      {
+        "name": "single_family_only",
+        "duration_hours": 48,
+        "expected_alert": 0,
+        "description": "Negative control: dose-matched decline in steps only."
+      }
+    ]
+  },
+  "n_cows": 11,
+  "n_physical_events": 198,
+  "n_result_rows": 990,
+  "dose_integrity": {
+    "all_events_matched": true,
+    "max_relative_error": 3.9474596431116675e-16
+  },
+  "scenario_summary": [
+    {
+      "scenario": "abrupt_persistent",
+      "expected_alert": 1,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 0.0,
+      "attributable_coverage": 0.9393939393939394,
+      "coverage_ci95_low_cow_bootstrap": 0.8484848484848484,
+      "coverage_ci95_high_cow_bootstrap": 1.0,
+      "novel_start_rate": 0.5454545454545454,
+      "iou20_rate": 0.2727272727272727,
+      "best_iou_mean": 0.1674558080808081
+    },
+    {
+      "scenario": "desynchronized_families",
+      "expected_alert": 1,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 1.9737298215558337e-16,
+      "attributable_coverage": 1.0,
+      "coverage_ci95_low_cow_bootstrap": 1.0,
+      "coverage_ci95_high_cow_bootstrap": 1.0,
+      "novel_start_rate": 0.7272727272727273,
+      "iou20_rate": 0.30303030303030304,
+      "best_iou_mean": 0.13623737373737374
+    },
+    {
+      "scenario": "asymmetric_recovery",
+      "expected_alert": 1,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 0.0,
+      "attributable_coverage": 0.9393939393939394,
+      "coverage_ci95_low_cow_bootstrap": 0.8484848484848484,
+      "coverage_ci95_high_cow_bootstrap": 1.0,
+      "novel_start_rate": 0.6363636363636364,
+      "iou20_rate": 0.21212121212121213,
+      "best_iou_mean": 0.13295454545454546
+    },
+    {
+      "scenario": "noisy_gradual",
+      "expected_alert": 1,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 3.9474596431116675e-16,
+      "attributable_coverage": 0.9696969696969697,
+      "coverage_ci95_low_cow_bootstrap": 0.909090909090909,
+      "coverage_ci95_high_cow_bootstrap": 1.0,
+      "novel_start_rate": 0.6666666666666666,
+      "iou20_rate": 0.5151515151515151,
+      "best_iou_mean": 0.21764520202020202
+    },
+    {
+      "scenario": "contiguous_dropout",
+      "expected_alert": 1,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 0.0,
+      "attributable_coverage": 1.0,
+      "coverage_ci95_low_cow_bootstrap": 1.0,
+      "coverage_ci95_high_cow_bootstrap": 1.0,
+      "novel_start_rate": 1.0,
+      "iou20_rate": 0.24242424242424243,
+      "best_iou_mean": 0.16891818800532493
+    },
+    {
+      "scenario": "single_family_only",
+      "expected_alert": 0,
+      "n_cows": 11,
+      "n_placements": 3,
+      "n_events": 33,
+      "target_dose_hours": 36.0,
+      "max_relative_dose_error": 0.0,
+      "attributable_coverage": 0.7878787878787878,
+      "coverage_ci95_low_cow_bootstrap": 0.6666666666666666,
+      "coverage_ci95_high_cow_bootstrap": 0.9090909090909091,
+      "novel_start_rate": 0.30303030303030304,
+      "iou20_rate": 0.0,
+      "best_iou_mean": 0.03803661616161617
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "primary": "A. Alerte temporelle multivariée",
+      "comparator": "B. IF + règles de persistance",
+      "n_cows": 11,
+      "primary_cow_mean": 0.9696969696969696,
+      "comparator_cow_mean": 0.12727272727272726,
+      "mean_paired_difference": 0.8424242424242425,
+      "exact_sign_flip_p_one_sided": 0.00048828125
+    },
+    {
+      "primary": "A. Alerte temporelle multivariée",
+      "comparator": "C. IF seul",
+      "n_cows": 11,
+      "primary_cow_mean": 0.9696969696969696,
+      "comparator_cow_mean": 0.4424242424242424,
+      "mean_paired_difference": 0.5272727272727273,
+      "exact_sign_flip_p_one_sided": 0.00048828125
+    },
+    {
+      "primary": "A. Alerte temporelle multivariée",
+      "comparator": "D. LOF + règles",
+      "n_cows": 11,
+      "primary_cow_mean": 0.9696969696969696,
+      "comparator_cow_mean": 0.2666666666666667,
+      "mean_paired_difference": 0.7030303030303031,
+      "exact_sign_flip_p_one_sided": 0.00048828125
+    },
+    {
+      "primary": "A. Alerte temporelle multivariée",
+      "comparator": "E. Comparateur pédométrique (pas seuls)",
+      "n_cows": 11,
+      "primary_cow_mean": 0.9696969696969696,
+      "comparator_cow_mean": 0.9818181818181819,
+      "mean_paired_difference": -0.012121212121212118,
+      "exact_sign_flip_p_one_sided": 0.84375
+    }
+  ]
+}

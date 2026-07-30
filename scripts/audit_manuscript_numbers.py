@@ -13,6 +13,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from audit_bibliography import load_bibtex
+
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data/validation/manuscript_number_audit.csv"
@@ -353,6 +355,112 @@ for claim, column, expected_min, expected_max in (
     check(f"{claim} minimum", fusion_sensitivity[column].min(), expected_min, "hybrid_refined_full/comparison_summary.csv", 5e-4)
     check(f"{claim} maximum", fusion_sensitivity[column].max(), expected_max, "hybrid_refined_full/comparison_summary.csv", 5e-4)
 
+# Frozen dose-matched HYPO stress campaign.
+stress_summary = json.loads(
+    (ROOT / "data/validation/hypo_stress/summary.json").read_text()
+)
+check("HYPO stress cows", stress_summary["n_cows"], 11, "hypo_stress/summary.json", 0)
+check(
+    "HYPO stress physical events",
+    stress_summary["n_physical_events"],
+    198,
+    "hypo_stress/summary.json",
+    0,
+)
+check(
+    "HYPO stress evaluation rows",
+    stress_summary["n_result_rows"],
+    990,
+    "hypo_stress/summary.json",
+    0,
+)
+check(
+    "HYPO stress all doses matched",
+    stress_summary["dose_integrity"]["all_events_matched"],
+    1,
+    "hypo_stress/summary.json",
+    0,
+)
+check(
+    "HYPO stress maximum relative dose error",
+    stress_summary["dose_integrity"]["max_relative_error"],
+    0,
+    "hypo_stress/summary.json",
+    4e-16,
+)
+stress = pd.read_csv(
+    ROOT / "data/validation/hypo_stress/scenario_summary.csv"
+).set_index("scenario")
+stress_expected = {
+    "abrupt_persistent": (33, 0.9394, 0.5455, 0.2727),
+    "desynchronized_families": (33, 1.0000, 0.7273, 0.3030),
+    "asymmetric_recovery": (33, 0.9394, 0.6364, 0.2121),
+    "noisy_gradual": (33, 0.9697, 0.6667, 0.5152),
+    "contiguous_dropout": (33, 1.0000, 1.0000, 0.2424),
+    "single_family_only": (33, 0.7879, 0.3030, 0.0000),
+}
+for scenario, expected in stress_expected.items():
+    row = stress.loc[scenario]
+    for column, value in zip(
+        ("n_events", "attributable_coverage", "novel_start_rate", "iou20_rate"),
+        expected,
+        strict=True,
+    ):
+        check(
+            f"HYPO stress {scenario} {column}",
+            row[column],
+            value,
+            "hypo_stress/scenario_summary.csv",
+        )
+    check(
+        f"HYPO stress {scenario} matched dose",
+        row["target_dose_hours"],
+        36.0,
+        "hypo_stress/scenario_summary.csv",
+        0,
+    )
+stress_positive = stress[stress["expected_alert"].eq(1)]
+check(
+    "HYPO stress positive physical events",
+    stress_positive["n_events"].sum(),
+    165,
+    "hypo_stress/scenario_summary.csv",
+    0,
+)
+for claim, column, expected in (
+    ("HYPO stress positive coverage", "attributable_coverage", 0.9697),
+    ("HYPO stress positive new start", "novel_start_rate", 0.7152),
+    ("HYPO stress positive IoU20", "iou20_rate", 0.3091),
+):
+    check(
+        claim,
+        stress_positive[column].mean(),
+        expected,
+        "hypo_stress/scenario_summary.csv",
+    )
+stress_comparisons = pd.read_csv(
+    ROOT / "data/validation/hypo_stress/paired_comparisons.csv"
+).set_index("comparator")
+for comparator, difference, p_value in (
+    ("B. IF + règles de persistance", 0.8424, 0.000488),
+    ("C. IF seul", 0.5273, 0.000488),
+    ("D. LOF + règles", 0.7030, 0.000488),
+    ("E. Comparateur pédométrique (pas seuls)", -0.0121, 0.84375),
+):
+    row = stress_comparisons.loc[comparator]
+    check(
+        f"HYPO stress difference vs {comparator}",
+        row["mean_paired_difference"],
+        difference,
+        "hypo_stress/paired_comparisons.csv",
+    )
+    check(
+        f"HYPO stress exact p vs {comparator}",
+        row["exact_sign_flip_p_one_sided"],
+        p_value,
+        "hypo_stress/paired_comparisons.csv",
+    )
+
 # Observation against SLS scores.
 sls = json.loads((ROOT / "data/validation/mcgill_sls/mcgill_summary.json").read_text())
 check("SLS evaluable cows", sls["cohort"]["n_evaluable"], 14, "mcgill_sls/mcgill_summary.json", 0)
@@ -373,9 +481,60 @@ for index, label, expected_auc in (
     (3, "SLS instability surveillance AUC", 0.3485),
 ):
     check(label, sls["primary_metrics"][index]["auc"], expected_auc, "mcgill_sls/mcgill_summary.json")
+treatment = {row["analysis"]: row for row in sls["treatment_sensitivity"]}
+check(
+    "SLS exact global permutations",
+    treatment["global"]["n_permutations"],
+    364,
+    "mcgill_sls/mcgill_summary.json",
+    0,
+)
+for claim, analysis, key, expected in (
+    ("SLS global exact one-sided p", "global", "exact_permutation_p_one_sided", 0.01923),
+    ("SLS global exact two-sided p", "global", "exact_permutation_p_two_sided", 0.03022),
+    ("SLS Exercise-only AUC", "exercise_only", "auc", 0.77778),
+    (
+        "SLS Exercise-only exact two-sided p",
+        "exercise_only",
+        "exact_permutation_p_two_sided",
+        0.40,
+    ),
+):
+    check(
+        claim,
+        treatment[analysis][key],
+        expected,
+        "mcgill_sls/mcgill_summary.json",
+        5e-5,
+    )
+diagnostics = sls["treatment_diagnostics"]
+for claim, key, expected in (
+    ("SLS treatment Fisher p", "treatment_sls_fisher_p_two_sided", 0.06993),
+    ("SLS leave-one-positive-out AUC minimum", "leave_one_positive_out_auc_min", 0.90909),
+    ("SLS leave-one-positive-out AUC maximum", "leave_one_positive_out_auc_max", 0.95455),
+):
+    check(claim, diagnostics[key], expected, "mcgill_sls/mcgill_summary.json", 5e-5)
 sls_cohort = pd.read_csv(ROOT / "data/validation/mcgill_sls/mcgill_cohort_all_variants.csv")
 sls_hierarchical = sls_cohort.loc[sls_cohort["variant"] == "hierarchical"]
 check("SLS future notification load", sls_hierarchical["future_hybrid_notif_per_cow_day"].mean(), 0.7551, "mcgill_sls/mcgill_cohort_all_variants.csv")
+
+# Bibliography counts reported in the reproducibility documentation.
+bibliography = load_bibtex(ROOT / "memoire/references.bib")
+check("Bibliography references", len(bibliography), 73, "memoire/references.bib", 0)
+check(
+    "Bibliography DOI references",
+    sum(bool(record.get("doi")) for record in bibliography),
+    58,
+    "memoire/references.bib",
+    0,
+)
+check(
+    "Bibliography authoritative-URL references",
+    sum(not record.get("doi") for record in bibliography),
+    15,
+    "memoire/references.bib",
+    0,
+)
 
 # Runtime benchmark.
 perf = json.loads((ROOT / "data/validation/performance_full_corpus.json").read_text())

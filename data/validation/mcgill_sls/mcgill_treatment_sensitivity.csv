@@ -1,0 +1,4 @@
+analysis,n,n_sls_ge_2,n_sls_lt_2,auc,exact_permutation_p_one_sided,exact_permutation_p_two_sided,n_permutations
+global,14,3,11,0.9242424242424242,0.019230769230769232,0.03021978021978022,364
+exercise_only,6,3,3,0.7777777777777779,0.2,0.4,20
+no_exercise_only,7,0,7,,,,0
