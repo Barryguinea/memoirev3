@@ -135,7 +135,27 @@ pour un grand troupeau. Ces valeurs ne sont pas des taux de faux positifs, puisq
 propre peut contenir une dégradation réelle non annotée, mais elles indiquent une fatigue
 d'alerte potentielle. Un déploiement devrait regrouper les alertes par épisode, limiter les
 répétitions, prioriser les trajectoires persistantes et enregistrer le résultat de la
-vérification humaine. Du côté du coût de calcul, le temps médian de 10,64 secondes pour
+vérification humaine.
+
+Deux leviers supplémentaires, absents du système actuel, méritent d'être signalés car ils
+portent sur une dimension différente. Le premier est une normalisation à l'échelle du
+troupeau~: le détecteur compare aujourd'hui chaque vache à sa seule période de référence, ce
+qui le rend insensible à un décalage affectant simultanément tout le troupeau. Le second est
+un filtre des journées collectives~: lorsqu'une proportion élevée d'animaux alerte le même
+jour, la cause la plus probable relève de la conduite, du logement ou du climat plutôt que
+d'une atteinte individuelle. La carte thermique de la Figure~\ref{fig:streamlit_heatmap} rend
+déjà ces journées visibles à l'écran, mais aucun mécanisme ne les écarte du décompte.
+
+Ces deux leviers se distinguent du filtre d'activité coordonnée déjà présent dans la branche
+INSTABILITÉ, qui compare l'excès de pas à celui de l'indice de mouvement chez une même vache
+et demeure donc intra-individuel. Ils ouvriraient un axe orthogonal aux trois niveaux de
+priorité~: là où la priorité indique quel mécanisme a déclenché, une normalisation par le
+troupeau et un filtre collectif permettraient de graduer la confiance accordée à chaque
+alerte, et donc de réduire la charge de revue sans toucher au détecteur lui-même. Cette piste
+n'est pas évaluée ici, et son effet sur la couverture attribuable reste à mesurer~: écarter
+une journée collective peut aussi écarter une dégradation individuelle qui y coïncide.
+
+Du côté du coût de calcul, le temps médian de 10,64 secondes pour
 28 vaches montre que le prototype est techniquement exécutable sur le corpus étudié~;
 Isolation Forest représente la majeure partie de ce coût, tandis que le calcul
 HYPO, INSTABILITÉ et fusion ne représente que 6,4\,\% du temps instrumenté. Ce résultat ne
