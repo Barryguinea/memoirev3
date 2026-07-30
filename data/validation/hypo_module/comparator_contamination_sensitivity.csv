@@ -1,0 +1,26 @@
+contamination,est_reference,variante,detect_any,iou20,best_iou,false_notif_cow_day
+0.02,0,A. Alerte temporelle multivariée,0.432,0.295,0.137,0.402
+0.02,0,B. IF + règles de persistance,0.023,0.0,0.001,0.0
+0.02,0,C. IF seul,0.25,0.0,0.004,2.509
+0.02,0,D. LOF + règles,0.159,0.0,0.004,0.045
+0.02,0,E. Comparateur pédométrique (pas seuls),0.273,0.318,0.141,0.518
+0.04,0,A. Alerte temporelle multivariée,0.432,0.295,0.137,0.402
+0.04,0,B. IF + règles de persistance,0.068,0.0,0.002,0.063
+0.04,0,C. IF seul,0.227,0.0,0.003,5.132
+0.04,0,D. LOF + règles,0.159,0.0,0.005,0.071
+0.04,0,E. Comparateur pédométrique (pas seuls),0.273,0.318,0.141,0.518
+0.06,1,A. Alerte temporelle multivariée,0.432,0.295,0.137,0.402
+0.06,1,B. IF + règles de persistance,0.159,0.0,0.004,0.152
+0.06,1,C. IF seul,0.136,0.0,0.002,7.658
+0.06,1,D. LOF + règles,0.159,0.0,0.005,0.107
+0.06,1,E. Comparateur pédométrique (pas seuls),0.273,0.318,0.141,0.518
+0.1,0,A. Alerte temporelle multivariée,0.432,0.295,0.137,0.402
+0.1,0,B. IF + règles de persistance,0.205,0.0,0.005,0.259
+0.1,0,C. IF seul,0.068,0.0,0.005,11.825
+0.1,0,D. LOF + règles,0.318,0.0,0.007,0.223
+0.1,0,E. Comparateur pédométrique (pas seuls),0.273,0.318,0.141,0.518
+0.15,0,A. Alerte temporelle multivariée,0.432,0.295,0.137,0.402
+0.15,0,B. IF + règles de persistance,0.25,0.0,0.006,0.357
+0.15,0,C. IF seul,0.0,0.0,0.007,14.707
+0.15,0,D. LOF + règles,0.318,0.0,0.008,0.304
+0.15,0,E. Comparateur pédométrique (pas seuls),0.273,0.318,0.141,0.518

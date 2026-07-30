@@ -94,6 +94,18 @@ python -m validation_hypo.sensitivity \
 La référence et les vingt variantes utilisent les mêmes onze vaches, les mêmes fenêtres et
 la même graine. L'analyse ne sélectionne pas de nouvelle configuration.
 
+\subsubsection{Sensibilité des comparateurs à leur contamination}
+\begin{verbatim}
+python scripts/compute_comparator_sensitivity.py
+\end{verbatim}
+
+Cette commande rejoue l'ablation complète à cinq valeurs de \texttt{contamination}, de 0,02 à
+0,15, sur les mêmes onze vaches et les mêmes 44 événements, puis écrit
+\path{hypo_module/comparator_contamination_sensitivity.csv}. Elle contrôle que l'échec de
+localisation d'Isolation Forest et de LOF ne dépend pas du réglage retenu pour eux. HYPO et le
+comparateur pédométrique n'emploient pas Isolation Forest et servent de témoin~: leurs lignes
+doivent rester constantes sur toute la plage.
+
 \subsubsection{Traçabilité des données (provenance CowAlert)}
 \begin{verbatim}
 python scripts/cowalert_provenance.py
@@ -177,7 +189,7 @@ Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et r�
 figures de fusion, de scénarios et de SLS; il reconstruit également quatre trajectoires
 représentatives pour l'inspection visuelle. Les trois scripts suivants écrivent les métriques
 F1, l'ablation par famille et les temps d'autocorrélation dans
-\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 374 valeurs
+\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 385 valeurs
 empiriques du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent
 le manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
 
@@ -278,7 +290,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{derived_metrics/channel_ablation_summary.csv} & Synthèse de l'ablation par famille de signaux. \\
   \path{derived_metrics/channel_ablation_events.csv} & Sorties événementielles détaillées de l'ablation par famille. \\
   \path{derived_metrics/correlation_time.csv} & Temps d'autocorrélation et tailles effectives aux deux grains d'analyse. \\
-  \path{manuscript_number_audit.csv} & Correspondance entre 374 valeurs du manuscrit et leurs artefacts sources. \\
+  \path{manuscript_number_audit.csv} & Correspondance entre 385 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
   \path{hybrid_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\

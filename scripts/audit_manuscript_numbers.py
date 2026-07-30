@@ -639,6 +639,83 @@ for claim, key, expected in (
     tolerance = 1.0 if key == "rows_per_sec_median" else 0.0051
     check(claim, perf[key], expected, "performance_full_corpus.json", tolerance)
 
+# Valeurs du chapitre 6 exactes et tracables, mais restees hors de l'audit:
+# AUC des scores alternatifs de l'analyse SLS, moyenne de notifications du groupe
+# a score eleve, charge de fond au seuil 0,20 et fond de la fusion INSTABILITE.
+mcgill_metrics = pd.read_csv(
+    ROOT / "data/validation/mcgill_sls/mcgill_metrics.csv"
+)
+hierarchical_metrics = mcgill_metrics[mcgill_metrics["variant"].eq("hierarchical")].set_index("metric")
+for metric, column, expected in (
+    ("pre7_hybrid_frac_time", "auc", 0.7121),
+    ("pre7_hybrid_score_max", "auc", 0.6061),
+    ("pre7_instability_surveillance_frac", "auc", 0.3485),
+    ("pre7_hybrid_notifs", "mean_sls_ge_2", 6.6667),
+):
+    check(
+        f"SLS hierarchique {metric} {column}",
+        hierarchical_metrics.loc[metric, column],
+        expected,
+        "mcgill_sls/mcgill_metrics.csv",
+        tolerance=5e-4,
+    )
+
+check(
+    "Detection-background threshold 0.2 background_per_cow_day",
+    curve.loc[0.20, "background_per_cow_day"],
+    0.330,
+    "hypo_module/detection_background_curve.csv",
+    tolerance=5e-4,
+)
+
+fusion_backgrounds = pd.read_csv(
+    ROOT / "data/validation/hybrid_refined_full/comparison_summary.csv"
+).set_index("configuration")
+check(
+    "Fusion instability_only background_per_cow_day",
+    fusion_backgrounds.loc["instability_only", "background_per_cow_day"],
+    0.8748,
+    "hybrid_refined_full/comparison_summary.csv",
+)
+
+# Sensibilite des comparateurs a leur contamination: aucun reglage ne leur permet
+# de localiser, ce qui soutient l'argument de non-circularite du chapitre 6.
+comparator_sensitivity = pd.read_csv(
+    ROOT / "data/validation/hypo_module/comparator_contamination_sensitivity.csv"
+)
+comparators = comparator_sensitivity[
+    comparator_sensitivity["variante"].str.startswith(("B.", "C.", "D."))
+]
+check(
+    "Comparateurs IoU20 maximal sur la plage de contamination",
+    comparators["iou20"].max(),
+    0.0,
+    "hypo_module/comparator_contamination_sensitivity.csv",
+)
+check(
+    "Comparateurs IoU moyen maximal sur la plage de contamination",
+    comparators["best_iou"].max(),
+    0.008,
+    "hypo_module/comparator_contamination_sensitivity.csv",
+    tolerance=5e-4,
+)
+if_alone = comparator_sensitivity[comparator_sensitivity["variante"].str.startswith("C.")]
+for contamination, expected in ((0.02, 2.509), (0.15, 14.707)):
+    check(
+        f"IF seul fond a contamination {contamination}",
+        if_alone.set_index("contamination").loc[contamination, "false_notif_cow_day"],
+        expected,
+        "hypo_module/comparator_contamination_sensitivity.csv",
+        tolerance=5e-4,
+    )
+hypo_temoin = comparator_sensitivity[comparator_sensitivity["variante"].str.startswith("A.")]
+check(
+    "HYPO temoin invariant en IoU20 sur la plage",
+    float(hypo_temoin["iou20"].nunique()),
+    1.0,
+    "hypo_module/comparator_contamination_sensitivity.csv",
+)
+
 audit = pd.DataFrame(records)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 audit.to_csv(OUT, index=False)

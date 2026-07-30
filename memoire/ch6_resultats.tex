@@ -303,6 +303,22 @@ contre D, tous excluant zéro), avec une corrélation rang-bisériale appariée
 \citep{kerby2014simple} de $+1{,}00$~:
 les onze vaches favorisent HYPO. La supériorité ne tient donc pas à quelques vaches.
 
+Cette supériorité appelle une objection, car l'analyse de sensibilité de la
+Section~\ref{sec:sensibilite} fait varier dix paramètres de HYPO et aucun paramètre des
+comparateurs. Le paramètre \texttt{contamination} d'Isolation Forest et de LOF, que le
+Chapitre~\ref{chapitre:etatart} désigne comme critique pour ces deux méthodes, reste figé à
+0,06. L'échec de localisation des comparateurs pourrait donc refléter ce choix plutôt que
+leur principe. L'ablation a été rejouée à cinq valeurs de contamination, de 0,02 à 0,15, sur
+les mêmes onze vaches et les mêmes quarante-quatre événements. Aucune de ces valeurs ne
+permet à B, C ou D d'atteindre le seuil IoU20 sur un seul événement, et leur IoU attribuable
+moyen ne dépasse jamais 0,008, contre 0,137 pour HYPO. Ce que la contamination gouverne est
+le volume d'alertes et non la localisation~: la charge de fond d'Isolation Forest ponctuel
+passe de 2,509 à 14,707 notifications par vache-jour sur cette plage, sans qu'aucun événement
+ne soit mieux situé. La valeur retenue ne désavantage donc pas les comparateurs, et l'écart
+mesuré tient à la nature de la détection plutôt qu'à un réglage. HYPO et le comparateur
+pédométrique, qui n'emploient pas Isolation Forest, restent inchangés sur toute la plage et
+servent de témoin à cette vérification.
+
 La cinquième variante isole, elle, le rôle de la combinaison de plusieurs signaux. Le comparateur
 pédométrique (E) reprend exactement la machinerie temporelle de HYPO (même période de référence
 individuelle par créneau horaire, même cumul CUSUM et même persistance), mais restreint la
@@ -392,6 +408,7 @@ indépendant sur la détection ou la localisation. Elles ne résolvent pas la ch
 qui reste supérieure à celle des variantes B et D.
 
 \subsection{Robustesse locale des paramètres HYPO}
+\label{sec:sensibilite}
 L'analyse OFAT comprend la référence et vingt variantes dans lesquelles un seul des dix
 paramètres est modifié. Les 924 évaluations événement-configuration rejettent toutes le
 contrôle bref. Sur les profils progressifs, 12 variantes sur 20 reproduisent exactement le

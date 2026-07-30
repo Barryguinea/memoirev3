@@ -373,3 +373,14 @@ Feature engineering share,0.082,0.08153338752857063,performance_full_corpus.json
 IF share of instrumented core,0.828,0.8275350408619133,performance_full_corpus.json,True
 Hybrid share of instrumented core,0.064,0.06434867059164796,performance_full_corpus.json,True
 Comparative IF rules share,0.025,0.02466650617164831,performance_full_corpus.json,True
+SLS hierarchique pre7_hybrid_frac_time auc,0.7121,0.7121212121212122,mcgill_sls/mcgill_metrics.csv,True
+SLS hierarchique pre7_hybrid_score_max auc,0.6061,0.6060606060606061,mcgill_sls/mcgill_metrics.csv,True
+SLS hierarchique pre7_instability_surveillance_frac auc,0.3485,0.3484848484848485,mcgill_sls/mcgill_metrics.csv,True
+SLS hierarchique pre7_hybrid_notifs mean_sls_ge_2,6.6667,6.666666666666667,mcgill_sls/mcgill_metrics.csv,True
+Detection-background threshold 0.2 background_per_cow_day,0.33,0.330234,hypo_module/detection_background_curve.csv,True
+Fusion instability_only background_per_cow_day,0.8748,0.8748363381186052,hybrid_refined_full/comparison_summary.csv,True
+Comparateurs IoU20 maximal sur la plage de contamination,0.0,0.0,hypo_module/comparator_contamination_sensitivity.csv,True
+Comparateurs IoU moyen maximal sur la plage de contamination,0.008,0.008,hypo_module/comparator_contamination_sensitivity.csv,True
+IF seul fond a contamination 0.02,2.509,2.509,hypo_module/comparator_contamination_sensitivity.csv,True
+IF seul fond a contamination 0.15,14.707,14.707,hypo_module/comparator_contamination_sensitivity.csv,True
+HYPO temoin invariant en IoU20 sur la plage,1.0,1.0,hypo_module/comparator_contamination_sensitivity.csv,True
