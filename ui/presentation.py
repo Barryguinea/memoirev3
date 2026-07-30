@@ -122,7 +122,7 @@ def build_reason_row(row: pd.Series) -> str:
 
     fams: List[str] = []
     for col, label in [
-        ("fam_activity", "activite"),
+        ("fam_activity", "activité"),
         ("fam_rest", "repos"),
         ("fam_transitions", "transitions"),
     ]:
@@ -278,7 +278,7 @@ def clinical_payload(level: str, kb: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "summary": "Pas d'indice significatif; poursuivre la surveillance de routine.",
             "actions_0_24h": [
-                "Continuer le suivi quotidien et l'hygiene des sols/litiere.",
+                "Continuer le suivi quotidien et l'hygiène des sols/litière.",
                 "Recontroler si changement de comportement ou de locomotion.",
             ],
         }

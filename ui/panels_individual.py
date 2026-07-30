@@ -54,7 +54,7 @@ def render_tab_individual(
     max_date = it["T"].max().date() if len(it) > 0 else datetime.now().date()
 
     with col_d1:
-        d1 = st.date_input("Date debut", value=min_date, min_value=min_date, max_value=max_date, key="tab1_d1")
+        d1 = st.date_input("Date début", value=min_date, min_value=min_date, max_value=max_date, key="tab1_d1")
     with col_d2:
         d2 = st.date_input("Date fin", value=max_date, min_value=min_date, max_value=max_date, key="tab1_d2")
 

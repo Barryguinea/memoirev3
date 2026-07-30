@@ -273,7 +273,7 @@ def load_clinical_kb() -> Dict[str, Any]:
         "meta": {
             "title": "Consignes cliniques boiterie",
             "version": "fallback",
-            "disclaimer": "Informations generales. Ne remplace pas un avis veterinaire.",
+            "disclaimer": "Informations générales. Ne remplace pas un avis vétérinaire.",
         },
         "levels": {
             "suspect": {
@@ -287,19 +287,19 @@ def load_clinical_kb() -> Dict[str, Any]:
             "probable": {
                 "summary": "Intervention rapide (<24-48h).",
                 "actions_0_2h": [
-                    "Mettre au calme, litiere seche, limiter marche.",
+                    "Mettre au calme, litière sèche, limiter marche.",
                     "Preparer examen du pied par personnel forme.",
                 ],
                 "actions_24_48h": [
                     "Parage therapeutique selon protocole.",
-                    "Gestion de la douleur selon protocole veterinaire.",
+                    "Gestion de la douleur selon protocole vétérinaire.",
                 ],
             },
             "critique": {
                 "summary": "Priorité immédiate + vet si signes d'urgence.",
                 "actions_0_2h": [
                     "Isoler et limiter la marche.",
-                    "Contacter le veterinaire si red flags.",
+                    "Contacter le vétérinaire si signes d'alerte.",
                 ],
                 "red_flags": [
                     "Incapacité à se lever/boire/manger.",
@@ -371,11 +371,11 @@ def render_clinical_guidance(levels: List[str], kb: Dict[str, Any]) -> None:
 
             red_flags = payload.get("red_flags", [])
             if isinstance(red_flags, list) and len(red_flags) > 0:
-                st.markdown("**Signes d'urgence (contacter veterinaire)**")
+                st.markdown("**Signes d'urgence (contacter vétérinaire)**")
                 for rf in red_flags:
                     st.markdown(f"- {rf}")
 
-            _render_bullets("Appeler le veterinaire si", payload.get("call_vet_if", []))
+            _render_bullets("Appeler le vétérinaire si", payload.get("call_vet_if", []))
             _render_bullets("A eviter", payload.get("do_not", []))
 
             recheck = payload.get("recheck")
@@ -386,7 +386,7 @@ def render_clinical_guidance(levels: List[str], kb: Dict[str, Any]) -> None:
 
     herd_prev = kb.get("herd_prevention", [])
     if isinstance(herd_prev, list) and herd_prev:
-        with st.expander("Prevention troupeau (rappels)", expanded=False):
+        with st.expander("Prévention troupeau (rappels)", expanded=False):
             for item in herd_prev:
                 if isinstance(item, dict):
                     text = str(item.get("text", "")).strip()
