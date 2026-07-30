@@ -51,7 +51,15 @@ def test_fusion_or_preserves_branch_identity():
     assert (out.loc[[1, 2, 5, 6], "hybrid_warning_type"].isin(["HYPO", "MIXTE"])).all()
 
 
-def test_hierarchical_fusion_keeps_instability_as_surveillance_only():
+def test_frame_without_baseline_produces_no_instability_output():
+    """Cas degenere: dataset_split vaut « futur » partout, donc il n'existe
+    aucune ligne de reference et la branche instabilite ne peut rien calculer.
+
+    Ce test ne verifie donc pas l'asymetrie de la regle hierarchique, malgre
+    ce que son nom d'origine laissait croire: cette propriete est verifiee
+    dans tests/test_reference_config_and_fusion_rule.py, sur une trame qui
+    declenche reellement l'instabilite.
+    """
     times = pd.date_range("2026-01-01", periods=40, freq="15min")
     frame = pd.DataFrame(
         {
@@ -73,6 +81,11 @@ def test_hierarchical_fusion_keeps_instability_as_surveillance_only():
         interval="15T",
         fusion_config=HybridFusionConfig(mode="HIERARCHICAL"),
     )
+    # La premisse du cas degenere est rendue explicite: sans baseline, aucun
+    # episode d'instabilite n'existe. Sans cette assertion, le test pourrait
+    # continuer a passer pour une raison entierement differente.
+    assert out["instability_warning_episode"].sum() == 0
+    assert out["hybrid_warning_surveillance"].sum() == 0
     assert out["hybrid_warning_notification"].sum() == 0
     assert (out["hybrid_warning_priority"] <= 1).all()
 
