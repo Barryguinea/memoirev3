@@ -430,6 +430,17 @@ l'extension, les métriques ajoutent les taux de surveillance, de contrôle et d
 synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne sont
 jamais des sujets indépendants.
 
+Comparer les départs des deux exécutions suppose de décider quand deux départs proches sont le
+même événement. Cette comparaison admet une tolérance temporelle d'une heure~: un départ de
+l'exécution injectée situé à moins d'une heure d'un départ de l'exécution propre est considéré
+comme le même déclenchement et n'est pas crédité. Ce choix est conservateur, et son effet est
+mesuré plutôt que supposé. Sans tolérance, deux départs distants d'un seul intervalle
+compteraient comme distincts et le taux de nouveau départ atteindrait 50,0\,\% au lieu de
+43,2\,\%~; avec deux heures, il descendrait à 38,6\,\%. La valeur retenue n'est donc pas celle
+qui flatte le résultat. La couverture attribuable et l'IoU ne dépendent pas de cette décision,
+puisqu'elles se calculent sur les intervalles attribuables sans jamais apparier de départs~:
+elles restent inchangées sur toute la plage et servent de témoin à cette vérification.
+
 Cette dépendance est quantifiée sur le corpus par le temps d'autocorrélation intégré $\tau$
 et par la taille d'échantillon effective $n_{\text{eff}}=n/\tau$, lorsque $\tau$ est exprimé
 en nombre de pas d'échantillonnage. Les résultats descriptifs correspondants sont présentés

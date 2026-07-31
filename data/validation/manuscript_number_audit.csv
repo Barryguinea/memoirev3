@@ -384,3 +384,8 @@ Comparateurs IoU moyen maximal sur la plage de contamination,0.008,0.008,hypo_mo
 IF seul fond a contamination 0.02,2.509,2.509,hypo_module/comparator_contamination_sensitivity.csv,True
 IF seul fond a contamination 0.15,14.707,14.707,hypo_module/comparator_contamination_sensitivity.csv,True
 HYPO temoin invariant en IoU20 sur la plage,1.0,1.0,hypo_module/comparator_contamination_sensitivity.csv,True
+Tolerance 0.0 h taux de nouveau depart,0.5,0.5,hypo_module/match_tolerance_sensitivity.csv,True
+Tolerance 1.0 h taux de nouveau depart,0.432,0.432,hypo_module/match_tolerance_sensitivity.csv,True
+Tolerance 2.0 h taux de nouveau depart,0.386,0.386,hypo_module/match_tolerance_sensitivity.csv,True
+IoU20 invariant a la tolerance d'appariement,1.0,1.0,hypo_module/match_tolerance_sensitivity.csv,True
+IoU20 temoin a la tolerance retenue,0.295,0.295,hypo_module/match_tolerance_sensitivity.csv,True

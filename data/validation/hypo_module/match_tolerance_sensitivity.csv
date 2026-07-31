@@ -1,0 +1,4 @@
+match_tolerance_hours,est_reference,variante,new_start_rate,iou20,best_iou
+0.0,0,A. Alerte temporelle multivariée,0.5,0.295,0.137
+1.0,1,A. Alerte temporelle multivariée,0.432,0.295,0.137
+2.0,0,A. Alerte temporelle multivariée,0.386,0.295,0.137

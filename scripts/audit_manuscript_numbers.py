@@ -716,6 +716,31 @@ check(
     "hypo_module/comparator_contamination_sensitivity.csv",
 )
 
+# Tolerance d'appariement des departs: le chapitre 3 publie les trois taux, dont
+# celui de la valeur retenue, pour montrer que ce choix ne flatte pas le resultat.
+match_tolerance = pd.read_csv(
+    ROOT / "data/validation/hypo_module/match_tolerance_sensitivity.csv"
+).set_index("match_tolerance_hours")
+for tolerance, expected in ((0.0, 0.5000), (1.0, 0.4320), (2.0, 0.3860)):
+    check(
+        f"Tolerance {tolerance} h taux de nouveau depart",
+        match_tolerance.loc[tolerance, "new_start_rate"],
+        expected,
+        "hypo_module/match_tolerance_sensitivity.csv",
+    )
+check(
+    "IoU20 invariant a la tolerance d'appariement",
+    float(match_tolerance["iou20"].nunique()),
+    1.0,
+    "hypo_module/match_tolerance_sensitivity.csv",
+)
+check(
+    "IoU20 temoin a la tolerance retenue",
+    match_tolerance.loc[1.0, "iou20"],
+    0.2950,
+    "hypo_module/match_tolerance_sensitivity.csv",
+)
+
 audit = pd.DataFrame(records)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 audit.to_csv(OUT, index=False)

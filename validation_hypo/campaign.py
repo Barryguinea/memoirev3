@@ -290,6 +290,15 @@ def final_params() -> Dict[str, object]:
     )
 
 
+# Tolerance d'appariement entre un depart de la serie injectee et un depart de
+# l'execution propre. Un depart situe a moins de cette duree d'un depart deja
+# present dans l'execution propre n'est pas credite comme nouveau. La valeur est
+# nommee ici plutot que codee en dur dans la signature, afin que
+# scripts/compute_match_tolerance_sensitivity.py puisse la faire varier et
+# documenter son effet.
+DEFAULT_MATCH_TOLERANCE_HOURS = 1.0
+
+
 def _evaluate_binary_output(
     predictions: pd.DataFrame,
     event: pd.Series,
@@ -299,8 +308,10 @@ def _evaluate_binary_output(
     score_col: str,
     interval: str,
     reference_predictions: Optional[pd.DataFrame] = None,
-    match_tolerance_hours: float = 1.0,
+    match_tolerance_hours: Optional[float] = None,
 ) -> dict[str, float | int]:
+    if match_tolerance_hours is None:
+        match_tolerance_hours = DEFAULT_MATCH_TOLERANCE_HOURS
     minutes = interval_to_minutes(interval)
     bin_seconds = int(minutes * 60)
     start = pd.Timestamp(event["start"])
