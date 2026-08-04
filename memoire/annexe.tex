@@ -302,6 +302,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{derived_metrics/channel_ablation_summary.csv} & Synthèse de l'ablation par famille de signaux. \\
   \path{derived_metrics/channel_ablation_events.csv} & Sorties événementielles détaillées de l'ablation par famille. \\
   \path{derived_metrics/correlation_time.csv} & Temps d'autocorrélation et tailles effectives aux deux grains d'analyse. \\
+  \path{input_provenance.json} & Empreinte, taille et dimensions du corpus brut confidentiel. \\
   \path{manuscript_number_audit.csv} & Correspondance entre 390 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
@@ -329,9 +330,10 @@ Sauf pour la planche d'inspection, les chemins du tableau sont relatifs à
 \subsubsection{Intégrité des fichiers}
 Le fichier \texttt{data/validation/validation\_artifacts.sha256} contient les empreintes SHA-256
 des sorties qui alimentent ce mémoire~: performance attribuable, ablation, analyses
-exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Les chemins y
-sont relatifs à la racine du projet. Après une reproduction, la commande suivante vérifie le
-manifeste~:
+exploratoires, temps d'exécution, comparaison des fusions et concordance IceTag-SLS. Il scelle
+aussi \texttt{input\_provenance.json}, qui consigne l'empreinte du corpus brut confidentiel sans
+en révéler le contenu. Les chemins y sont relatifs à la racine du projet. Après une reproduction,
+la commande suivante vérifie le manifeste~:
 
 \begin{verbatim}
 shasum -a 256 -c data/validation/validation_artifacts.sha256

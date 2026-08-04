@@ -1,23 +1,28 @@
 """Generate visual panels used for the human review of synthetic events."""
 
+# ruff: noqa: E402 -- direct execution requires the repository root on sys.path.
+
 from __future__ import annotations
 
 from pathlib import Path
-import json
+import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image, ImageDraw
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from core.io import COW, TIME, load_csv
 from core.early_warning import EarlyWarningConfig
 from core.pipeline import run_pipeline_one_cow
 from validation_hypo.campaign import final_params, inject_events_for_cow
+from validation_hypo.qa import manual_review_sample
 
 
-ROOT = Path(__file__).resolve().parents[1]
 EVENTS_PATH = ROOT / "data/validation/hypo_module/events_primary.csv"
-SAMPLE_PATH = ROOT / "data/validation/hypo_module/manual_review_sample.csv"
 OUT = ROOT / "data/validation/hypo_module/manual_review_figures"
 
 
@@ -204,14 +209,12 @@ def main() -> None:
     for old_figure in OUT.glob("*.png"):
         old_figure.unlink()
     params = final_params()
-    protocol = json.loads(
-        (ROOT / "data/validation/hypo_module/protocol_configuration.json").read_text(encoding="utf-8")
-    )
-    warning_config = EarlyWarningConfig(**protocol["early_warning"])
+    warning_config = EarlyWarningConfig()
     raw = load_csv(ROOT / "data/brut.csv")
     raw[COW] = raw[COW].astype(str)
     events = pd.read_csv(EVENTS_PATH)
-    sample = pd.read_csv(SAMPLE_PATH)[["event_id"]].merge(events, on="event_id", how="left")
+    selected = manual_review_sample(events, per_scenario=3)[["event_id"]]
+    sample = selected.merge(events, on="event_id", how="left", validate="one_to_one")
     paths: list[Path] = []
     for event in sample.to_dict(orient="records"):
         event = pd.Series(event)

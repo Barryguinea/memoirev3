@@ -1,0 +1,8 @@
+{
+  "path": "data/brut.csv",
+  "confidential": true,
+  "sha256": "ba0c2a2927379f3824a258357a09f744723e6cb5a0f21b649f66fda94b826146",
+  "size_bytes": 2744017,
+  "rows": 37839,
+  "cows": 28
+}

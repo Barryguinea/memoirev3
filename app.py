@@ -156,9 +156,14 @@ with st.sidebar:
 
     st.header("Comparateur Isolation Forest")
     contamination = st.slider("Contamination", 0.001, 0.1, float(DEFAULT_CONTAMINATION), 0.001)
-    baseline_options = [None, 0.5, 0.6, 0.7, 0.8]
+    baseline_options = [0.5, 0.6, 0.7, 0.8]
     default_baseline_idx = baseline_options.index(DEFAULT_BASELINE_RATIO) if DEFAULT_BASELINE_RATIO in baseline_options else 0
-    baseline_ratio = st.selectbox("Baseline ratio (fit IF)", baseline_options, index=default_baseline_idx)
+    baseline_ratio = st.selectbox(
+        "Part chronologique de référence",
+        baseline_options,
+        index=default_baseline_idx,
+        help="Part initiale utilisée comme référence individuelle et pour entraîner le comparateur IF.",
+    )
     random_state = st.number_input("Random state", value=int(DEFAULT_RANDOM_STATE), step=1)
 
     st.header("Agrégation du comparateur")

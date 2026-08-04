@@ -8,9 +8,9 @@ pose **jamais** un diagnostic de boiterie ni une classification de stade cliniqu
 
 La contribution principale est un détecteur temporel par vache (**HYPO**),
 complété par une extension bidirectionnelle exploratoire (**INSTABILITÉ** +
-fusion hiérarchique). La validation est **post‑baseline et attribuable** : aucune
-sélection de paramètres n'est faite sur le jeu d'évaluation, et chaque chiffre du
-mémoire est régénérable par script et scellé par un manifeste SHA‑256.
+fusion hiérarchique). L'évaluation est **post‑baseline et attribuable** : la
+configuration est gelée avant la campagne finale, et les résultats chiffrés audités
+sont vérifiés contre des artefacts scellés par un manifeste SHA‑256.
 
 ---
 
@@ -65,9 +65,9 @@ projet-memoire/
 │   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
-│   ├── audit_manuscript_numbers.py     # Vérifie 354 valeurs du mémoire ↔ sources
+│   ├── audit_manuscript_numbers.py     # Vérifie 390 valeurs du mémoire ↔ sources
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 109 tests (unitaires, invariants, non-régression)
+├── tests/                       # 118 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 109 tests
+pytest -q                                # 118 tests
 ```
 
 ---
@@ -176,7 +176,7 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 
 ## Reproductibilité
 
-- Chaque résultat est régénéré par un script ; **aucun chiffre n'est saisi à la main**.
+- Chaque résultat empirique est régénéré par un script et vérifié contre son artefact source.
 - Les 73 références sont auditées : 58 DOI sont confrontés aux métadonnées
   Crossref/DataCite et 15 sources sans DOI à leur URL d'autorité :
   ```bash
@@ -193,7 +193,9 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   python scripts/update_validation_manifest.py
   shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
-- Un script d'audit confronte **354 valeurs** du manuscrit à leurs sources :
+  Le manifeste inclut un fichier de provenance contenant uniquement l'empreinte,
+  la taille et les dimensions du corpus confidentiel, sans en diffuser le contenu.
+- Un script d'audit confronte **390 valeurs** du manuscrit à leurs sources :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```

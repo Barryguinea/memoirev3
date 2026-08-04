@@ -192,8 +192,8 @@ Channel ablation Transitions seules background_per_cow_day,0.518,0.5176903937152
 Channel ablation Transitions seules f1_new_start,0.8,0.8,derived_metrics/channel_ablation_summary.csv,True
 Channel ablation Posture seule new_start_rate,0.273,0.2727272727272727,derived_metrics/channel_ablation_summary.csv,True
 Channel ablation Posture seule iou20_rate,0.023,0.0227272727272727,derived_metrics/channel_ablation_summary.csv,True
-Channel ablation Posture seule mean_best_iou,0.042,0.0416982323232323,derived_metrics/channel_ablation_summary.csv,True
-Channel ablation Posture seule background_per_cow_day,0.393,0.3927137739840036,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule mean_best_iou,0.042,0.0415088383838383,derived_metrics/channel_ablation_summary.csv,True
+Channel ablation Posture seule background_per_cow_day,0.384,0.3837810485722606,derived_metrics/channel_ablation_summary.csv,True
 Channel ablation Posture seule f1_new_start,0.53,0.5333333333333333,derived_metrics/channel_ablation_summary.csv,True
 Channel ablation HYPO (4 familles) new_start_rate,0.432,0.4318181818181818,derived_metrics/channel_ablation_summary.csv,True
 Channel ablation HYPO (4 familles) iou20_rate,0.295,0.2954545454545454,derived_metrics/channel_ablation_summary.csv,True

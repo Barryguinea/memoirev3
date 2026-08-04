@@ -94,6 +94,9 @@ def apply_behavioral_early_warning(
         baseline_mask = df["dataset_split"].astype(str).eq("baseline")
         future_mask = df["dataset_split"].astype(str).eq("futur")
     else:
+        baseline_mask = pd.Series(False, index=df.index)
+        future_mask = pd.Series(False, index=df.index)
+    if not baseline_mask.any() or not future_mask.any():
         split = max(30, int(round(0.60 * len(df))))
         baseline_mask = pd.Series(df.index < split, index=df.index)
         future_mask = ~baseline_mask
@@ -157,13 +160,18 @@ def apply_behavioral_early_warning(
     score = sum((base_weights[name] / total_weight) * family_terms[name] for name in active)
 
     activity_families = [name for name in ("steps", "motion", "transitions") if name in active]
-    if not activity_families:
-        activity_families = ["steps", "motion", "transitions"]
-    activity_ratio = pd.concat(
-        [ratios[name] for name in activity_families], axis=1
-    ).mean(axis=1, skipna=True)
     lag_bins = max(2, int(round(6 * 60 / minutes)))
-    progressive_drop = (activity_ratio.shift(lag_bins) - activity_ratio).clip(0.0, 1.0).fillna(0.0)
+    if activity_families:
+        activity_ratio = pd.concat(
+            [ratios[name] for name in activity_families], axis=1
+        ).mean(axis=1, skipna=True)
+        progressive_drop = (
+            activity_ratio.shift(lag_bins) - activity_ratio
+        ).clip(0.0, 1.0).fillna(0.0)
+    else:
+        # Une ablation posture doit rester strictement posturale : les canaux
+        # d'activite ne contribuent ni au score ni a l'evidence du CUSUM.
+        progressive_drop = pd.Series(0.0, index=df.index)
     hit_thresholds = {
         "steps": cfg.family_min_change,
         "motion": cfg.family_min_change,

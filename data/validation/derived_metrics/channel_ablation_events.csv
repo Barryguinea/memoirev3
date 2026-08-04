@@ -42,22 +42,22 @@ HYPO (4 familles),7443,isolated_short_variation,False,0,0,0,0.0,0.39303991811668
 Pas seuls,8061,gradual_mild,True,0,1,0,0.027777777777777776,0.49129989764585463
 Motion Index seul,8061,gradual_mild,True,0,1,0,0.05555555555555555,0.5895598771750256
 Transitions seules,8061,gradual_mild,True,1,1,0,0.034722222222222224,0.49129989764585463
-Posture seule,8061,gradual_mild,True,0,0,0,0.0,0.3930399181166837
+Posture seule,8061,gradual_mild,True,0,0,0,0.0,0.2947799385875128
 HYPO (4 familles),8061,gradual_mild,True,1,1,0,0.020833333333333332,0.2947799385875128
 Pas seuls,8061,gradual_moderate,True,0,1,0,0.052083333333333336,0.49129989764585463
 Motion Index seul,8061,gradual_moderate,True,1,1,0,0.1875,0.5895598771750256
 Transitions seules,8061,gradual_moderate,True,1,1,0,0.026041666666666668,0.49129989764585463
-Posture seule,8061,gradual_moderate,True,0,1,0,0.13020833333333334,0.3930399181166837
+Posture seule,8061,gradual_moderate,True,0,1,0,0.13020833333333334,0.2947799385875128
 HYPO (4 familles),8061,gradual_moderate,True,1,1,1,0.22395833333333334,0.2947799385875128
 Pas seuls,8061,gradual_marked,True,1,1,1,0.2708333333333333,0.49129989764585463
 Motion Index seul,8061,gradual_marked,True,1,1,1,0.4166666666666667,0.5895598771750256
 Transitions seules,8061,gradual_marked,True,1,1,1,0.2833333333333333,0.49129989764585463
-Posture seule,8061,gradual_marked,True,0,0,0,0.0,0.3930399181166837
+Posture seule,8061,gradual_marked,True,0,0,0,0.0,0.2947799385875128
 HYPO (4 familles),8061,gradual_marked,True,1,1,1,0.275,0.2947799385875128
 Pas seuls,8061,isolated_short_variation,False,0,0,0,0.0,0.49129989764585463
 Motion Index seul,8061,isolated_short_variation,False,0,0,0,0.0,0.5895598771750256
 Transitions seules,8061,isolated_short_variation,False,0,0,0,0.0,0.49129989764585463
-Posture seule,8061,isolated_short_variation,False,0,0,0,0.0,0.3930399181166837
+Posture seule,8061,isolated_short_variation,False,0,0,0,0.0,0.2947799385875128
 HYPO (4 familles),8061,isolated_short_variation,False,0,0,0,0.0,0.2947799385875128
 Pas seuls,8081,gradual_mild,True,1,1,1,0.24305555555555555,0.49129989764585463
 Motion Index seul,8081,gradual_mild,True,0,0,0,0.0,0.3930399181166837
@@ -132,7 +132,7 @@ HYPO (4 familles),8149,gradual_moderate,True,0,1,1,0.4635416666666667,0.58955987
 Pas seuls,8149,gradual_marked,True,1,1,1,0.2875,0.49129989764585463
 Motion Index seul,8149,gradual_marked,True,1,1,1,0.2833333333333333,0.5895598771750256
 Transitions seules,8149,gradual_marked,True,0,1,1,0.3458333333333333,0.6878198567041964
-Posture seule,8149,gradual_marked,True,1,1,0,0.03333333333333333,0.5895598771750256
+Posture seule,8149,gradual_marked,True,1,1,0,0.025,0.5895598771750256
 HYPO (4 familles),8149,gradual_marked,True,1,1,1,0.325,0.5895598771750256
 Pas seuls,8149,isolated_short_variation,False,0,0,0,0.0,0.49129989764585463
 Motion Index seul,8149,isolated_short_variation,False,0,0,0,0.0,0.5895598771750256

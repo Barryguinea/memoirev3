@@ -281,7 +281,7 @@ for channel, expected in {
     "Pas seuls": (0.273, 0.318, 0.141, 0.518, 0.53),
     "Motion Index seul": (0.341, 0.250, 0.135, 0.491, 0.63),
     "Transitions seules": (0.500, 0.273, 0.128, 0.518, 0.80),
-    "Posture seule": (0.273, 0.023, 0.042, 0.393, 0.53),
+    "Posture seule": (0.273, 0.023, 0.042, 0.384, 0.53),
     "HYPO (4 familles)": (0.432, 0.295, 0.137, 0.402, 0.73),
 }.items():
     row = channel_ablation.loc[channel]

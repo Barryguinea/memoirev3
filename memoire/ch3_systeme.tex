@@ -577,8 +577,9 @@ atteste la cohérence logicielle et sécurise la reproduction des résultats.
 
 Chaque résultat suit un cycle de vie traçable~: une commande de reproduction exécute un
 module d'évaluation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
-fige ces sorties~; et un script dédié les transforme en figures du manuscrit. Aucun résultat
-n'est saisi à la main. Une modification du code, des données ou des paramètres impose donc
+fige ces sorties ainsi que l'empreinte du corpus confidentiel~; et un script dédié les
+transforme en figures du manuscrit. Aucun résultat empirique n'est accepté sans comparaison
+à son artefact source. Une modification du code, des données ou des paramètres impose donc
 une nouvelle exécution et un nouveau manifeste, de sorte que le PDF seul ne constitue jamais
 la trace de référence de l'expérience. La Figure~\ref{fig:repro_chain} illustre cette chaîne.
 

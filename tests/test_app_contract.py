@@ -20,3 +20,9 @@ def test_duplicate_upload_warning_removed_and_no_html_injection():
     text = _read_app()
     assert 'st.error("Meme fichier recharge: resultats possiblement inchanges.")' not in text
     assert "unsafe_allow_html=True" not in text
+
+
+def test_dashboard_exposes_only_chronological_baseline_ratios():
+    text = _read_app()
+    assert "baseline_options = [0.5, 0.6, 0.7, 0.8]" in text
+    assert "baseline_options = [None" not in text
