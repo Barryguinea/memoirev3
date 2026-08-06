@@ -1,4 +1,4 @@
-# Confrontation exploratoire synchronisée aux scores SLS — Winter 2019
+# Confrontation exploratoire synchronisée aux scores SLS : Winter 2019
 
 **Statut : reproductible, mais non concluante sur le plan clinique.** Cette analyse utilise
 des données capteurs strictement antérieures au score SLS du 12 mars 2019. Elle mesure une
@@ -38,7 +38,7 @@ disponible.
 
 ## Résultats
 
-| Mesure sur les sept jours précédents | AUC exploratoire | Test de Mann–Whitney | Corrélation de Spearman avec le SLS |
+| Mesure sur les sept jours précédents | AUC exploratoire | Test de Mann-Whitney | Corrélation de Spearman avec le SLS |
 |---|---:|---:|---:|
 | Nombre de notifications | 0,955 | p=0,020 | rho=0,699; p=0,005 |
 | Fraction du temps en épisode | 0,712 | p=0,311 | rho=0,217; p=0,456 |

@@ -57,12 +57,12 @@ projet-memoire/
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
 │   ├── campaign.py              #   Injections post-baseline + métriques attribuables
 │   ├── sensitivity.py           #   Comparaison des fusions
-│   └── mcgill_sls_validation.py #   Concordance exploratoire IceTag–SLS (synchronisée)
+│   └── mcgill_sls_validation.py #   Concordance exploratoire IceTag-SLS (synchronisée)
 ├── scripts/                     # Orchestrateurs et analyses reproductibles
 │   ├── run_hypo_module_validation.py   # Campagne + ablation + tests appariés
 │   ├── compute_bootstrap_ci.py         # IC95 (bootstrap par vache) + tailles d'effet
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
-│   ├── detection_background_curve.py   # Courbe détection–charge (robustesse)
+│   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # Vérifie 390 valeurs du mémoire ↔ sources
@@ -117,7 +117,7 @@ future, puis soustrait l'exécution propre afin de limiter la fuite et les
 attributions erronées. Le détecteur ayant été conçu sur le même corpus, cette
 campagne reste une **évaluation technique interne** et non un test indépendant.
 
-1. **Évaluation technique du module HYPO** — onze vaches admissibles, quatre
+1. **Évaluation technique du module HYPO** : onze vaches admissibles, quatre
    événements par vache (44 au total) :
    ```bash
    python scripts/run_hypo_module_validation.py --output-dir data/validation/hypo_module
@@ -130,7 +130,7 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    - **Configuration gelée avant la campagne finale** ; l'analyse OFAT teste la
      robustesse locale et **ne sélectionne pas** de nouvelle configuration.
 
-2. **Ablation A–E** — HYPO comparé à : Isolation Forest + règles, IF ponctuel,
+2. **Ablation A-E** : HYPO comparé à : Isolation Forest + règles, IF ponctuel,
    LOF + règles, et un **comparateur pédométrique** (pas seuls, esprit
    Alsaaod 2012). Tests de Wilcoxon appariés au niveau vache, tailles d'effet
    rang‑bisériale, intervalles de confiance par bootstrap regroupé par vache :
@@ -138,7 +138,7 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    python scripts/compute_bootstrap_ci.py
    ```
 
-3. **Stress test HYPO à aire d'enveloppe appariée** — cinq formes moins favorables et un
+3. **Stress test HYPO à aire d'enveloppe appariée** : cinq formes moins favorables et un
    contrôle pas-seuls, à trois positions par vache :
    ```bash
    python -m scripts.run_hypo_stress_validation
@@ -149,13 +149,13 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    Cet appariement ne garantit pas une modification comportementale physique
    identique entre vaches ou familles de signaux.
 
-4. **Extension bidirectionnelle** — douze scénarios (hypoactivité, instabilité,
+4. **Extension bidirectionnelle** : douze scénarios (hypoactivité, instabilité,
    séquence) plus des contrôles et confondants (pic capteur, exercice, œstrus) :
    ```bash
    python -m validation_hybrid.sensitivity --output-dir data/validation/hybrid_refined_full
    ```
 
-5. **Concordance clinique exploratoire** — cohorte IceTag–SLS (hiver 2019),
+5. **Concordance clinique exploratoire** : cohorte IceTag-SLS (hiver 2019),
    mesures capteurs **strictement antérieures** au score locomoteur :
    ```bash
    python -m validation_hybrid.mcgill_sls_validation
@@ -214,7 +214,7 @@ cd memoire && latexmk -lualatex -interaction=nonstopmode main.tex
 
 ## Documentation
 
-- `docs/archive_historique/architecture_memoire.md` — architecture détaillée
-- `docs/archive_historique/cartographie_projet_fr.md` — rôle de chaque dossier et fichier
-- `docs/archive_historique/guide_lecture_code_fr.md` — ordre de lecture du code
-- `docs/source_audit/selection_sources.md` — provenance et intégrité des sources
+- `docs/archive_historique/architecture_memoire.md` : architecture détaillée
+- `docs/archive_historique/cartographie_projet_fr.md` : rôle de chaque dossier et fichier
+- `docs/archive_historique/guide_lecture_code_fr.md` : ordre de lecture du code
+- `docs/source_audit/selection_sources.md` : provenance et intégrité des sources

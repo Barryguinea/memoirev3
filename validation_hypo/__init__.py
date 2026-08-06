@@ -3,14 +3,14 @@
 Ce package contient la campagne principale de validation technique du module
 HYPO, sans modifier le coeur ``core/`` qui reste la source de vérité :
 
-1. Séparation temporelle — toutes les injections sont placées après la période
+1. Séparation temporelle : toutes les injections sont placées après la période
    de référence, donc strictement dans la partie post-baseline.
 
-2. Unité statistique — la campagne primaire utilise une configuration gelée.
+2. Unité statistique : la campagne primaire utilise une configuration gelée.
    Les intervalles de confiance, la calibration et l'ablation regroupent les
    résultats au niveau de la vache.
 
-3. Couverture multi-vaches — les événements sont répartis sur les vaches
+3. Couverture multi-vaches : les événements sont répartis sur les vaches
    admissibles du corpus.
 
 Les profils graduels et le détecteur temporel servent à mesurer une alerte

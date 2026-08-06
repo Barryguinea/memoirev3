@@ -195,7 +195,7 @@ class TestNormalizeColumns(unittest.TestCase):
 
 
 # ============================================================
-# BUG 1 — Tests de régression : contamination de la fenêtre glissante
+# BUG 1 : Tests de régression : contamination de la fenêtre glissante
 # ============================================================
 class TestCoverageGatingBug1(unittest.TestCase):
     """Verifie que les anomalies sur intervalles faible couverture

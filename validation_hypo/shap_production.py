@@ -10,7 +10,7 @@ Différences avec le script comparatif ``scripts/compute_shap_feature_importance
   | bootstrap        | absent       | True             |
 
 On entraîne l'Isolation Forest comme ``core.model_if.run_if_core`` (RobustScaler
-10–90, n_estimators=800, max_features=0.8, bootstrap=True, fit sur les 60 %
+10-90, n_estimators=800, max_features=0.8, bootstrap=True, fit sur les 60 %
 premiers bins fiables), puis on calcule les valeurs de Shapley dessus.
 """
 

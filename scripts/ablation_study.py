@@ -101,7 +101,7 @@ def _run_variant_a(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
 
 
 def _run_variant_b(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
-    """Variante B : sans IF — tous les bins marqués anomaux, seules les règles filtrent."""
+    """Variante B : sans IF, tous les bins marqués anomaux, seules les règles filtrent."""
     df = features_df.copy()
     df["if_anomaly_point"] = 1
     df["if_pred"] = -1
@@ -112,7 +112,7 @@ def _run_variant_b(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
 
 
 def _run_variant_c(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
-    """Variante C : sans règles métier — IF brut, chaque anomalie = épisode."""
+    """Variante C : sans règles métier, IF brut, chaque anomalie = épisode."""
     df = run_if_core(
         features_df.copy(),
         time_col="T",
@@ -128,7 +128,7 @@ def _run_variant_c(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
 
 
 def _run_variant_d(features_df: pd.DataFrame, cow_id: str) -> pd.DataFrame:
-    """Variante D : LOF + règles métier — Local Outlier Factor remplace Isolation Forest."""
+    """Variante D : LOF + règles métier, Local Outlier Factor remplace Isolation Forest."""
     df = features_df.copy().sort_values("T").reset_index(drop=True)
 
     feature_cols = _default_feature_cols(df)
@@ -452,7 +452,7 @@ def _print_table(df: pd.DataFrame) -> None:
         return f"{mean:.3f} ± {std:.3f}"
 
     print("\n" + "=" * 70)
-    print("ÉTUDE D'ABLATION — contribution de chaque composante")
+    print("ÉTUDE D'ABLATION : contribution de chaque composante")
     print("=" * 70)
     print(f"{'Variante':<18} {'Détection':>18} {'IoU≥0.20':>18} {'Best IoU':>18} {'Faux/cow-day':>18}")
     print("-" * 70)
@@ -503,7 +503,7 @@ def _write_report(df: pd.DataFrame, path: Path) -> None:
 
     lines = []
     lines.append("=" * 70)
-    lines.append("ÉTUDE D'ABLATION — Rapport explicatif")
+    lines.append("ÉTUDE D'ABLATION : Rapport explicatif")
     lines.append("=" * 70)
     lines.append("")
     lines.append("OBJECTIF")
@@ -574,7 +574,7 @@ def _write_report(df: pd.DataFrame, path: Path) -> None:
     sd = summaries.get("D. LOF + regles", {})
     if sc:
         lines.append("C. Sans règles (IF seul) :")
-        lines.append(f"   Détection = {sc['det']:.0%} — l'IF détecte presque toujours un overlap,")
+        lines.append(f"   Détection = {sc['det']:.0%}, l'IF détecte presque toujours un overlap,")
         lines.append(f"   mais sans filtrage il signale {DEFAULT_CONTAMINATION:.0%} de TOUS les bins")
         lines.append("   comme anomaux. Inutilisable en production (trop de bruit).")
         lines.append("")

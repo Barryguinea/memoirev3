@@ -258,7 +258,7 @@ def main() -> None:
     cbar.ax.tick_params(labelsize=8)
     ax.grid(alpha=0.15, axis="x")
 
-    fig.suptitle(f"Importance des features — Isolation Forest (vache {cow}, {len(X_sample):,} bins)",
+    fig.suptitle(f"Importance des features : Isolation Forest (vache {cow}, {len(X_sample):,} bins)",
                  fontsize=12, fontweight="bold")
     png_out = OUT_DIR / "shap_summary_plot.png"
     pdf_out = OUT_DIR / "shap_summary_plot.pdf"
@@ -268,7 +268,7 @@ def main() -> None:
 
     # Markdown summary
     lines = [
-        "# SHAP Feature Importance — Isolation Forest\n",
+        "# SHAP Feature Importance : Isolation Forest\n",
         f"Vache analysée : **{cow}**  ",
         f"Bins d'intervalle : {len(X_sample):,} (échantillon aléatoire, seed {SEED})  ",
         f"Features IF totales : {len(feat_cols)}  ",

@@ -17,13 +17,13 @@ def pretty_feature_name(col: Optional[str]) -> str:
 
     def _base_label(n: str) -> str:
         if "motion index" in n:
-            return "Activité — Motion Index"
+            return "Activité - Motion Index"
         if "steps" in n:
-            return "Activité — Pas"
+            return "Activité - Pas"
         if "lying time" in n:
-            return "Repos — Temps couché"
+            return "Repos - Temps couché"
         if "standing time" in n:
-            return "Repos — Temps debout"
+            return "Repos - Temps debout"
         if "transitions" in n:
             return "Transitions"
         return raw
@@ -34,13 +34,13 @@ def pretty_feature_name(col: Optional[str]) -> str:
         base = f"{base} (log)"
 
     if name.endswith("_rrz"):
-        return f"{base} — écart robuste glissant"
+        return f"{base} - écart robuste glissant"
     if name.endswith("_rz"):
-        return f"{base} — écart robuste global"
+        return f"{base} - écart robuste global"
     if name.endswith("_sum"):
-        return f"{base} — somme"
+        return f"{base} - somme"
     if name.endswith("_mean"):
-        return f"{base} — moyenne"
+        return f"{base} - moyenne"
 
     return base
 
@@ -49,13 +49,13 @@ def compact_feature_title(col: Optional[str], max_len: int = 38) -> str:
     """Libelle feature raccourci pour les titres de sous-graphiques (tronque a *max_len*)."""
     label = pretty_feature_name(col)
     replacements = [
-        ("Activité — ", ""),
-        ("Repos — ", ""),
-        ("Transitions — ", "Transitions "),
-        (" — écart robuste glissant", " (rrz)"),
-        (" — écart robuste global", " (rz)"),
-        (" — somme", " (sum)"),
-        (" — moyenne", " (mean)"),
+        ("Activité - ", ""),
+        ("Repos - ", ""),
+        ("Transitions - ", "Transitions "),
+        (" - écart robuste glissant", " (rrz)"),
+        (" - écart robuste global", " (rz)"),
+        (" - somme", " (sum)"),
+        (" - moyenne", " (mean)"),
     ]
     for old, new in replacements:
         label = label.replace(old, new)

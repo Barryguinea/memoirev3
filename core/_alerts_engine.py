@@ -200,7 +200,7 @@ def apply_alert_logic(
         (df["boiterie_probable"] == 1) & (df["boiterie_probable"].shift(1).fillna(0) == 0)
     ).astype(int)
 
-    # CRITIQUE (IF score) — inchangé
+    # CRITIQUE (IF score) : inchangé
     if "if_score" in df.columns and len(df) > 10 and df["if_score"].notna().sum() > 5:
         q05 = float(np.nanquantile(df["if_score"], 0.05))
     else:

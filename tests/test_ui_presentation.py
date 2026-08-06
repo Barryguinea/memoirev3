@@ -16,8 +16,8 @@ from ui.presentation import (
 
 
 def test_pretty_feature_name_formats_rrz_labels():
-    assert pretty_feature_name("Motion Index_sum_log_rrz") == "Activité — Motion Index (log) — écart robuste glissant"
-    assert pretty_feature_name("Steps_mean") == "Activité — Pas — moyenne"
+    assert pretty_feature_name("Motion Index_sum_log_rrz") == "Activité - Motion Index (log) - écart robuste glissant"
+    assert pretty_feature_name("Steps_mean") == "Activité - Pas - moyenne"
 
 
 def test_compact_feature_title_shortens_and_rewrites_suffixes():
