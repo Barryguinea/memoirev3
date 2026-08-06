@@ -389,3 +389,11 @@ Tolerance 1.0 h taux de nouveau depart,0.432,0.432,hypo_module/match_tolerance_s
 Tolerance 2.0 h taux de nouveau depart,0.386,0.386,hypo_module/match_tolerance_sensitivity.csv,True
 IoU20 invariant a la tolerance d'appariement,1.0,1.0,hypo_module/match_tolerance_sensitivity.csv,True
 IoU20 temoin a la tolerance retenue,0.295,0.295,hypo_module/match_tolerance_sensitivity.csv,True
+Holm iou A vs B,0.00294,0.00294,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm iou A vs C,0.00294,0.00294,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm iou A vs D,0.00294,0.00294,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm nouveau_depart A vs C,0.04686,0.04686,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm nouveau_depart A vs B,0.08594,0.08594,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm nouveau_depart A vs D,0.08594,0.08594,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm IoU significatif pour les trois comparaisons,3.0,3.0,derived_metrics/holm_adjusted_pvalues.csv,True
+Holm nouveau depart significatif pour la seule comparaison avec C,1.0,1.0,derived_metrics/holm_adjusted_pvalues.csv,True

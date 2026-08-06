@@ -1,0 +1,7 @@
+metrique,paire,p_brut,p_holm,significatif_5pct
+iou,A vs B,0.00098,0.00294,1
+iou,A vs C,0.00098,0.00294,1
+iou,A vs D,0.00098,0.00294,1
+nouveau_depart,A vs B,0.04297,0.08594,0
+nouveau_depart,A vs C,0.01562,0.04686,1
+nouveau_depart,A vs D,0.04297,0.08594,0

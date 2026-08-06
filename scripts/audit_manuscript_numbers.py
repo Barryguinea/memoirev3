@@ -741,6 +741,38 @@ check(
     "hypo_module/match_tolerance_sensitivity.csv",
 )
 
+# Correction de Holm des trois comparaisons appariees, desormais derivee par
+# scripts/compute_holm_adjustment.py au lieu d'etre calculee a la main.
+holm = pd.read_csv(
+    ROOT / "data/validation/derived_metrics/holm_adjusted_pvalues.csv"
+).set_index(["metrique", "paire"])
+for metrique, paire, expected in (
+    ("iou", "A vs B", 0.00294),
+    ("iou", "A vs C", 0.00294),
+    ("iou", "A vs D", 0.00294),
+    ("nouveau_depart", "A vs C", 0.04686),
+    ("nouveau_depart", "A vs B", 0.08594),
+    ("nouveau_depart", "A vs D", 0.08594),
+):
+    check(
+        f"Holm {metrique} {paire}",
+        holm.loc[(metrique, paire), "p_holm"],
+        expected,
+        "derived_metrics/holm_adjusted_pvalues.csv",
+    )
+check(
+    "Holm IoU significatif pour les trois comparaisons",
+    float(holm.loc["iou", "significatif_5pct"].sum()),
+    3.0,
+    "derived_metrics/holm_adjusted_pvalues.csv",
+)
+check(
+    "Holm nouveau depart significatif pour la seule comparaison avec C",
+    float(holm.loc["nouveau_depart", "significatif_5pct"].sum()),
+    1.0,
+    "derived_metrics/holm_adjusted_pvalues.csv",
+)
+
 audit = pd.DataFrame(records)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 audit.to_csv(OUT, index=False)

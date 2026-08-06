@@ -189,6 +189,7 @@ python scripts/plot_cow_admissibility.py
 python scripts/compute_event_f1.py
 python scripts/compute_channel_ablation.py
 python scripts/compute_correlation_time.py
+python scripts/compute_holm_adjustment.py
 python scripts/audit_bibliography.py
 python scripts/audit_manuscript_numbers.py
 python scripts/update_validation_manifest.py
@@ -199,9 +200,9 @@ Le script bibliographique contrôle les 73 références~: 58 DOI sont confronté
 Crossref ou DataCite et les 15 références sans DOI à une URL d'autorité préalablement revue.
 Le premier script représente l'OFAT de HYPO. Le second lit les CSV finaux et régénère les
 figures de fusion, de scénarios et de SLS; il reconstruit également quatre trajectoires
-représentatives pour l'inspection visuelle. Les trois scripts suivants écrivent les métriques
-F1, l'ablation par famille et les temps d'autocorrélation dans
-\path{data/validation/derived_metrics}. Le script d'audit compare ensuite 390 valeurs
+représentatives pour l'inspection visuelle. Les quatre scripts suivants écrivent les métriques
+F1, l'ablation par famille, les temps d'autocorrélation et les valeurs de $p$ corrigées par
+Holm dans \path{data/validation/derived_metrics}. Le script d'audit compare ensuite 398 valeurs
 empiriques du manuscrit à leurs CSV ou JSON sources. Les deux dernières commandes reconstruisent
 le manifeste des artefacts scientifiques puis en vérifient chaque empreinte.
 
@@ -303,7 +304,7 @@ Le Tableau~\ref{tab:artefacts_validation} liste les artefacts qui soutiennent le
   \path{derived_metrics/channel_ablation_events.csv} & Sorties événementielles détaillées de l'ablation par famille. \\
   \path{derived_metrics/correlation_time.csv} & Temps d'autocorrélation et tailles effectives aux deux grains d'analyse. \\
   \path{input_provenance.json} & Empreinte, taille et dimensions du corpus brut confidentiel. \\
-  \path{manuscript_number_audit.csv} & Correspondance entre 390 valeurs du manuscrit et leurs artefacts sources. \\
+  \path{manuscript_number_audit.csv} & Correspondance entre 398 valeurs du manuscrit et leurs artefacts sources. \\
   \path{performance_full_corpus.json} & Médiane et décomposition du temps d'exécution de la chaîne complète. \\
   \path{hybrid_refined_full/comparison_summary.csv} & Comparaison des fusions et variantes de sensibilité. \\
   \path{hybrid_refined_full/events_fusion_hierarchical.csv} & 132 évaluations de la fusion hiérarchique exploratoire. \\
