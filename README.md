@@ -65,7 +65,7 @@ projet-memoire/
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
-│   ├── audit_manuscript_numbers.py     # Vérifie 398 valeurs du mémoire ↔ sources
+│   ├── audit_manuscript_numbers.py     # Vérifie 398 affirmations numériques enregistrées
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
 ├── tests/                       # 118 tests (unitaires, invariants, non-régression)
 ├── data/
@@ -195,7 +195,8 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   ```
   Le manifeste inclut un fichier de provenance contenant uniquement l'empreinte,
   la taille et les dimensions du corpus confidentiel, sans en diffuser le contenu.
-- Un script d'audit confronte **398 valeurs** du manuscrit à leurs sources :
+- Un script d'audit confronte aux artefacts **398 affirmations numériques explicitement
+  enregistrées**; il ne parcourt pas automatiquement tous les nombres du PDF :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```

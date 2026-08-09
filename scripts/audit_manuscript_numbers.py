@@ -1,9 +1,9 @@
-"""Verify the principal numerical claims reported in the manuscript.
+"""Verify an explicit registry of numerical claims reported in the manuscript.
 
-The script reads the final CSV/JSON artifacts, compares them with the rounded values
-printed in the manuscript, and writes a traceable audit table. It is intentionally
-limited to empirical results; numbers taken from the literature remain controlled by
-their cited sources.
+The script does not parse every number from the TeX sources or the PDF. It reads the
+final CSV/JSON artifacts, compares them with 398 manually registered manuscript
+claims, and writes a traceable audit table. It is intentionally limited to empirical
+results; numbers taken from the literature remain controlled by their cited sources.
 """
 
 from __future__ import annotations

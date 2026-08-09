@@ -203,7 +203,7 @@ def run_clean_ablation(
     warning_config: Optional[EarlyWarningConfig] = None,
     verbose: bool = True,
 ) -> pd.DataFrame:
-    """Évalue les quatre variantes sur les mêmes injections post-baseline."""
+    """Évalue les cinq variantes A à E sur les mêmes injections post-baseline."""
     params = params or final_params()
     df_all = load_csv(raw_csv)
     df_all[COW] = df_all[COW].astype(str)
