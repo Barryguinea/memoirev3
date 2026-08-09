@@ -4,9 +4,9 @@ La boiterie désigne une altération de la locomotion, le plus souvent causée p
 d'une lésion du pied ou du membre. Elle se reconnaît cliniquement à une démarche irrégulière,
 un dos voûté, une répartition inégale du poids entre les membres et une réticence à se
 déplacer~; son évaluation de référence repose sur une notation locomotrice standardisée
-\citep{sprecher1997lameness,chapinal2010measurement}. Cette définition est importante~: tout
-le mémoire distingue la boiterie, phénomène \emph{clinique}, des changements \emph{de
-comportement} mesurés par les capteurs, qui n'en sont qu'un reflet indirect.
+\citep{sprecher1997lameness,chapinal2010measurement}. Cette distinction guide l'ensemble du
+mémoire. La boiterie est un phénomène clinique. Les changements comportementaux mesurés par
+les capteurs n'en constituent qu'un reflet indirect.
 
 La boiterie constitue un problème majeur de bien-être et de performance en élevage laitier.
 Les études épidémiologiques rapportent fréquemment des prévalences de l'ordre de 20\,\% ou
@@ -16,8 +16,9 @@ conséquences comprennent la douleur, la baisse de production, une fertilité d�
 soins supplémentaires et des réformes anticipées
 \citep{green2002financial,bruijnis2010assessing}. Les estimations publiées chiffrent la
 perte de production laitière à environ 360~kg par lactation chez les vaches cliniquement
-boiteuses et le coût moyen d'un trouble du pied à 95~USD (18~USD s'il est subclinique), soit
-de l'ordre de 75~USD par vache et par an à l'échelle du troupeau. Au-delà du coût, la douleur associée est
+boiteuses et le coût moyen d'un trouble du pied à 95~dollars américains (18~dollars américains
+s'il est subclinique), soit de l'ordre de 75~dollars américains par vache et par an à l'échelle
+du troupeau. Au-delà du coût, la douleur associée est
 reconnue comme l'une des principales sources de souffrance chronique chez la vache laitière
 \citep{whay2003assessment}. Une identification plus précoce peut donc orienter l'examen du
 pied et la prise en charge avant l'installation d'un épisode chronique.
@@ -34,27 +35,31 @@ traçables et utilisables par l'éleveur.
 Dans cette perspective, la manifestation la mieux étayée dans les données disponibles est une
 réduction durable de l'activité locomotrice: diminution des pas, du mouvement et des
 transitions, accompagnée de changements posturaux. Ces signaux restent néanmoins non
-spécifiques, car une autre maladie, la chaleur ou le contexte d'élevage peuvent produire une
-forme semblable. Une difficulté supplémentaire est que certaines situations douloureuses
+spécifiques. Des situations différentes peuvent produire une forme semblable, notamment une
+autre maladie, la chaleur ou certaines conditions d'élevage. Une difficulté supplémentaire est
+que certaines situations douloureuses
 pourraient s'accompagner d'agitation ou d'instabilité avant une hypoactivité, mais cette
-trajectoire n'est pas démontrée dans le corpus principal. Une hausse brute du \textit{Motion
-Index} peut aussi refléter l'exercice, l'œstrus, une manipulation ou un artefact de capteur.
+trajectoire n'est pas démontrée dans le corpus principal. Une hausse brute de l'indice de
+mouvement (\textit{Motion Index}) peut aussi refléter l'exercice, l'œstrus, une manipulation ou
+un artefact de capteur.
 
-La réponse proposée est donc graduée. Elle ne cherche pas à remplacer le jugement clinique,
-mais à ordonner le travail de vérification: repérer d'abord les trajectoires d'hypoactivité
-persistantes par HYPO, puis explorer séparément les profils d'instabilité afin de mesurer ce
-qu'ils ajoutent réellement et ce qu'ils coûtent en charge de vérification.
+La réponse proposée ne remplace pas le jugement clinique: elle ordonne les vérifications. HYPO
+repère d'abord les trajectoires d'hypoactivité persistantes; INSTABILITÉ examine séparément
+l'apport des profils d'agitation et leur coût en vérifications.
 
-La question principale est donc la suivante: \textit{comment détecter de façon reproductible
+Le mémoire répond à une question principale: \textbf{comment détecter de façon reproductible
 des dégradations comportementales graduelles et persistantes à partir de séries IceQube non
-étiquetées, sans les assimiler à un diagnostic de boiterie?} Une question secondaire explore
-si une branche d'instabilité peut apporter une information complémentaire sans dégrader
-excessivement la localisation temporelle et la charge de vérification.
+étiquetées sans les assimiler à un diagnostic de boiterie?} Il examine également une question
+secondaire: \textbf{une branche d'instabilité peut-elle apporter une information complémentaire
+sans dégrader excessivement la localisation temporelle ni augmenter la charge de vérification?}
 
-Pour répondre à cette question, l'objectif général est de concevoir et d'évaluer une chaîne de priorisation comportementale
-fondée sur HYPO, puis d'en tester l'extension par une branche INSTABILITÉ.
-Il se décline en six objectifs spécifiques:
-\begin{enumerate}
+L'objectif principal est de concevoir et d'évaluer un système reproductible qui transforme les
+signaux IceQube en priorités de vérification comportementale. HYPO repère les baisses graduelles
+et persistantes; INSTABILITÉ examine un apport complémentaire éventuel sans dégrader
+excessivement la localisation temporelle ni augmenter la charge de vérification.
+
+Pour atteindre cet objectif, la démarche méthodologique suit six étapes:
+\begin{enumerate}[itemsep=0pt, parsep=0pt, topsep=0.3\baselineskip]
   \item construire une période de référence chronologique propre à chaque vache et à chaque créneau
   horaire;
   \item détecter les baisses multivariées persistantes par une branche HYPO;
@@ -77,46 +82,40 @@ compléter HYPO, à condition de conserver une sortie de surveillance distincte 
 persistance plus courte. Ces hypothèses portent sur le comportement du logiciel et ne
 préjugent pas de la cause clinique des événements.
 
-Dans ce cadre, le système produit des \emph{alertes comportementales à vérifier}, c'est-à-dire une aide à
-la décision pour le suivi d'élevage. Ce positionnement est volontaire~: le corpus principal
-ne contient pas d'étalon clinique synchronisé pour toutes les vaches, mais il permet d'étudier
-rigoureusement la réponse du logiciel à des perturbations contrôlées. L'apport opérationnel
-recherché est de transformer des signaux continus en priorités de vérification traçables,
-avec une portée clairement séparée d'un outil diagnostique validé
-\citep{alsaaod2019automatic}.
+Le système produit ainsi des «~alertes comportementales à vérifier~»: elles soutiennent le suivi
+d'élevage sans constituer un diagnostic. Faute d'étalon clinique synchronisé pour toutes les
+vaches, le corpus principal sert à étudier rigoureusement la réponse du logiciel à des
+perturbations contrôlées et à produire des priorités traçables, dont la portée reste distincte de
+celle d'un outil diagnostique validé \citep{alsaaod2019automatic}.
 
-Sur le plan méthodologique, le corpus principal contient 37\,839 mesures de 28 vaches. Les 60\,\% premiers intervalles
-admissibles de chaque série constituent la période de référence et les 40\,\% suivants la période
-surveillée. HYPO utilise des totaux glissants sur douze heures, une persistance de six heures,
-un score multivarié et un CUSUM unilatéral. Sa campagne principale comporte 33 dégradations
-graduelles et 11 contrôles brefs répartis entre onze vaches. Une exécution propre de la même
-vache, sans injection, est soustraite (comparaison contrefactuelle) afin de ne créditer que les
-alertes réellement attribuables à l'événement. Les données originales restent intactes, chaque
-perturbation étant ajoutée dans une copie de la période future.
+Le corpus principal contient 37\,839 mesures de 28 vaches. Les premiers 60\,\% des intervalles
+admissibles de chaque série forment la période de référence, les 40\,\% suivants la période
+surveillée. HYPO combine des totaux glissants sur douze heures, une persistance de six heures, un
+score multivarié et une somme cumulative unilatérale (CUSUM). La campagne principale répartit
+33 dégradations graduelles et 11 contrôles brefs entre 11 vaches. Chaque perturbation est ajoutée
+à une copie de la période future, puis comparée à l'exécution propre de la même vache afin de ne
+créditer que les alertes qui lui sont attribuables; les données originales restent intactes.
 
-L'évaluation porte sur l'événement et sur la vache,
-non sur chaque intervalle de capteur: chaque dégradation injectée compte comme un épisode unique,
-dont on mesure la détection et la localisation temporelle par un indice de recouvrement, tandis que
-les indicateurs sont agrégés par vache et assortis d'intervalles de confiance obtenus par
-rééchantillonnage des vaches. Ce choix évite de traiter des intervalles successifs fortement corrélés
-comme autant d'observations indépendantes. La même campagne situe HYPO face aux comparateurs
-Isolation Forest, LOF et pédométrique, trace une courbe reliant la détection à la charge de
-vérification et scelle les résultats par un manifeste cryptographique. Un stress test gelé
-ajoute ensuite cinq formes moins favorables et un contrôle pas-seuls à trois positions par
-vache. Les aires numériques d'enveloppe y sont appariées au profil graduel modéré, afin de
-comparer les formes à intensité d'enveloppe contrôlée. Cet appariement ne garantit pas une
-modification comportementale physique identique entre vaches ou familles de signaux.
+L'évaluation prend l'événement et la vache comme unités, non chaque intervalle de capteur. Chaque
+dégradation forme un épisode dont la détection et la localisation sont mesurées par recouvrement;
+les indicateurs sont agrégés par vache et leurs intervalles de confiance proviennent d'un
+rééchantillonnage des vaches. Ce choix tient compte de la corrélation entre intervalles successifs.
+La campagne compare aussi HYPO aux méthodes Isolation Forest, LOF et pédométrique, relie la
+détection à la charge de vérification et scelle les résultats par un manifeste cryptographique.
+Un stress test gelé ajoute cinq formes moins favorables et un contrôle pas-seuls à trois positions
+par vache. Leurs aires numériques d'enveloppe sont appariées à celle du profil graduel modéré afin
+de contrôler l'intensité, sans supposer une modification physique identique entre vaches ou
+familles de signaux.
 
-L'extension INSTABILITÉ utilise une agrégation de trois heures et une persistance de deux
-heures. Elle est évaluée avec HYPO sur 132 scénarios comprenant intensités, séquence,
-contrôles et facteurs confondants. Une fusion hiérarchique conserve l'instabilité isolée
-comme surveillance et réserve la notification de vérification à HYPO ou à une convergence. Ces
-résultats constituent une extension exploratoire qui enrichit la lecture opérationnelle du
-système sans remplacer l'évaluation technique plus ciblée de HYPO.
+L'extension INSTABILITÉ agrège trois heures avec une persistance de deux heures. Elle est évaluée
+avec HYPO sur 132 scénarios d'intensité, de séquence, de contrôle et de confusion. Une fusion
+hiérarchique conserve l'instabilité isolée comme surveillance et réserve la notification à HYPO
+ou à une convergence. Cette extension exploratoire enrichit la lecture opérationnelle sans
+remplacer l'évaluation technique plus ciblée de HYPO.
 
-À partir de cette démarche, le mémoire apporte une chaîne complète qui va du signal brut à une priorité de vérification
-reproductible. Ses contributions sont les suivantes:
-\begin{enumerate}
+Le mémoire apporte ainsi une chaîne reproductible allant du signal brut à une priorité de
+vérification. Ses contributions sont les suivantes:
+\begin{enumerate}[itemsep=0pt, parsep=0pt, topsep=0.3\baselineskip]
   \item un détecteur HYPO directionnel, persistant, interprétable et individualisé;
   \item un banc d'essai contrefactuel reproductible associant injections post-référence,
   exécution propre et attribution événementielle;
@@ -131,20 +130,17 @@ reproductible. Ses contributions sont les suivantes:
   \item l'évaluation du temps d'exécution, l'analyse SLS synchronisée, l'interface Streamlit et
   une suite de tests reproductibles.
 \end{enumerate}
-La contribution centrale n'est pas un modèle plus complexe, mais l'articulation contrôlée,
-rarement réunie dans un même système, de quatre exigences le plus souvent traitées
-séparément: individualisation, temporalité, attribution et reproductibilité. C'est cette
-combinaison, adossée à une évaluation dont les principaux résultats chiffrés sont
-régénérables, qui distingue ce travail.
+La contribution principale réside dans l'articulation contrôlée de quatre exigences souvent
+traitées séparément: individualisation, temporalité, attribution et reproductibilité. Les
+artefacts conservés permettent en outre de reproduire les principaux résultats.
 
-Le mémoire comprend six chapitres. Les Chapitres~\ref{chapitre:contexte}
-et~\ref{chapitre:etatart} présentent respectivement le contexte de la boiterie et l'état de
-l'art de sa détection automatisée. Le Chapitre~\ref{chapitre:systeme} définit le système et son
-protocole d'évaluation; le Chapitre~\ref{chapitre:donnees}, les corpus et le cadre expérimental;
-le Chapitre~\ref{chapitre:interface}, l'interface de priorisation. Le
-Chapitre~\ref{chapitre:resultats} rapporte les performances, les comparaisons, les analyses de
-sensibilité, l'extension bidirectionnelle et l'analyse IceTag-SLS. La discussion générale et
-la conclusion distinguent les résultats établis des observations exploratoires et dégagent
-les travaux encore nécessaires.
+Les six chapitres présentent successivement le contexte de la boiterie
+(Chapitre~\ref{chapitre:contexte}), l'état de l'art de sa détection automatisée
+(Chapitre~\ref{chapitre:etatart}), le système et son protocole d'évaluation
+(Chapitre~\ref{chapitre:systeme}), les corpus et le cadre expérimental
+(Chapitre~\ref{chapitre:donnees}), l'interface de priorisation
+(Chapitre~\ref{chapitre:interface}), puis les résultats et analyses IceTag-SLS
+(Chapitre~\ref{chapitre:resultats}). La discussion et la conclusion distinguent enfin les
+résultats établis des observations exploratoires et dégagent les travaux nécessaires.
 
 \end{introduction}

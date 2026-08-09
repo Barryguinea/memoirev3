@@ -1,16 +1,17 @@
 \begin{abstract}
 \noindent
 La boiterie demeure un problème majeur de bien-être et de performance en élevage laitier. Son
-repérage repose sur l'observation humaine et le score locomoteur, indispensables mais difficiles
+repérage repose sur l'observation humaine et le score locomoteur, indispensables, mais difficiles
 à maintenir en continu sur un troupeau. Les capteurs d'activité complètent cette surveillance en
-signalant des changements comportementaux persistants qui justifient une vérification terrain.
+signalant des changements comportementaux persistants qui justifient une vérification sur le terrain.
 Ce mémoire conçoit et évalue un système reproductible d'\textbf{alerte comportementale précoce}
 à partir de capteurs IceQube fixés à la patte.
 
-La contribution principale est la branche temporelle HYPO. Elle compare chaque vache à sa
-propre période de référence et recherche une baisse graduelle, persistante et concordante de
-plusieurs familles de signaux: pas, \textit{Motion Index}, transitions posturales, temps couché
-et temps debout. Cette logique individualisée transforme des séries indirectes en priorités de
+La contribution principale repose sur la branche temporelle HYPO. Elle compare le comportement
+actuel de chaque vache à celui observé pendant sa propre période de référence et recherche une
+baisse graduelle, persistante et concordante de
+plusieurs familles de signaux: pas, indice de mouvement (\textit{Motion Index}), transitions
+posturales, temps couché et temps debout. Cette logique individualisée transforme des séries de données indirectes en priorités de
 vérification traçables. L'évaluation repose sur des événements injectés uniquement après la
 période de référence, puis comparés à une exécution propre de la même vache afin de ne créditer
 que les alertes attribuables. Sur les dégradations graduelles, HYPO recouvre la plupart
@@ -23,18 +24,18 @@ localisation des formes attendues. Sa cohérence multifamille se manifeste aille
 l'empêche de localiser une perturbation limitée aux pas, que le comparateur pédométrique situe
 correctement.
 
-Le mémoire explore aussi une extension bidirectionnelle fondée sur une branche INSTABILITÉ,
+Le mémoire explore aussi une extension bidirectionnelle fondée sur une branche nommée INSTABILITÉ,
 qui représente des situations où un inconfort locomoteur pourrait s'accompagner d'agitation, de
-transitions plus fréquentes ou de fragmentation posturale. Elle reste séparée de HYPO:
-l'instabilité isolée produit une sortie de surveillance, tandis que la notification de
+transitions plus fréquentes ou de fragmentation posturale. Elle reste séparée de HYPO.
+L'instabilité isolée produit une sortie de surveillance, tandis que la notification de
 vérification demeure réservée aux baisses persistantes ou aux séquences
 instabilité-hypoactivité. Son évaluation quantifie le gain de couverture, la charge de
 vérification et la sensibilité aux causes non locomotrices.
 
 Une analyse IceTag-SLS synchronisée confronte enfin les sorties aux scores locomoteurs à partir
-de données capteurs strictement antérieures à l'évaluation. Les vaches aux scores les plus
+de données des capteurs strictement antérieures à l'évaluation. Les vaches aux scores les plus
 élevés reçoivent davantage de notifications et l'AUC descriptive globale est élevée, mais
-l'analyse exacte restreinte au seul groupe \textit{Exercise} demeure non concluante:
+l'analyse exacte restreinte au groupe expérimental \textit{Exercise} demeure non concluante:
 l'association reste exploratoire, faute d'un effectif suffisant de vaches à score élevé hors de
 ce groupe. Le mémoire livre un détecteur temporel interprétable, une interface de priorisation
 et un protocole reproductible articulant performance logicielle, hypothèse comportementale et
