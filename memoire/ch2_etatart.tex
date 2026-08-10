@@ -5,40 +5,48 @@
 \section{Approches automatisées de détection}
 % =====================================================================
 
-Les approches basées sur des capteurs visent à détecter des déviations comportementales
-(activité, transitions, dynamique de mouvement) qui peuvent être associées à la boiterie,
-sans être spécifiques à cette affection.
-La littérature distingue trois familles principales: l'analyse de la démarche par vision
-par ordinateur \citep{vanhertem2014evaluation,lavrova2023lameness}, la classification de
-comportements par accélérométrie \citep{oleary2020accelerometers,alsaaod2019automatic,
-balasso2023behaviour,benaissa2019calving} et la détection d'anomalies sur des indicateurs dérivés
-\citep{qiao2021review,chandola2009anomaly}. Les revues
-récentes confirment la prédominance des approches supervisées, tout en soulignant le
-manque d'études non supervisées en conditions réelles d'élevage
-\citep{qiao2021review,oleary2020accelerometers}. Une revue récente de la détection
-automatisée par intelligence artificielle confirme cette dynamique tout en pointant des
-freins persistants: hétérogénéité des protocoles, dépendance aux étiquettes et validation
-encore limitée en conditions réelles \citep{siachos2024automated}. Les approches récentes par
-vision et apprentissage profond atteignent de bonnes performances sur vidéo
-\citep{myint2024lameness}, mais supposent une infrastructure caméra et des données étiquetées,
-deux conditions absentes du corpus accéléromètre non étiqueté utilisé ici. Des jeux de données
-publics annotés pour la boiterie commencent certes à apparaître, comme \textit{CowScreeningDB}
-\citep{ismail2024cowscreeningdb}, mais ils restent rares, propres à un capteur donné, et ne
-couvrent pas le corpus IceQube exploité ici.
+Les approches fondées sur des capteurs cherchent à repérer des variations de l'activité, des
+transitions posturales ou de la dynamique du mouvement susceptibles d'être associées à la
+boiterie, sans être spécifiques à cette affection. La revue de la littérature fait ressortir
+trois grandes familles: l'analyse de la démarche par vision par ordinateur
+\citep{vanhertem2014evaluation,myint2024lameness}, la classification de comportements ou
+d'états locomoteurs à partir de données accélérométriques
+\citep{oleary2020accelerometers,alsaaod2019automatic,balasso2023behaviour,
+benaissa2019calving,lavrova2023lameness}, et la détection d'anomalies sur des indicateurs
+dérivés \citep{qiao2021review,chandola2009anomaly}. Les synthèses disponibles soulignent la
+prédominance des approches supervisées et le manque d'études non supervisées conduites dans
+des conditions réelles d'élevage \citep{qiao2021review,oleary2020accelerometers}. Une revue
+consacrée à l'intelligence artificielle appliquée à la détection automatisée relève également
+trois freins persistants: l'hétérogénéité des protocoles, la dépendance aux étiquettes et le
+faible nombre d'évaluations en conditions réelles \citep{siachos2024automated}.
 
-La diversité de ces approches peut être organisée selon trois dimensions complémentaires:
-\textit{la source de données}, \textit{la stratégie analytique} et \textit{la nature de la
-sortie}. Une telle lecture est importante, car elle évite de comparer directement des travaux
-qui ne visent pas le même objectif. Un modèle supervisé de classification binaire à partir
-d'images et un système d'alerte basé sur des capteurs d'activité n'ont ni les mêmes
-contraintes de données, ni le même niveau d'interprétabilité, ni le même usage en ferme.
+À titre d'exemple, \citet{vanhertem2014evaluation} exploitent des enregistrements vidéo 3D
+successifs, tandis que \citet{myint2024lameness} proposent un système en temps réel fondé sur
+une caméra latérale. Ces méthodes obtiennent de bonnes performances, mais nécessitent une
+infrastructure de vision et des données étiquetées, deux conditions qui ne sont pas réunies
+dans le corpus IceQube non étiqueté. Des jeux de données publics annotés pour la boiterie
+commencent aussi à apparaître, comme \textit{CowScreeningDB}
+\citep{ismail2024cowscreeningdb}; ils restent toutefois rares, liés à leur propre dispositif
+d'acquisition et distincts du corpus exploité dans ce mémoire.
 
-La Figure~\ref{fig:taxonomie_approches} synthétise cette organisation en trois axes~: la
-source de données (de l'observation visuelle aux accéléromètres portés), la stratégie
-analytique (règles et seuils, modèles supervisés, détection d'anomalies non supervisée,
-approches hybrides) et la sortie opérationnelle (du score locomoteur à l'alerte
-nécessitant une vérification). Le présent travail se positionne dans la branche non supervisée et hybride,
-encadrée en vert sur la figure.
+Ces approches peuvent également être comparées selon trois dimensions complémentaires: la
+source des données, la stratégie analytique et la nature de la sortie
+\citep{qiao2021review,oleary2020accelerometers}. Ce cadre évite de juxtaposer des systèmes qui
+ne répondent pas au même besoin. Un modèle supervisé fondé sur des images apprend à attribuer
+une classe à partir de données étiquetées, alors qu'un système d'alerte fondé sur des capteurs
+d'activité signale une déviation comportementale qui doit être vérifiée. Les deux systèmes
+diffèrent donc par les données requises, le degré d'interprétabilité de leur sortie et leur
+usage en ferme.
+
+La Figure~\ref{fig:taxonomie_approches} synthétise cette organisation des approches
+automatisées. Le premier axe porte sur la source des données, depuis l'observation visuelle
+jusqu'aux accéléromètres portés. Le deuxième décrit la stratégie analytique, qui peut reposer
+sur des règles et des seuils, un apprentissage supervisé, une détection non supervisée
+d'anomalies ou une approche hybride. Le troisième précise la nature de la sortie, du score
+locomoteur à l'alerte nécessitant une vérification. Le présent travail relève de la
+\textbf{branche non supervisée et hybride}: il combine une détection de changements
+comportementaux sans étiquettes avec des règles temporelles et opérationnelles. Cette branche
+est encadrée en vert sur la figure.
 
 \begin{figure}[H]
     \centering
@@ -102,38 +110,44 @@ encadrée en vert sur la figure.
 Du point de vue de la stratégie analytique, les méthodes de détection se déclinent
 classiquement en deux familles:
 \begin{itemize}
-    \item[(a)] \textit{Modèles supervisés}: lorsque des labels fiables et suffisamment
-    représentatifs sont disponibles. Ces approches peuvent atteindre de bonnes performances
+    \item[(a)] \textit{Modèles supervisés}: lorsque des étiquettes fiables et suffisamment
+    représentatives sont disponibles. Ces approches peuvent atteindre de bonnes performances
     de classification
     \citep{vanhertem2014evaluation,viazzi2013analysis}, mais leur
-    dépendance aux labels limite leur déployabilité dans des contextes où l'étiquetage est
+    dépendance aux étiquettes limite leur déployabilité dans des contextes où l'étiquetage est
     incomplet ou incertain;
-    \item[(b)] \textit{Détection d'anomalies et règles expertes}: lorsque les labels sont
-    partiels ou absents. Ces approches ne nécessitent pas d'exemples positifs pour
-    l'entraînement et sont donc mieux adaptées aux situations réelles où la boiterie n'est
-    pas systématiquement diagnostiquée et enregistrée.
+    \item[(b)] \textit{Détection d'anomalies et règles expertes}: lorsque les étiquettes sont
+    partielles ou absentes. Ces approches peuvent être utilisées sans exemples positifs pour
+    l'entraînement, notamment lorsque le suivi locomoteur n'est pas systématiquement
+    synchronisé avec les données capteurs
+    \citep{qiao2021review,oleary2020accelerometers}.
 \end{itemize}
 
-Dans le corpus étudié, la supervision clinique exhaustive n'est pas disponible. Cette
-contrainte motive une architecture qui combine des mesures de déviation et des règles
-temporelles explicites \citep{chandola2009anomaly,palma2025scoping}. L'étude de
-\citet{michelena2025comparative} compare plusieurs détecteurs non supervisés sur un autre
-usage bovin, la détection des chaleurs; elle soutient l'intérêt d'une comparaison empirique
-des algorithmes, mais ne fournit pas de preuve sur la boiterie.
+Le corpus IceQube décrit à la Section~\ref{sec:donnees} ne contient pas d'étiquettes cliniques
+synchronisées permettant un apprentissage supervisé. Cette contrainte motive le choix d'une
+architecture qui combine des mesures de déviation et des règles temporelles explicites
+\citep{chandola2009anomaly,palma2025scoping}. Dans un autre contexte bovin,
+\citet{michelena2025comparative} compare plusieurs détecteurs non supervisés pour repérer les
+chaleurs. Cette étude ne fournit pas de preuve sur la boiterie, mais elle montre l'intérêt
+d'une comparaison empirique entre plusieurs détecteurs appliqués aux mêmes données. Cette
+distinction conduit à retenir Isolation Forest et LOF comme références non supervisées afin
+d'évaluer l'apport de la structure temporelle explicite du système proposé.
 
 % =====================================================================
-\section{Méthodes non supervisées de référence~: Isolation Forest et LOF}
+\section{Méthodes non supervisées de référence}
 % =====================================================================
 
 \subsection{Isolation Forest}
-L'algorithme Isolation Forest (IF), proposé par Liu et al. \citep{liu2008isolation}, repose
-sur le principe que les anomalies sont plus faciles à isoler que les points normaux dans un
+La première méthode de référence repose sur l'algorithme Isolation Forest (IF), proposé par
+\citet{liu2008isolation}. Son principe est que les anomalies sont plus faciles à isoler que
+les points normaux dans un
 espace de variables. Son échantillonnage et ses arbres aléatoires permettent de traiter des
 jeux tabulaires sans modèle explicite de la distribution normale. Son implémentation dans
-scikit-learn \citep{sklearn_api} fournit ici un comparateur ponctuel reproductible; elle ne
-modélise toutefois pas directement la direction ni la durée d'un changement.
+scikit-learn, comme montré dans \citet{sklearn_api}, fournit un comparateur ponctuel
+reproductible; elle ne modélise toutefois pas directement la direction ni la durée d'un
+changement.
 
-La Figure~\ref{fig:if_principle} illustre le principe fondamental d'IF: une anomalie
+La Figure~\ref{fig:if_principle} illustre le principe fondamental d'IF. Une anomalie
 (point rouge) est isolée en seulement deux coupures aléatoires, tandis que les points
 normaux (cluster bleu) nécessitent de nombreuses partitions supplémentaires. Le score
 d'anomalie est inversement proportionnel au nombre de coupures.
@@ -180,12 +194,56 @@ d'anomalie est inversement proportionnel au nombre de coupures.
 \end{figure}
 
 \subsection{Local Outlier Factor}
-Le Local Outlier Factor (LOF), proposé par Breunig et al. \citep{breunig2000lof}, estime la
+La méthode nommée Local Outlier Factor (LOF), proposée par Breunig et al.
+\citep{breunig2000lof}, estime la
 densité locale de chaque point par rapport à celle de ses voisins. Il vise ainsi des points
 rares dans leur voisinage, tandis qu'IF repose sur leur facilité d'isolation globale. Le coût
 de LOF dépend notamment de la recherche des voisins et de la dimension des données. Dans ce
 mémoire, il sert de second comparateur non supervisé; aucune supériorité générale ne lui est
 attribuée a priori.
+
+La Figure~\ref{fig:lof_principle} illustre ce principe. Un point situé au cœur du groupe a des
+voisins proches, donc une densité locale comparable à la leur. Le point isolé conserve un
+voisinage, mais nettement plus étendu~: sa densité locale est faible devant celle de ses propres
+voisins, et c'est ce rapport, et non une distance absolue, qui détermine son score.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.72\textwidth}{!}{%
+    \begin{tikzpicture}
+        % Cadre
+        \draw[black!50] (0,0) rectangle (12,6);
+
+        % --- Groupe dense a gauche ---
+        \foreach \x/\y in {2.0/3.0, 2.3/3.4, 2.6/2.8, 2.2/3.2, 1.9/3.5,
+                           2.5/3.0, 2.1/2.7, 2.4/3.3, 2.7/3.5, 1.8/3.1,
+                           2.2/2.9, 2.5/3.4, 2.3/2.8, 2.1/3.3, 2.6/3.2} {
+            \fill[ifblue] (\x,\y) circle (2.5pt);
+        }
+
+        % --- Voisinage d'un point du groupe : rayon court ---
+        \draw[black!70, dashed] (2.35,3.1) circle (0.85);
+
+        % --- Points clairsemes a droite ---
+        \foreach \x/\y in {7.9/3.0, 10.4/4.6, 8.3/4.9, 10.6/2.6} {
+            \fill[ifblue] (\x,\y) circle (2.5pt);
+        }
+
+        % --- Point isole : voisinage bien plus etendu ---
+        \fill[rawred] (9.2,3.8) circle (4pt);
+        \draw[black!70, dashed] (9.2,3.8) circle (1.6);
+
+        % --- Etiquettes ---
+        \node[font=\footnotesize, black] at (2.35,1.6) {Voisinage dense};
+        \node[font=\footnotesize, black!70] at (2.35,1.1) {densité proche de celle des voisins};
+
+        \node[font=\footnotesize, black] at (9.2,5.7) {Voisinage clairsemé};
+        \node[font=\footnotesize, black!70] at (9.2,1.7) {densité faible devant celle des voisins};
+    \end{tikzpicture}%
+    }
+    \caption{Principe de Local Outlier Factor.}
+    \label{fig:lof_principle}
+\end{figure}
 
 \subsection{Comparaison synthétique IF et LOF}
 Le Tableau~\ref{tab:if_vs_lof} synthétise les différences fondamentales entre les deux

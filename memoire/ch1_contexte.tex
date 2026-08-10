@@ -331,7 +331,7 @@ portés constituent la technologie la plus étudiée dans la littérature récen
         & Sensible aux conditions, calibration
         & \cite{qiao2021review} \\
         \addlinespace
-        Système de traite automatisé
+        Système automatisé de traite
         & Production laitière, conductivité, fréquentation
         & Déjà installé, données continues
         & Signal indirect pour la boiterie
@@ -341,12 +341,12 @@ portés constituent la technologie la plus étudiée dans la littérature récen
 \end{table}
 
 Dans le cadre de ce mémoire, les données proviennent de capteurs IceQube
-(IceRobotics Ltd, Édimbourg, Royaume-Uni), des accéléromètres tri-axiaux conçus
+(IceRobotics Ltd, Édimbourg, Royaume-Uni), à base d'accéléromètres tri-axiaux conçus
 spécifiquement pour le suivi comportemental des vaches laitières. La
 Figure~\ref{fig:iceqube_capteur} montre la représentation schématique du capteur IceQube,
-dont le boîtier étanche contient l'accéléromètre tri-axial et se fixe à la patte par un
+dont le boîtier étanche contient l'accéléromètre tri-axial et se fixe à la patte du bovin par un
 bracelet en plastique muni d'une boucle et de trous d'ajustement. La
-Figure~\ref{fig:iceqube_position} illustre son positionnement sur le métatarse de la patte
+Figure~\ref{fig:iceqube_position} illustre le positionnement sur le métatarse de la patte
 arrière~; les axes $x$, $y$, $z$ de l'accéléromètre permettent de distinguer la position
 debout (patte verticale, $\vec{g}$ aligné avec $z$) de la position couchée (patte
 horizontale).
@@ -469,55 +469,43 @@ horizontale).
     \label{fig:iceqube_position}
 \end{figure}
 
-Le capteur se fixe au métatarse d'une patte arrière par un bracelet à boucle.
 L'accéléromètre interne mesure l'accélération sur trois axes. La composante gravitationnelle
-contribue à distinguer la position couchée de la position debout, tandis que les variations
-d'accélération alimentent les indicateurs d'activité. L'algorithme propriétaire agrège les
-mesures brutes; le présent projet exploite des intervalles de 15~minutes. Cette résolution
-est un choix analytique du mémoire et non une fréquence cliniquement optimale démontrée.
-Des études de validation de capteurs portés rapportent une forte concordance entre certaines
-mesures de posture et l'observation directe. \citet{ledgerwood2010lying} valident ainsi un
-enregistreur d'activité fixé à la patte contre l'observation directe pour la mesure du
-comportement couché, tandis que \citet{alsaaod2012electronic} et \cite{blackie2011lying}
-montrent que ces mesures permettent de caractériser les différences de comportement couché
-associées à la boiterie.
+distingue les positions couchée et debout, tandis que les variations d'accélération fournissent
+les indicateurs d'activité. L'algorithme propriétaire agrège les mesures brutes; le présent
+projet exploite des intervalles de 15~minutes. Cette résolution, justifiée à la
+Section~\ref{sec:resolution_temporelle}, est un compromis analytique plutôt qu'une fréquence
+clinique démontrée. Des études de capteurs portés rapportent une forte concordance avec
+l'observation directe du comportement couché et de la posture couché/debout
+\citep{ledgerwood2010lying,alsaaod2012electronic}, ainsi que des différences de couchage
+associées à la boiterie \citep{blackie2011lying}.
 
-Chaque intervalle de 15~minutes génère sept colonnes de données, dont cinq sont utilisées dans la
-chaîne de traitement:
-\begin{itemize}
-    \item \textit{Steps}: nombre de pas détectés par l'accéléromètre;
-    \item \textit{Motion Index}: indice synthétique d'activité locomotrice (unité
-    propriétaire IceRobotics, dérivée des variations d'accélération);
-    \item \textit{Lying Time}: durée cumulée en position couchée (en minutes, bornée à 15);
-    \item \textit{Standing Time}: durée cumulée en position debout (en minutes, bornée à 15);
-    \item \textit{Transitions}: nombre total de changements de posture
-    couché$\leftrightarrow$debout.
-\end{itemize}
-Le \textit{Motion Index} a d'ailleurs déjà permis de détecter des comportements précis au
-moyen de seuils validés~: \citet{mckay2024play} repèrent ainsi le jeu chez le veau sevré
-équipé d'un accéléromètre IceTag. Cela confirme la valeur discriminante du signal, tout en
-rappelant qu'un même indice recouvre des comportements variés et n'est donc pas spécifique à
-la boiterie.
+Chaque intervalle de 15~minutes génère sept colonnes, dont cinq sont utilisées dans la chaîne de
+traitement: \textit{Steps}, le nombre de pas détectés; \textit{Motion Index}, un indice
+synthétique d'activité locomotrice dérivé des variations d'accélération (unité propriétaire
+IceRobotics); \textit{Lying Time} et \textit{Standing Time}, les durées cumulées en position
+couchée et debout, chacune bornée à 15~minutes; et \textit{Transitions}, le nombre total de
+changements de posture couché/debout.
+Chez des veaux sevrés équipés d'un accéléromètre IceTag, le \textit{Motion Index} a permis
+d'identifier le jeu au moyen de seuils validés \citep{mckay2024play}. Ce résultat confirme
+la valeur discriminante du signal, mais aussi son absence de spécificité pour la boiterie.
+Les deux colonnes supplémentaires du fichier IceQube (\textit{Transitions Up} et
+\textit{Transitions Down}) détaillent la direction des transitions; la chaîne de traitement
+utilise plutôt leur somme.
 
-Les colonnes supplémentaires (\textit{Transitions Up} et \textit{Transitions Down})
-détaillent la direction des transitions mais ne sont pas exploitées directement par la
-chaîne de traitement, qui utilise leur somme.
-
-Les données agrégées sont stockées dans la mémoire interne du capteur, puis récupérées
-périodiquement. Elles sont accessibles via la plateforme web CowAlert (IceRobotics), qui
-offre une interface de visualisation en ligne, et peuvent être exportées au format tabulaire
-(CSV), directement exploitable par la chaîne de traitement décrite dans ce mémoire.
+Les données agrégées, stockées dans la mémoire interne du capteur, sont récupérées périodiquement
+par CowAlert (IceRobotics), puis exportables depuis son interface web au format tabulaire (CSV),
+directement exploitable par la chaîne de traitement.
 
 Le modèle IceTag, prédécesseur de l'IceQube, fournit des variables similaires (pas, temps
 couché, transitions) et a été utilisé dans plusieurs travaux sur le comportement et la
 locomotion bovins \citep{beer2016objective,alsaaod2012electronic}. Le choix de l'IceQube
-est d'abord déterminé par la disponibilité du corpus. Il est cohérent avec la place
-importante des accéléromètres portés dans la littérature sur la surveillance locomotrice
-\citep{oleary2020accelerometers,bewley2015precision}.
-
-\cite{ito2010lying} montrent que les vaches boiteuses modifient significativement leur
-comportement de couchage (durée allongée, fréquence de transitions réduite), ce qui
-justifie l'inclusion de ces variables dans la chaîne de traitement. \cite{nechanitzky2016analysis}
-montrent également que des lésions de la corne sont associées à des changements de
-comportement mesurables. Ces résultats justifient l'étude de signaux comportementaux,
-sans établir à eux seuls un délai universel de détection préclinique.
+est d'abord déterminé par la disponibilité du corpus et s'accorde avec la place importante
+des accéléromètres portés dans la surveillance locomotrice
+\citep{oleary2020accelerometers,bewley2015precision}. Les vaches boiteuses modifient notamment
+leur comportement de couchage \citep{ito2010lying}, tandis que des lésions de la corne sont
+associées à des changements comportementaux mesurables \citep{nechanitzky2016analysis}.
+Ces observations justifient l'exploitation des variables IceQube comme indicateurs indirects
+de changements locomoteurs, sans établir à elles seules un délai universel de détection
+préclinique ni une spécificité clinique. Le chapitre suivant examine les approches proposées
+pour transformer ces signaux en alertes, ainsi que leurs performances et leurs limites
+méthodologiques.
