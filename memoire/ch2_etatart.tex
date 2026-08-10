@@ -278,20 +278,25 @@ détecteurs utilisés dans ce projet.
 \end{table}
 
 IF fournit un comparateur fondé sur l'isolation globale, tandis que LOF apporte un contraste
-fondé sur la densité locale. La sortie principale du mémoire repose sur les détecteurs
-temporels décrits au Chapitre~\ref{chapitre:systeme}.
+fondé sur la densité locale. La distinction apparaît sur les cas où les deux divergent. IF
+signale un intervalle globalement atypique, même lorsqu'il occupe une région peu peuplée de
+l'espace des variables, alors que LOF retient un intervalle ordinaire dans l'absolu mais
+s'écartant de son voisinage immédiat. Aucun des deux ne tient toutefois compte de l'ordre des
+intervalles~: chacun juge un instant sans le situer dans la trajectoire de la vache. La sortie
+principale du mémoire repose donc sur les détecteurs temporels décrits au
+Chapitre~\ref{chapitre:systeme}, et la section suivante examine les méthodes qui exploitent
+cette dimension temporelle.
 
 % =====================================================================
 \section{Détection temporelle de changements persistants}
 % =====================================================================
 
 La boiterie n'est pas nécessairement représentée par un point extrême isolé. Les changements
-rapportés dans les signaux portés concernent souvent une tendance, une rupture ou une
+rapportés dans les signaux obtenus concernent souvent une tendance, une rupture ou une
 modification persistante par rapport au comportement habituel de l'animal
 \citep{alsaaod2019automatic,paudyal2021lying}. Cette structure temporelle favorise les
 méthodes capables d'accumuler une évidence unilatérale plutôt que de classer indépendamment
 chaque intervalle.
-
 Les sommes cumulées proposées par \citet{page1954continuous} constituent une famille
 classique de détection de changement, formalisée depuis en analyse séquentielle et en
 détection de rupture \citep{basseville1993detection} et toujours au cœur des méthodes
