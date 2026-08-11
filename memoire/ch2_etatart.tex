@@ -194,8 +194,8 @@ d'anomalie est inversement proportionnel au nombre de coupures.
 \end{figure}
 
 \subsection{Local Outlier Factor}
-La méthode nommée Local Outlier Factor (LOF), proposée par Breunig et al.
-\citep{breunig2000lof}, estime la
+La méthode nommée Local Outlier Factor (LOF), proposée par
+\citet{breunig2000lof}, estime la
 densité locale de chaque point par rapport à celle de ses voisins. Il vise ainsi des points
 rares dans leur voisinage, tandis qu'IF repose sur leur facilité d'isolation globale. Le coût
 de LOF dépend notamment de la recherche des voisins et de la dimension des données. Dans ce
@@ -304,11 +304,13 @@ actuelles \citep{truong2020selective}. Appliquées à une combinaison de défici
 elles permettent d'oublier les fluctuations brèves, d'accumuler une baisse soutenue et de
 déclencher une alerte lorsque l'évidence franchit un seuil. Le problème traité n'est donc pas
 seulement une classification ponctuelle, mais la décision progressive qu'une trajectoire
-individuelle s'éloigne durablement de sa référence. Dans un contexte bovin, cette logique doit
+individuelle s'éloigne durablement de sa référence. Dans un contexte de production bovine,
+cette logique doit
 être associée à une période de référence individuelle, au cycle journalier, à la qualité des
 données et à la concordance de plusieurs familles de signaux. Elle reste toutefois une détection
 comportementale: seule une validation avec examens locomoteurs et diagnostics contemporains
-peut établir la relation clinique.
+peut établir la relation clinique. Encore faut-il que les travaux publiés soient comparables
+entre eux, ce que la section suivante met en doute.
 
 % =====================================================================
 \section{Hétérogénéité des protocoles~: un obstacle à la comparaison}
@@ -319,85 +321,14 @@ Les revues spécialisées sur la détection automatisée de boiterie convergent 
 limite récurrente: l'hétérogénéité des protocoles. Le type de capteur, sa position sur
 l'animal, la définition opérationnelle de la boiterie, la taille des cohortes et l'horizon
 d'évaluation varient fortement d'une étude à l'autre, ce qui complique la comparaison
-directe des performances publiées, comme le soulignent les travaux de
-\citet{oleary2020accelerometers} et de \citet{alsaaod2019automatic}.
+directe des performances publiées, comme le soulignent les travaux présentés dans
+\citet{oleary2020accelerometers} et \citet{alsaaod2019automatic}.
 
-Les travaux représentatifs du Tableau~\ref{tab:revue_ciblee}, présenté à la
-section~\ref{sec:choix_methodo}, montrent pourquoi les
+Les travaux représentatifs du Tableau~\ref{tab:revue_ciblee} montrent pourquoi les
 performances numériques ne doivent pas être juxtaposées sans précaution: les définitions
 cliniques, les populations, les modalités de capteurs, les découpages d'évaluation et les
 unités statistiques diffèrent. La présente section examine donc les protocoles plutôt qu'un
 classement de sensibilités.
-La revue d'O'Leary et al. \citep{oleary2020accelerometers} sur les accéléromètres pour la
-détection de boiterie confirme cette dispersion et souligne l'absence de standardisation
-dans les protocoles d'évaluation.
-Alsaaod et al. \citep{alsaaod2019automatic} soulignent en particulier l'absence
-de véritables études de longue durée ayant abouti à un système d'alerte précoce valide de
-bout en bout.
-
-Une étude longitudinale menée dans six fermes allemandes combine activité, couchage,
-production laitière et caractéristiques individuelles dans un modèle à effets mixtes
-\citep{lavrova2023lameness}. Elle illustre l'intérêt d'informations hétérogènes, mais son
-protocole supervisé et ses données contextuelles diffèrent de ceux du présent mémoire.
-
-Enfin, la qualité de la mesure amont reste déterminante: l'échantillonnage, l'édition des
-épisodes et la représentation des comportements influencent directement la fiabilité des
-variables dérivées \citep{ledgerwood2010lying,balasso2023behaviour}.
-
-Concrètement, l'hétérogénéité des protocoles se manifeste sur au moins cinq dimensions:
-\begin{enumerate}
-    \item \textit{Définition du cas}: classe clinique, score locomoteur seuil ou probabilité
-    de boiterie selon les études, d'où des phénomènes mesurés et des sensibilités
-    difficilement comparables;
-    \item \textit{Instrumentation}: position du capteur (patte
-    \citep{alsaaod2012electronic,thorup2015lameness}, collier
-    \citep{vanhertem2013lameness}, vision dorsale \citep{viazzi2013analysis}), fréquence
-    d'échantillonnage et signaux
-    contextuels varient, produisant des variables de nature différente;
-    \item \textit{Granularité analytique}: prédiction instantanée, journalière, par épisode
-    ou par vache, avec des exigences de précision temporelle très différentes;
-    \item \textit{Objectif métier}: classification clinique, alerte précoce, filtrage ou
-    score de risque, chaque objectif imposant des coûts d'erreur différents;
-    \item \textit{Évaluation}: sensibilité, spécificité, AUC, taux d'alertes, IoU ou
-    robustesse inter-fermes, un même système paraissant excellent ou médiocre selon la
-    métrique.
-\end{enumerate}
-
-Autrement dit, deux articles peuvent rapporter une « bonne performance » tout en répondant à
-des problèmes différents. Cette observation justifie le choix de consacrer un chapitre entier
-aux protocoles d'évaluation et à leurs artefacts, plutôt que de se limiter à un score unique
-agrégé.
-
-\FloatBarrier
-
-% =====================================================================
-\section{Synthèse critique et positionnement du mémoire}
-% =====================================================================
-
-\subsection{Choix méthodologique et travaux directement pertinents}
-\label{sec:choix_methodo}
-La revue présentée ici est narrative et ciblée; elle ne constitue ni une revue systématique
-ni une méta-analyse. Les travaux ont été retenus parce qu'ils éclairent directement l'une
-des décisions du projet: nature indirecte des signaux comportementaux, absence de labels
-cliniques dans le corpus principal, intérêt d'une référence individuelle, nécessité d'une
-évaluation temporelle et exigence d'interprétabilité.
-
-Les modèles supervisés et les réseaux profonds peuvent exploiter des motifs complexes lorsque
-des signaux suffisamment riches et des labels contemporains sont disponibles
-\citep{vanhertem2014evaluation,balasso2023behaviour}. Ces conditions ne sont pas réunies
-ici: les variables IceQube sont déjà agrégées par intervalles de 15~minutes et le corpus
-principal ne comporte pas de diagnostic locomoteur synchronisé. Une classification clinique
-supervisée ne serait donc pas défendable. Les méthodes non supervisées restent utiles comme
-points de comparaison, mais elles ne résolvent pas à elles seules la direction ni la
-persistance d'un changement. Des travaux récents transposent la détection d'anomalies non
-supervisée à des séries capteurs d'élevage bruitées \citep{kakar2024timetector}, ce qui
-conforte l'intérêt d'approches sans étiquettes; ils restent toutefois orientés vers la
-reconstruction de signaux plutôt que vers une baisse comportementale directionnelle,
-persistante et individualisée comme celle que cible HYPO.
-
-Le Tableau~\ref{tab:revue_ciblee} résume les travaux les plus directement reliés aux choix
-méthodologiques. Il ne compare pas leurs performances numériques, car les capteurs, les
-définitions de cas et les unités statistiques diffèrent.
 
 \begin{table}[H]
     \centering
@@ -439,6 +370,75 @@ définitions de cas et les unités statistiques diffèrent.
         \bottomrule
     \end{tabular}
 \end{table}
+Le travail présenté dans \citet{oleary2020accelerometers} sur les accéléromètres pour la
+détection de boiterie confirme cette dispersion et souligne l'absence de standardisation
+dans les protocoles d'évaluation.
+\citet{alsaaod2019automatic} soulignent aussi en particulier l'absence
+de véritables études de longue durée ayant abouti à un système d'alerte précoce valide de
+bout en bout.
+Une étude longitudinale menée dans six fermes allemandes combine activité, couchage,
+production laitière et caractéristiques individuelles dans un modèle à effets mixtes
+\citep{lavrova2023lameness}. Elle illustre l'intérêt d'informations hétérogènes, mais son
+protocole supervisé et ses données contextuelles diffèrent de ceux du présent mémoire.
+
+Enfin, la qualité de la mesure amont reste déterminante: l'échantillonnage, l'édition des
+épisodes et la représentation des comportements influencent directement la fiabilité des
+variables dérivées \citep{ledgerwood2010lying,balasso2023behaviour}.
+
+Concrètement, l'hétérogénéité des protocoles se manifeste sur au moins cinq dimensions:
+\begin{enumerate}
+    \item \textit{La définition du cas}: classe clinique, score locomoteur seuil ou probabilité
+    de boiterie selon les études, d'où des phénomènes mesurés et des sensibilités
+    difficilement comparables;
+    \item \textit{L'instrumentation}: position du capteur (patte
+    \citep{alsaaod2012electronic,thorup2015lameness}, collier
+    \citep{vanhertem2013lameness}, vision dorsale \citep{viazzi2013analysis}), fréquence
+    d'échantillonnage et signaux
+    contextuels varient, produisant des variables de nature différente;
+    \item \textit{La granularité analytique}: prédiction instantanée, journalière, par épisode
+    ou par vache, avec des exigences de précision temporelle très différentes;
+    \item \textit{L'objectif métier}: classification clinique, alerte précoce, filtrage ou
+    score de risque, chaque objectif imposant des coûts d'erreur différents;
+    \item \textit{L'évaluation}: sensibilité, spécificité, AUC, taux d'alertes, IoU ou
+    robustesse inter-fermes, un même système paraissant excellent ou médiocre selon la
+    métrique.
+\end{enumerate}
+
+Autrement dit, deux articles peuvent rapporter une « bonne performance » tout en répondant à
+des problèmes différents. Cette observation justifie le choix de consacrer un chapitre entier
+aux protocoles d'évaluation et à leurs artefacts, plutôt que de se limiter à un score unique
+agrégé.
+
+\FloatBarrier
+
+% =====================================================================
+\section{Synthèse critique et positionnement du mémoire}
+% =====================================================================
+
+\subsection{Choix méthodologique et travaux directement pertinents}
+\label{sec:choix_methodo}
+La revue de littérature présentée est narrative et ciblée; elle ne constitue ni une revue systématique
+ni une méta-analyse. Les travaux ont été retenus parce qu'ils éclairent directement l'une
+des décisions du projet: nature indirecte des signaux comportementaux, absence de labels
+cliniques dans le corpus principal, intérêt d'une référence individuelle, nécessité d'une
+évaluation temporelle et exigence d'interprétabilité.
+
+Les modèles supervisés et les réseaux profonds peuvent exploiter des motifs complexes lorsque
+des signaux suffisamment riches et des labels contemporains sont disponibles
+\citep{vanhertem2014evaluation,balasso2023behaviour}. Ces conditions ne sont pas réunies dans ce mémoire: les variables IceQube sont déjà agrégées par intervalles de 15~minutes et le corpus
+principal ne comporte pas de diagnostic locomoteur synchronisé. Une classification clinique
+supervisée ne serait donc pas défendable. Les méthodes non supervisées restent utiles comme
+points de comparaison, mais elles ne résolvent pas à elles seules la direction ni la
+persistance d'un changement. Des travaux récents transposent la détection d'anomalies non
+supervisée à des séries de capteurs d'élevage bruitées \citep{kakar2024timetector}, ce qui
+conforte l'intérêt d'approches sans étiquettes; ils restent toutefois orientés vers la
+reconstruction de signaux plutôt que vers une baisse comportementale directionnelle,
+persistante et individualisée comme celle que cible HYPO.
+
+Le Tableau~\ref{tab:revue_ciblee}, présenté à la section~\ref{sec:heterogeneite}, réunit
+les travaux les plus directement reliés à ces choix méthodologiques. Il ne compare pas leurs
+performances numériques, car les capteurs, les définitions de cas et les unités statistiques
+diffèrent.
 
 Ces travaux motivent une architecture classique, individualisée et temporelle. IF et LOF
 sont conservés comme comparateurs ponctuels de familles différentes; le résultat principal
@@ -461,10 +461,10 @@ surveillance associée au risque de boiterie:
 
 En pratique, les méthodes purement pilotées par les données peuvent manquer d'explicabilité pour
 l'opérationnel, tandis que les approches purement à règles peuvent manquer de flexibilité
-face à la variabilité inter-animaux. Un compromis robuste consiste à coupler détection
-d'anomalies et contraintes métier explicites. Ce couplage cumule la
+face à la variabilité inter-animaux. Un compromis robuste consiste à coupler la détection
+d'anomalies et des contraintes métier explicites. Ce couplage cumule la
 capacité de généralisation des algorithmes non supervisés et des gardes-fous
-interprétables. La littérature récente confirme cette orientation: les systèmes
+interprétables. Des travaux récents confirment cette orientation: les systèmes
 d'élevage de précision les plus prometteurs combinent des signaux hétérogènes avec des
 logiques de décision interprétables, plutôt que de s'appuyer sur un modèle unique en boîte
 noire \citep{palma2025scoping,michelena2025plf_review}.
@@ -473,36 +473,36 @@ L'hétérogénéité des protocoles examinée à la Section~\ref{sec:heterogenei
 directe sur l'évaluation des systèmes: de nombreux travaux comparent des capteurs, des fermes, des
 labels et des définitions de cas différents, ce qui complique l'appréciation d'une chaîne
 déployable de bout en bout. Dans ce contexte, il existe une place claire pour des
-contributions moins théoriques mais plus systémiques: une chaîne reproductible, une
-évaluation explicite sur plusieurs niveaux et une traçabilité des artefacts expérimentaux.
+contributions moins théoriques mais plus systémiques: \textbf{une chaîne reproductible, une
+évaluation explicite sur plusieurs niveaux et une traçabilité des artefacts expérimentaux}.
 
-La revue de littérature conduit donc à un enseignement central: la difficulté n'est pas
+La revue de littérature conduit alors à un enseignement central: la difficulté n'est pas
 seulement de proposer un détecteur performant, mais de construire une chaîne de décision
-cohérente, reproductible et défendable du point de vue métier. Une telle exigence justifie
+cohérente, reproductible et défendable du point de vue «~métier~». Une telle exigence justifie
 la structure du présent mémoire, qui traite l'algorithme, les règles métier, l'interface et
 l'évaluation comme un ensemble cohérent plutôt que comme des blocs séparés.
 
 \subsection{Positionnement du mémoire}
 Le présent mémoire retient d'abord une approche temporelle directionnelle orientée vers les
 baisses d'activité, puis examine une extension bidirectionnelle. Cette hiérarchie reflète le
-niveau de preuve: la branche HYPO est soumise à une évaluation attribuable, une ablation et
-une analyse de sensibilité complètes; la branche d'instabilité teste une hypothèse
-complémentaire qui reste exploratoire. La contribution relève de l'ingénierie scientifique:
+niveau de preuve: la branche \textbf{HYPO} est soumise à une évaluation attribuable, une ablation et
+une analyse de sensibilité complètes, puis la branche \textbf{d'instabilité} teste une
+hypothèse complémentaire qui reste exploratoire. La contribution relève de l'ingénierie scientifique:
 construire une chaîne reproductible qui compare chaque vache à sa propre période de référence et évaluer
 honnêtement ce que permettent des données d'activité non étiquetées. Concrètement, le
 mémoire livre:
 \begin{enumerate}
-  \item une branche HYPO évaluée sur 44 événements postérieurs à la période de référence, avec exécution propre de
-  référence, ablation contre IF et LOF, analyse OFAT de vingt variantes et stress test
+  \item une \textbf{branche HYPO} évaluée sur 44 événements postérieurs à la période de référence, avec exécution propre de
+  référence, ablation contre IF et LOF, analyse OFAT de 20 variantes et stress test
   à aire d'enveloppe appariée sur 198 événements;
-  \item une branche d'instabilité exploratoire et cinq stratégies de fusion, dont une règle
+  \item une \textbf{branche d'instabilité} exploratoire et cinq stratégies de fusion, dont une règle
   hiérarchique séparant surveillance et notification de vérification;
-  \item une campagne étendue de 132 événements incluant contrôles brefs et facteurs
+  \item une \textbf{campagne étendue} de 132 événements incluant contrôles brefs et facteurs
   confondants;
-  \item une évaluation du temps d'exécution de la chaîne complète sur les 28 vaches;
-  \item une analyse complémentaire IceTag-SLS synchronisée, explicitement interprétée comme
+  \item une \textbf{évaluation} du temps d'exécution de la chaîne complète sur les 28 vaches;
+  \item une \textbf{analyse complémentaire} IceTag-SLS synchronisée, explicitement interprétée comme
   exploratoire et non concluante;
-  \item une traçabilité par tests et artefacts tabulaires reproductibles.
+  \item une \textbf{traçabilité} par tests et artefacts tabulaires reproductibles.
 \end{enumerate}
 
 La portée reste clairement délimitée: la sortie est une alerte de dégradation
@@ -510,8 +510,8 @@ comportementale à vérifier, et non une classification ou un diagnostic vétér
 boiterie. Cette distinction est fondamentale et cohérente avec les recommandations de la
 littérature \citep{alsaaod2019automatic}.
 
-Le Chapitre~\ref{chapitre:systeme} définit donc le système proposé et le protocole selon lequel
-il est évalué, puis le Chapitre~\ref{chapitre:donnees} décrit les données utilisées, les
+Le Chapitre~\ref{chapitre:systeme} définira alors le système proposé et le protocole selon lequel
+il est évalué, puis le Chapitre~\ref{chapitre:donnees} décrira les données utilisées, les
 transformations appliquées aux signaux capteurs, le choix des variables et le cadre
 expérimental retenu. L'objectif n'est pas seulement de décrire une implémentation, mais de
 montrer comment la revue qui précède se traduit en décisions méthodologiques explicites.

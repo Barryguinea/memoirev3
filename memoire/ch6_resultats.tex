@@ -249,7 +249,7 @@ charge en ferme.
 \section{Comparaison à IF et LOF, et ablation par le comparateur pédométrique}
 % =====================================================================
 Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. La colonne de détection
-attribuable retient ici le critère de nouveau départ, c'est-à-dire l'apparition d'un épisode
+attribuable retient le critère de nouveau départ, c'est-à-dire l'apparition d'un épisode
 absent de l'exécution propre. La cinquième variante, le comparateur pédométrique, restreint
 le détecteur au seul canal des pas, à la manière d'un podomètre. Le
 Tableau~\ref{tab:hypo_ablation} rapporte les métriques attribuables des cinq variantes. Le
@@ -351,13 +351,13 @@ approches strictement podométriques, dont la sensibilité dépend du seul compt
 % =====================================================================
 \section{Analyses de sensibilité}
 % =====================================================================
-Les analyses réunies ici examinent la dépendance des conclusions aux familles de signaux
+Les analyses réunies dans cette section examinent la dépendance des conclusions aux familles de signaux
 retenues puis aux valeurs de paramètres. Elles évaluent une robustesse locale et ne
 sélectionnent aucune nouvelle configuration.
 
 \subsection{Apport de chaque famille de signaux}
 Le comparateur pédométrique suggère, pour les pas, que la combinaison de signaux peut réduire la
-charge de fond sans changer la localisation. On examine ici si ce motif descriptif se retrouve
+charge de fond sans changer la localisation. On examine si ce motif descriptif se retrouve
 en rejouant la même ablation, mais en restreignant tour à tour le détecteur à chacune
 des quatre familles (Tableau~\ref{tab:hypo_channels}). Là où le Tableau~\ref{tab:hypo_ablation}
 situe HYPO face à d'autres familles d'algorithmes (IF, LOF, podomètre), celui-ci décompose ce
@@ -411,7 +411,7 @@ qui reste supérieure à celle des variantes B et D.
 
 \subsection{Robustesse locale des paramètres HYPO}
 \label{sec:sensibilite}
-L'analyse OFAT comprend la référence et vingt variantes dans lesquelles un seul des dix
+L'analyse OFAT comprend la référence et 20 variantes dans lesquelles un seul des dix
 paramètres est modifié. Les 924 évaluations événement-configuration rejettent toutes le
 contrôle bref. Sur les profils progressifs, 12 variantes sur 20 reproduisent exactement le
 taux de nouveaux départs de la référence et 15 restent dans un écart maximal de 6,1 points.
@@ -717,7 +717,7 @@ objectif préalable.
       & 87,9\,\% de couverture attribuable et 39,4\,\% à IoU20 sur 33 profils graduels.
       & Réalisé \\
     3 & Ablation et sensibilité HYPO
-      & Supériorité sur IF/LOF; OFAT de vingt variantes; forte couverture des formes de stress
+      & Supériorité sur IF/LOF; OFAT de 20 variantes; forte couverture des formes de stress
         à aire d'enveloppe appariée, mais contrôle pas-seuls non rejeté sur le recouvrement.
       & Réalisé \\
     4 & Explorer INSTABILITÉ et les fusions

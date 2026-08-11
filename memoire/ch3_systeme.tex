@@ -1,24 +1,30 @@
 \chapter{Système proposé et protocole d'évaluation}
 \label{chapitre:systeme}
 
-Ce chapitre définit le système proposé et le protocole selon lequel il est évalué~: la
-période de référence individuelle, la branche HYPO, l'extension bidirectionnelle
+Ce chapitre définit le système proposé et le protocole selon lequel il sera évalué en se
+basant sur la période de référence individuelle, la branche HYPO, l'extension bidirectionnelle
 exploratoire, la fusion des branches, les comparateurs et les métriques. Il relie aussi la
 méthode au code exécuté~: le noyau HYPO, son évaluation, l'extension bidirectionnelle et
 l'interface sont séparés afin qu'une modification de présentation ne change pas
-silencieusement les résultats
+silencieusement les résultats. Cette séparation répond aux dettes techniques que ces
+travaux documentent dans les systèmes d'apprentissage automatique déployés
 \citep{sculley2015hidden,amershi2019software,breck2017ml}. Les corpus et les campagnes
-correspondantes sont décrits au Chapitre~\ref{chapitre:donnees}, et l'interface au
-Chapitre~\ref{chapitre:interface}. La sortie étudiée est une alerte comportementale à
-vérifier sur le terrain. Les termes de sensibilité et de faux positif cliniques ne sont pas
+correspondantes sont décrits au Chapitre~\ref{chapitre:donnees}, alors que l'interface
+proposée sera présentée au Chapitre~\ref{chapitre:interface}. La sortie étudiée est une \textbf{alerte comportementale} à
+vérifier sur le terrain. Les termes de sensibilité et de faux positifs cliniques ne sont pas
 employés pour l'évaluation synthétique, faute d'étalon vétérinaire.
 
 % =====================================================================
 \section{Vue d'ensemble du système}
 % =====================================================================
-La Figure~\ref{fig:architecture_modules} schématise l'architecture retenue~: les mesures
-normalisées alimentent en parallèle les deux branches de détection, dont les épisodes sont
-ensuite fusionnés en une notification de vérification ou en une simple surveillance.
+La Figure~\ref{fig:architecture_modules} schématise l'architecture retenue du système
+proposé. Les mesures brutes de chaque vache, stockées dans des fichiers CSV exportés du
+système CowAlert, sont d'abord agrégées par intervalles de quinze minutes. Cette étape
+calcule également la couverture de chaque intervalle, c'est-à-dire la proportion de la
+période effectivement mesurée, qui sert ensuite à écarter les intervalles trop lacunaires.
+Les mesures ainsi normalisées alimentent en parallèle les deux branches de détection, HYPO
+et INSTABILITÉ, dont les épisodes sont ensuite fusionnés en une notification de vérification
+ou en une simple surveillance.
 
 \begin{figure}[H]
   \centering
@@ -56,58 +62,85 @@ ensuite fusionnés en une notification de vérification ou en une simple surveil
   \label{fig:architecture_modules}
 \end{figure}
 
-Pour une vache, \texttt{run\_pipeline\_one\_cow} effectue les opérations suivantes:
+Cette architecture est réalisée par une fonction unique du noyau logiciel,
+\texttt{run\_pipeline\_one\_cow}, qui reçoit la série d'une seule vache et en retourne les
+sorties de détection. Elle constitue le point d'entrée de toute la chaîne~: les campagnes
+d'évaluation comme l'interface l'appellent, ce qui garantit qu'aucune ne peut appliquer une
+règle qui lui serait propre. Ses opérations reprennent, dans l'ordre, les boîtes de la
+Figure~\ref{fig:architecture_modules}~:
 \begin{enumerate}
-  \item normaliser les mesures et construire les intervalles;
-  \item matérialiser la séparation entre la période de référence et la période future;
-  \item exécuter le comparateur Isolation Forest;
-  \item calculer la branche HYPO;
-  \item calculer la branche INSTABILITÉ;
-  \item appliquer la fusion choisie et espacer les notifications;
-  \item retourner les scores, épisodes, départs, notifications, types et priorités.
+  \item normaliser les mesures et construire les intervalles, ce qui correspond au passage
+  de la boîte \emph{CSV IceQube par vache} à la boîte \emph{Intervalles et couverture};
+  \item matérialiser la séparation entre la période de référence et la période future, qui
+  n'apparaît pas sur la figure mais conditionne tout ce qui suit;
+  \item exécuter le comparateur Isolation Forest, employé comme point de comparaison et non
+  représenté sur la figure, qui ne montre que la chaîne principale;
+  \item calculer la branche HYPO, soit la boîte supérieure issue de l'embranchement;
+  \item calculer la branche INSTABILITÉ, soit la boîte inférieure;
+  \item appliquer la fusion choisie et espacer les notifications, soit la boîte
+  \emph{Fusion hiérarchique};
+  \item retourner les scores, épisodes, départs, notifications, types et priorités, que la
+  figure résume par ses deux sorties, la notification de vérification et la surveillance
+  d'instabilité.
 \end{enumerate}
-La chaîne appliquée au troupeau répète ce traitement sans partager de période de référence
+La chaîne appliquée au troupeau répète ce traitement sans partager de périodes de référence
 entre les vaches.
 
 % =====================================================================
 \section{Période de référence individuelle}
 % =====================================================================
-Chaque série est triée chronologiquement. Les 60\,\% premiers intervalles admissibles
-constituent la période de référence; les 40\,\% suivants forment la période future. Les médianes de
+Chaque série est triée chronologiquement. Les 60\,\% des intervalles admissibles
+constituent la \textbf{période de référence}; les 40\,\% suivants forment la
+\textbf{période future}. Les médianes de
 référence sont calculées pour le même créneau horaire, avec repli sur la médiane globale de
-la vache. Une deuxième référence est la valeur du jour précédent. Pour les familles
+la vache. Une deuxième référence considérée est la valeur observée au même créneau horaire le
+jour précédent. Pour les familles
 d'activité et le temps debout, le ratio le plus faible entre ces deux références est retenu;
 pour le temps couché, le ratio le plus élevé est conservé. Ce choix sélectionne la référence
-qui fait apparaître la variation adverse la plus marquée, afin qu'une dégradation par rapport
+qui fait apparaître la variation la plus marquée, afin qu'une dégradation par rapport
 à l'une des deux références ne soit pas masquée par l'autre. Les sorties sont forcées
 à zéro pendant la période de référence et un intervalle dont la couverture est inférieure à 25\,\% ne
 peut devenir candidat. Ce découpage empêche une fuite directe de la période future vers la
-référence, mais il suppose que les premiers 60\,\% décrivent suffisamment le fonctionnement
-habituel de la vache; il ne garantit pas à lui seul l'absence d'un épisode atypique, d'une
-dérive capteur ou d'un changement de conduite pendant cette période.
+référence. Il repose toutefois sur une hypothèse~: les premiers 60\,\% décrivent
+suffisamment le fonctionnement habituel de la vache. Il ne garantit donc pas à lui seul
+l'absence d'un épisode atypique, d'une dérive capteur ou d'un changement de conduite pendant
+cette période.
 
 % =====================================================================
 \section{Branche HYPO~: baisse comportementale persistante}
 \label{sec:hypo}
 % =====================================================================
-La branche HYPO cible la signature comportementale la mieux documentée de la boiterie~: une
-réduction de l'activité locomotrice (pas, mouvement, transitions) accompagnée d'une
+La branche HYPO cible la signature comportementale la mieux documentée de la boiterie, qui se
+manifeste sous forme d'une réduction de l'activité locomotrice comme les pas, le mouvement et
+les transitions, accompagnée d'une
 augmentation du temps couché \citep{ito2010lying,blackie2011lying,chapinal2010measurement}.
-C'est cette direction de changement, et non un écart quelconque, que le détecteur recherche.
+Le détecteur recherche donc cette direction de changement plutôt qu'un écart quelconque.
 
 Les pas, le \textit{Motion Index}, les transitions et les temps posturaux sont cumulés sur
-douze heures. Pour les trois familles d'activité, le déficit est
+douze heures. Pour les trois familles d'activité, le déficit est défini par
 \(
 d_j(t)=\max(0,1-r_j(t))
-\), où \(r_j(t)\) est le ratio à la référence individuelle. Le changement postural combine
-l'excès de temps couché et le déficit de temps debout. Le score est
+\), où \(r_j(t)\) représente le ratio à la référence individuelle. Le changement postural
+combine l'excès de temps couché et le déficit de temps debout. Le score est alors donné par la
+relation suivante~:
 \[
 S_H(t)=0{,}30d_{pas}+0{,}30d_{MI}+0{,}20d_{transitions}+0{,}20d_{posture}.
 \]
-Un candidat exige \(S_H\geq0{,}12\), au moins trois familles concordantes, l'implication des
+Les trois premiers termes sont les instances de \(d_j(t)\) pour chacune des familles
+d'activité~: \(d_{pas}\) pour les pas, \(d_{MI}\) pour le \textit{Motion Index} et
+\(d_{transitions}\) pour les transitions posturales. Le quatrième, \(d_{posture}\), est le
+terme combiné décrit ci-dessus, qui réunit l'excès de temps couché et le déficit de temps
+debout. Les quatre varient entre zéro et un, zéro signifiant l'absence d'écart défavorable à
+la référence.
+Un candidat exige \(S_H\geq0{,}12\), pour au moins trois familles concordantes, l'implication des
 pas ou du \textit{Motion Index}, une couverture suffisante et une position dans la période future.
-Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM, somme cumulée unilatérale de Page \citep{page1954continuous}, est défini par
-\(C_t=\max(0,C_{t-1}+e_t-0{,}07)\). Un épisode exige une persistance sur six heures et
+Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM représente la
+somme cumulée unilatérale de \citet{page1954continuous}. Il est défini par
+\(C_t=\max(0,C_{t-1}+e_t-0{,}07)\), où \(e_t\) désigne l'évidence accumulée à l'intervalle
+\(t\), nulle tant qu'aucun candidat n'est retenu, et \(C_{t-1}\) la valeur du cumul à
+l'intervalle précédent. La soustraction d'une dérive constante de \(0{,}07\) fait redescendre
+le cumul en l'absence d'évidence nouvelle, ce qui empêche une accumulation indéfinie.
+Un épisode exige une persistance sur six heures et
 \(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. L'algorithme~\ref{alg:hypo}
 résume cette logique de détection pour une vache.
 
@@ -122,12 +155,13 @@ résume cette logique de détection pour une vache.
 
 \begin{enumerate}[leftmargin=1.5em]
 \item \textit{Référence individuelle:}\\
-    Pour chaque famille (pas, \textit{Motion Index}, transitions, posture), médiane de la période
-    de référence par créneau horaire, avec repli sur la médiane globale de la vache.
+    Pour chaque famille de signaux, soit les pas, le \textit{Motion Index}, les transitions et
+    la posture, le détecteur calcule la médiane de la période de référence par créneau horaire,
+    puis se replie sur la médiane globale de la vache lorsque ce créneau est trop peu documenté.
 
 \item \textit{Pour chaque intervalle $t$ de la période surveillée:}\\
     Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ aux références du créneau et de la veille;
-    conserver le ratio correspondant à la variation adverse la plus marquée\\
+    conserver le ratio correspondant à la variation la plus marquée\\
     Déficits $d_j(t) = \max(0,\ 1 - r_j(t))$\hspace{0.5em}(posture: excès de temps couché et déficit de temps debout)\\
     Score $S_H(t) = 0{,}30\,d_{pas} + 0{,}30\,d_{MI} + 0{,}20\,d_{transitions} + 0{,}20\,d_{posture}$\\
     Candidat si $S_H \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
@@ -145,7 +179,8 @@ résume cette logique de détection pour une vache.
 \end{figure}
 
 \subsection{Implémentation de la persistance}
-La persistance n'est pas appliquée après une fusion brute. Chaque branche construit d'abord
+La persistance s'applique à l'intérieur de chaque branche, avant toute fusion, et non sur le
+résultat d'une fusion brute. Chaque branche construit donc d'abord
 ses propres candidats, son propre CUSUM et son propre épisode. Cette décision évite qu'une
 instabilité courte doive durer six heures pour être reconnue ou qu'une baisse lente soit
 déclenchée par deux heures de fluctuation. La fusion reçoit donc deux séries d'épisodes déjà
