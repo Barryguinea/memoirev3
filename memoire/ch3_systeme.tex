@@ -117,7 +117,7 @@ augmentation du temps couché \citep{ito2010lying,blackie2011lying,chapinal2010m
 Le détecteur recherche donc cette direction de changement plutôt qu'un écart quelconque.
 
 Les pas, le \textit{Motion Index}, les transitions et les temps posturaux sont cumulés sur
-douze heures. Pour les trois familles d'activité, le déficit est défini par
+12 heures. Pour les trois familles d'activité, le déficit est défini par
 \(
 d_j(t)=\max(0,1-r_j(t))
 \), où \(r_j(t)\) représente le ratio à la référence individuelle. Le changement postural
@@ -139,7 +139,9 @@ somme cumulée unilatérale de \citet{page1954continuous}. Il est défini par
 \(C_t=\max(0,C_{t-1}+e_t-0{,}07)\), où \(e_t\) désigne l'évidence accumulée à l'intervalle
 \(t\), nulle tant qu'aucun candidat n'est retenu, et \(C_{t-1}\) la valeur du cumul à
 l'intervalle précédent. La soustraction d'une dérive constante de \(0{,}07\) fait redescendre
-le cumul en l'absence d'évidence nouvelle, ce qui empêche une accumulation indéfinie.
+le cumul en l'absence d'évidence nouvelle, ce qui empêche une accumulation indéfinie. Le
+cumul est unilatéral supérieur~: il part de zéro, ne peut jamais devenir négatif, et un
+épisode se déclenche lorsqu'il franchit son seuil en montant.
 Un épisode exige une persistance sur six heures et
 \(C_t\geq1{,}20\). Deux notifications HYPO sont espacées d'au moins 24 heures. L'algorithme~\ref{alg:hypo}
 résume cette logique de détection pour une vache.
@@ -186,8 +188,8 @@ instabilité courte doive durer six heures pour être reconnue ou qu'une baisse 
 déclenchée par deux heures de fluctuation. La fusion reçoit donc deux séries d'épisodes déjà
 stabilisées.
 
-Dans la branche HYPO, une fenêtre glissante de six heures doit contenir au moins 45\,\% de
-candidats et le CUSUM doit franchir 1,20. Dans la branche INSTABILITÉ, la proportion minimale
+Dans la branche HYPO, une fenêtre glissante de six heures doit contenir au moins 45\,\% des
+candidats et le CUSUM doit franchir 1,20 par valeur croissante. Dans la branche INSTABILITÉ, la proportion minimale
 est de 50\,\% sur deux heures et le CUSUM doit franchir 0,70. Ces règles sont déterministes et
 testées séparément.
 
@@ -195,27 +197,33 @@ testées séparément.
 \section{Branche INSTABILITÉ~: mouvement disproportionné et posture fragmentée}
 \label{sec:instabilite}
 % =====================================================================
-La branche INSTABILITÉ ne recherche pas une hausse globale d'activité. Elle calcule quatre
+La branche INSTABILITÉ recherche une disproportion entre familles de signaux, et non une
+hausse globale d'activité. Elle permet de calculer quatre
 familles sur une fenêtre de trois heures: mouvement relatif aux pas, transitions relatives
 aux pas, transitions relatives au temps postural et volatilité de la fraction couchée. Les
 hausses des quatre familles sont pondérées respectivement par 0,35, 0,30, 0,20 et 0,15.
 
-Un candidat exige un score d'au moins 0,18, deux familles, dont le mouvement relatif et au
-moins une corroboration par transitions, fragmentation ou posture. Chaque changement
-familial doit atteindre 20\,\%. Une hausse coordonnée des pas et du \textit{Motion Index}
-d'au moins 15\,\%, avec un écart inférieur à 20\,\% et sans fragmentation, est filtrée comme
-activité générale. Le CUSUM utilise une dérive de 0,06 et un seuil de 0,70. La persistance
-est de deux heures et le délai réfractaire de douze heures.
+Un candidat doit satisfaire trois conditions. Son score atteint au moins 0,18. Deux familles
+au minimum réagissent, dont obligatoirement le mouvement relatif, corroboré par les
+transitions, la fragmentation ou la posture. Chaque famille retenue présente un changement
+d'au moins 20\,\%.
+
+Un filtre écarte ensuite l'activité générale~: une hausse conjointe des pas et du
+\textit{Motion Index} d'au moins 15\,\%, avec un écart entre les deux inférieur à 20\,\% et
+sans fragmentation, n'est pas retenue comme instabilité.
+
+Le CUSUM emploie une dérive de 0,06 et un seuil de 0,70. La persistance exigée est de deux
+heures et le délai réfractaire de 12 heures.
 
 Les paramètres de la branche INSTABILITÉ sont des choix techniques exploratoires. Ils ont
-été définis avant la campagne complète puis soumis à une analyse de sensibilité. Ils ne sont
+été définis avant la campagne complète, puis soumis à une analyse de sensibilité. Ils ne sont
 pas présentés comme des seuils physiologiques ou cliniquement optimaux.
 
 % =====================================================================
 \section{Fusion hiérarchique}
 % =====================================================================
 \subsection{Stratégies comparées}
-Cinq stratégies sont comparées sur les mêmes événements:
+Cinq stratégies de fusion sont comparées sur les mêmes événements:
 \begin{enumerate}
   \item \textbf{HYPO}: seule la branche HYPO produit la sortie;
   \item \textbf{INSTABILITÉ}: seule l'instabilité produit la sortie;
@@ -226,11 +234,11 @@ Cinq stratégies sont comparées sur les mêmes événements:
   entre 24 et 72 heures plus tard.
 \end{enumerate}
 La fusion hiérarchique est la configuration de référence de l'extension exploratoire. Sa
-période réfractaire est de douze heures. Une priorité 1 correspond à une surveillance
+période réfractaire est de 12 heures. Une priorité 1 correspond à une surveillance
 d'instabilité, une priorité 2 à une hypoactivité et une priorité 3 à une convergence ou une
-séquence. Elle n'est pas présupposée supérieure à HYPO: cette comparaison fait partie des
-résultats. Le Tableau~\ref{tab:config_finale} consigne les paramètres de référence des deux
-branches.
+séquence. La fusion hiérarchique n'est pas présupposée supérieure à HYPO: cette comparaison
+fait partie des résultats. Le Tableau~\ref{tab:config_finale} présente les paramètres de
+référence des deux branches.
 
 \begin{table}[H]
   \centering
@@ -253,9 +261,13 @@ branches.
   \end{tabular}
 \end{table}
 
-La sélection descriptive des fusions impose trois conditions de portée: détection
-des scénarios de vérification d'au moins 60\,\%, surveillance de l'instabilité d'au moins 50\,\% et
-IoU20 d'au moins 20\,\%. Une fonction d'utilité secondaire récompense la détection et
+La sélection descriptive des fusions impose trois conditions de portée:
+\begin{itemize}
+  \item détection des scénarios de vérification d'au moins 60\,\%;
+  \item surveillance de l'instabilité d'au moins 50\,\%;
+  \item IoU20 d'au moins 20\,\%.
+\end{itemize}
+Une fonction d'utilité secondaire récompense la détection et
 pénalise fortement les contrôles, les confondants et la charge de fond. Ses poids sont des
 choix d'ingénierie; elle ne représente pas une utilité clinique validée.
 
@@ -267,7 +279,7 @@ branches convergent ou lorsqu'un départ HYPO est précédé d'un départ INSTAB
 fenêtre de 72 heures. Cette architecture empêche un simple pic de \textit{Motion Index} de
 devenir une notification de vérification.
 
-L'algorithme~\ref{alg:fusion} formalise cette logique de fusion pour une vache donnée.
+L'algorithme~\ref{alg:fusion} formalise la logique de fusion proposée pour une vache donnée.
 
 \begin{figure}[H]
 \centering
@@ -310,11 +322,12 @@ L'algorithme~\ref{alg:fusion} formalise cette logique de fusion pour une vache d
 \label{sec:comparateurs}
 % =====================================================================
 Deux détecteurs d'anomalies non supervisés sont conservés comme points de comparaison. Ils
-ne produisent pas la notification principale~: ils situent le détecteur temporel par rapport
-à des familles d'algorithmes répandues et fournissent des points de comparaison reproductibles.
+situent le détecteur temporel par rapport à des familles d'algorithmes répandues et
+fournissent des points de comparaison reproductibles, sans produire de notifications
+principales.
 
-\subsection{Isolation Forest}
-Isolation Forest isole les observations rares en construisant des arbres de partition
+\subsection{Isolation Forest (IF)}
+IF isole les observations rares en construisant des arbres de partition
 aléatoire~: un point anormal, plus facile à séparer du reste, présente une profondeur
 moyenne d'isolation plus faible \citep{liu2008isolation}. Les variables dérivées sont
 d'abord mises à l'échelle par un \texttt{RobustScaler} (intervalle inter-quantile
