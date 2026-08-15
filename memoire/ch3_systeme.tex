@@ -360,37 +360,36 @@ Tableau~\ref{tab:if_hyperparams}.
 Les sorties \texttt{if\_score} et \texttt{if\_anomaly\_point}, ainsi que des colonnes de
 compatibilité \texttt{pred\_lameness\_*}, restent disponibles. Elles alimentent l'ablation
 du Chapitre~\ref{chapitre:resultats} et l'affichage, sans jamais définir la conclusion. Par
-construction, Isolation Forest repère un écart \emph{ponctuel} dans n'importe quelle
+construction, IF repère un écart \emph{ponctuel} dans n'importe quelle
 direction~; il ne modélise ni la référence horaire individuelle, ni la \emph{direction}, ni
 la \emph{persistance} d'une dégradation, qui sont précisément les propriétés recherchées par
 la branche HYPO.
 
-\subsection{Local Outlier Factor}
-Local Outlier Factor compare la densité locale d'un point à celle de ses voisins~: une
+\subsection{Local Outlier Factor (LOF)}
+LOF compare la densité locale d'un point à celle de ses voisins~: une
 densité nettement plus faible que le voisinage signale une anomalie locale
 \citep{breunig2000lof}. Il est exécuté en mode nouveauté dans le module d'ablation,
 avec les mêmes indices d'entraînement et la même normalisation robuste que la comparaison
-Isolation Forest, afin que l'écart mesuré reflète l'algorithme et non un changement de
+IF, afin que l'écart mesuré reflète l'algorithme et non un changement de
 protocole. Sa complexité quadratique dans le cas général le rend moins apte au passage à
 l'échelle, mais il peut capter des structures locales que les méthodes globales manquent.
-Le Tableau~\ref{tab:if_vs_lof} du Chapitre~\ref{chapitre:etatart} résume leurs propriétés
-respectives.
+Le Tableau~\ref{tab:if_vs_lof} compare les propriétés respectives d'IF et de LOF.
 
 % =====================================================================
 \section{Protocole d'évaluation}
 % =====================================================================
 Le module de campagne HYPO sélectionne les vaches admissibles, exécute une
 référence propre et injecte les quatre profils de la campagne HYPO. Le module
-d'ablation réutilise les mêmes fenêtres pour les cinq variantes. Le
+d'ablation réutilise les mêmes fenêtres pour les cinq variantes comparées. Le
 module d'extension bidirectionnelle étend ensuite le protocole aux douze scénarios
 bidirectionnels. Le harnais garantit trois propriétés~: un placement reproductible des
 perturbations, une attribution stricte de l'effet à l'injection, et le rejet de toute
 campagne mal formée.
 
 \subsection{Génération déterministe et exécution de référence}
-La graine d'une vache et d'un scénario est dérivée par SHA-256, indépendamment de la
-variable d'environnement de hachage de Python~; deux exécutions produisent donc exactement
-les mêmes injections. La position des profils est tournée entre les vaches pour ne pas
+La graine associée à chaque couple vache-scénario est dérivée au moyen de la fonction de
+hachage cryptographique SHA-256, indépendamment de la variable d'environnement de hachage
+de Python~; deux exécutions produisent donc exactement les mêmes injections. La position des profils est tournée entre les vaches pour ne pas
 associer systématiquement une intensité à une période particulière. La fonction
 d'injection renvoie une copie modifiée de la série et une table décrivant la fenêtre, les
 changements cibles et la raison de conception, sans jamais altérer le fichier source.
@@ -409,9 +408,9 @@ vache et une dégradation graduelle injectée après la période de référence.
 le score comportemental $S_H(t)$ de l'exécution injectée s'élève au-dessus du seuil de
 candidat et de l'exécution propre pendant la fenêtre injectée, puis redescend une fois
 l'événement terminé. Le panneau~(b) montre que l'épisode détecté dans l'exécution
-injectée se superpose à la fenêtre réelle. L'exécution propre déclenche elle aussi un épisode
-plus court au même moment, la vache présentant une baisse naturelle; seule la part ajoutée par
-l'injection, au-delà de ce déclenchement naturel, est créditée comme attribuable.
+injectée se superpose à la fenêtre réelle. Un épisode plus court apparaît également dans
+l'exécution sans injection, en raison d'une baisse naturellement présente dans les données.
+L'évaluation ne retient donc que la portion supplémentaire produite par l'injection.
 
 \begin{figure}[H]
   \centering
@@ -440,7 +439,7 @@ prédit~:
 \mathrm{IoU} = \frac{|\,\text{injecté} \cap \text{prédit}\,|}{|\,\text{injecté} \cup \text{prédit}\,|},
 \]
 exprimée en nombre d'intervalles de quinze minutes. Une valeur de~1 indique une superposition
-parfaite et une valeur de~0 une absence de chevauchement. Le seuil IoU~$\geq0{,}20$ retient
+parfaite, alors qu'une valeur de~0 indique une absence de chevauchement. Le seuil IoU~$\geq0{,}20$ retient
 les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
 recouvrement, qui ne compte qu'un chevauchement non nul.
 
@@ -469,11 +468,12 @@ comportement habituel, et l'IoU indique où il a réagi.
 
 \subsection{Métriques attribuables et unité statistique}
 Une détection est attribuable seulement si l'exécution injectée ajoute un intervalle ou un
-départ absent de l'exécution propre. Pour HYPO, les résultats distinguent nouveau départ,
-couverture attribuable, IoU~$\geq0{,}20$, meilleur IoU, délai et notifications de fond. Ces
-quantités sont volontairement reliées à des notions connues: la couverture joue le rôle d'un
-rappel événementiel permissif, le nouveau départ d'un rappel événementiel strict, l'IoU mesure
-la localisation temporelle et les notifications de fond mesurent la charge opérationnelle. Pour
+départ absent de l'exécution propre. Pour HYPO, les résultats distinguent un nouveau départ,
+une couverture attribuable, un IoU~$\geq0{,}20$, le meilleur IoU, un délai et une notification
+de fond. Ces entités sont volontairement reliées à des notions connues: la couverture joue le
+rôle d'un rappel événementiel permissif, le nouveau départ joue le rôle d'un rappel
+événementiel strict, l'IoU mesure la localisation temporelle et les notifications de fond
+mesurent la charge opérationnelle. Pour
 l'extension, les métriques ajoutent les taux de surveillance, de contrôle et de confusion. Les
 synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne sont
 jamais des sujets indépendants.
@@ -489,31 +489,34 @@ qui flatte le résultat. La couverture attribuable et l'IoU ne dépendent pas de
 puisqu'elles se calculent sur les intervalles attribuables sans jamais apparier de départs~:
 elles restent inchangées sur toute la plage et servent de témoin à cette vérification.
 
-Cette dépendance est quantifiée sur le corpus par le temps d'autocorrélation intégré $\tau$
-et par la taille d'échantillon effective $n_{\text{eff}}=n/\tau$, lorsque $\tau$ est exprimé
-en nombre de pas d'échantillonnage. Les résultats descriptifs correspondants sont présentés
-à la Section~\ref{subsec:statistiques_corpus}. Comme les fenêtres glissantes voisines
-partagent une grande partie de leurs mesures, la vache, et non l'intervalle, constitue l'unité
-de rééchantillonnage. Le calcul est reproductible par
+La dépendance temporelle entre les intervalles successifs est quantifiée sur le corpus par le
+temps d'autocorrélation intégré $\tau$ et par la taille d'échantillon effective
+$n_{\text{eff}}=n/\tau$, où $n$ désigne le nombre d'observations disponibles et $\tau$ le temps
+d'autocorrélation exprimé en nombre de pas d'échantillonnage. Les résultats descriptifs
+correspondants seront présentés à la Section~\ref{subsec:statistiques_corpus}. Comme les fenêtres
+glissantes voisines partagent une grande partie de leurs mesures, c'est la vache qui constitue
+l'unité de rééchantillonnage. Le calcul est reproductible par un script nommé
 \path{scripts/compute_correlation_time.py}.
 
-La détection peut aussi se résumer, au niveau de l'événement, par un F1: les dégradations
-graduelles sont les positifs attendus et les contrôles brefs les négatifs attendus. Un vrai
-positif est un événement graduel détecté de façon attribuable, un faux positif un contrôle bref
-alerté à tort, un faux négatif un événement graduel manqué et un vrai négatif un contrôle
-correctement rejeté; le F1 est la moyenne harmonique de la précision et du rappel correspondants.
-Cette synthèse reste complémentaire: elle n'intègre ni la charge de fond ni la qualité fine de
-localisation.
+La détection peut aussi être résumée, au niveau de l'événement, par un score F1. Les
+dégradations graduelles constituent les positifs attendus, tandis que les contrôles brefs
+constituent les négatifs attendus. Un vrai positif correspond à un événement graduel détecté de
+façon attribuable, alors qu'un faux positif représente un contrôle bref alerté à tort. D'autre
+part, un faux négatif correspond à un événement graduel manqué, tandis qu'un vrai négatif
+correspond à un contrôle correctement rejeté. Le score F1 est la moyenne harmonique de la
+précision et du rappel correspondants. Cela dit, cette synthèse reste complémentaire: elle
+n'intègre ni la charge de fond ni la qualité fine de localisation.
 
 \subsection{Analyses de sensibilité prévues}
-L'analyse OFAT principale modifie vingt fois, une valeur à la fois, dix paramètres de HYPO.
+L'analyse OFAT (de l'anglais \emph{One Factor At a Time}, soit un facteur à la fois) évalue
+20 variantes des paramètres de HYPO, obtenues en ne modifiant qu'une valeur à la fois.
 Une analyse plus restreinte modifie ensuite l'agrégation, la persistance et les seuils de la
 branche INSTABILITÉ. Les deux analyses servent à détecter une dépendance excessive aux
 valeurs de référence, non à optimiser les paramètres sur les événements évalués.
 
 Deux analyses exploratoires complètent ce dispositif sans modifier la configuration
 principale. La première estime, uniquement sur la période de référence de chaque vache, un facteur
-proportionnel à l'écart-type de son score, puis réexécute la campagne avec un seuil
+proportionnel à l'écart-type de son score, puis ré-exécute la campagne avec un seuil
 individualisé. La seconde fait varier le seuil de score HYPO de 0,04 à 0,20, en conservant
 les mêmes vaches, fenêtres, injections et autres paramètres. Elle décrit conjointement la
 réponse aux événements graduels et la charge produite par les exécutions propres. Ces
@@ -523,7 +526,7 @@ hypothèses et non à sélectionner rétrospectivement une nouvelle valeur de se
 % =====================================================================
 \section{Reproductibilité et organisation logicielle}
 % =====================================================================
-Les configurations et les sorties sont exportées en CSV. Les tests vérifient le placement
+Les configurations et les sorties sont exportées en fichiers CSV. Les tests vérifient le placement
 postérieur à la période de référence, la conservation posturale, la fusion et les contrats
 de sortie. L'Annexe~\ref{annexe:validation} fournit les commandes de reproduction. Cette
 démarche rejoint les recommandations sur la reproductibilité en apprentissage automatique et
@@ -577,7 +580,7 @@ parallèle.
 Le Tableau~\ref{tab:technologies} présente les principales dépendances figées dans
 \path{requirements.txt}. Les versions exactes servent à reconstruire l'environnement et à
 garantir la reproductibilité numérique~; elles ne constituent pas un résultat scientifique.
-Les comparateurs Isolation Forest et Local Outlier Factor proviennent de \texttt{scikit-learn}
+Les comparateurs IF et LOF proviennent de \texttt{scikit-learn}
 \citep{sklearn_api}, les tests statistiques de \texttt{SciPy} \citep{virtanen2020scipy},
 et l'interface de \texttt{Streamlit}; la manipulation des données et le calcul numérique
 reposent sur \texttt{pandas} \citep{mckinney2010data} et \texttt{NumPy} \citep{harris2020array}.
@@ -611,8 +614,8 @@ IF comparatives, HYPO, INSTABILITÉ et la fusion hiérarchique. Chaque étape es
 une horloge monotone. Cinq répétitions sont effectuées sur l'ensemble du corpus principal et la concaténation
 des sorties intervalle est incluse. Le résultat canonique est la médiane des cinq durées; les
 valeurs minimale et maximale sont conservées pour rendre visible la variabilité de la machine.
-Ce test documente la faisabilité du prototype sur l'ordinateur utilisé, non un temps garanti
-en production.
+Cette évaluation du temps d'exécution documente la faisabilité du prototype sur l'ordinateur
+utilisé, non un temps garanti en production.
 
 \subsection{Tests et traçabilité}
 La suite automatisée contient 114 tests et couvre le chargement, les variables dérivées,
@@ -626,7 +629,7 @@ atteste la cohérence logicielle et sécurise la reproduction des résultats.
 Chaque résultat suit un cycle de vie traçable~: une commande de reproduction exécute un
 module d'évaluation, qui écrit des fichiers CSV et JSON~; un manifeste SHA-256
 fige ces sorties ainsi que l'empreinte du corpus confidentiel~; et un script dédié les
-transforme en figures du manuscrit. Aucun résultat empirique n'est accepté sans comparaison
+transforme automatiquement en figures du manuscrit. Aucun résultat empirique n'est accepté sans comparaison
 à son artefact source. Une modification du code, des données ou des paramètres impose donc
 une nouvelle exécution et un nouveau manifeste, de sorte que le PDF seul ne constitue jamais
 la trace de référence de l'expérience. La Figure~\ref{fig:repro_chain} illustre cette chaîne.

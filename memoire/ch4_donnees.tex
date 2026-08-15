@@ -145,17 +145,18 @@ numériques non négatives~; les durées posturales sont converties en minutes e
 de chaque intervalle est conservée. Les données originales ne sont jamais modifiées par
 l'évaluation~: chaque injection opère sur une copie en mémoire.
 
-La durée des séries est bimodale~: seize vaches possèdent moins de quatorze jours de mesures
-et douze une série longue. Une vache est admissible à l'évaluation synthétique si sa durée
-atteint quatorze jours, si une période future existe après la période de référence et si les pas, le
-\textit{Motion Index} et les transitions y sont informatifs. Onze vaches satisfont ces
-conditions~; les 28 restent utilisables dans l'interface, l'effectif de onze ne concernant
-que le protocole expérimental. La Figure~\ref{fig:admissibilite} montre la durée disponible
-par vache et distingue les onze vaches admissibles, en vert, des dix-sept autres, en gris~;
-le trait pointillé marque le seuil de quatorze jours. Seize des vaches grises restent sous ce
-seuil, faute d'une durée suffisante. Une barre grise le dépasse pourtant~: cette
-vache atteint la durée requise, mais ne fournit pas de signaux informatifs dans sa période
-future, ce qui ramène l'effectif admissible à onze.
+Le corpus regroupe 16 vaches suivies pendant moins de 14 jours et 12 vaches disposant de
+séries plus longues. Pour être admissible à l'évaluation synthétique, une vache doit disposer
+d'au moins 14 jours de mesures, d'une période future après la période de référence et de
+valeurs informatives pour les pas, le \textit{Motion Index} et les transitions. Ces critères
+retiennent 11 vaches. Les 28 vaches demeurent néanmoins disponibles dans l'interface~; la
+restriction à 11 animaux s'applique uniquement au protocole expérimental.
+
+La Figure~\ref{fig:admissibilite} présente les identifiants des vaches sur l'axe vertical et la
+durée des séries sur l'axe horizontal. Les 11 vaches admissibles sont représentées en vert et
+les 17 vaches non admissibles en gris. Le trait pointillé représente le seuil de 14 jours.
+Parmi les vaches non admissibles, 16 se trouvent sous ce seuil. La vache 8144 le dépasse,
+mais ses signaux ne sont pas informatifs dans la période future, ce qui explique son exclusion.
 
 \begin{figure}[H]
   \centering
@@ -166,25 +167,24 @@ future, ce qui ramène l'effectif admissible à onze.
 
 \subsection{Traçabilité et provenance des données}
 La provenance du corpus a été vérifiée en confrontant ses valeurs à celles du système
-commercial CowAlert (IceRobotics), qui restitue les mêmes mesures IceQube. Pour les cinq
-vaches dont les mesures ont pu être relevées depuis ce système, les deux sources sont
-alignées un à un sur le couple (vache, début d'intervalle), après vérification de l'absence
-de doublons. Sur les 7\,631 intervalles communs parmi 7\,823 lignes CowAlert (97,5\,\%), les
-pas, le \textit{Motion Index} et les transitions \emph{coïncident exactement} (corrélation de
-1,0, valeurs identiques). Le corpus reflète donc les mesures restituées par le système
-officiel pour ces vaches. Cette vérification porte sur cinq des vingt-huit vaches~; le
-fichier source est confidentiel et n'est pas diffusé, seules les corrélations agrégées étant
-rapportées.
+commercial CowAlert (IceRobotics), qui restitue les mêmes mesures IceQube
+\citep{icerobotics2012cowalert}. Pour les 5 vaches dont les mesures ont pu être relevées
+depuis ce système, les deux sources de données, soit le corpus brut et l'export CowAlert,
+sont alignées sur la clé vache-début d'intervalle, après vérification de l'absence de
+doublons. Les 7\,631 intervalles communs représentent 97,5\,\% des 7\,823 lignes de
+l'export CowAlert. Pour ces intervalles, les pas, le \textit{Motion Index} et les
+transitions sont identiques, avec une corrélation parfaite de 1,0. Le corpus correspond
+donc aux mesures restituées par le système officiel pour ces vaches. À noter que cette
+vérification porte sur 5 des 28 vaches. Seules les corrélations agrégées sont rapportées,
+puisque l'export CowAlert est confidentiel.
 
 \subsection{Variables dérivées}
-Pour chaque variable brute, la chaîne de traitement construit une famille de variables dérivées
-(Tableau~\ref{tab:features})~: des agrégats par intervalle, leurs transformations
-logarithmiques pour atténuer l'asymétrie, un z-score robuste global et un z-score robuste
-glissant (centrage par la médiane, échelle par l'écart absolu médian) et un indicateur de
-couverture. Ces variables
-alimentent principalement les comparateurs Isolation~Forest et Local~Outlier~Factor ainsi que
-les règles de cohérence~; les deux branches temporelles, elles, raisonnent directement sur
-des ratios à la référence individuelle.
+La chaîne de traitement calcule plusieurs variables dérivées à partir de chaque variable
+brute, comme le montre le Tableau~\ref{tab:features}. Elle produit des agrégats par intervalle,
+des transformations logarithmiques qui atténuent l'asymétrie, des z-scores robustes globaux
+et glissants, ainsi qu'un indicateur de couverture. Ces variables alimentent IF, LOF et les
+règles de cohérence qui leur sont associées. HYPO et INSTABILITÉ utilisent plutôt des ratios
+calculés par rapport à la référence individuelle.
 
 \begin{table}[H]
   \centering
@@ -208,31 +208,9 @@ des ratios à la référence individuelle.
 \section{Cadre expérimental}
 \label{sec:cadre_experimental}
 % =====================================================================
-Le cadre expérimental comprend trois campagnes injectées sur le corpus principal, puis une
-cohorte observationnelle distincte.
-
-L'étude comporte trois niveaux principaux et une extension de stress. Le premier évalue HYPO sur 44 événements et le compare aux
-trois variantes fondées sur IF ou LOF ainsi qu'au comparateur pédométrique. Le deuxième étend
-la campagne à 132 scénarios pour explorer INSTABILITÉ et cinq règles de fusion. À chaque
-niveau, un scénario est injecté dans une copie distincte de la période future, puis comparé à
-l'exécution propre de la même vache. Le troisième niveau est une analyse observationnelle sur
-une cohorte IceTag-SLS de l'hiver 2019. Il utilise des mesures strictement antérieures au score
-locomoteur et ne sert pas à régler le système. La Figure~\ref{fig:plan_etude} schématise ces
-trois niveaux. Ce plan forme un banc d'essai contrefactuel reproductible: l'événement
-synthétique est le seul changement volontaire entre l'exécution propre et l'exécution
-injectée, ce qui permet de mesurer la réponse du détecteur sans modifier la période de
-référence ni optimiser les seuils sur les sorties observées.
-
-Une campagne de stress complémentaire réexécute aussi HYPO et les quatre comparateurs sur
-six formes moins favorables, à trois positions par vache. Elle est séparée des résultats qui
-ont servi à construire le système. Son protocole JSON interdit tout nouveau réglage et
-apparie l'aire de l'enveloppe numérique: pour chaque famille modifiée, l'aire discrète sous
-l'enveloppe, calculée sur les intervalles effectivement conservés, est égale à celle du
-profil modéré graduel de 48 heures. Cette contrainte évite d'attribuer à la forme temporelle
-un effet qui proviendrait seulement d'une enveloppe programmée plus intense; elle ne garantit
-pas une amplitude physiologique ou comportementale identique. Le contrôle négatif modifie
-uniquement les pas avec la même aire numérique; le scénario de données manquantes retire un
-bloc contigu de 12 heures après cet appariement.
+Le cadre expérimental comprend deux campagnes injectées principales, une campagne de stress
+complémentaire et une cohorte observationnelle distincte. La
+Figure~\ref{fig:plan_etude} présente cette organisation.
 
 \begin{figure}[H]
   \centering
@@ -242,7 +220,7 @@ bloc contigu de 12 heures après cet appariement.
     arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
     \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44\\stress: 198\\extension: 132};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44\\INSTABILITÉ: 132\\stress: 198};
     \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
     \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
@@ -254,21 +232,63 @@ bloc contigu de 12 heures après cet appariement.
   \label{fig:plan_etude}
 \end{figure}
 
-\subsection{Campagne principale et ablation du module HYPO}
-Trois profils graduels et un contrôle bref sont appliqués à chacune des onze vaches
-admissibles, soit 44 événements. Les profils léger, modéré et marqué diminuent de façon
-progressive les pas, le mouvement et les transitions, puis transfèrent une part du temps
-debout vers le temps couché pendant respectivement 36, 48 et 60 heures. Le contrôle dure
-trois heures et ne devrait pas former un épisode persistant. Cette campagne reprend le cadre
-contrefactuel de la Section~\ref{sec:cadre_experimental}; pour HYPO, l'exécution propre de la
-même vache est soustraite lors du calcul des métriques attribuables.
+Les trois niveaux présentés sont les suivants~:
+\begin{itemize}
+  \item le premier niveau évalue HYPO sur 44 événements et le compare aux trois variantes
+  fondées sur IF ou LOF ainsi qu'au comparateur pédométrique;
+  \item le deuxième niveau applique 132 scénarios afin d'explorer INSTABILITÉ et cinq règles
+  de fusion;
+  \item le troisième niveau analyse une cohorte IceTag-SLS de l'hiver 2019 composée de
+  14 vaches. Il utilise les mesures des sept jours précédant le score locomoteur et ne sert
+  pas à régler le système.
+\end{itemize}
 
-L'ablation applique cinq variantes aux mêmes fenêtres: (A) HYPO temporel multivarié;
-(B) Isolation Forest suivi des règles de persistance; (C) Isolation Forest ponctuel;
-(D) LOF suivi des règles; et (E) un comparateur pédométrique restreint au seul canal des pas. Les comparaisons appariées sont calculées après agrégation par
-vache. Une analyse OFAT conserve les mêmes onze vaches, les mêmes fenêtres et la même graine,
-puis modifie séparément dix paramètres autour de la référence. Elle évalue une robustesse
-locale et ne sélectionne pas une nouvelle configuration.
+Dans chacun des deux premiers niveaux, un scénario est injecté dans une copie distincte de la
+période future, puis comparé à l'exécution propre de la même vache. Ce plan forme un banc
+d'essai contrefactuel reproductible~: l'événement synthétique est le seul changement
+volontaire entre l'exécution propre et l'exécution injectée, ce qui permet de mesurer la
+réponse du détecteur sans modifier la période de référence ni optimiser les seuils sur les
+sorties observées.
+
+Une campagne de stress complémentaire réexécute aussi HYPO et les quatre comparateurs sur
+six formes moins favorables, à trois positions par vache. Elle est séparée des résultats qui
+ont servi à construire le système. Son protocole JSON interdit tout nouveau réglage et
+apparie l'aire de l'enveloppe numérique~: pour chaque famille modifiée, l'aire discrète sous
+l'enveloppe, calculée sur les intervalles effectivement conservés, est égale à celle du
+profil modéré graduel de 48 heures. Cette contrainte évite d'attribuer à la forme temporelle
+un effet qui proviendrait seulement d'une enveloppe programmée plus intense; elle ne garantit
+pas une amplitude physiologique ou comportementale identique. Le contrôle négatif modifie
+uniquement les pas avec la même aire numérique; le scénario de données manquantes retire un
+bloc contigu de 12 heures après cet appariement.
+
+\subsection{Campagne principale et ablation du module HYPO}
+La campagne principale construit quatre événements pour chacune des 11 vaches admissibles,
+soit 44 événements~:
+\begin{itemize}
+  \item le profil \textbf{léger} diminue progressivement les pas, le mouvement et les
+  transitions, puis transfère une part du temps debout vers le temps couché pendant 36 heures;
+  \item le profil \textbf{modéré} applique la même évolution pendant 48 heures;
+  \item le profil \textbf{marqué} l'applique pendant 60 heures;
+  \item le contrôle bref dure trois heures et ne devrait pas former un épisode persistant.
+\end{itemize}
+Cette campagne reprend le cadre contrefactuel de la Section~\ref{sec:cadre_experimental}.
+Pour HYPO, l'exécution propre de la même vache est soustraite lors du calcul des métriques
+attribuables.
+
+L'étude d'ablation évalue l'apport de la structure temporelle et multivariée de HYPO en la
+comparant à quatre configurations simplifiées ou alternatives. Les cinq variantes sont
+appliquées aux mêmes fenêtres~:
+\begin{itemize}
+  \item (A) HYPO temporel multivarié;
+  \item (B) IF suivi des règles de persistance;
+  \item (C) IF ponctuel;
+  \item (D) LOF suivi des règles;
+  \item (E) un comparateur pédométrique restreint au seul canal des pas.
+\end{itemize}
+Les comparaisons appariées sont calculées après agrégation par vache. Une analyse OFAT
+conserve les mêmes 11 vaches, les mêmes fenêtres et la même graine, puis modifie séparément
+dix paramètres autour de la référence. Elle évalue une robustesse locale et ne sélectionne
+pas une nouvelle configuration.
 
 \subsection{Extension bidirectionnelle et contrôles de confusion}
 Douze scénarios sont appliqués à chacune des onze vaches admissibles, soit 132 événements,
@@ -302,8 +322,15 @@ sont des hypothèses de test et non des estimations cliniques.
 \subsection{Cohorte IceTag-SLS de l'hiver 2019}
 \label{subsec:corpus_mcgill}
 
+Le développement et l'évaluation technique du système ont d'abord été réalisés sur le corpus
+IceQube 2023. La cohorte IceTag-SLS 2019, devenue accessible dans un second temps, a ensuite
+été exploitée sans modifier la configuration ni les seuils du détecteur.
+
+Les deux ensembles de données ne sont ni fusionnés ni appariés animal par animal. Le corpus
+IceQube 2023 sert à l'évaluation technique du système, tandis que la cohorte IceTag-SLS 2019
+fournit une confrontation observationnelle distincte avec des scores locomoteurs contemporains.
 Cette cohorte provient du même campus, mais d'une période et d'un dispositif différents.
-Le SLS est la somme de quatre composantes binaires et varie de 0 à 4. L'analyse retient le
+Le SLS représente la somme de quatre composantes binaires et varie de 0 à 4. L'analyse retient le
 score du 12 mars 2019 et les données capteurs strictement antérieures. Une vache doit avoir
 une période de référence suffisante et au moins 70\,\% de couverture dans les sept jours précédents.
 Quatorze vaches sont évaluables: deux ont un SLS de 0, neuf un SLS de 1 et trois un SLS de 2.
