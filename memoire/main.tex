@@ -75,6 +75,26 @@
 % Avertissement bénin de babel-french sur les légendes, sans impact sur le PDF courant.
 \WarningFilter{french3.ldf}{Figures' and tables' captions might look like}
 
+% Espacement des figures rendu rigide. La classe fixe deja parskip a
+% 18bp plus 2bp minus 2bp : c'est l'espace entre paragraphes qui sert de
+% ressort de remplissage de page. L'elasticite de intextsep (12pt plus 2pt
+% minus 2pt) vient de la classe book et faisait varier de 2,8bp le blanc
+% autour des figures d'une page a l'autre. On la supprime et on exprime la
+% valeur en bp, l'unite retenue par la classe.
+\setlength{\intextsep}{12bp}
+\setlength{\textfloatsep}{12bp}
+\setlength{\floatsep}{12bp}
+% parskip est declare 18bp plus 2bp minus 2bp par la classe, et redeclare a
+% chaque tete de chapitre. On conserve la valeur choisie par la classe et on
+% retire seulement l'elasticite, de sorte que chaque paragraphe recoive
+% exactement les 18bp prevus au lieu de 16 a 20bp selon le remplissage.
+\usepackage{etoolbox}
+\makeatletter
+\apptocmd{\@makechapterhead}{\parskip=18bp\relax}{}{}
+\apptocmd{\@makeschapterhead}{\parskip=18bp\relax}{}{}
+\makeatother
+\setlength{\parskip}{18bp}
+
 % Le format des citations et des labels est géré par natbib + apalike-uqam
 
 
