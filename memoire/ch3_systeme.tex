@@ -100,7 +100,8 @@ pour le temps couché, le ratio le plus élevé est conservé. Ce choix sélecti
 qui fait apparaître la variation la plus marquée, afin qu'une dégradation par rapport
 à l'une des deux références ne soit pas masquée par l'autre. Les sorties sont forcées
 à zéro pendant la période de référence et un intervalle dont la couverture est inférieure à 25\,\% ne
-peut devenir candidat. Ce découpage empêche une fuite directe de la période future vers la
+peut devenir candidat. Ce seuil figure parmi les paramètres soumis à l'analyse de
+sensibilité de la Section~\ref{sec:sensibilite}. Ce découpage empêche une fuite directe de la période future vers la
 référence. Il repose toutefois sur une hypothèse~: les premiers 60\,\% décrivent
 suffisamment le fonctionnement habituel de la vache. Il ne garantit donc pas à lui seul
 l'absence d'un épisode atypique, d'une dérive capteur ou d'un changement de conduite pendant
@@ -118,9 +119,10 @@ Le détecteur recherche donc cette direction de changement plutôt qu'un écart 
 
 Les pas, le \textit{Motion Index}, les transitions et les temps posturaux sont cumulés sur
 12 heures. Pour les trois familles d'activité, le déficit est défini par
-\(
-d_j(t)=\max(0,1-r_j(t))
-\), où \(r_j(t)\) représente le ratio à la référence individuelle. Le changement postural
+\[
+d_j(t)=\max(0,1-r_j(t)),
+\]
+où \(r_j(t)\) représente le ratio à la référence individuelle. Le changement postural
 combine l'excès de temps couché et le déficit de temps debout. Le score est alors donné par la
 relation suivante~:
 \[
