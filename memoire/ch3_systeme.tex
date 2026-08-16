@@ -490,7 +490,9 @@ l'exécution injectée situé à moins d'une heure d'un départ de l'exécution 
 comme le même déclenchement et n'est pas crédité. Ce choix est conservateur, et son effet est
 mesuré plutôt que supposé. Sans tolérance, deux départs distants d'un seul intervalle
 compteraient comme distincts et le taux de nouveau départ atteindrait 50,0\,\% au lieu de
-43,2\,\%~; avec deux heures, il descendrait à 38,6\,\%. La valeur retenue n'est donc pas celle
+43,2\,\%~; avec deux heures, il descendrait à 38,6\,\%. Ce balayage de la tolérance est
+reproductible par un script nommé
+\path{scripts/compute_match_tolerance_sensitivity.py}. La valeur retenue n'est donc pas celle
 qui flatte le résultat. La couverture attribuable et l'IoU ne dépendent pas de cette décision,
 puisqu'elles se calculent sur les intervalles attribuables sans jamais apparier de départs~:
 elles restent inchangées sur toute la plage et servent de témoin à cette vérification.
@@ -523,7 +525,8 @@ valeurs de référence, non à optimiser les paramètres sur les événements é
 Deux analyses exploratoires complètent ce dispositif sans modifier la configuration
 principale. La première estime, uniquement sur la période de référence de chaque vache, un facteur
 proportionnel à l'écart-type de son score, puis ré-exécute la campagne avec un seuil
-individualisé. La seconde fait varier le seuil de score HYPO de 0,04 à 0,20, en conservant
+individualisé. La seconde fait varier le seuil de score HYPO de 0,04 à 0,20, une plage qui encadre
+symétriquement la valeur retenue de 0,12, en conservant
 les mêmes vaches, fenêtres, injections et autres paramètres. Elle décrit conjointement la
 réponse aux événements graduels et la charge produite par les exécutions propres. Ces
 analyses ont été ajoutées après la campagne principale~: elles servent à examiner des
@@ -576,15 +579,16 @@ reproduction qui produisent les sorties du mémoire.
 \end{table}
 
 Les fichiers exécutables exacts sont répartis par responsabilité: \texttt{core/} porte le
-noyau de détection, \texttt{validation\_hypo/} et \texttt{validation\_hybrid/} portent les
+noyau de détection, soit les variables dérivées, les deux branches et leur
+fusion, \texttt{validation\_hypo/} et \texttt{validation\_hybrid/} portent les
 campagnes reproductibles, \texttt{scripts/} regroupe les tâches de soutien, \texttt{app.py}
 et \texttt{ui/} portent l'interface, et \texttt{tests/} regroupe les contrôles automatisés.
 Les scripts réutilisent les campagnes existantes sans introduire de logique d'alerte
 parallèle.
 
 \subsection{Technologies et dépendances}
-Le Tableau~\ref{tab:technologies} présente les principales dépendances figées dans
-\path{requirements.txt}. Les versions exactes servent à reconstruire l'environnement et à
+Le Tableau~\ref{tab:technologies} présente les principales dépendances figées dans le fichier
+\path{requirements.txt}. Les versions exactes qui y figurent servent à reconstruire l'environnement et à
 garantir la reproductibilité numérique~; elles ne constituent pas un résultat scientifique.
 Les comparateurs IF et LOF proviennent de \texttt{scikit-learn}
 \citep{sklearn_api}, les tests statistiques de \texttt{SciPy} \citep{virtanen2020scipy},
