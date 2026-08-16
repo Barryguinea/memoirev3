@@ -260,7 +260,7 @@ charge en ferme.
 % =====================================================================
 \section{Comparaison à IF et LOF, et ablation par le comparateur pédométrique}
 % =====================================================================
-Les cinq variantes sont évaluées sur les mêmes 44 fenêtres. La colonne de détection
+Les cinq variantes d'ablation sont évaluées sur les mêmes 44 fenêtres. La colonne de détection
 attribuable retient le critère de nouveau départ, c'est-à-dire l'apparition d'un épisode
 absent de l'exécution propre. La cinquième variante, le comparateur pédométrique, restreint
 le détecteur au seul canal des pas, à la manière d'un podomètre. Le
@@ -331,7 +331,7 @@ mesuré tient à la nature de la détection plutôt qu'à un réglage. HYPO et l
 pédométrique, qui n'emploient pas Isolation Forest, restent inchangés sur toute la plage et
 servent de témoin à cette vérification.
 
-La cinquième variante isole, elle, le rôle de la combinaison de plusieurs signaux. Le comparateur
+La cinquième variante isole le rôle de la combinaison de plusieurs signaux. Le comparateur
 pédométrique (E) reprend exactement la machinerie temporelle de HYPO (même période de référence
 individuelle par créneau horaire, même cumul CUSUM et même persistance), mais restreint la
 détection au seul canal des pas, à la manière du comptage d'activité d'un podomètre
@@ -371,7 +371,8 @@ sélectionnent aucune nouvelle configuration.
 Le comparateur pédométrique suggère, pour les pas, que la combinaison de signaux peut réduire la
 charge de fond sans changer la localisation. On examine si ce motif descriptif se retrouve
 en rejouant la même ablation, mais en restreignant tour à tour le détecteur à chacune
-des quatre familles (Tableau~\ref{tab:hypo_channels}). Là où le Tableau~\ref{tab:hypo_ablation}
+des quatre familles, comme le montre le Tableau~\ref{tab:hypo_channels}. Là où le
+Tableau~\ref{tab:hypo_ablation}
 situe HYPO face à d'autres familles d'algorithmes (IF, LOF, podomètre), celui-ci décompose ce
 qu'il doit à chacune de ses propres familles de signaux; les deux se lisent donc ensemble.
 Dans ce test, le détecteur temporel est restreint à un seul canal et la cohérence
@@ -423,7 +424,8 @@ qui reste supérieure à celle des variantes B et D.
 
 \subsection{Robustesse locale des paramètres HYPO}
 \label{sec:sensibilite}
-L'analyse OFAT comprend la référence et 20 variantes dans lesquelles un seul des dix
+L'analyse OFAT comprend la référence et 20 variantes de paramétrage dans lesquelles un
+seul des dix
 paramètres est modifié. Les 924 évaluations événement-configuration rejettent toutes le
 contrôle bref. Sur les profils progressifs, 12 variantes sur 20 reproduisent exactement le
 taux de nouveaux départs de la référence et 15 restent dans un écart maximal de 6,1 points.
@@ -433,8 +435,10 @@ valeurs testées, le taux de nouveaux départs varie de 45,5 à 66,7\,\%, la cou
 de 0,187 à 0,553 notification par vache-jour.
 
 La Figure~\ref{fig:hypo_sensitivity} représente l'amplitude maximale de ces écarts. Elle
-mesure une influence locale des paramètres, et non une amélioration ni une optimisation de
-la configuration de référence. Le Tableau~\ref{tab:hypo_sensitivity} en détaille les plages
+mesure une influence locale des paramètres, et non une amélioration ou une optimisation de
+la configuration de référence. Le panneau~(a) rapporte l'amplitude des écarts sur les
+événements progressifs, le panneau~(b) celle observée sur la charge de fond. Le
+Tableau~\ref{tab:hypo_sensitivity} en détaille les plages
 signées pour les paramètres les plus structurants.
 
 \begin{figure}[H]
