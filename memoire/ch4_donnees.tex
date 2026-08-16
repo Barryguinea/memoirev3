@@ -4,8 +4,7 @@
 Ce chapitre décrit les données sur lesquelles le système est évalué, puis le cadre
 expérimental correspondant. Il présente le corpus principal IceQube 2023, sa préparation et
 ses variables dérivées, avant de détailler les campagnes injectées et la cohorte
-IceTag-SLS. Les mécanismes de détection et le protocole d'évaluation sont définis au
-Chapitre~\ref{chapitre:systeme}.
+IceTag-SLS.
 
 % =====================================================================
 \section{Corpus principal IceQube 2023}
@@ -42,8 +41,8 @@ caractéristiques vérifiées.
 Les variables utilisées sont les pas, le \textit{Motion Index}, le temps couché, le temps
 debout, les transitions et leur décomposition en levers et couchers
 (Tableau~\ref{tab:variables_brutes}). Elles décrivent la quantité de mouvement et la
-posture~; elles ne mesurent ni l'asymétrie de démarche, ni la douleur, ni une lésion du
-pied \citep{alsaaod2019automatic,oleary2020accelerometers}. Leur portée clinique est donc
+posture, contrairement à la mesure de l'asymétrie de démarche, de la douleur ou des lésions
+du pied \citep{alsaaod2019automatic,oleary2020accelerometers}. Leur portée clinique est donc
 indirecte.
 
 \begin{table}[H]
@@ -67,8 +66,8 @@ indirecte.
 
 \subsection{Statistiques descriptives et variabilité inter-individuelle}
 \label{subsec:statistiques_corpus}
-Les distributions sont fortement asymétriques (Tableau~\ref{tab:statistiques_brutes})~: la
-médiane des pas et des transitions par intervalle est nulle, tandis que les maxima sont
+Les distributions sont fortement asymétriques, comme le montre le
+Tableau~\ref{tab:statistiques_brutes}~: la médiane des pas et des transitions par intervalle est nulle, tandis que les maxima sont
 élevés. Cette structure écarte une normalisation gaussienne globale et motive des
 comparaisons robustes propres à chaque vache et à chaque créneau horaire
 \citep{leys2013detecting}.
@@ -102,7 +101,8 @@ l'ordre du millier sur l'ensemble du corpus, soit 1\,151 points pour les pas et 
 rééchantillonnage groupé employés dans l'évaluation; il évite que la dépendance entre
 intervalles produise des intervalles de confiance artificiellement étroits.
 
-La variabilité entre vaches est considérable (Tableau~\ref{tab:variabilite}). La moyenne de
+La variabilité entre vaches est considérable, comme le montre le
+Tableau~\ref{tab:variabilite}. La moyenne de
 pas par intervalle varie de 0,0 à 11,1 selon la vache, et le coefficient de variation
 inter-vache atteint 0,50 pour les pas, 0,40 pour le \textit{Motion Index} et 0,41 pour les
 transitions. Cette hétérogénéité interdit un seuil commun à tout le troupeau et justifie le
@@ -139,7 +139,7 @@ exploitable à l'échelle d'un épisode de plusieurs heures~; une résolution pl
 masque les transitions posturales. Une résolution de 15 minutes permet d'avoir un compromis entre stabilité du
 signal et granularité suffisante pour la persistance recherchée par les deux branches.
 
-\subsection{Contrôles d'intégrité et admissibilité}
+\subsection{Contrôles d'admissibilité}
 Le chargement impose des dates interprétables, des identifiants non vides et des variables
 numériques non négatives~; les durées posturales sont converties en minutes et la couverture
 de chaque intervalle est conservée. Les données originales ne sont jamais modifiées par
