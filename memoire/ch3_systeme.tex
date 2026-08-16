@@ -330,8 +330,8 @@ principales.
 IF isole les observations rares en construisant des arbres de partition
 aléatoire~: un point anormal, plus facile à séparer du reste, présente une profondeur
 moyenne d'isolation plus faible \citep{liu2008isolation}. Les variables dérivées sont
-d'abord mises à l'échelle par un \texttt{RobustScaler} (intervalle inter-quantile
-10--90), qui résiste aux distributions fortement asymétriques des signaux d'activité. Le
+d'abord mises à l'échelle par un \texttt{RobustScaler} de scikit-learn
+\citep{sklearn_api}, sur l'intervalle inter-quantile 10--90, qui résiste aux distributions fortement asymétriques des signaux d'activité. Le
 modèle est ajusté sur la période de référence de chaque vache, puis appliqué à l'ensemble de sa
 série, de sorte qu'il décrive l'écart d'un intervalle par rapport au comportement
 individuel appris. Les hyperparamètres figés sont rassemblés au
