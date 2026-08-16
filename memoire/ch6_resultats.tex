@@ -196,8 +196,9 @@ référence de 0,12, conservé malgré le résultat ponctuel observé à 0,14.
 
 \subsection{Inspection visuelle ciblée}
 La Figure~\ref{fig:manual_review} montre quatre situations de la vache 8081 après le gel
-des paramètres. L'hypoactivité modérée produit un épisode de vérification; l'instabilité modérée
-reste au niveau de surveillance; le pic capteur isolé est rejeté; et l'hypoactivité non
+des paramètres. L'hypoactivité modérée produit un épisode de vérification, alors que
+l'instabilité modérée reste au niveau de surveillance. Le pic capteur isolé est rejeté et
+l'hypoactivité non
 locomotrice produit une alerte comparable à celle d'une baisse locomotrice. La fenêtre injectée
 apparaît en fond gris derrière les courbes, tandis que les sorties du système occupent un
 bandeau distinct sous l'axe des signaux~: rouge pour un épisode de vérification, ambre pour une
@@ -214,8 +215,7 @@ marquent les bornes exactes de la fenêtre injectée, y compris lorsqu'elle ne d
 pas de temps. Dans chaque panneau, les trois
 signaux sont tracés bruts en transparence sous une moyenne glissante horaire, et normalisés
 séparément par le maximum de cette moyenne : un pic isolé ne comprime donc plus le reste de la
-courbe contre l'axe. Cette inspection vérifie la cohérence technique des sorties; elle ne
-constitue pas une adjudication clinique.
+courbe contre l'axe. Cette inspection vérifie la cohérence technique des sorties.
 
 % Page paysage. Le folio normal tomberait sur le bord gauche une fois la page
 % pivotee : on le neutralise et on le replace, pivote, au bas de la vue paysage
@@ -239,9 +239,9 @@ constitue pas une adjudication clinique.
 Une calibration simple a été testée pour répondre à la variabilité du fond entre vaches.
 Pour chaque vache, le seuil de 0,12 est multiplié par le rapport entre l'écart-type de son
 score pendant la période de référence et la médiane de ces écarts-types. Les facteurs, estimés sans utiliser la
-période future, restent compris entre 0,98 et 1,03. La procédure ne modifie ni le fond moyen
-(0,402 notification par vache-jour), ni son coefficient de variation inter-vache (0,244),
-ni la couverture attribuable (87,9\,\%). Le taux de nouveaux départs passe de 57,6 à
+période future, restent compris entre 0,98 et 1,03. La procédure laisse inchangés le fond
+moyen (0,402 notification par vache-jour), son coefficient de variation inter-vache (0,244)
+et la couverture attribuable (87,9\,\%). Le taux de nouveaux départs passe de 57,6 à
 60,6\,\%, mais IoU20 diminue de 39,4 à 33,3\,\%. Cette calibration n'apporte donc aucun gain
 opérationnel et dégrade la localisation; elle n'est pas retenue. Ce résultat nul ne démontre
 pas qu'aucune calibration individualisée soit possible, seulement que la dispersion du
