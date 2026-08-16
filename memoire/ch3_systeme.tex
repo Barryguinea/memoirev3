@@ -19,7 +19,7 @@ employés pour l'évaluation synthétique, faute d'étalon vétérinaire.
 % =====================================================================
 La Figure~\ref{fig:architecture_modules} schématise l'architecture retenue du système
 proposé. Les mesures brutes de chaque vache, stockées dans des fichiers CSV exportés du
-système CowAlert, sont d'abord agrégées par intervalles de quinze minutes. Cette étape
+système CowAlert, sont d'abord agrégées par intervalles de 15 minutes. Cette étape
 calcule également la couverture de chaque intervalle, c'est-à-dire la proportion de la
 période effectivement mesurée, qui sert ensuite à écarter les intervalles trop lacunaires.
 Les mesures ainsi normalisées alimentent en parallèle les deux branches de détection, HYPO
@@ -438,7 +438,7 @@ prédit~:
 \[
 \mathrm{IoU} = \frac{|\,\text{injecté} \cap \text{prédit}\,|}{|\,\text{injecté} \cup \text{prédit}\,|},
 \]
-exprimée en nombre d'intervalles de quinze minutes. Une valeur de~1 indique une superposition
+exprimée en nombre d'intervalles de 15 minutes. Une valeur de~1 indique une superposition
 parfaite, alors qu'une valeur de~0 indique une absence de chevauchement. Le seuil IoU~$\geq0{,}20$ retient
 les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
 recouvrement, qui ne compte qu'un chevauchement non nul.
@@ -475,7 +475,7 @@ rôle d'un rappel événementiel permissif, le nouveau départ joue le rôle d'u
 événementiel strict, l'IoU mesure la localisation temporelle et les notifications de fond
 mesurent la charge opérationnelle. Pour
 l'extension, les métriques ajoutent les taux de surveillance, de contrôle et de confusion. Les
-synthèses inférentielles utilisent la vache comme unité; les lignes de quinze minutes ne sont
+synthèses inférentielles utilisent la vache comme unité; les lignes de 15 minutes ne sont
 jamais des sujets indépendants.
 
 Comparer les départs des deux exécutions suppose de décider quand deux départs proches sont le
@@ -508,7 +508,7 @@ précision et du rappel correspondants. Cela dit, cette synthèse reste complém
 n'intègre ni la charge de fond ni la qualité fine de localisation.
 
 \subsection{Analyses de sensibilité prévues}
-L'analyse OFAT (de l'anglais \emph{One Factor At a Time}, soit un facteur à la fois) évalue
+L'analyse OFAT évalue
 20 variantes des paramètres de HYPO, obtenues en ne modifiant qu'une valeur à la fois.
 Une analyse plus restreinte modifie ensuite l'agrégation, la persistance et les seuils de la
 branche INSTABILITÉ. Les deux analyses servent à détecter une dépendance excessive aux

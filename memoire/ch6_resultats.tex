@@ -1,14 +1,14 @@
 \chapter{Résultats et analyses}
 \label{chapitre:resultats}
 
-Ce chapitre présente les preuves techniques du système en partant du résultat le plus solide:
-la branche HYPO. La première partie montre sa réponse à des dégradations graduelles, son
+Ce chapitre présente les preuves techniques du système. La première partie montre la réponse
+de la branche HYPO à des dégradations graduelles, son
 avantage sur les comparateurs IF/LOF et sa stabilité locale par OFAT. La deuxième partie
 teste sa robustesse à des formes moins favorables à aire d'enveloppe appariée, puis examine l'extension
 INSTABILITÉ et les règles de fusion sur une campagne plus large. Les
 pourcentages décrivent la réponse du logiciel à des scénarios contrôlés et permettent de
-comparer détection, localisation et charge de vérification. Le Tableau~\ref{tab:cles_lecture_resultats}
-rassemble les clés de lecture mobilisées tout au long du chapitre.
+comparer la détection, la localisation et la charge de vérification. Le Tableau~\ref{tab:cles_lecture_resultats}
+présente les clés de lecture mobilisées tout au long de ce chapitre.
 
 % =====================================================================
 \section{Clés de lecture et intégrité des protocoles}
@@ -22,7 +22,7 @@ rassemble les clés de lecture mobilisées tout au long du chapitre.
     \toprule
     Élément & Interprétation \\
     \midrule
-    Onze vaches
+    Vaches admissibles
       & Seules onze des 28 vaches possèdent une période future suffisamment longue, les signaux
         requis et une couverture compatible avec toutes les campagnes. \\
     Injections après la période de référence
@@ -49,9 +49,10 @@ rassemble les clés de lecture mobilisées tout au long du chapitre.
   \end{tabular}
 \end{table}
 
-Les onze vaches admissibles fournissent quatre événements par vache à la campagne HYPO, soit
-44 événements, six formes à trois positions dans le stress test, soit 198 événements, et
-douze scénarios par vache à la campagne étendue, soit 132 scénarios. Ces effectifs ne sont
+Les onze vaches admissibles fournissent quatre événements par vache lors de la campagne
+HYPO, soit un total de 44 événements, six formes à trois positions dans le stress test, pour
+un total de 198 événements, ainsi que douze scénarios par vache lors de la campagne étendue,
+pour un total de 132 scénarios. Ces effectifs ne sont
 pas regroupés~: la première campagne mesure la réponse attribuable de HYPO, la deuxième
 éprouve la forme temporelle sans changer la dose, tandis que la troisième examine
 INSTABILITÉ et les règles de fusion sur un éventail plus large de situations. Le
@@ -79,13 +80,22 @@ l'intégrité et la comparabilité de ces campagnes.
   \end{tabular}
 \end{table}
 
+Les neuf contrôles sont conformes sur les trois campagnes. Ils vérifient la structure des
+fichiers, l'unicité des identifiants et des fenêtres, la postériorité des injections par
+rapport à la période de référence, l'appariement de l'aire d'enveloppe et la conservation du
+temps postural. Un seul contrôle en échec invaliderait la campagne concernée, car tous les
+résultats rapportés ensuite supposent ces conditions réunies.
+
 % =====================================================================
 \section{Performance attribuable du module HYPO}
 % =====================================================================
 \subsection{Résultats attribuables par profil}
-Le Tableau~\ref{tab:hypo_profiles} présente séparément le nouveau départ, la couverture
-attribuable et la localisation IoU20. Les trois profils graduels sont les cas techniques
-attendus positifs; la variation brève isolée est le contrôle attendu négatif.
+Le Tableau~\ref{tab:hypo_profiles} présente les résultats attribuables par profil. Il
+s'agit du nouveau départ, de la couverture attribuable et de la localisation IoU20. Les trois
+profils graduels, léger, modéré et marqué, sont les cas techniques attendus positifs, alors
+que la variation brève isolée représente le contrôle attendu négatif. Les valeurs agrégées
+rapportées plus bas portent sur les 33 dégradations graduelles, c'est-à-dire sur ces trois
+profils réunis.
 
 \begin{table}[H]
   \centering
@@ -104,8 +114,9 @@ attendus positifs; la variation brève isolée est le contrôle attendu négatif
   \end{tabular}
 \end{table}
 
-Sur les 33 dégradations graduelles, un nouvel épisode apparaît dans 19 cas, soit 57,6\,\%.
-Après soustraction de l'exécution propre, un intervalle ajouté recouvre la fenêtre dans
+Comme le montre le Tableau~\ref{tab:hypo_profiles}, un nouvel épisode apparaît dans 19 cas
+sur les 33 dégradations graduelles, soit 57,6\,\%.
+Après la soustraction de l'exécution propre, un intervalle ajouté recouvre la fenêtre dans
 29 cas sur 33, soit 87,9\,\%, et 13 cas atteignent IoU~$\geq0{,}20$, soit 39,4\,\%.
 L'IoU attribuable moyen est de 0,183 et le délai médian de nouveau départ de 20,75 heures.
 Les intervalles de confiance à 95\,\%, obtenus par bootstrap regroupé par vache
@@ -116,7 +127,7 @@ l'effectif de onze vaches et invite à interpréter la valeur ponctuelle avec pr
 Ces indicateurs ne sont pas interchangeables: la couverture montre une réponse dans la
 fenêtre, tandis que le nouveau départ vérifie qu'un épisode distinct a réellement commencé.
 
-Le contrôle bref n'engendre aucun départ ni intervalle attribuable. Sur les exécutions
+Le contrôle bref n'engendre aucun départ ou intervalle attribuable. Sur les exécutions
 propres et uniquement pendant la période future, HYPO produit en moyenne 0,402
 notification par vache-jour; le 90\textsuperscript{e} percentile entre vaches est de 0,491.
 Cette quantité mesure l'effort de vérification attendu sur la période surveillée; elle est
@@ -125,11 +136,11 @@ et détection des événements injectés.
 
 \subsection{Typologie des modes de défaillance}
 Le Tableau~\ref{tab:failure_modes} décompose les résultats actuels en modes d'échec, sans
-reprendre les fréquences d'un protocole antérieur. Sur les 33 dégradations graduelles, quatre
-ne produisent aucun recouvrement attribuable et seize sont recouvertes sans localisation
-suffisante~; sur les vingt-neuf recouvertes, dix n'ouvrent aucun nouveau départ par rapport à
+reprendre les fréquences d'un protocole antérieur. Sur les 33 dégradations graduelles, 4
+ne produisent aucun recouvrement attribuable et 16 sont recouvertes sans localisation
+suffisante~; sur les 29 recouvertes, 10 n'ouvrent aucun nouveau départ par rapport à
 l'exécution propre. Du côté des contrôles, les variations brèves sont rejetées, mais
-l'hypoactivité non locomotrice déclenche neuf alertes sur onze. Parmi les 33 instabilités
+l'hypoactivité non locomotrice déclenche 9 alertes sur 11. Parmi les 33 instabilités
 pures, 22 sont repérées par la branche de surveillance et aucune ne produit un épisode
 nécessitant une vérification de la fusion. Ces fréquences sont régénérées par le script
 \path{scripts/compute_failure_modes.py}.
@@ -304,7 +315,7 @@ contre D, tous excluant zéro), avec une corrélation rang-bisériale appariée
 les onze vaches favorisent HYPO. La supériorité ne tient donc pas à quelques vaches.
 
 Cette supériorité appelle une objection, car l'analyse de sensibilité de la
-Section~\ref{sec:sensibilite} fait varier dix paramètres de HYPO et aucun paramètre des
+Section~\ref{sec:sensibilite} fait varier 10 paramètres de HYPO et aucun paramètre des
 comparateurs. Le paramètre \texttt{contamination} d'Isolation Forest et de LOF, que le
 Chapitre~\ref{chapitre:etatart} désigne comme critique pour ces deux méthodes, reste figé à
 0,06. L'échec de localisation des comparateurs pourrait donc refléter ce choix plutôt que
