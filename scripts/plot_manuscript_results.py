@@ -126,12 +126,17 @@ def plot_sls() -> None:
     notif_col = "pre7_hybrid_notifs"
     fig, ax = plt.subplots(figsize=(6.6, 4.5), constrained_layout=True)
     rng = np.random.default_rng(42)
+    # La couleur porte la dichotomie de l'analyse, SLS >= 2 contre SLS < 2, et
+    # non le score lui-meme que l'axe des abscisses affiche deja : c'est cette
+    # separation qui produit l'AUC, le test exact et le Mann-Whitney.
     for sls, group in data.groupby(sls_col):
         jitter = rng.normal(0, 0.035, len(group))
-        # Couleur unique : la teinte ne ferait que repeter l'axe des abscisses,
-        # qui porte deja le score SLS, et aucune legende ne l'expliquerait.
+        positif = float(sls) >= 2
         ax.scatter(np.full(len(group), float(sls)) + jitter, group[notif_col],
-                   s=48, alpha=0.85, color="#376078")
+                   s=48, alpha=0.85,
+                   color="#af4646" if positif else "#376078",
+                   label=("SLS $\\geq$ 2" if positif else "SLS < 2") if sls in (0.0, 2.0) else None)
+    ax.legend(frameon=False, fontsize=9, loc="lower right")
     ax.set_xticks(sorted(data[sls_col].dropna().unique()))
     ax.set_xlabel("Score SLS du 12 mars 2019")
     ax.set_ylabel("Notifications dans les 7 jours précédents")
