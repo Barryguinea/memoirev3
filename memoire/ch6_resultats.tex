@@ -304,7 +304,7 @@ légèrement le détecteur complet, mais il ouvre moins de nouveaux départs et 
 de fond. Les deux localisent en réalité de
 façon équivalente, comme le confirme plus loin l'écart d'IoU attribuable par vache.
 
-La dernière colonne résume détection et rejet des contrôles en un F1 événementiel: HYPO atteint
+La dernière colonne résume la détection et le rejet des contrôles en un F1 événementiel: HYPO atteint
 0,73 (IC95 par vache [0,60~; 0,86]), nettement au-dessus d'IF et de LOF (au plus 0,35). Comme
 aucun contrôle n'est alerté (précision de 1,0), ce F1 ne fait toutefois que réexprimer le rappel
 et n'intègre pas la charge de fond: avec la couverture attribuable, plus permissive que le
@@ -313,7 +313,8 @@ prix d'un fond bien plus élevé. Le
 F1 reste donc un complément des métriques décomposées et de la charge de fond, qui demeurent
 privilégiées.
 
-Après agrégation par vache, HYPO obtient un IoU supérieur à B, C et D
+Après agrégation par vache, HYPO obtient un IoU supérieur aux trois variantes fondées sur IF
+et LOF, soit B, C et D
 ($p=0{,}00098$ pour les trois comparaisons appariées de Wilcoxon~\citep{wilcoxon1945individual}).
 Son taux de nouveau départ est également supérieur à B et D ($p=0{,}04297$) et à C
 ($p=0{,}01562$); ces valeurs sont non corrigées. Après correction de Holm pour les trois

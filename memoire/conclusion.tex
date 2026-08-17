@@ -12,9 +12,12 @@
 % ses tableaux heriteraient du numero du chapitre 6. On leur donne un prefixe
 % propre, comme l'annexe utilise A. La numerotation par chapitre est retablie
 % en fin de fichier, pour que l'annexe retrouve A.1 et suivants.
+\setcounter{secnumdepth}{0}   % intitules non numerotes : \section* est
+                              % inoperant dans memoireuqam.cls
 \setcounter{table}{0}
 \renewcommand{\thetable}{D.\arabic{table}}
 
+\section{Ce que le système établit}
 L'objectif de ce mémoire était de produire une chaîne reproductible qui transforme des
 mesures IceQube indirectes en priorités de vérification locomotrice. Son apport central est
 de montrer qu'une alerte comportementale peut être construite autour d'une trajectoire
@@ -133,6 +136,7 @@ les traitements, le vêlage ou un examen clinique sont nécessaires pour amélio
 spécificité causale. Les capteurs reconnaissent une forme comportementale sans en identifier
 l'origine, ce qui impose une vérification terrain.
 
+\section{Charge de vérification et pistes d'amélioration}
 La charge que ce dispositif représente mérite d'être regardée en face. Le fond de 0,402
 notification par vache-jour pour HYPO et de 0,571 pour la fusion hiérarchique demeure élevé
 pour un grand troupeau. Ces valeurs ne sont pas des taux de faux positifs, puisqu'une donnée
@@ -166,6 +170,7 @@ HYPO, INSTABILITÉ et fusion ne représente que 6,4\,\% du temps instrumenté. C
 préjuge pas de la latence en ferme, du stockage continu ou de la concurrence entre
 utilisateurs.
 
+\section{Confrontation aux scores locomoteurs et à la littérature}
 L'analyse IceTag-SLS apporte un résultat encourageant~: le nombre de notifications dans les
 sept jours précédant le score est plus élevé chez les trois vaches SLS~$\geq2$, avec une AUC
 exploratoire de 0,924 et un test exact bilatéral global à $p=0{,}030$, tandis que le score
@@ -199,6 +204,7 @@ chaque vache par sa médiane horaire de référence, HYPO réduit l'influence de
 de nuisance interindividuelle et horaire, et rend plus comparable, d'une vache à l'autre,
 l'ampleur d'une dégradation relative.
 
+\section{Limites du capteur et comparaison aux systèmes existants}
 Les limites du capteur doivent être rappelées avec la même franchise. L'agitation, les reports
 de poids et les changements posturaux peuvent être observés lors d'un inconfort, mais les
 agrégats IceQube ne mesurent ni l'appui relatif des membres ni la démarche. Une hausse de
@@ -254,6 +260,7 @@ Le Tableau~\ref{tab:forces_limites} synthétise les forces et les limites de l'e
   \end{tabular}
 \end{table}
 
+\section{Menaces à la validité}
 Ces limites gagnent à être examinées selon la typologie classique des menaces à la validité en
 recherche empirique \citep{shadish2002experimental,wohlin2012experimentation}. Du côté du
 construit, les injections représentent des changements de comportement et non des cas de
@@ -315,6 +322,7 @@ par ailleurs fragiles en raison du petit effectif, de la multiplicité et de la 
 avec le traitement. Le test exact interne au groupe \textit{Exercise}, plutôt que le seul
 test global, borne l'interprétation clinique.
 
+\section{Éthique, gouvernance et validation clinique}
 De ces limites découle un usage prévu étroit et un ensemble d'obligations éthiques. L'usage
 défendable est un tri des vaches à observer. Une notification signifie que plusieurs
 dimensions du comportement ont changé de manière persistante par rapport à la période de
@@ -345,6 +353,7 @@ de démarche ou d'asymétrie seraient plus proches du construit clinique que la 
 de mouvement, et la charge de vérification devra être évaluée avec les utilisateurs afin de
 définir un compromis acceptable en ferme.
 
+\section{Contributions}
 Au terme de ce travail, les contributions peuvent être résumées ainsi. Le mémoire fournit une
 évaluation attribuable de HYPO avec intervalles de confiance, une ablation et ses tailles
 d'effet, une analyse OFAT, une courbe reliant détection et charge, une tentative de
@@ -371,3 +380,5 @@ une base reproductible pour développer et évaluer un futur usage de priorisati
 
 % Retablir la numerotation par chapitre : l'annexe qui suit doit repartir en A.1.
 \renewcommand{\thetable}{{\thechapter.\arabic{table}}}
+
+\setcounter{secnumdepth}{5}
