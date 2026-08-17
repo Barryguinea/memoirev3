@@ -359,9 +359,9 @@ SLS notification variants max-stat one-sided p,0.0467,0.046703296703296704,mcgil
 SLS all combinations max-stat one-sided p,0.07418,0.07417582417582418,mcgill_sls/mcgill_summary.json,True
 SLS all combinations max-stat two-sided p,0.12363,0.12362637362637363,mcgill_sls/mcgill_summary.json,True
 SLS future notification load,0.7551,0.7550796482467383,mcgill_sls/mcgill_cohort_all_variants.csv,True
-Bibliography references,73.0,73.0,memoire/references.bib,True
+Bibliography references,74.0,74.0,memoire/references.bib,True
 Bibliography DOI references,58.0,58.0,memoire/references.bib,True
-Bibliography authoritative-URL references,15.0,15.0,memoire/references.bib,True
+Bibliography authoritative-URL references,16.0,16.0,memoire/references.bib,True
 Benchmark cows,28.0,28.0,performance_full_corpus.json,True
 Benchmark rows,37839.0,37839.0,performance_full_corpus.json,True
 Benchmark repeats,5.0,5.0,performance_full_corpus.json,True

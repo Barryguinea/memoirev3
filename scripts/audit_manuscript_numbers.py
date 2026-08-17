@@ -605,7 +605,7 @@ check("SLS future notification load", sls_hierarchical["future_hybrid_notif_per_
 
 # Bibliography counts reported in the reproducibility documentation.
 bibliography = load_bibtex(ROOT / "memoire/references.bib")
-check("Bibliography references", len(bibliography), 73, "memoire/references.bib", 0)
+check("Bibliography references", len(bibliography), 74, "memoire/references.bib", 0)
 check(
     "Bibliography DOI references",
     sum(bool(record.get("doi")) for record in bibliography),
@@ -616,7 +616,7 @@ check(
 check(
     "Bibliography authoritative-URL references",
     sum(not record.get("doi") for record in bibliography),
-    15,
+    16,
     "memoire/references.bib",
     0,
 )
