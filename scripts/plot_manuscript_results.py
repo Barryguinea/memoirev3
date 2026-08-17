@@ -165,11 +165,22 @@ def plot_manual_review() -> None:
     # 0,20 dans le score HYPO et porte la fragmentation posturale de la branche
     # INSTABILITE. Sans elle, le panneau de l'instabilite illustrait un
     # mecanisme postural sans montrer la posture.
+    # Le temps couche est dessine en premier, donc sous les canaux d'activite :
+    # sature a 15 min sur 15, il forme de larges creneaux qui masquaient 14 %
+    # de la courbe des transitions lorsqu'il passait au-dessus.
     colors = {
+        "Lying Time_sum": "#7a5195",
         "Steps_sum": "#4b8764",
         "Motion Index_sum": "#376078",
         "Transitions_sum": "#be7832",
-        "Lying Time_sum": "#7a5195",
+    }
+    # Libelles en francais, comme le corps du memoire. « Motion Index » reste
+    # le nom de la variable restituee par le capteur.
+    labels_signaux = {
+        "Lying Time_sum": "Temps couché",
+        "Steps_sum": "Pas",
+        "Motion Index_sum": "Motion Index",
+        "Transitions_sum": "Transitions",
     }
     for letter, (ax, (scenario, label)) in zip("abcd", zip(axes, scenarios)):
         injected, event = inject_profile(
@@ -185,21 +196,18 @@ def plot_manual_review() -> None:
         left = pd.Timestamp(event["start"]) - pd.Timedelta(hours=12)
         right = pd.Timestamp(event["end"]) + pd.Timedelta(hours=12)
         view = pred[pred[TIME].between(left, right)].copy()
-        # Echelle robuste : 95e centile plutot que maximum. Divise par le
-        # maximum, un pic isole comprimait toute la courbe contre l'axe au
-        # point de rendre invisible une chute de 80 % du niveau d'activite.
         # Le trace brut reste dessine en transparence sous une moyenne
-        # glissante de 3 h : la tendance devient lisible sans perdre les pics,
+        # glissante de 1 h : la tendance devient lisible sans perdre les pics,
         # ce qui reste indispensable au panneau du pic capteur isole.
         step = pd.Series(view[TIME]).diff().median()
         smooth_bins = max(1, int(round(pd.Timedelta(hours=1) / step))) if pd.notna(step) else 1
         for column, color in colors.items():
             raw_values = pd.to_numeric(view[column], errors="coerce")
             smoothed = raw_values.rolling(smooth_bins, center=True, min_periods=1).mean()
-            # Echelle calee sur la courbe lissee : celle-ci occupe alors toute
-            # la hauteur du panneau. Calee sur le maximum brut, un pic isole
-            # comprimait tout le reste contre l'axe au point de rendre
-            # invisible une chute de 80 % du niveau d'activite.
+            # Echelle calee sur le maximum de la courbe lissee, et non sur le
+            # maximum brut : un pic isole ne comprime plus tout le reste contre
+            # l'axe. Un centile eleve reléverait les canaux d'activite ecrases
+            # du panneau (b), mais tronquerait 2 a 4 % des points au sommet.
             scale = max(1.0, float(smoothed.max()))
             ax.plot(view[TIME], raw_values / scale, color=color, linewidth=0.7, alpha=0.18)
             ax.plot(
@@ -207,7 +215,7 @@ def plot_manual_review() -> None:
                 smoothed / scale,
                 color=color,
                 linewidth=1.6,
-                label=column.replace("_sum", ""),
+                label=labels_signaux[column],
             )
         episode = pd.to_numeric(view["hybrid_warning_episode"], errors="coerce").fillna(0).astype(bool)
         instability = pd.to_numeric(view["instability_warning_episode"], errors="coerce").fillna(0).astype(bool)
