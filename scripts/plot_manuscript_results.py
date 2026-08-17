@@ -161,7 +161,16 @@ def plot_manual_review() -> None:
         ("nonlocomotor_hypoactivity", "Hypoactivité non locomotrice"),
     ]
     fig, axes = plt.subplots(4, 1, figsize=(13.5, 8.4), constrained_layout=True)
-    colors = {"Steps_sum": "#4b8764", "Motion Index_sum": "#376078", "Transitions_sum": "#be7832"}
+    # Le temps couche accompagne les trois canaux d'activite : la posture pese
+    # 0,20 dans le score HYPO et porte la fragmentation posturale de la branche
+    # INSTABILITE. Sans elle, le panneau de l'instabilite illustrait un
+    # mecanisme postural sans montrer la posture.
+    colors = {
+        "Steps_sum": "#4b8764",
+        "Motion Index_sum": "#376078",
+        "Transitions_sum": "#be7832",
+        "Lying Time_sum": "#7a5195",
+    }
     for letter, (ax, (scenario, label)) in zip("abcd", zip(axes, scenarios)):
         injected, event = inject_profile(
             cow_raw,
@@ -239,7 +248,7 @@ def plot_manual_review() -> None:
     # la ligne du titre (titre a gauche, legende a droite).
     axes[0].legend(
         frameon=False,
-        ncol=3,
+        ncol=4,
         fontsize=8,
         loc="lower right",
         bbox_to_anchor=(1.0, 1.02),
