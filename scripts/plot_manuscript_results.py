@@ -62,9 +62,16 @@ def plot_fusion_comparison() -> None:
     fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2), constrained_layout=True)
     x = np.arange(len(data))
     width = 0.25
-    axes[0].bar(x - width, 100 * data["actionable_detection"], width, label="Événements actionnables")
-    axes[0].bar(x, 100 * data["instability_surveillance_detection"], width, label="Instabilité en surveillance")
-    axes[0].bar(x + width, 100 * data["confound_alert_rate"], width, label="Confondants alertés")
+    # Memes couleurs que la figure des scenarios pour les memes grandeurs :
+    # l'alerte actionnable et la surveillance d'instabilite s'y lisent deja en
+    # bleu et en ambre. Le rouge des confondants reprend celui du bandeau
+    # d'alerte, reserve dans tout le memoire a ce qu'on ne veut pas declencher.
+    axes[0].bar(x - width, 100 * data["actionable_detection"], width,
+                label="Événements actionnables", color="#376078")
+    axes[0].bar(x, 100 * data["instability_surveillance_detection"], width,
+                label="Instabilité en surveillance", color="#be7832")
+    axes[0].bar(x + width, 100 * data["confound_alert_rate"], width,
+                label="Confondants alertés", color="#af4646")
     axes[0].set_ylabel("Proportion (%)")
     axes[0].set_ylim(0, 105)
     axes[0].set_xticks(x, labels, rotation=22, ha="right")
@@ -121,7 +128,10 @@ def plot_sls() -> None:
     rng = np.random.default_rng(42)
     for sls, group in data.groupby(sls_col):
         jitter = rng.normal(0, 0.035, len(group))
-        ax.scatter(np.full(len(group), float(sls)) + jitter, group[notif_col], s=48, alpha=0.85)
+        # Couleur unique : la teinte ne ferait que repeter l'axe des abscisses,
+        # qui porte deja le score SLS, et aucune legende ne l'expliquerait.
+        ax.scatter(np.full(len(group), float(sls)) + jitter, group[notif_col],
+                   s=48, alpha=0.85, color="#376078")
     ax.set_xticks(sorted(data[sls_col].dropna().unique()))
     ax.set_xlabel("Score SLS du 12 mars 2019")
     ax.set_ylabel("Notifications dans les 7 jours précédents")
