@@ -210,7 +210,10 @@ La Figure~\ref{fig:manual_review} montre quatre situations de la vache 8081 apr�
 des paramètres. L'hypoactivité modérée produit un épisode de vérification, alors que
 l'instabilité modérée reste au niveau de surveillance. Le pic capteur isolé est rejeté et
 l'hypoactivité non
-locomotrice produit une alerte comparable à celle d'une baisse locomotrice. La fenêtre injectée
+locomotrice produit une alerte comparable à celle d'une baisse locomotrice. Dans le premier
+panneau, l'épisode est déjà actif à l'ouverture de la fenêtre~: il compte donc comme couverture
+attribuable mais non comme nouveau départ, le critère exigeant un début absent de l'exécution
+propre. La fenêtre injectée
 apparaît en fond gris derrière les courbes, tandis que les sorties du système occupent un
 bandeau distinct sous l'axe des signaux~: rouge pour un épisode de vérification, ambre pour une
 période de surveillance sans alerte. Le rejet est ainsi la seule issue qui ne reçoit aucune
@@ -219,7 +222,8 @@ intermédiaire et rend leur recouvrement directement lisible. Chaque panneau aff
 heures de part et d'autre de la fenêtre injectée, et le bandeau rend compte de l'état du
 système sur toute la période représentée, marges comprises~; l'issue annoncée dans le titre
 porte en revanche sur la seule fenêtre injectée. Une bande de surveillance située hors de
-cette fenêtre relève donc du bruit de fond et n'entre pas dans les taux rapportés, ce qui
+cette fenêtre n'entre pas dans les taux rapportés, qu'elle relève du bruit de fond ou d'une
+réaction différée à l'événement injecté comme au panneau du pic capteur, ce qui
 explique qu'un panneau puisse en présenter alors que le scénario correspondant affiche un
 taux de surveillance nul. Les traits verticaux pointillés
 marquent les bornes exactes de la fenêtre injectée, y compris lorsqu'elle ne dure qu'un seul
