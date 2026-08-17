@@ -182,6 +182,17 @@ def plot_manual_review() -> None:
         "Motion Index_sum": "Motion Index",
         "Transitions_sum": "Transitions",
     }
+    # Style de trait en plus de la couleur : imprimees en niveaux de gris, les
+    # luminances des quatre courbes ne different que de 12 a 15 points sur 255,
+    # soit moins de 6 %. La Figure du compromis detection-charge distingue deja
+    # ses series par des marqueurs ; ici, 300 points par courbe les rendraient
+    # illisibles, d'ou le trait.
+    traits = {
+        "Lying Time_sum": "-",
+        "Steps_sum": (0, (5, 2)),
+        "Motion Index_sum": (0, (6, 2, 1, 2)),
+        "Transitions_sum": (0, (1, 1.6)),
+    }
     for letter, (ax, (scenario, label)) in zip("abcd", zip(axes, scenarios)):
         injected, event = inject_profile(
             cow_raw,
@@ -215,6 +226,7 @@ def plot_manual_review() -> None:
                 smoothed / scale,
                 color=color,
                 linewidth=1.6,
+                linestyle=traits[column],
                 label=labels_signaux[column],
             )
         episode = pd.to_numeric(view["hybrid_warning_episode"], errors="coerce").fillna(0).astype(bool)
