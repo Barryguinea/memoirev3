@@ -266,6 +266,10 @@ comparatives 2,5\,\%. L'extension hybride ajoute donc un coût mesurable mais se
 au comparateur IF. Ces valeurs décrivent la machine de test et ne constituent pas un test de
 charge en ferme.
 
+Cette section établit le résultat principal du mémoire~: après soustraction de l'exécution
+propre, 29 des 33 dégradations graduelles injectées sont recouvertes, 19 donnent lieu à un
+nouvel épisode, et la charge de fond reste sous une notification par vache-jour.
+
 % =====================================================================
 \section{Comparaison à IF et LOF, et ablation par le comparateur pédométrique}
 % =====================================================================
@@ -368,6 +372,10 @@ un IoU quasi nul. Sa faiblesse est ailleurs~: restreint aux pas, il ouvre moins 
     avantage indépendant de la cohérence multivariée. Ce constat rejoint la limite connue des
 approches strictement podométriques, dont la sensibilité dépend du seul comptage de pas
 \citep{alsaaod2012electronic,oleary2020accelerometers}.
+
+L'ablation situe donc l'apport du détecteur~: la machinerie temporelle explique l'essentiel de
+l'écart avec IF et LOF, tandis que la cohérence multivariée se traduit d'abord par une charge
+de vérification plus faible que celle du comparateur pédométrique.
 
 % =====================================================================
 \section{Analyses de sensibilité}
@@ -492,6 +500,9 @@ Trois variantes proches sont comparées à la référence. La détection des sc�
 et augmente les confusions; une agrégation de quatre heures réduit également la surveillance.
 Cette analyse soutient la stabilité locale de l'extension, mais elle est beaucoup moins
 complète que l'OFAT de HYPO et ne valide pas les seuils physiologiquement.
+
+Sur l'ensemble des 20 variantes, le contrôle bref reste rejeté sans exception~: la conclusion
+de la campagne principale ne dépend donc pas d'un seuil isolé.
 
 % =====================================================================
 \section{Stress test HYPO à aire d'enveloppe appariée}
@@ -670,6 +681,10 @@ départ de vérification ou de surveillance. Par ailleurs, l'alerte de neuf hypo
 locomotrices sur onze démontre une limite d'identifiabilité:
 des causes différentes peuvent produire la même forme sur les capteurs disponibles.
 
+L'extension apporte ainsi une surveillance des instabilités que HYPO seul ne produit pas, sans
+améliorer la localisation ni réduire la charge~: elle complète le détecteur principal plutôt
+qu'elle ne le remplace.
+
 % =====================================================================
 \section{Évaluation observationnelle IceTag-SLS}
 % =====================================================================
@@ -718,6 +733,9 @@ groupe sans exercice ne contient aucun cas
 SLS~$\geq2$, donc aucune AUC interne n'y est estimable. Malgré la stabilité du classement
 global au retrait d'une vache positive, sa portée clinique demeure limitée par le petit
 effectif, la multiplicité et la confusion avec le traitement.
+
+Le classement global reste néanmoins net, avec une AUC de 0,924~: c'est la seule confrontation
+à des scores locomoteurs réels dont dispose ce travail, et elle va dans le sens attendu.
 
 % =====================================================================
 \section{Correspondance entre objectifs et résultats}
