@@ -116,7 +116,8 @@ intervalles produise des intervalles de confiance artificiellement étroits.
 La variabilité entre vaches est considérable, comme le montre le
 Tableau~\ref{tab:variabilite}. La moyenne de
 pas par intervalle varie de 0,0 à 11,1 selon la vache, et le coefficient de variation
-inter-vache atteint 0,50 pour les pas, 0,40 pour le \textit{Motion Index} et 0,41 pour les
+inter-vache, soit le rapport de l'écart-type à la moyenne calculé sur les moyennes par vache,
+atteint 0,50 pour les pas, 0,40 pour le \textit{Motion Index} et 0,41 pour les
 transitions. Cette hétérogénéité empêche de définir un seuil commun à tout le troupeau et justifie le
 recours à une référence \emph{individuelle}, propre à chaque vache.
 
@@ -161,7 +162,10 @@ l'évaluation~: chaque injection opère sur une copie en mémoire.
 Le corpus regroupe 16 vaches suivies pendant moins de 14 jours et 12 vaches disposant de
 séries plus longues. Pour être admissible à l'évaluation synthétique, une vache doit disposer
 d'au moins 14 jours de mesures, d'une période future après la période de référence et de
-valeurs informatives pour les pas, le \textit{Motion Index} et les transitions. Ces critères
+valeurs informatives pour les pas, le \textit{Motion Index} et les transitions. Ce seuil de
+14 jours découle du découpage 60/40 de la période de référence~: il laisse environ 8 jours de
+référence et 6 jours de période future, soit la durée minimale compatible avec une agrégation
+de 12~h, une persistance de 6~h et un délai réfractaire de 24~h. Ces critères
 retiennent 11 vaches. Les 28 vaches demeurent néanmoins disponibles dans l'interface~; la
 restriction à 11 animaux s'applique uniquement au protocole expérimental.
 
@@ -229,14 +233,14 @@ Figure~\ref{fig:plan_etude} présente cette organisation.
   \centering
   \begin{tikzpicture}[
     box/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
-      minimum height=2.1cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
+      minimum height=2.6cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
     arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
     \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {HYPO: 44\\INSTABILITÉ: 132\\stress: 198};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {Niveau 1\\HYPO: 44, stress: 198\\Niveau 2\\INSTABILITÉ: 132};
     \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
-    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {IceTag-SLS 2019\\14 vaches};
+    \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {Niveau 3\\IceTag-SLS 2019\\14 vaches};
     \node[box, fill=rulegreen!7, below=0.8cm of split] (pre) {Sept jours\\avant le SLS};
     \node[box, fill=profgray!7, below=0.8cm of inject] (conc) {Concordance exploratoire\\sans réglage};
     \draw[arrow] (sls) -- (pre); \draw[arrow] (pre) -- (conc);
@@ -300,7 +304,8 @@ appliquées aux mêmes fenêtres~:
 \end{itemize}
 Les comparaisons appariées sont calculées après agrégation par vache. Une analyse OFAT
 conserve les mêmes 11 vaches, les mêmes fenêtres et la même graine, puis modifie séparément
-dix paramètres autour de la référence. Elle évalue une robustesse locale et ne sélectionne
+dix paramètres autour de la référence, soit les huit valeurs du
+Tableau~\ref{tab:config_finale} et les deux seuils minimaux de concordance. Elle évalue une robustesse locale et ne sélectionne
 pas une nouvelle configuration.
 
 \subsection{Extension bidirectionnelle et contrôles de confusion}
@@ -344,8 +349,9 @@ IceQube 2023 sert à l'évaluation technique du système, tandis que la cohorte 
 fournit une confrontation observationnelle distincte avec des scores locomoteurs contemporains.
 Cette cohorte provient du même campus, mais d'une période et d'un dispositif différents.
 Le SLS représente la somme de quatre composantes binaires et varie de 0 à 4. L'analyse retient le
-score du 12 mars 2019 et les données capteurs strictement antérieures. Une vache doit avoir
-une période de référence suffisante et au moins 70\,\% de couverture dans les sept jours précédents.
+score du 12 mars 2019 et les données capteurs strictement antérieures. Une vache doit disposer
+d'au moins 20 jours de mesures avant cette fenêtre et d'au moins 70\,\% de couverture dans les
+sept jours précédents.
 Quatorze vaches sont évaluables: deux ont un SLS de 0, neuf un SLS de 1 et trois un SLS de 2.
 Aucun SLS de 3 ou 4 n'est observé. Le seuil SLS~$\geq2$ constitue une séparation
 exploratoire, non un diagnostic imposé par le protocole source.
