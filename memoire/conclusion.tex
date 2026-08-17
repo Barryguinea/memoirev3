@@ -38,6 +38,17 @@ persistante, avec une traçabilité suffisante pour expliquer pourquoi une vache
 classement. Le Tableau~\ref{tab:portee_conclusions} associe chaque conclusion à son niveau de
 preuve.
 
+
+La comparaison aux autres détecteurs apporte un résultat méthodologique important~: la
+quantité de points anormaux n'est pas le critère décisif. Isolation Forest ponctuel produit
+7,658 départs par vache-jour sans atteindre IoU20 sur un seul événement, et les variantes IF
+et LOF suivies de persistance réduisent la charge sans localiser davantage les fenêtres. HYPO
+atteint pour sa part un IoU attribuable moyen de 0,137 et 29,5\,\% à IoU20 sur les quatre
+profils. La direction du changement et l'accumulation temporelle sont donc mieux soutenues
+que la simple accumulation d'anomalies ponctuelles. La contribution propre de la cohérence
+entre familles demande toutefois une comparaison supplémentaire, car le comparateur
+pédométrique partage la même machinerie temporelle.
+
 \begin{table}[H]
   \centering
   \caption{Portée des conclusions principales.}
@@ -66,16 +77,6 @@ preuve.
     \bottomrule
   \end{tabular}
 \end{table}
-
-La comparaison aux autres détecteurs apporte un résultat méthodologique important~: la
-quantité de points anormaux n'est pas le critère décisif. Isolation Forest ponctuel produit
-7,658 départs par vache-jour sans atteindre IoU20 sur un seul événement, et les variantes IF
-et LOF suivies de persistance réduisent la charge sans localiser davantage les fenêtres. HYPO
-atteint pour sa part un IoU attribuable moyen de 0,137 et 29,5\,\% à IoU20 sur les quatre
-profils. La direction du changement et l'accumulation temporelle sont donc mieux soutenues
-que la simple accumulation d'anomalies ponctuelles. La contribution propre de la cohérence
-entre familles demande toutefois une comparaison supplémentaire, car le comparateur
-pédométrique partage la même machinerie temporelle.
 
 Le stress test à aire d'enveloppe appariée apporte cette comparaison sur cinq formes moins favorables,
 trois positions et onze vaches. Sur les 165 événements positifs, HYPO atteint en moyenne
