@@ -64,7 +64,7 @@ projet-memoire/
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
-│   ├── audit_bibliography.py            # Contrôle des 73 références et de leurs sources
+│   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # Vérifie 398 affirmations numériques enregistrées
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
 ├── tests/                       # 118 tests (unitaires, invariants, non-régression)
@@ -177,8 +177,8 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 ## Reproductibilité
 
 - Chaque résultat empirique est régénéré par un script et vérifié contre son artefact source.
-- Les 73 références sont auditées : 58 DOI sont confrontés aux métadonnées
-  Crossref/DataCite et 15 sources sans DOI à leur URL d'autorité :
+- Les 74 références sont auditées : 58 DOI sont confrontés aux métadonnées
+  Crossref/DataCite et 16 sources sans DOI à leur URL d'autorité :
   ```bash
   python scripts/audit_bibliography.py
   ```

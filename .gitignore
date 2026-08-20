@@ -18,6 +18,7 @@ memoire/*.synctex.gz
 memoire/*.toc
 memoire/main.pdf
 memoire/presentation_directeur.pptx
+memoire/correction/
 memoire/~$*
 # Donnees capteurs brutes confidentielles, NE PAS diffuser (depot autonome)
 brut.csv
