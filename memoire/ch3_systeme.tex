@@ -171,13 +171,13 @@ et la posture}{
   Calculer les ratios $r_j(t)$ aux références du créneau et de la veille, puis conserver
   celui qui correspond à la variation la plus marquée\;
   $d_j(t) \leftarrow \max\bigl(0,\ 1-r_j(t)\bigr)$
-  \tcp*{posture : excès de temps couché et déficit de temps debout}
+  \tcp*[l]{posture : excès couché, déficit debout}
   $S_H(t) \leftarrow 0{,}30\,d_{\text{pas}} + 0{,}30\,d_{\text{MI}}
    + 0{,}20\,d_{\text{transitions}} + 0{,}20\,d_{\text{posture}}$\;
   \Si{$S_H(t) \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
   impliqués, et couverture suffisante}{
     $e_t \leftarrow S_H(t) + 0{,}35 \times (\text{baisse sur } 6\,\text{h})$
-    \tcp*{l'intervalle devient candidat}
+    \tcp*[l]{l'intervalle devient candidat}
   }
   \Sinon{
     $e_t \leftarrow 0$\;
@@ -213,9 +213,9 @@ familles sur une fenêtre de trois heures: mouvement relatif aux pas, transition
 aux pas, transitions relatives au temps postural et volatilité de la fraction couchée. Les
 hausses des quatre familles sont pondérées respectivement par 0,35~; 0,30~; 0,20 et 0,15.
 
-Un candidat doit satisfaire trois conditions. Son score atteint au moins 0,18. Deux familles
+Un candidat doit satisfaire trois conditions~: son score atteint au moins 0,18; deux familles
 au minimum réagissent, dont obligatoirement le mouvement relatif, corroboré par les
-transitions, la fragmentation ou la posture. Chaque famille retenue présente un changement
+transitions, la fragmentation ou la posture; chaque famille retenue présente un changement
 d'au moins 20\,\%.
 
 Un filtre écarte ensuite l'activité générale~: une hausse conjointe des pas et du
@@ -306,9 +306,9 @@ L'algorithme~\ref{alg:fusion} formalise la logique de fusion proposée pour une 
 \KwOut{Type d'alerte, priorité et notifications (alerte à vérifier, non diagnostique)}
 \BlankLine
 $\mathrm{hypo} \leftarrow \textsc{DétecterHypo}\bigl(X,\ \text{référence},\ \text{persistance}=6\,\text{h}\bigr)$
-\tcp*{baisse d'activité persistante}
+\tcp*[l]{baisse d'activité persistante}
 $\mathrm{instab} \leftarrow \textsc{DétecterInstabilité}\bigl(X,\ \text{référence},\ \text{persistance}=2\,\text{h}\bigr)$
-\tcp*{mouvement disproportionné aux pas}
+\tcp*[l]{mouvement disproportionné aux pas}
 \BlankLine
 \Si{$\mathrm{hypo}$ \KwEt $\mathrm{instab}$ récente ($\leq 72\,\text{h}$)}{
   priorité $\leftarrow 3$,\ \ type $\leftarrow$ \texttt{SEQUENCE}\;
@@ -321,7 +321,7 @@ $\mathrm{instab} \leftarrow \textsc{DétecterInstabilité}\bigl(X,\ \text{réfé
 }
 \SinonSi{$\mathrm{instab}$}{
   priorité $\leftarrow 1$,\ \ type $\leftarrow$ \texttt{SURVEILLANCE}
-  \tcp*{à surveiller, sans vérification prioritaire}
+  \tcp*[l]{à surveiller, sans vérification prioritaire}
 }
 \BlankLine
 \Si{priorité $\geq 2$}{
