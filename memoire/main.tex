@@ -43,6 +43,19 @@
 % redéfinir localement \arraystretch, sous peine de rompre cette uniformité.
 \renewcommand{\arraystretch}{1.15}
 \usepackage{float}          % option [H] pour certains flottants
+% Pseudocodes en algorithme numerote (gabarit du codirecteur). Les mots-cles sont
+% francises car algorithm2e affiche Input/Output par defaut, et le compteur suit le
+% chapitre comme le reste du memoire.
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\SetAlgorithmName{Algorithme}{algorithme}{Liste des algorithmes}
+\SetKwInput{KwIn}{Entrée}
+\SetKwInput{KwOut}{Sortie}
+\SetKw{KwEt}{et}
+\SetKwFor{PourChaque}{pour chaque}{faire}{fin}
+\SetKwIF{Si}{SinonSi}{Sinon}{si}{alors}{sinon si}{sinon}{fin}
+\SetAlgoCaptionSeparator{.}
+\renewcommand{\thealgocf}{\thechapter.\arabic{algocf}}
+\counterwithin*{algocf}{chapter}
 \usepackage{tikz}           % diagrammes
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, decorations.pathreplacing, backgrounds}
 \usepackage{pgfplots}       % graphiques de données

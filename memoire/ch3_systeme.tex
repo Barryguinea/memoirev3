@@ -154,38 +154,41 @@ Un épisode exige une persistance sur six heures et
 résume cette logique de détection pour une vache.
 
 \subsection{Formalisation et pseudocode}
-\begin{figure}[H]
-\centering
-\fbox{\parbox{0.92\textwidth}{\raggedright
-\textbf{Algorithme:} Détection HYPO d'une baisse comportementale persistante (par vache)
-\vspace{0.3em}\hrule\vspace{0.5em}
-\textbf{Entrée:} intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$\\
-\textbf{Sortie:} épisodes, départs et notifications (alerte à vérifier, non diagnostique)
-
-\begin{enumerate}[leftmargin=1.5em]
-\item \textit{Référence individuelle:}\\
-    Pour chaque famille de signaux, soit les pas, le \textit{Motion Index}, les transitions et
-    la posture, le détecteur calcule la médiane de la période de référence par créneau horaire,
-    puis se replie sur la médiane globale de la vache lorsque ce créneau est trop peu documenté.
-
-\item \textit{Pour chaque intervalle $t$ de la période surveillée:}\\
-    Totaux glissants sur $12\,$h, puis ratio $r_j(t)$ aux références du créneau et de la veille;
-    conserver le ratio correspondant à la variation la plus marquée\\
-    Déficits $d_j(t) = \max(0,\ 1 - r_j(t))$\hspace{0.5em}(posture: excès de temps couché et déficit de temps debout)\\
-    Score $S_H(t) = 0{,}30\,d_{pas} + 0{,}30\,d_{MI} + 0{,}20\,d_{transitions} + 0{,}20\,d_{posture}$\\
-    Candidat si $S_H \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
-    impliqués, et couverture suffisante\\
-    Évidence $e_t \leftarrow S_H + 0{,}35\,(\text{baisse sur }6\,\text{h})$ si candidat, sinon $0$\\
-    CUSUM $C_t \leftarrow \max(0,\ C_{t-1} + e_t - 0{,}07)$
-
-\item \textit{Épisode et notification:}\\
-    Épisode si persistance du candidat sur $6\,$h et $C_t \geq 1{,}20$\\
-    Notifier au début d'un épisode, avec un délai réfractaire de $24\,$h
-\end{enumerate}
-}}
-\caption{Pseudocode de la détection HYPO.}
+\begin{algorithm}[H]
+\caption{Détection HYPO d'une baisse comportementale persistante, pour une vache}
 \label{alg:hypo}
-\end{figure}
+\KwIn{Intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$}
+\KwOut{Épisodes, départs et notifications (alerte à vérifier, non diagnostique)}
+\BlankLine
+\PourChaque{famille de signaux $j$ parmi les pas, le \textit{Motion Index}, les transitions
+et la posture}{
+  Calculer la médiane de la période de référence par créneau horaire\;
+  Se replier sur la médiane globale de la vache si le créneau est trop peu documenté\;
+}
+\BlankLine
+\PourChaque{intervalle $t$ de la période surveillée}{
+  Cumuler les totaux glissants sur $12$~h\;
+  Calculer les ratios $r_j(t)$ aux références du créneau et de la veille, puis conserver
+  celui qui correspond à la variation la plus marquée\;
+  $d_j(t) \leftarrow \max\bigl(0,\ 1-r_j(t)\bigr)$
+  \tcp*{posture : excès de temps couché et déficit de temps debout}
+  $S_H(t) \leftarrow 0{,}30\,d_{\text{pas}} + 0{,}30\,d_{\text{MI}}
+   + 0{,}20\,d_{\text{transitions}} + 0{,}20\,d_{\text{posture}}$\;
+  \Si{$S_H(t) \geq 0{,}12$, au moins trois familles concordantes, pas ou \textit{Motion Index}
+  impliqués, et couverture suffisante}{
+    $e_t \leftarrow S_H(t) + 0{,}35 \times (\text{baisse sur } 6\,\text{h})$
+    \tcp*{l'intervalle devient candidat}
+  }
+  \Sinon{
+    $e_t \leftarrow 0$\;
+  }
+  $C_t \leftarrow \max\bigl(0,\ C_{t-1} + e_t - 0{,}07\bigr)$\;
+  \Si{persistance du candidat sur $6$~h \KwEt $C_t \geq 1{,}20$}{
+    Déclarer un épisode et enregistrer son départ\;
+    Notifier au début de l'épisode, avec un délai réfractaire de $24$~h\;
+  }
+}
+\end{algorithm}
 
 \subsection{Implémentation de la persistance}
 La persistance s'applique à l'intérieur de chaque branche, avant toute fusion, et non sur le
@@ -296,40 +299,36 @@ devenir une notification de vérification.
 
 L'algorithme~\ref{alg:fusion} formalise la logique de fusion proposée pour une vache donnée.
 
-\begin{figure}[H]
-\centering
-\fbox{\parbox{0.92\textwidth}{\raggedright
-\textbf{Algorithme:} Fusion hiérarchique des branches HYPO et INSTABILITÉ (par vache)
-\vspace{0.3em}\hrule\vspace{0.5em}
-\textbf{Entrée:} intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$\\
-\textbf{Sortie:} type d'alerte, priorité et notifications (alerte à vérifier, non diagnostique)
-
-\begin{enumerate}[leftmargin=1.5em]
-\item \textit{Détection des deux branches:}\\
-    $\mathrm{hypo} \leftarrow \textsc{DétecterHypo}(X,\ \text{référence},\ \text{persistance} = 6\,\text{h})$
-    \hspace{0.5em}(baisse d'activité persistante)\\
-    $\mathrm{instab} \leftarrow \textsc{DétecterInstabilité}(X,\ \text{référence},\ \text{persistance} = 2\,\text{h})$
-    \hspace{0.5em}(mouvement disproportionné aux pas)
-
-\item \textit{Fusion par priorité décroissante:}\\
-    Si $\mathrm{hypo}$ et $\mathrm{instab}$ récente ($\leq 72\,\text{h}$)\,:\quad
-    priorité $\leftarrow 3$,\ \ type $\leftarrow$ \texttt{SEQUENCE}\\
-    Sinon si $\mathrm{hypo}$ et $\mathrm{instab}$\,:\quad
-    priorité $\leftarrow 3$,\ \ type $\leftarrow$ \texttt{MIXTE}\\
-    Sinon si $\mathrm{hypo}$\,:\quad
-    priorité $\leftarrow 2$,\ \ type $\leftarrow$ \texttt{HYPO}\\
-    Sinon si $\mathrm{instab}$\,:\quad
-    priorité $\leftarrow 1$,\ \ type $\leftarrow$ \texttt{SURVEILLANCE}
-    \hspace{0.5em}(à surveiller, sans vérification prioritaire)
-
-\item \textit{Notification:}\\
-    Émettre une notification seulement si priorité $\geq 2$\\
-    Respecter un délai réfractaire de fusion de $12\,\text{h}$ entre notifications
-\end{enumerate}
-}}
-\caption{Pseudocode de la fusion hiérarchique des deux branches.}
+\begin{algorithm}[H]
+\caption{Fusion hiérarchique des branches HYPO et INSTABILITÉ, pour une vache}
 \label{alg:fusion}
-\end{figure}
+\KwIn{Intervalles $X$ d'une vache, période de référence individuelle, paramètres $\theta$}
+\KwOut{Type d'alerte, priorité et notifications (alerte à vérifier, non diagnostique)}
+\BlankLine
+$\mathrm{hypo} \leftarrow \textsc{DétecterHypo}\bigl(X,\ \text{référence},\ \text{persistance}=6\,\text{h}\bigr)$
+\tcp*{baisse d'activité persistante}
+$\mathrm{instab} \leftarrow \textsc{DétecterInstabilité}\bigl(X,\ \text{référence},\ \text{persistance}=2\,\text{h}\bigr)$
+\tcp*{mouvement disproportionné aux pas}
+\BlankLine
+\Si{$\mathrm{hypo}$ \KwEt $\mathrm{instab}$ récente ($\leq 72\,\text{h}$)}{
+  priorité $\leftarrow 3$,\ \ type $\leftarrow$ \texttt{SEQUENCE}\;
+}
+\SinonSi{$\mathrm{hypo}$ \KwEt $\mathrm{instab}$}{
+  priorité $\leftarrow 3$,\ \ type $\leftarrow$ \texttt{MIXTE}\;
+}
+\SinonSi{$\mathrm{hypo}$}{
+  priorité $\leftarrow 2$,\ \ type $\leftarrow$ \texttt{HYPO}\;
+}
+\SinonSi{$\mathrm{instab}$}{
+  priorité $\leftarrow 1$,\ \ type $\leftarrow$ \texttt{SURVEILLANCE}
+  \tcp*{à surveiller, sans vérification prioritaire}
+}
+\BlankLine
+\Si{priorité $\geq 2$}{
+  Émettre une notification\;
+  Respecter un délai réfractaire de fusion de $12\,\text{h}$ entre notifications\;
+}
+\end{algorithm}
 
 % =====================================================================
 
