@@ -72,9 +72,19 @@
 \definecolor{rawred}{RGB}{175,70,70}       % rouge brique atténué
 \definecolor{profgray}{RGB}{130,130,130}   % gris neutre
 
-% Police similaire à Calibri
-\usepackage[sfdefault,lf]{carlito}
-% \usepackage{times}
+% Police du texte et des mathematiques, famille unique a empattement.
+% Le guide de mise en page de l'UQAM ne prescrit aucune police : il cite Times
+% New Roman ou Calibri en exemples, a une taille comparable a Calibri 11 pt, et
+% demande l'uniformite dans tout le document. newtx compose le texte ET les
+% formules dans la meme famille, ce que la variante precedente ne faisait pas :
+% le corps etait en Carlito sans empattement, les formules en Computer Modern.
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+%
+% RETOUR A LA VARIANTE PRECEDENTE (Carlito, clone libre de Calibri) : commenter
+% les deux lignes ci-dessus et decommenter la suivante. Le memoire repasse alors
+% a 128 pages, avec le melange de familles decrit plus haut.
+% \usepackage[sfdefault,lf]{carlito}
 \emergencystretch=2em
 \hfuzz=10pt
 \hbadness=10000
