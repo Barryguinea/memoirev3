@@ -145,15 +145,6 @@ Cette quantité mesure l'effort de vérification attendu sur la période surveil
 rapportée séparément des métriques attribuables pour éviter de confondre charge opérationnelle
 et détection des événements injectés.
 
-Rapportée à une exploitation, cette charge devient concrète~: sur la ferme type de
-65~vaches du Tableau~\ref{tab:impact_economique}, elle représente environ 26~notifications
-par jour, et près de 32 au 90\textsuperscript{e} percentile. Ce volume dépasse ce qu'une
-observation quotidienne peut absorber. Un déploiement ne traiterait donc pas la liste
-entière, mais son en-tête~: le classement décrit au Chapitre~\ref{chapitre:interface}
-ordonne les vaches par priorité et permet d'arrêter la vérification à un nombre fixé
-d'avance. Ce mémoire n'établit pas ce plafond, faute d'étalon clinique qui en mesurerait
-le coût en épisodes manqués.
-
 \subsection{Typologie des modes de défaillance}
 Le Tableau~\ref{tab:failure_modes} décompose les résultats actuels en modes d'échec, sans
 reprendre les fréquences d'un protocole antérieur. Sur les 33 dégradations graduelles, 4
@@ -215,6 +206,15 @@ référence de 0,12, conservé malgré le résultat ponctuel observé à 0,14.
   \caption{Compromis détection-charge de fond.}
   \label{fig:detection_background_curve}
 \end{figure}
+
+Rapportée à une exploitation, la charge de fond devient concrète~: sur la ferme type de
+65~vaches du Tableau~\ref{tab:impact_economique}, elle représente environ 26~notifications
+par jour, et près de 32 au 90\textsuperscript{e} percentile. Ce volume dépasse ce qu'une
+observation quotidienne peut absorber. Un déploiement ne traiterait donc pas la liste
+entière, mais son en-tête~: le classement décrit au Chapitre~\ref{chapitre:interface}
+ordonne les vaches par priorité et permet d'arrêter la vérification à un nombre fixé
+d'avance. Ce mémoire n'établit pas ce plafond, faute d'étalon clinique qui en mesurerait
+le coût en épisodes manqués.
 
 \subsection{Inspection visuelle ciblée}
 La Figure~\ref{fig:manual_review} montre quatre situations de la vache 8081 après le gel
