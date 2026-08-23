@@ -103,24 +103,34 @@ def compute_cow_cached(
     mi_z_high_thr: float,
     coverage_min_pct: float,
 ) -> pd.DataFrame:
-    """Execution pipeline avec cache pour une vache (cle = toutes les valeurs de parametres)."""
-    return run_pipeline_one_cow(
-        df_all, cow_id,
-        interval=interval,
-        window_baseline=window_baseline,
-        contamination=contamination,
-        baseline_ratio=baseline_ratio,
-        random_state=random_state,
-        persist_hours=persist_hours,
-        alert_min=alert_min,
-        mix_mode=mix_mode,
-        mix_rate_thr=mix_rate_thr,
-        z_low_thr=z_low_thr,
-        z_high_thr=z_high_thr,
-        cooldown_hours=cooldown_hours,
-        mi_z_high_thr=mi_z_high_thr,
-        coverage_min_pct=coverage_min_pct,
-    )
+    """Execution pipeline avec cache pour une vache (cle = toutes les valeurs de parametres).
+
+    Une serie trop courte, depourvue de signal exploitable ou entierement lacunaire
+    ne permet pas de construire la periode de reference et le noyau leve alors une
+    exception. L'interface acceptant des fichiers arbitraires, cette remontee est
+    convertie en tableau vide : la vache concernee reste sans sortie au lieu
+    d'interrompre l'application par une trace Python.
+    """
+    try:
+        return run_pipeline_one_cow(
+            df_all, cow_id,
+            interval=interval,
+            window_baseline=window_baseline,
+            contamination=contamination,
+            baseline_ratio=baseline_ratio,
+            random_state=random_state,
+            persist_hours=persist_hours,
+            alert_min=alert_min,
+            mix_mode=mix_mode,
+            mix_rate_thr=mix_rate_thr,
+            z_low_thr=z_low_thr,
+            z_high_thr=z_high_thr,
+            cooldown_hours=cooldown_hours,
+            mi_z_high_thr=mi_z_high_thr,
+            coverage_min_pct=coverage_min_pct,
+        )
+    except Exception:
+        return pd.DataFrame()
 
 # ============================================================
 # BARRE LATERALE
