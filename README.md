@@ -67,7 +67,7 @@ projet-memoire/
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # Vérifie 398 affirmations numériques enregistrées
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 118 tests (unitaires, invariants, non-régression)
+├── tests/                       # 121 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 118 tests
+pytest -q                                # 121 tests
 ```
 
 ---
