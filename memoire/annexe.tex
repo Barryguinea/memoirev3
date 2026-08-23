@@ -413,8 +413,9 @@ transitions, $+12/+14$\,\% de posture/oscillation sur 12~h), un délai de 24~h, 
 hypoactivité ($-32$\,\% de pas, $-28$\,\% de mouvement, $-30$\,\% de transitions et
 $+8$\,\% de transfert postural sur 36~h).
 
+\vspace{-0.5\baselineskip}
 \subsubsection{Invariants des injections}
-\begin{enumerate}
+\begin{enumerate}[nosep]
   \item chaque scénario est injecté dans une copie distincte des données;
   \item le début est strictement postérieur à la période de référence;
   \item les pas, le mouvement et les transitions restent non négatifs;
@@ -426,12 +427,15 @@ $+8$\,\% de transfert postural sur 36~h).
   \item le fichier \texttt{data/brut.csv} n'est jamais modifié.
 \end{enumerate}
 
+\vspace{-0.75\baselineskip}
 \subsubsection{Variabilité inter-vache du fond}
 Le taux de fond agrégé (0,402 notification par vache-jour pour HYPO) masque une variabilité
 individuelle importante. Sur les onze vaches admissibles (45 notifications, 112~vaches-jours),
 le taux varie de 0,197 à 0,590 selon la vache, soit un facteur d'environ trois
 (Tableau~\ref{tab:fond_par_vache}).
 
+\begingroup
+\setlength{\intextsep}{0.3\baselineskip}
 \begin{table}[H]
   \centering
   \caption{Distribution du fond de notifications HYPO par vache (campagne principale).}
@@ -449,7 +453,9 @@ le taux varie de 0,197 à 0,590 selon la vache, soit un facteur d'environ trois
     \bottomrule
   \end{tabular}
 \end{table}
+\endgroup
 
+\vspace{-\baselineskip}
 Cette dispersion décrit une hétérogénéité de charge, mais elle ne démontre pas que le niveau
 d'activité moyen en est la cause. Une calibration simple fondée sur la dispersion du score de
 période de référence a été testée sans réduire le fond ni son coefficient de variation, et elle a dégradé
