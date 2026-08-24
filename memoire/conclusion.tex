@@ -13,6 +13,17 @@
 % propre, comme l'annexe utilise A. La numerotation par chapitre est retablie
 % en fin de fichier, pour que l'annexe retrouve A.1 et suivants.
 \setcounter{secnumdepth}{0}   % intitules non numerotes : \section* est
+% Les intitules de ce chapitre ne portent pas de numero. Sans lui, la classe
+% UQAM les compose en romain de taille normale et ils se confondent avec le
+% corps du texte. Ils passent donc en italique, ici seulement : les sections
+% numerotees des chapitres 1 a 6 gardent leur presentation, leur numero
+% suffisant a les identifier. La definition d'origine est retablie plus bas,
+% avec le compteur.
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {12bp\@plus.2ex\@minus.2ex}{0.01bp\@plus.2ex}%
+  {\normalfont\normalsize\itshape\baselineskip=\simpleinter}}
+\makeatother
                               % inoperant dans memoireuqam.cls
 \setcounter{table}{0}
 \renewcommand{\thetable}{D.\arabic{table}}
@@ -385,3 +396,11 @@ une base reproductible pour développer et évaluer un futur usage de priorisati
 \renewcommand{\thetable}{{\thechapter.\arabic{table}}}
 
 \setcounter{secnumdepth}{5}
+
+% Retablir la presentation d'origine des titres de section : l'annexe qui suit
+% numerote les siens et n'a donc pas besoin de l'italique pose plus haut.
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {12bp\@plus.2ex\@minus.2ex}{0.01bp\@plus.2ex}%
+  {\normalfont\normalsize\baselineskip=\simpleinter}}
+\makeatother
