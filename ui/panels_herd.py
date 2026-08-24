@@ -137,8 +137,12 @@ def render_tab_herd(
     )
 
     st.markdown("### Vaches à vérifier en priorité")
-    top_cows = summary_df.head(9)[COW].tolist()
-    cols_grid = st.columns(3)
+    # Six vignettes sur deux colonnes plutot que neuf sur trois : a largeur de
+    # capture egale, chaque vignette dispose de la moitie en plus, et les
+    # decomptes qui l'accompagnent restent lisibles une fois la figure reduite
+    # a la largeur d'une page du memoire.
+    top_cows = summary_df.head(6)[COW].tolist()
+    cols_grid = st.columns(2)
     slot = 0
     for cid in top_cows:
         g = out_df[out_df[COW].astype(str) == str(cid)].copy()
@@ -152,7 +156,7 @@ def render_tab_herd(
                 break
 
         if plot_col:
-            with cols_grid[slot % 3]:
+            with cols_grid[slot % 2]:
                 r = summary_df[summary_df[COW] == cid].iloc[0]
                 st.markdown(f"**Vache {cid}**")
                 st.caption(
