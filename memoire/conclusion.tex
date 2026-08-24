@@ -28,6 +28,49 @@
 \setcounter{table}{0}
 \renewcommand{\thetable}{D.\arabic{table}}
 
+Ce mémoire s'est déployé en six temps. Le Chapitre~\ref{chapitre:contexte} a établi l'enjeu
+économique et zootechnique de la boiterie, son étiologie multifactorielle, les limites de la
+notation locomotrice conventionnelle et les variables comportementales que restituent les
+capteurs portés. Le Chapitre~\ref{chapitre:etatart} a passé en revue les approches automatisées
+de détection, les méthodes non supervisées de référence et la détection temporelle de
+changements persistants, avant de montrer que l'hétérogénéité des protocoles interdit de
+comparer directement les performances publiées. Le Chapitre~\ref{chapitre:systeme} a défini le
+système proposé~: la période de référence individuelle, la branche HYPO, la branche
+INSTABILITÉ, leur fusion hiérarchique, les comparateurs et le protocole d'évaluation, avec les
+métriques et l'organisation logicielle qui les rendent reproductibles. Le
+Chapitre~\ref{chapitre:donnees} a décrit le corpus IceQube 2023, la préparation des données et
+le cadre expérimental. Le Chapitre~\ref{chapitre:interface} a présenté l'interface de
+priorisation, ses trois niveaux de priorité et les limites de son usage en ferme. Le
+Chapitre~\ref{chapitre:resultats} a enfin rapporté la performance attribuable du module HYPO,
+sa comparaison aux détecteurs d'anomalies ponctuels, ses analyses de sensibilité, le test de
+stress à aire d'enveloppe appariée, l'extension bidirectionnelle et la confrontation à la
+cohorte IceTag-SLS.
+
+\section{Contributions}
+Au terme de ce travail, les contributions peuvent être résumées ainsi. Le mémoire fournit une
+évaluation attribuable de HYPO avec intervalles de confiance, une ablation et ses tailles
+d'effet, une analyse OFAT, une courbe reliant détection et charge, une tentative de
+calibration individuelle rapportée malgré son résultat négatif, une extension bidirectionnelle
+assortie de contrôles de confusion, une évaluation du temps d'exécution, une analyse SLS
+synchronisée, une interface de priorisation et des artefacts reproductibles. Sa contribution
+méthodologique est double~: proposer un détecteur temporel interprétable, et montrer comment
+évaluer ce type d'outil sans confondre résultats techniques, hypothèses exploratoires et
+interprétations cliniques. Le code source, les paramètres figés, les douze profils d'injection
+et les scripts d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
+et de l'empreinte du corpus source (Annexe~\ref{annexe:validation})~; les données capteurs brutes ne peuvent être diffusées pour
+des raisons de confidentialité. Les artefacts et leurs empreintes publiés permettent d'auditer
+les résultats, et la démarche complète, des injections jusqu'aux figures du manuscrit, reste
+reproductible par les personnes autorisées à accéder aux données.
+
+Le module HYPO constitue en définitive le résultat technique principal~: il démontre sa
+capacité à transformer des baisses graduelles en épisodes attribuables, surpasse les variantes
+IF/LOF évaluées pour la localisation et conserve une logique interprétable par vache. Sa
+performance de localisation et sa charge de vérification définissent désormais des objectifs
+d'amélioration mesurables.
+L'extension bidirectionnelle organise une hypothèse complémentaire et quantifie ses compromis.
+Cette séparation entre preuve principale et exploration rend l'ensemble cohérent et fournit
+une base reproductible pour développer et évaluer un futur usage de priorisation en ferme.
+
 \section{Ce que le système établit}
 L'objectif de ce mémoire était de concevoir une chaîne reproductible qui transforme des
 mesures indirectes du capteur IceQube en priorités de vérification locomotrice. Son apport central est
@@ -367,30 +410,31 @@ de démarche ou d'asymétrie seraient plus proches du construit clinique que la 
 de mouvement, et la charge de vérification devra être évaluée avec les utilisateurs afin de
 définir un compromis acceptable en ferme.
 
-\section{Contributions}
-Au terme de ce travail, les contributions peuvent être résumées ainsi. Le mémoire fournit une
-évaluation attribuable de HYPO avec intervalles de confiance, une ablation et ses tailles
-d'effet, une analyse OFAT, une courbe reliant détection et charge, une tentative de
-calibration individuelle rapportée malgré son résultat négatif, une extension bidirectionnelle
-assortie de contrôles de confusion, une évaluation du temps d'exécution, une analyse SLS
-synchronisée, une interface de priorisation et des artefacts reproductibles. Sa contribution
-méthodologique est double~: proposer un détecteur temporel interprétable, et montrer comment
-évaluer ce type d'outil sans confondre résultats techniques, hypothèses exploratoires et
-interprétations cliniques. Le code source, les paramètres figés, les douze profils d'injection
-et les scripts d'évaluation sont versionnés, avec un manifeste d'intégrité SHA-256 des sorties
-et de l'empreinte du corpus source (Annexe~\ref{annexe:validation})~; les données capteurs brutes ne peuvent être diffusées pour
-des raisons de confidentialité. Les artefacts et leurs empreintes publiés permettent d'auditer
-les résultats, et la démarche complète, des injections jusqu'aux figures du manuscrit, reste
-reproductible par les personnes autorisées à accéder aux données.
+\section{Perspectives et travaux futurs}
+Les résultats obtenus dessinent un programme de travail dont les priorités sont ordonnées par
+ce que les données actuelles ne permettent pas d'établir.
 
-Le module HYPO constitue en définitive le résultat technique principal~: il démontre sa
-capacité à transformer des baisses graduelles en épisodes attribuables, surpasse les variantes
-IF/LOF évaluées pour la localisation et conserve une logique interprétable par vache. Sa
-performance de localisation et sa charge de vérification définissent désormais des objectifs
-d'amélioration mesurables.
-L'extension bidirectionnelle organise une hypothèse complémentaire et quantifie ses compromis.
-Cette séparation entre preuve principale et exploration rend l'ensemble cohérent et fournit
-une base reproductible pour développer et évaluer un futur usage de priorisation en ferme.
+La première est un corpus indépendant. Une estimation pleinement externe demande un troupeau
+resté étranger à la conception, un jeu de développement distinct du jeu d'évaluation et des
+scores locomoteurs relevés sur l'ensemble des animaux plutôt que sur une sous-cohorte. Ce
+cadre seul autoriserait à mesurer une sensibilité et une spécificité cliniques, termes que ce
+mémoire s'est interdit d'employer faute d'étalon vétérinaire.
+
+La deuxième porte sur la charge de vérification. Le plafond quotidien d'alertes, laissé ouvert
+au Chapitre~\ref{chapitre:resultats}, demande à être fixé sur des données de terrain et son
+coût en épisodes manqués à être mesuré. La normalisation par le troupeau et le filtre collectif
+évoqués plus haut relèvent du même chantier~: réduire l'effort de revue sans modifier le
+détecteur lui-même.
+
+La troisième concerne la localisation. Un IoU attribuable moyen de 0,137 laisse une marge
+considérable, et l'analyse OFAT désigne l'agrégation et le nombre de familles concordantes
+comme les deux leviers structurants. Les explorer suppose toutefois un jeu de développement
+séparé, sans quoi tout gain observé resterait une sélection rétrospective.
+
+La quatrième, enfin, est la validation clinique longitudinale que le
+Tableau~\ref{tab:portee_conclusions} classe parmi ce qui reste à établir~: examens locomoteurs
+répétés, causes documentées et suivi des décisions prises à partir des alertes. Elle seule
+dirait si la priorisation proposée change quelque chose au repérage de la boiterie en ferme.
 
 % Retablir la numerotation par chapitre : l'annexe qui suit doit repartir en A.1.
 \renewcommand{\thetable}{{\thechapter.\arabic{table}}}
