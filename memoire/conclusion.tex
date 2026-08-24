@@ -50,7 +50,7 @@ classement. Le Tableau~\ref{tab:portee_conclusions} associe chaque conclusion à
 preuve.
 
 
-La comparaison aux autres détecteurs apporte un résultat méthodologique important~: la
+La comparaison de HYPO aux autres détecteurs apporte un résultat méthodologique important~: la
 quantité de points anormaux n'est pas le critère décisif. IF ponctuel produit
 7,658 départs par vache-jour sans atteindre IoU20 sur un seul événement, et les variantes IF
 et LOF suivies de persistance réduisent la charge sans localiser davantage les fenêtres. HYPO
@@ -91,8 +91,8 @@ pédométrique partage la même machinerie temporelle.
 
 Le test de stress à aire d'enveloppe appariée apporte cette comparaison sur 5 formes moins
 favorables, 3 positions et 11 vaches. Sur les 165 événements positifs, HYPO atteint en moyenne
-97,0\,\% de couverture attribuable, 71,5\,\% de nouveaux départs et 30,9\,\% à IoU20. Il
-conserve un avantage exact sur IF, IF avec persistance et LOF avec persistance
+97,0\,\% de couverture attribuable, 71,5\,\% de nouveaux départs et un taux de 30,9\,\% à
+IoU20. HYPO conserve un avantage exact sur IF, IF avec persistance et LOF avec persistance
 ($p=0{,}000488$ pour chaque comparaison). Ce résultat positif montre que l'avantage de HYPO
 sur les détecteurs ponctuels ne dépend pas uniquement de la forme graduelle initiale. En
 revanche, sa couverture ne dépasse pas celle du comparateur pédométrique temporel
@@ -102,11 +102,11 @@ reste toutefois mal localisé (IoU moyen de 0,038 et aucun événement à IoU20)
 soutient donc la robustesse temporelle de HYPO aux formes moins favorables, mais ne démontre
 pas un gain indépendant de spécificité multivariée.
 
-L'analyse OFAT montre ensuite que ces conclusions ne reposent pas sur une valeur unique de
+L'analyse OFAT montre ensuite que ces conclusions ne reposent pas sur \textbf{une valeur unique} de
 chaque seuil. Elle identifie toutefois deux choix structurants~: l'agrégation et le nombre de
 familles concordantes. Exiger quatre familles réduit fortement la couverture et le fond, alors
-que n'en exiger que deux augmente la charge~; une agrégation courte réagit plus vite mais
-localise moins bien, tandis qu'une agrégation longue perd des événements. Les valeurs de
+que n'en exiger que deux augmente la charge~; une \textbf{agrégation courte} réagit plus vite mais
+localise moins bien, tandis qu'une \textbf{agrégation longue} perd des événements. Les valeurs de
 référence constituent donc un compromis documenté, non un optimum. Modifier les seuils après
 lecture de cette analyse aurait transformé une étude de robustesse en sélection sur les
 données d'évaluation~; aucun réglage a posteriori n'a été effectué.
@@ -128,8 +128,8 @@ rejetés dans la campagne synthétique, la séquence instabilité vers hypoactiv
 dans 90,9\,\% des cas, et 66,7\,\% des instabilités produisent bien une sortie de
 surveillance. La fusion hiérarchique augmente la couverture des scénarios de vérification de
 61,4 à 72,7\,\% par rapport à HYPO seul dans la campagne étendue, qui compte 132 scénarios. En contrepartie, elle
-n'améliore pas IoU20, augmente le fond de 0,446 à 0,571 notification par vache-jour et alerte
-une part notable des facteurs confondants. Son apport démontré réside donc dans la séparation
+n'améliore pas IoU20, elle porte le fond de 0,446 à 0,571 notification par vache-jour et elle
+déclenche une alerte sur une part notable des facteurs confondants. Son apport démontré réside donc dans la séparation
 des sorties et dans le gain de couverture, plutôt que dans une supériorité globale sur HYPO.
 Les profils d'instabilité et leur chronologie restent des hypothèses de test~: la branche
 structure ces hypothèses dans une interface de surveillance, tandis que HYPO demeure la
@@ -168,7 +168,7 @@ déjà ces journées visibles à l'écran, mais aucun mécanisme ne les écarte 
 
 Ces deux leviers se distinguent du filtre d'activité coordonnée déjà présent dans la branche
 INSTABILITÉ, qui compare l'excès de pas à celui de l'indice de mouvement chez une même vache
-et demeure donc intra-individuel. Ils ouvriraient un axe orthogonal aux trois niveaux de
+et demeure donc intra-individuel. Ils agiraient sur une dimension indépendante des trois niveaux de
 priorité~: là où la priorité indique quel mécanisme a déclenché, une normalisation par le
 troupeau et un filtre collectif permettraient de graduer la confiance accordée à chaque
 alerte, et donc de réduire la charge de revue sans toucher au détecteur lui-même. Cette piste
