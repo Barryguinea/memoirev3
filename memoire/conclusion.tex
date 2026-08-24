@@ -431,6 +431,11 @@ considérable, et l'analyse OFAT désigne l'agrégation et le nombre de familles
 comme les deux leviers structurants. Les explorer suppose toutefois un jeu de développement
 séparé, sans quoi tout gain observé resterait une sélection rétrospective.
 
+Le coût de calcul offre par ailleurs une marge immédiate~: le comparateur IF consomme
+82,8\,\% du temps d'exécution alors que les deux branches et leur fusion n'en demandent que
+6,4\,\%. Le retirer d'un déploiement, où il ne sert plus de point de comparaison, ramènerait
+la chaîne complète sous deux secondes.
+
 La quatrième, enfin, est la validation clinique longitudinale que le
 Tableau~\ref{tab:portee_conclusions} classe parmi ce qui reste à établir~: examens locomoteurs
 répétés, causes documentées et suivi des décisions prises à partir des alertes. Elle seule
