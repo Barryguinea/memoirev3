@@ -144,12 +144,12 @@ d'évaluer l'apport de la structure temporelle explicite du système proposé.
 % =====================================================================
 
 \subsection{Isolation Forest}
-La première méthode de référence repose sur l'algorithme Isolation Forest (IF), proposé par
-\citet{liu2008isolation}. Son principe est que les anomalies sont plus faciles à isoler que
+La première méthode de référence repose sur l'algorithme Isolation Forest, ou IF
+\citep{liu2008isolation}. Son principe est que les anomalies sont plus faciles à isoler que
 les points normaux dans un
 espace de variables. Son échantillonnage et ses arbres aléatoires permettent de traiter des
 jeux tabulaires sans modèle explicite de la distribution normale. Son implémentation dans
-scikit-learn, comme montré dans \citet{sklearn_api}, fournit un comparateur ponctuel
+scikit-learn \citep{sklearn_api} fournit un comparateur ponctuel
 reproductible; elle ne modélise toutefois pas directement la direction ni la durée d'un
 changement.
 
@@ -200,8 +200,7 @@ d'anomalie est inversement proportionnel au nombre de coupures.
 \end{figure}
 
 \subsection{Local Outlier Factor}
-La méthode nommée Local Outlier Factor (LOF), proposée par
-\citet{breunig2000lof}, estime la
+La méthode nommée Local Outlier Factor (LOF), \citep{breunig2000lof} estime la
 densité locale de chaque point par rapport à celle de ses voisins. Il vise ainsi des points
 rares dans leur voisinage, tandis qu'IF repose sur leur facilité d'isolation globale. Le coût
 de LOF dépend notamment de la recherche des voisins et de la dimension des données. Dans ce
@@ -271,8 +270,8 @@ détecteurs utilisés dans ce projet.
             & Densité locale relative \\
         Type d'anomalie ciblée        & Globale (isolée dans l'espace)
             & Locale (faible densité relative) \\
-        Référence fondatrice          & \citet{liu2008isolation}
-            & \citet{breunig2000lof} \\
+        Référence fondatrice          & \citep{liu2008isolation}
+            & \citep{breunig2000lof} \\
         Dépendance principale         & Nombre d'arbres et contamination
             & Nombre de voisins et contamination \\
         Limite pour ce projet         & Ne modélise pas la persistance
@@ -327,8 +326,8 @@ Les revues spécialisées sur la détection automatisée de boiterie convergent 
 limite récurrente: l'hétérogénéité des protocoles. Le type de capteur, sa position sur
 l'animal, la définition opérationnelle de la boiterie, la taille des cohortes et l'horizon
 d'évaluation varient fortement d'une étude à l'autre, ce qui complique la comparaison
-directe des performances publiées, comme le soulignent les travaux présentés dans
-\citet{oleary2020accelerometers} et \citet{alsaaod2019automatic}.
+directe des performances publiées, comme le soulignent plusieurs revues
+\citep{oleary2020accelerometers,alsaaod2019automatic}.
 
 Les travaux représentatifs du Tableau~\ref{tab:revue_ciblee} montrent pourquoi les
 performances numériques ne doivent pas être juxtaposées sans précaution: les définitions
@@ -347,28 +346,28 @@ classement de sensibilités.
         \toprule
         \textbf{Travail} & \textbf{Constat utile} & \textbf{Conséquence pour ce mémoire} \\
         \midrule
-        \citet{alsaaod2019automatic}
+        \citep{alsaaod2019automatic}
         & Les systèmes automatiques reposent sur des modalités et des protocoles hétérogènes.
         & Limiter la sortie à une alerte comportementale et documenter le protocole complet. \\
         \addlinespace
-        \citet{oleary2020accelerometers}
+        \citep{oleary2020accelerometers}
         & Les variables accélérométriques associées à la boiterie varient selon le capteur et
           le protocole.
         & Éviter une signature universelle et conserver plusieurs familles de signaux. \\
         \addlinespace
-        \citet{lavrova2023lameness}
+        \citep{lavrova2023lameness}
         & Une étude multi-fermes combine activité, couchage, production et caractéristiques
           individuelles.
         & Comparer chaque vache à sa propre référence et reconnaître l'intérêt futur de
           variables contextuelles. \\
         \addlinespace
-        \citet{balasso2023behaviour}
+        \citep{balasso2023behaviour}
         & Les signaux accélérométriques bruts permettent de modéliser des motifs
           comportementaux complexes.
         & Ne pas transposer ces capacités à des agrégats de 15~minutes qui ne contiennent
           plus la dynamique fine de la démarche. \\
         \addlinespace
-        \citet{palma2025scoping}
+        \citep{palma2025scoping}
         & Le déploiement de l'intelligence artificielle en élevage dépend de la qualité des
           données, de l'intégration et de l'usage.
         & Privilégier une sortie traçable, interprétable et destinée à une vérification
@@ -376,9 +375,9 @@ classement de sensibilités.
         \bottomrule
     \end{tabular}
 \end{table}
-Le travail présenté dans \citet{oleary2020accelerometers} sur les accéléromètres pour la
-détection de boiterie confirme cette dispersion et souligne l'absence de standardisation
-dans les protocoles d'évaluation.
+Une revue des accéléromètres pour la détection de boiterie confirme cette dispersion et
+souligne l'absence de standardisation dans les protocoles d'évaluation
+\citep{oleary2020accelerometers}.
 \citet{alsaaod2019automatic} soulignent aussi en particulier l'absence
 de véritables études de longue durée ayant abouti à un système d'alerte précoce valide de
 bout en bout.
