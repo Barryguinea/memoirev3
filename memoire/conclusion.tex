@@ -18,17 +18,17 @@
 \renewcommand{\thetable}{D.\arabic{table}}
 
 \section{Ce que le système établit}
-L'objectif de ce mémoire était de produire une chaîne reproductible qui transforme des
-mesures IceQube indirectes en priorités de vérification locomotrice. Son apport central est
+L'objectif de ce mémoire était de concevoir une chaîne reproductible qui transforme des
+mesures indirectes du capteur IceQube en priorités de vérification locomotrice. Son apport central est
 de montrer qu'une alerte comportementale peut être construite autour d'une trajectoire
 individuelle plutôt qu'autour de points anormaux isolés. La branche HYPO combine direction du
-changement, cohérence entre signaux et persistance temporelle, et cette combinaison produit
-des épisodes plus cohérents avec les dégradations graduelles que les comparateurs Isolation
-Forest et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33 événements
+changement, cohérence entre signaux et persistance temporelle. Cette combinaison produit
+des épisodes plus cohérents avec les dégradations graduelles que les comparateurs IF
+et LOF. Après soustraction de l'exécution propre, HYPO couvre 29 des 33 événements
 graduels et atteint IoU20 dans 13 cas. Ce résultat établit la capacité du système à
 transformer une dégradation contrôlée en priorité de vérification localisée.
 
-Ce résultat se lit à deux niveaux complémentaires. La couverture de 87,9\,\% montre que HYPO
+Le résultat établi se lit à deux niveaux complémentaires. La couverture de 87,9\,\% montre que HYPO
 réagit dans la plupart des fenêtres injectées, tandis que le taux de nouveaux départs de
 57,6\,\% distingue les épisodes réellement ouverts de ceux qui prolongent une alerte déjà
 active. Le délai médian de 20,75 heures situe le caractère \textit{précoce} relativement aux
@@ -40,11 +40,11 @@ preuve.
 
 
 La comparaison aux autres détecteurs apporte un résultat méthodologique important~: la
-quantité de points anormaux n'est pas le critère décisif. Isolation Forest ponctuel produit
+quantité de points anormaux n'est pas le critère décisif. IF ponctuel produit
 7,658 départs par vache-jour sans atteindre IoU20 sur un seul événement, et les variantes IF
 et LOF suivies de persistance réduisent la charge sans localiser davantage les fenêtres. HYPO
-atteint pour sa part un IoU attribuable moyen de 0,137 et 29,5\,\% à IoU20 sur les quatre
-profils. La direction du changement et l'accumulation temporelle sont donc mieux soutenues
+atteint, pour sa part, un IoU attribuable moyen de 0,137 et un taux de 29,5\,\% à IoU20 sur
+les quatre profils. La direction du changement et l'accumulation temporelle sont donc mieux soutenues
 que la simple accumulation d'anomalies ponctuelles. La contribution propre de la cohérence
 entre familles demande toutefois une comparaison supplémentaire, car le comparateur
 pédométrique partage la même machinerie temporelle.
@@ -78,8 +78,8 @@ pédométrique partage la même machinerie temporelle.
   \end{tabular}
 \end{table}
 
-Le stress test à aire d'enveloppe appariée apporte cette comparaison sur cinq formes moins favorables,
-trois positions et onze vaches. Sur les 165 événements positifs, HYPO atteint en moyenne
+Le test de stress à aire d'enveloppe appariée apporte cette comparaison sur 5 formes moins
+favorables, 3 positions et 11 vaches. Sur les 165 événements positifs, HYPO atteint en moyenne
 97,0\,\% de couverture attribuable, 71,5\,\% de nouveaux départs et 30,9\,\% à IoU20. Il
 conserve un avantage exact sur IF, IF avec persistance et LOF avec persistance
 ($p=0{,}000488$ pour chaque comparaison). Ce résultat positif montre que l'avantage de HYPO
@@ -152,7 +152,7 @@ troupeau~: le détecteur compare aujourd'hui chaque vache à sa seule période d
 qui le rend insensible à un décalage affectant simultanément tout le troupeau. Le second est
 un filtre des journées collectives~: lorsqu'une proportion élevée d'animaux alerte le même
 jour, la cause la plus probable relève de la conduite, du logement ou du climat plutôt que
-d'une atteinte individuelle. La carte thermique de la Figure~\ref{fig:streamlit_heatmap} rend
+d'une atteinte individuelle. La carte thermique présentée par la Figure~\ref{fig:streamlit_heatmap} rend
 déjà ces journées visibles à l'écran, mais aucun mécanisme ne les écarte du décompte.
 
 Ces deux leviers se distinguent du filtre d'activité coordonnée déjà présent dans la branche
@@ -166,7 +166,7 @@ une journée collective peut aussi écarter une dégradation individuelle qui y 
 
 Du côté du coût de calcul, le temps médian de 10,64 secondes pour
 28 vaches montre que le prototype est techniquement exécutable sur le corpus étudié~;
-Isolation Forest représente la majeure partie de ce coût, tandis que le calcul
+IF représente la majeure partie de ce coût, tandis que le calcul
 HYPO, INSTABILITÉ et fusion ne représente que 6,4\,\% du temps instrumenté. Ce résultat ne
 préjuge pas de la latence en ferme, du stockage continu ou de la concurrence entre
 utilisateurs.
@@ -273,7 +273,7 @@ l'asymétrie de démarche, et le seuil IoU20 est une convention technique dépou
 Ce protocole d'injection soulève une objection légitime~: la campagne principale reproduit
 une baisse graduelle, persistante et concordante, c'est-à-dire précisément la signature que
 HYPO recherche. Trois éléments limitent toutefois le risque de circularité.
-D'abord, HYPO n'est pas évalué seul, mais confronté à Isolation Forest et à LOF sur exactement
+D'abord, HYPO n'est pas évalué seul, mais confronté à IF et à LOF sur exactement
 les mêmes événements injectés~; comme ces comparateurs échouent à localiser les épisodes avec
 le critère IoU20 alors que HYPO obtient une localisation supérieure, l'avantage mesuré ne
 découle pas de la simple présence de l'événement, mais de la manière dont il est capté.
