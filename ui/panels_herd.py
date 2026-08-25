@@ -158,9 +158,12 @@ def render_tab_herd(
         if plot_col:
             with cols_grid[slot % 2]:
                 r = summary_df[summary_df[COW] == cid].iloc[0]
-                st.markdown(f"**Vache {cid}**")
-                st.caption(
-                    f"Fusion : {int(r['hybrid_warning_notifs'])} | "
+                # Nom et decomptes sur une seule ligne, au corps du texte plutot
+                # qu'en legende : st.caption rend a environ 87 pour cent de cette
+                # taille, ce qui devenait illisible une fois la vue reduite a la
+                # largeur d'une page du memoire.
+                st.markdown(
+                    f"**Vache {cid}** | Fusion : {int(r['hybrid_warning_notifs'])} | "
                     f"HYPO : {int(r['behavioral_warning_notifs'])} | "
                     f"INSTABILITÉ : {int(r['instability_warning_notifs'])}"
                 )
