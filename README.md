@@ -51,7 +51,7 @@ projet-memoire/
 │   ├── campaign.py              #   Campagne post-baseline (44 événements)
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   ├── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
-│   ├── stress_campaign.py       #   Stress test à aire d'enveloppe appariée
+│   ├── stress_campaign.py       #   Test de stress à aire d'enveloppe appariée
 │   └── stress_protocol.json     #   Protocole gelé du stress test
 ├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
@@ -65,9 +65,9 @@ projet-memoire/
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
-│   ├── audit_manuscript_numbers.py     # Vérifie 398 affirmations numériques enregistrées
+│   ├── audit_manuscript_numbers.py     # 398 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 121 tests (unitaires, invariants, non-régression)
+├── tests/                       # 129 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 121 tests
+pytest -q                                # 129 tests
 ```
 
 ---
@@ -138,7 +138,7 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    python scripts/compute_bootstrap_ci.py
    ```
 
-3. **Stress test HYPO à aire d'enveloppe appariée** : cinq formes moins favorables et un
+3. **Test de stress HYPO à aire d'enveloppe appariée** : cinq formes moins favorables et un
    contrôle pas-seuls, à trois positions par vache :
    ```bash
    python -m scripts.run_hypo_stress_validation
@@ -196,7 +196,12 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   Le manifeste inclut un fichier de provenance contenant uniquement l'empreinte,
   la taille et les dimensions du corpus confidentiel, sans en diffuser le contenu.
 - Un script d'audit confronte aux artefacts **398 affirmations numériques explicitement
-  enregistrées**; il ne parcourt pas automatiquement tous les nombres du PDF :
+  enregistrées**, puis cherche chacune d'elles dans les sources LaTeX. Comparer le
+  registre aux seuls artefacts prouverait leur accord mutuel, pas celui du manuscrit :
+  une valeur modifiée dans le texte et laissée intacte dans le registre passerait. Les
+  trois valeurs calculées sans être citées dans le texte sont listées avec leur raison.
+  La recherche porte sur l'ensemble des fichiers, donc elle détecte une valeur qui
+  disparaît du manuscrit, non une occurrence devenue incohérente avec ses voisines :
   ```bash
   python scripts/audit_manuscript_numbers.py
   ```
