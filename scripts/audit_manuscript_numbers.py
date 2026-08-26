@@ -1,9 +1,20 @@
 """Verify an explicit registry of numerical claims reported in the manuscript.
 
-The script does not parse every number from the TeX sources or the PDF. It reads the
-final CSV/JSON artifacts, compares them with 398 manually registered manuscript
-claims, and writes a traceable audit table. It is intentionally limited to empirical
-results; numbers taken from the literature remain controlled by their cited sources.
+The script reads the final CSV/JSON artifacts and compares them with a registry of
+manually transcribed manuscript claims. That comparison alone would only prove the
+registry consistent with the artifacts, not with the manuscript: a value edited in
+the TeX sources and left untouched here would still pass. Every registered value is
+therefore also searched for in the TeX sources themselves, in French typography, and
+the audit table records whether it was found. Values that are computed but never
+quoted in the text are listed in NOT_QUOTED with the reason.
+
+That search spans all TeX files at once, so it proves a value is still quoted
+somewhere, not that every one of its occurrences is right: editing one of five
+occurrences leaves the other four to satisfy the search. It catches a value that
+disappears from the manuscript, not one that becomes inconsistent with itself.
+
+It remains limited to empirical results; numbers taken from the literature stay
+controlled by their cited sources.
 """
 
 from __future__ import annotations
@@ -18,6 +29,64 @@ from audit_bibliography import load_bibtex
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data/validation/manuscript_number_audit.csv"
+TEX = ROOT / "memoire"
+
+# Claims whose value is computed and audited but never quoted in the running text.
+# Keeping them listed, rather than silently tolerated, is what makes a newly missing
+# value stand out.
+NOT_QUOTED = {
+    "Corpus duration days": "span reported as a date range, not as a number of days",
+    "Correlation decision Steps tau hours": "intermediate value behind the effective sample size",
+    "OFAT configurations including reference": "the text counts the 20 variants, not the reference run alongside them",
+}
+
+
+def _manuscript_text() -> str:
+    """TeX sources with comments removed, ready for a literal number search.
+
+    An escaped percent sign is not a comment: stripping on a bare "%" would cut the
+    end of every line reporting a percentage, and hide the very numbers audited here.
+    """
+    import re
+
+    chunks = []
+    for path in sorted(TEX.glob("*.tex")):
+        text = re.sub(r"(?<!\\)%.*", "", path.read_text(encoding="utf8"))
+        chunks.append(text)
+    joined = "\n".join(chunks)
+    return joined.replace("\\,", "").replace("{,}", ",").replace("~", " ")
+
+
+MANUSCRIPT = _manuscript_text()
+
+
+def _quoted_in_manuscript(value: float) -> bool:
+    """Does the value appear in the TeX sources, in one of its written forms?
+
+    A ratio is often written as a percentage, and a percentage is rounded to one or
+    two decimals, so every plausible rendering is tried before concluding.
+    """
+    import re
+
+    candidates = set()
+    for scaled in (float(value), float(value) * 100.0):
+        if abs(scaled - round(scaled)) < 1e-9:
+            whole = int(round(scaled))
+            candidates.add(str(whole))
+            candidates.add(f"{whole:,}".replace(",", " "))
+        for decimals in (1, 2, 3, 4):
+            candidates.add(f"{scaled:.{decimals}f}".replace(".", ","))
+    # Bornes indispensables : sans elles "41" se trouverait dans "0,41" et l'audit
+    # validerait une valeur absente du texte. Une virgule ne borne le nombre que
+    # si elle est suivie d'un chiffre : "0,712," se termine par une ponctuation,
+    # pas par une decimale.
+    return any(
+        re.search(
+            rf"(?<!\d)(?<!\d,){re.escape(form)}(?!\d)(?!,\d)",
+            MANUSCRIPT,
+        )
+        for form in candidates
+    )
 
 
 def close(actual: float, expected: float, tolerance: float = 5e-4) -> bool:
@@ -36,6 +105,7 @@ def check(claim: str, actual: float, expected: float, source: str, tolerance: fl
             "artifact_value": float(actual),
             "source": source,
             "passed": passed,
+            "quoted_in_manuscript": _quoted_in_manuscript(expected),
         }
     )
     if not passed:
@@ -776,4 +846,22 @@ check(
 audit = pd.DataFrame(records)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 audit.to_csv(OUT, index=False)
-print(f"Verified {len(audit)} manuscript values; audit written to {OUT.relative_to(ROOT)}")
+
+missing = audit[~audit["quoted_in_manuscript"] & ~audit["claim"].isin(NOT_QUOTED)]
+quoted = int(audit["quoted_in_manuscript"].sum())
+print(
+    f"Verified {len(audit)} manuscript values against the artifacts; "
+    f"{quoted} of them are quoted in the TeX sources, "
+    f"{len(NOT_QUOTED)} are registered as computed but never quoted."
+)
+if len(missing):
+    lignes = "\n".join(
+        f"  {row.claim}: {row.manuscript_value} (source {row.source})"
+        for row in missing.itertuples()
+    )
+    raise AssertionError(
+        "These audited values no longer appear in the manuscript. Either the text "
+        "changed and the registry was not updated, or the value stopped being "
+        "quoted and belongs in NOT_QUOTED:\n" + lignes
+    )
+print(f"Audit written to {OUT.relative_to(ROOT)}")
