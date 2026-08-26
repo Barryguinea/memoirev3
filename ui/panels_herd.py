@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, List
 
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import streamlit as st
 
 from core.io import COW
@@ -227,41 +227,117 @@ def render_tab_daily_comparison(
     sev_max = daily["severity_raw"].max()
     daily["severity"] = daily["severity_raw"] / sev_max if sev_max > 0 else daily["severity_raw"]
 
-    pivot = daily.pivot(index=COW, columns="Day", values="severity").fillna(0)
+    # Pas de fillna : un couple (vache, jour) sans mesure doit rester vide. Le
+    # combler par un zero l'afficherait comme une journee observee sans alerte,
+    # alors qu'aucune donnee n'existe. Le fond gris du trace les distingue.
+    pivot = daily.pivot(index=COW, columns="Day", values="severity")
     severity = pivot.sum(axis=1).sort_values(ascending=False)
     pivot = pivot.loc[severity.index]
-    x_days = pd.to_datetime(pivot.columns).strftime("%b %d").tolist()
 
-    fig_heat = go.Figure(
-        data=go.Heatmap(
-            z=pivot.values,
-            x=x_days,
-            y=[f"Vache {c}" for c in pivot.index],
-            colorscale="YlOrRd",
-            zmin=0, zmax=1,
-            hovertemplate="Jour=%{x}<br>%{y}<br>Sévérité=%{z:.0%}<extra></extra>",
-            colorbar=dict(title="Sévérité"),
-        )
-    )
-    fig_heat.update_layout(height=600, title="Carte thermique des alertes journalières", margin=dict(l=10, r=10, t=60, b=10))
-    st_plotly(fig_heat, "tab3", "heatmap", file_hash, width="stretch")
+    # Colonnes reindexees sur le calendrier complet, et axe des dates reel
+    # plutot que categoriel : les journees sans aucune mesure forment une bande
+    # vide au lieu d'etre escamotees, et l'axe coincide avec celui de la courbe
+    # placee dessous. Deux dates identiques s'y lisent donc a la meme abscisse.
+    jours = pd.date_range(daily["Day"].min(), daily["Day"].max(), freq="D")
+    pivot = pivot.reindex(columns=jours)
 
     herd_daily = (
         daily.groupby("Day")
         .agg(cows=("day_alert", "size"), cows_alert=("day_alert", "sum"), total_notifs=("day_notifs", "sum"))
         .reset_index()
     )
-    herd_daily["pct_alert"] = (herd_daily["cows_alert"] / herd_daily["cows"]) * 100.0
 
-    fig_line = px.line(
-        herd_daily.sort_values("Day"),
-        x="Day",
-        y="pct_alert",
-        markers=True,
-        title="Pourcentage de vaches en alerte par jour",
+    # Deux effectifs plutot qu'une proportion : l'effectif observe varie d'un
+    # jour a l'autre, si bien qu'une part de 100 % peut recouvrir une seule
+    # vache aussi bien que tout le troupeau. Les tracer ensemble rend le
+    # denominateur visible sur la figure imprimee, ou aucune infobulle ne
+    # s'affiche.
+    #
+    # La reindexation sur le calendrier complet laisse vides les journees sans
+    # aucune mesure : la courbe s'y interrompt au lieu d'etre franchie par un
+    # segment droit, qui donnerait a lire une evolution la ou rien n'est mesure.
+    herd_plot = herd_daily.set_index("Day").reindex(jours).rename_axis("Day").reset_index()
+
+    # Un seul graphique a deux rangees plutot que deux graphiques empiles : les
+    # abscisses sont alors partagees, si bien qu'une meme date tombe exactement
+    # au meme endroit dans la carte et dans la courbe. Les dates ne sont ecrites
+    # qu'une fois, sous la rangee du bas.
+    fig_compare = make_subplots(
+        rows=2, cols=1, shared_xaxes=True,
+        row_heights=[0.70, 0.30], vertical_spacing=0.09,
+        subplot_titles=(
+            "Carte thermique des alertes journalières",
+            "Vaches en alerte et vaches observées, par jour",
+        ),
     )
-    fig_line.update_layout(height=300, margin=dict(l=10, r=10, t=50, b=10))
-    st_plotly(fig_line, "tab3", "line", file_hash, width="stretch")
+
+    fig_compare.add_trace(
+        go.Heatmap(
+            z=pivot.values,
+            x=pivot.columns,
+            y=[f"Vache {c}" for c in pivot.index],
+            colorscale="YlOrRd",
+            zmin=0, zmax=1,
+            hovertemplate="Jour=%{x}<br>%{y}<br>Sévérité=%{z:.0%}<extra></extra>",
+            colorbar=dict(title="Sévérité", len=0.70, y=1.0, yanchor="top"),
+        ),
+        row=1, col=1,
+    )
+    fig_compare.add_trace(
+        go.Scatter(
+            x=herd_plot["Day"], y=herd_plot["cows_alert"],
+            name="Vaches en alerte", mode="lines+markers",
+            line=dict(color="#1f77b4"),
+            hovertemplate="Jour=%{x|%d %b}<br>Vaches en alerte=%{y}<extra></extra>",
+        ),
+        row=2, col=1,
+    )
+    fig_compare.add_trace(
+        go.Scatter(
+            x=herd_plot["Day"], y=herd_plot["cows"],
+            name="Vaches observées", mode="lines+markers",
+            line=dict(color="#9e9e9e", dash="dot"), marker=dict(size=4),
+            hovertemplate="Jour=%{x|%d %b}<br>Vaches observées=%{y}<extra></extra>",
+        ),
+        row=2, col=1,
+    )
+
+    # Le fond gris ne couvre que la carte : il signale les couples sans mesure,
+    # notion qui n'a pas de sens sous la courbe.
+    fig_compare.add_shape(
+        type="rect", xref="x domain", yref="y domain",
+        x0=0, x1=1, y0=0, y1=1,
+        fillcolor="#e0e0e0", line_width=0, layer="below",
+        row=1, col=1,
+    )
+
+    # Sous-titres ramenes a gauche, legende posee a droite sur la meme ligne que
+    # celui de la rangee du bas : les deux ne se genent pas et le titre cesse
+    # d'etre colle a la legende.
+    #
+    # Les sous-titres sont en outre remontes de quelques pixels : places par
+    # defaut au ras du trace, ils touchaient la premiere rangee de vaches. La
+    # legende suit le meme decalage pour rester sur la ligne du sous-titre du
+    # bas, ce qui suppose de le convertir en fraction de la hauteur.
+    hauteur_px = 820
+    decalage_px = 14
+    for annotation in fig_compare.layout.annotations:
+        annotation.update(x=0.0, xanchor="left", yshift=decalage_px)
+    haut_rangee_basse = fig_compare.layout.yaxis2.domain[1] + decalage_px / hauteur_px
+
+    fig_compare.update_yaxes(title_text="Nombre de vaches", row=2, col=1)
+    fig_compare.update_xaxes(title_text="Jour", row=2, col=1)
+    fig_compare.update_layout(
+        height=hauteur_px,
+        margin=dict(l=10, r=10, t=60, b=10),
+        plot_bgcolor="white",
+        legend=dict(
+            orientation="h",
+            yanchor="bottom", y=haut_rangee_basse,
+            xanchor="right", x=1.0,
+        ),
+    )
+    st_plotly(fig_compare, "tab3", "compare_daily", file_hash, width="stretch")
 
 
 def render_tab_export(
