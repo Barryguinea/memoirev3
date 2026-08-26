@@ -23,7 +23,11 @@ COLOR_LAME = "#AF4646"
 LAME_MARKER_SIZE = 7.5
 COLOR_INSTABILITY = "#D9A441"
 COLOR_EP = "#6A3D9A"
-EP_MARKER_SIZE = 9.0
+# 14 et non 9 : a diametre egal une etoile porte bien moins de matiere qu'un
+# disque, si bien que la notification, marqueur le plus important de la vue,
+# paraissait plus discrete que les episodes traces a 7,5. A 14 elle passe
+# devant eux, et de 0,80 a 1,24 mm une fois la capture imprimee au chapitre 5.
+EP_MARKER_SIZE = 14.0
 
 # Vignettes « Vaches a verifier en priorite ». Le bleu tres pale employe
 # jusqu'ici se lisait mal une fois la vignette reduite. Ces deux teintes sont
