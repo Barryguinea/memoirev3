@@ -14,13 +14,16 @@
 % identiques, donc l'etoile n'est jamais transmise.
 \setcounter{secnumdepth}{2}
 % Sans numero, un intertitre en graisse normale ne se distingue pas du texte :
-% on le passe en gras. \origsubsubsection est la forme \@startsection que la
-% classe enveloppe ; la redefinir ici conserve toute sa logique d'espacement.
+% on le passe en italique. Le gras, essaye d'abord, rendait l'intertitre plus
+% visible que la section A.x qui le contient, alors que la classe impose le
+% romain aux sections ; l'italique est aussi celui des intitules de la
+% conclusion. \origsubsubsection est la forme \@startsection que la classe
+% enveloppe ; la redefinir ici conserve toute sa logique d'espacement.
 \makeatletter
 \renewcommand\origsubsubsection{\@startsection{subsubsection}{3}{\z@}%
                                      {12bp\@plus .2ex \@minus .2ex}%
                                      {.01pt \@plus .2ex}%
-                                     {\normalfont\normalsize\bfseries\baselineskip=\simpleinter}}
+                                     {\normalfont\normalsize\itshape\baselineskip=\simpleinter}}
 \makeatother
 
 Cette annexe recense les commandes et artefacts qui soutiennent les résultats du mémoire.
