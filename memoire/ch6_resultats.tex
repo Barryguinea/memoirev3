@@ -59,7 +59,7 @@ objectif annoncé à son résultat.
 \end{table}
 
 Les onze vaches admissibles fournissent quatre événements par vache lors de la campagne
-HYPO, soit un total de 44 événements, six formes à trois positions dans le stress test, pour
+HYPO, soit un total de 44 événements, six formes à trois positions dans le test de stress, pour
 un total de 198 événements, ainsi que douze scénarios par vache lors de la campagne étendue,
 pour un total de 132 scénarios. Ces effectifs ne sont
 pas regroupés~: la première campagne mesure la réponse attribuable de HYPO, la deuxième
@@ -82,7 +82,7 @@ l'intégrité et la comparabilité de ces campagnes.
     Injections strictement postérieures à la période de référence & Conforme \\
     Signaux sources informatifs et couverture admissible & Conforme \\
     Non-négativité et conservation du temps postural & Conforme \\
-    Aire d'enveloppe appariée sur les intervalles conservés du stress test & Conforme \\
+    Aire d'enveloppe appariée sur les intervalles conservés du test de stress & Conforme \\
     Trois positions postérieures à la période de référence & Conforme \\
     Exécution propre utilisée pour l'attribution & Conforme \\
     \bottomrule
@@ -525,7 +525,7 @@ Sur l'ensemble des 20 variantes, le contrôle bref reste rejeté sans exception~
 de la campagne principale ne dépend donc pas d'un seuil isolé.
 
 % =====================================================================
-\section{Stress test HYPO à aire d'enveloppe appariée}
+\section{Test de stress HYPO à aire d'enveloppe appariée}
 % =====================================================================
 La campagne gelée applique six formes à trois positions chez chacune des onze vaches, soit
 198 événements physiques et 990 évaluations pour les cinq variantes. Les cinq formes
@@ -565,7 +565,7 @@ recouvrement attribuable, alors qu'IoU20 reste à 24,2\,\%.
 
 \begin{table}[H]
   \centering
-  \caption{Comparaisons appariées sur les cinq formes positives du stress test.}
+  \caption{Comparaisons appariées sur les cinq formes positives du test de stress.}
   \label{tab:hypo_stress_comparisons}
   \small
   \begin{tabular}{lrr}
@@ -599,12 +599,12 @@ donc correctement une perturbation mono-famille. Le détecteur multivarié, lui,
 jamais. Sur les 165 événements positifs, les deux restent proches, à 97,0 contre 98,2\,\% de
 recouvrement et 30,9 contre 33,9\,\% à IoU20. L'exigence de concordance entre familles ne
 supprime donc pas le déclenchement sur un canal isolé, mais elle empêche de le localiser~;
-c'est la seule dimension où sa contribution propre se manifeste dans ce stress test. IF et LOF
+c'est la seule dimension où sa contribution propre se manifeste dans ce test de stress. IF et LOF
 rejettent ce contrôle plus franchement, à 0,0\,\% de recouvrement pour les variantes dotées de
 règles de persistance et 12,1\,\% pour IF ponctuel, mais au prix d'un recouvrement de 12,7 à
 44,2\,\% seulement sur les événements positifs.
 
-Le stress test établit ainsi une robustesse temporelle positive face aux cinq formes moins
+Le test de stress établit ainsi une robustesse temporelle positive face aux cinq formes moins
 favorables et un avantage net sur IF et LOF, tout en délimitant précisément l'apport de la
 cohérence multivariée~: démontré sur la localisation d'un stimulus mono-famille, non démontré
 sur le déclenchement. Avec les signaux disponibles, une vérification contextuelle reste

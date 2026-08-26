@@ -48,7 +48,7 @@ La reproduction complète suit six étapes, dans l'ordre~:
   \item exécuter l'évaluation et l'ablation du module HYPO~;
   \item exécuter l'analyse OFAT, la calibration exploratoire et la courbe
   détection-charge de HYPO~;
-  \item exécuter le stress test HYPO à aire d'enveloppe appariée, puis la comparaison exploratoire des fusions~;
+  \item exécuter le test de stress HYPO à aire d'enveloppe appariée, puis la comparaison exploratoire des fusions~;
   \item exécuter l'analyse IceTag-SLS, l'audit bibliographique et régénérer les figures~;
   \item régénérer puis vérifier le manifeste SHA-256.
 \end{enumerate}
@@ -63,7 +63,7 @@ python scripts/run_hypo_module_validation.py \
 Cette commande régénère les 44 événements, les contrôles du protocole, le résumé par profil,
 l'ablation et les tests appariés regroupés par vache.
 
-\subsubsection{Stress test HYPO à aire d'enveloppe appariée}
+\subsubsection{Test de stress HYPO à aire d'enveloppe appariée}
 \begin{verbatim}
 python -m scripts.run_hypo_stress_validation
 \end{verbatim}
@@ -261,7 +261,7 @@ La campagne HYPO comporte 44 événements mais repose sur les mêmes onze vaches
 l'ablation utilisent donc les moyennes par vache, jamais les 44 lignes comme observations
 indépendantes.
 
-Le stress test comporte 198 événements physiques et 990 lignes après application des cinq
+Le test de stress comporte 198 événements physiques et 990 lignes après application des cinq
 variantes. Les trois positions et les six formes restent imbriquées dans les mêmes onze
 vaches. Les intervalles de confiance rééchantillonnent donc les vaches, et les tests exacts
 appariés portent sur onze différences moyennes par vache.
