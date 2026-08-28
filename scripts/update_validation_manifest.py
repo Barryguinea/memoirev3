@@ -17,6 +17,7 @@ PATTERNS = (
     "data/validation/input_provenance.json",
     "data/validation/manuscript_number_audit.csv",
     "data/validation/derived_metrics/*.csv",
+    "data/validation/derived_metrics/*.json",
     "data/validation/hypo_module/*.csv",
     "data/validation/hypo_module/detection_background_curve/*.csv",
     "data/validation/hypo_module/parameter_sensitivity/*.csv",

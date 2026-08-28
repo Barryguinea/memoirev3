@@ -44,7 +44,15 @@ un intervalle de 15 minutes. L'étendue, de 244 à 2\,474 lignes, montre que les
 suivi diffèrent fortement d'une vache à l'autre, là où la médiane résume la situation
 typique. Aucun doublon vache-temps n'est présent. La période s'étend sur 42 journées, dont 33
 seulement portent des mesures~: aucune donnée n'est enregistrée du 7 au 15 octobre 2023, et
-l'origine de cette interruption n'est pas documentée dans la source.
+l'origine de cette interruption n'est pas documentée dans la source. Cinq journées de la
+reprise, les 16, 17, 19, 21 et 22 octobre, portent des mesures sans aucune activité~: les pas,
+le \textit{Motion Index} et les transitions y sont nuls pour toutes les vaches observées, et la
+posture y est enregistrée comme couchée sur la totalité des intervalles. Une telle immobilité
+est incompatible avec le comportement d'une vache laitière, qui se lève plusieurs fois par
+jour~; ces journées relèvent donc de l'acquisition et non du comportement. Elles représentent
+15,6\,\% des couples vache-jour du corpus et tombent à 98\,\% dans les périodes de référence,
+dont elles abaissent le niveau attendu. Les conserver rend les résultats conservateurs~: leur
+retrait porterait la détection attribuable de 43,2 à 47,7\,\% et l'IoU20 de 29,5 à 34,1\,\%.
 
 \subsection{Variables brutes du corpus}
 Les variables exploitées par les deux branches de détection sont les pas, le

@@ -38,6 +38,7 @@ NOT_QUOTED = {
     "Corpus duration days": "span reported as a date range, not as a number of days",
     "Correlation decision Steps tau hours": "intermediate value behind the effective sample size",
     "OFAT configurations including reference": "the text counts the 20 variants, not the reference run alongside them",
+    "Sensibilite journees sans activite, intervalles retires": "the chapter reports the five days, not the interval count behind them",
 }
 
 
@@ -841,6 +842,24 @@ check(
     float(holm.loc["nouveau_depart", "significatif_5pct"].sum()),
     1.0,
     "derived_metrics/holm_adjusted_pvalues.csv",
+)
+
+# Sensibilite aux journees sans activite mesuree, citee au chapitre 4.
+sensibilite = json.loads(
+    (ROOT / "data/validation/derived_metrics/dead_days_sensitivity.json").read_text()
+)
+for cle, attendu in (("detection_attribuable", 0.477), ("iou20", 0.341)):
+    check(
+        f"Sensibilite journees sans activite, {cle} apres retrait",
+        sensibilite["sans_journees_sans_activite"][cle],
+        attendu,
+        "derived_metrics/dead_days_sensitivity.json",
+    )
+check(
+    "Sensibilite journees sans activite, intervalles retires",
+    sensibilite["intervalles_retires"],
+    5476.0,
+    "derived_metrics/dead_days_sensitivity.json",
 )
 
 audit = pd.DataFrame(records)

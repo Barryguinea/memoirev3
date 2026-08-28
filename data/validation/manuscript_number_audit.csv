@@ -61,7 +61,7 @@ HYPO mean IoU,0.1827,0.1827362737290056,hypo_module/parameter_sensitivity/parame
 HYPO median onset delay hours,20.75,20.75,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
 HYPO background per cow-day,0.4016,0.4016,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
 HYPO background P90,0.4913,0.4913,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
-OFAT configurations including reference,21.0,21.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,False
+OFAT configurations including reference,21.0,21.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
 OFAT event evaluations,924.0,924.0,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
 OFAT new onset range minimum,0.455,0.4545454545454545,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
 OFAT new onset range maximum,0.667,0.6666666666666666,hypo_module/parameter_sensitivity/parameter_sensitivity_summary.csv,True,True
@@ -397,3 +397,6 @@ Holm nouveau_depart A vs B,0.08594,0.08594,derived_metrics/holm_adjusted_pvalues
 Holm nouveau_depart A vs D,0.08594,0.08594,derived_metrics/holm_adjusted_pvalues.csv,True,True
 Holm IoU significatif pour les trois comparaisons,3.0,3.0,derived_metrics/holm_adjusted_pvalues.csv,True,True
 Holm nouveau depart significatif pour la seule comparaison avec C,1.0,1.0,derived_metrics/holm_adjusted_pvalues.csv,True,True
+"Sensibilite journees sans activite, detection_attribuable apres retrait",0.477,0.477,derived_metrics/dead_days_sensitivity.json,True,True
+"Sensibilite journees sans activite, iou20 apres retrait",0.341,0.341,derived_metrics/dead_days_sensitivity.json,True,True
+"Sensibilite journees sans activite, intervalles retires",5476.0,5476.0,derived_metrics/dead_days_sensitivity.json,True,False
