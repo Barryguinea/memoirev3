@@ -57,20 +57,21 @@ herd scale. Activity sensors complement this monitoring by flagging persistent b
 changes that justify on-farm verification. This thesis designs and evaluates a reproducible
 \textbf{early behavioral-alert} system based on leg-mounted IceQube sensors.
 
-The main contribution is the temporal HYPO branch. It compares each cow with her own reference
+The main contribution is the temporal HYPO branch. It compares each cow with her own baseline
 period and searches for a gradual, persistent and concordant decline across several signal
 families: steps, motion index, postural transitions, lying time and standing time. This
-individualized logic converts indirect time series into traceable verification priorities.
-Evaluation uses events injected strictly after the reference period and compares each injected
+individualized logic converts indirect behavioral measurements into traceable verification priorities.
+Evaluation uses events injected strictly after the baseline period and compares each injected
 run with a clean run of the same cow, so that only attributable alerts are credited. On gradual
 degradations, HYPO recovers most events and localizes episodes better than Isolation Forest and
-Local Outlier Factor; the isolated brief variation is rejected. A no-retuning stress test
+Local Outlier Factor; the isolated brief variation, a single short departure from normal behavior, is rejected. A no-retuning stress test
 extends the evaluation to abrupt onset, desynchronized families, asymmetric recovery, noise and
 a missing-data block with matched numerical perturbation-envelope area. HYPO keeps its advantage
 over IF and LOF and yields less background load than the pedometric comparator, without
 surpassing it in localizing the expected shapes. Its multi-family coherence shows elsewhere: it
 prevents HYPO from localizing a perturbation confined to steps, which the pedometric comparator
-locates correctly.
+locates correctly. Requiring joint evidence across families is what separates this approach from
+characterizing perturbations through step counts alone.
 
 The thesis explores a bidirectional extension based on an INSTABILITY branch, which
 represents situations in which locomotor discomfort could involve agitation, more frequent
