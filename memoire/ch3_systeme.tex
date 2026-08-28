@@ -90,7 +90,10 @@ entre les vaches.
 % =====================================================================
 \section{Période de référence individuelle}
 % =====================================================================
-Chaque série est triée chronologiquement. Les 60\,\% des intervalles admissibles
+La série d'intervalles de chaque vache est triée chronologiquement. Un intervalle est
+admissible lorsque sa couverture atteint 25\,\% de sa durée~; la série ne débute toutefois
+qu'au premier intervalle précédé de trois relevés valides consécutifs, le temps que le capteur
+se stabilise. Les 60\,\% des intervalles admissibles
 constituent la \textbf{période de référence}; les 40\,\% suivants forment la
 \textbf{période future}. Les médianes de
 référence sont calculées pour le même créneau horaire, avec repli sur la médiane globale de
@@ -120,15 +123,17 @@ Le détecteur recherche donc cette direction de changement plutôt qu'un écart 
 
 Les pas, le \textit{Motion Index}, les transitions et les temps posturaux sont cumulés sur
 12 heures. Pour les trois familles d'activité, le déficit est défini par
-\[
+\begin{equation}
+  \label{eq:deficit}
 d_j(t)=\max(0,1-r_j(t)),
-\]
+\end{equation}
 où \(r_j(t)\) représente le ratio à la référence individuelle. Le changement postural
 combine l'excès de temps couché et le déficit de temps debout. Le score est alors donné par la
 relation suivante~:
-\[
+\begin{equation}
+  \label{eq:score_hypo}
 S_H(t)=0{,}30d_{pas}+0{,}30d_{MI}+0{,}20d_{transitions}+0{,}20d_{posture}.
-\]
+\end{equation}
 Les trois premiers termes sont les instances de \(d_j(t)\) pour chacune des familles
 d'activité~: \(d_{pas}\) pour les pas, \(d_{MI}\) pour le \textit{Motion Index} et
 \(d_{transitions}\) pour les transitions posturales. Le quatrième, \(d_{posture}\), est le
@@ -141,9 +146,10 @@ Une famille est concordante lorsque son déficit atteint 10\,\%, seuil ramené �
 posture.
 Une baisse progressive mesurée sur six heures renforce l'évidence. Le CUSUM représente la
 somme cumulée unilatérale classique \citep{page1954continuous}. Il est défini par
-\[
+\begin{equation}
+  \label{eq:cusum}
 C_t=\max(0,C_{t-1}+e_t-0{,}07),
-\]
+\end{equation}
 où \(e_t\) désigne l'évidence accumulée à l'intervalle
 \(t\), nulle tant qu'aucun candidat n'est retenu, et \(C_{t-1}\) la valeur du cumul à
 l'intervalle précédent. La soustraction d'une dérive constante de \(0{,}07\) fait redescendre
@@ -451,9 +457,10 @@ La localisation d'un épisode est mesurée par l'intersection sur l'union
 (\textit{Intersection over Union}, IoU), une métrique issue de la détection d'objets en
 vision par ordinateur \citep{everingham2010pascal}, entre la fenêtre injectée et l'épisode
 prédit~:
-\[
+\begin{equation}
+  \label{eq:iou}
 \mathrm{IoU} = \frac{|\,\text{injecté} \cap \text{prédit}\,|}{|\,\text{injecté} \cup \text{prédit}\,|},
-\]
+\end{equation}
 exprimée en nombre d'intervalles de 15 minutes. Une valeur de~1 indique une superposition
 parfaite, alors qu'une valeur de~0 indique une absence de chevauchement. Le seuil IoU~$\geq0{,}20$ retient
 les épisodes raisonnablement localisés~; il est nettement plus strict que le simple
