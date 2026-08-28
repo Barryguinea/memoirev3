@@ -127,13 +127,16 @@ vérification. Ses contributions sont les suivantes:
   \item une évaluation attribuable par événement et par vache, avec comparaisons à Isolation
   Forest et LOF, ablation pédométrique et analyse OFAT (de l'anglais \emph{One Factor At a
   Time}, soit un facteur à la fois) de 20 variantes;
-  \item une extension bidirectionnelle exploratoire avec persistances séparées et cinq
-  règles de fusion;
-  \item des contrôles brefs et des facteurs confondants qui rendent visibles les limites de spécificité
-  au lieu de les masquer;
+  \item une extension bidirectionnelle qui sépare la surveillance de la notification et porte
+  la couverture des scénarios de vérification de 61,4 à 72,7\,\%;
+  \item des contrôles brefs et des facteurs confondants qui mesurent la spécificité au lieu de
+  la supposer;
   \item l'évaluation du temps d'exécution, l'analyse SLS synchronisée, l'interface Streamlit et
   une suite de tests reproductibles.
 \end{enumerate}
+Sur les dégradations graduelles injectées, HYPO recouvre 29 des 33 événements et en localise 13
+au seuil IoU20, là où Isolation Forest et LOF n'en localisent aucun, et il produit dix-neuf fois
+moins de notifications de fond qu'Isolation Forest ponctuel.
 La contribution principale réside dans l'articulation contrôlée de quatre exigences souvent
 traitées séparément: individualisation, temporalité, attribution et reproductibilité. Les
 artefacts conservés permettent en outre de reproduire les principaux résultats.
