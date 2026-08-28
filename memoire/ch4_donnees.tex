@@ -244,11 +244,12 @@ Figure~\ref{fig:plan_etude} présente cette organisation.
   \centering
   \begin{tikzpicture}[
     box/.style={rectangle, draw=black!55, rounded corners=2pt, align=center,
-      minimum height=2.6cm, minimum width=3.7cm, text width=3.4cm, inner sep=6pt, font=\small},
+      minimum height=3.25cm, minimum width=3.55cm, text width=3.15cm,
+      inner sep=6pt, font=\small},
     arrow/.style={-{Stealth[length=2.2mm]}, thick, black!65}]
     \node[box, fill=ifblue!10] (main) {IceQube 2023\\28 vaches};
     \node[box, fill=rulegreen!10, right=0.4cm of main] (split) {Référence 60\,\%\\futur 40\,\%};
-    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {Niveau 1\\HYPO: 44, stress: 198\\Niveau 2\\INSTABILITÉ: 132};
+    \node[box, fill=loforange!10, right=0.4cm of split] (inject) {Niveau 1\\HYPO: 44,\\stress: 198\\Niveau 2\\INSTABILITÉ: 132};
     \node[box, fill=profgray!10, right=0.4cm of inject] (eval) {Comparaison propre-injectée\\unité: vache};
     \draw[arrow] (main) -- (split); \draw[arrow] (split) -- (inject); \draw[arrow] (inject) -- (eval);
     \node[box, fill=ifblue!7, below=0.8cm of main] (sls) {Niveau 3\\IceTag-SLS 2019\\14 vaches};
