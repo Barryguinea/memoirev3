@@ -184,7 +184,10 @@ La Figure~\ref{fig:admissibilite} présente la durée des séries pour chaque va
 Les 11 vaches admissibles sont représentées en vert et
 les 17 vaches non admissibles en gris. Le trait pointillé représente le seuil de 14 jours.
 Parmi les vaches non admissibles, 16 se trouvent sous ce seuil. La vache 8144 le dépasse,
-mais ses signaux ne sont pas informatifs dans la période future, ce qui explique son exclusion.
+mais ses signaux ne sont pas informatifs dans la période future~: du 28 octobre au 10 novembre,
+ses pas et ses transitions sont nuls alors que son \textit{Motion Index} garde son niveau
+habituel, ce qu'un capteur immobile ne produirait pas. Deux compteurs sur quatre sont donc muets
+pendant que l'animal continue de se déplacer, et le critère d'admissibilité l'écarte.
 
 \begin{figure}[H]
   \centering

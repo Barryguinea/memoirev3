@@ -103,3 +103,74 @@ def test_aucune_autre_journee_n_est_majoritairement_inactive(corpus) -> None:
     ordinaires = par_jour[~par_jour.index.isin(JOURNEES_SANS_ACTIVITE)]
     assert (ordinaires > 0).all()
     assert ordinaires.min() > 0.05 * ordinaires.median()
+
+
+# --- panne de canal isolee -------------------------------------------------
+
+# La vache 8144 conserve un Motion Index normal alors que ses pas et ses
+# transitions restent nuls, du 28 octobre au 10 novembre. Repere le 2026-08-29.
+COW_CANAUX_MORTS = "8144"
+PANNE_DEBUT, PANNE_FIN = "2023-10-28", "2023-11-10"
+
+
+def _fenetre_de_panne(corpus: pd.DataFrame) -> pd.DataFrame:
+    return corpus[
+        (corpus[COW].astype(str) == COW_CANAUX_MORTS)
+        & (corpus["jour"] >= PANNE_DEBUT)
+        & (corpus["jour"] <= PANNE_FIN)
+    ]
+
+
+def test_une_vache_perd_deux_canaux_en_gardant_les_autres(corpus) -> None:
+    """Defaut distinct des cinq journees sans activite.
+
+    La panne generale d'acquisition met les quatre familles a zero pour tout le
+    troupeau. Ici une seule vache perd les pas et les transitions pendant que le
+    Motion Index reste a son niveau habituel : un capteur immobile ne produirait
+    pas ce Motion Index, donc la vache marche et ce sont les compteurs qui sont
+    muets. Le test echoue si le corpus change ou si le defaut s'etend.
+    """
+    zone = _fenetre_de_panne(corpus)
+    par_jour = zone.groupby("jour")[FAMILLES_ACTIVITE].sum()
+    assert len(par_jour) == 14, "la fenetre de panne a change d'etendue"
+    assert (par_jour["Steps"] == 0).all()
+    assert (par_jour["Transitions"] == 0).all()
+    # Le Motion Index reste au niveau des journees saines de la meme vache.
+    assert par_jour["Motion Index"].median() > 2000.0
+
+
+def test_cette_panne_exclut_la_vache_de_la_campagne(corpus) -> None:
+    """Le garde-fou qui protege les resultats publies.
+
+    ``has_informative_heldout_signals`` exige les trois familles d'activite non
+    nulles apres la periode d'apprentissage. Ce critere, et lui seul, ecarte la
+    vache aux canaux muets de la campagne d'evaluation. S'il etait affaibli, une
+    baisse purement instrumentale entrerait dans les chiffres du manuscrit.
+    """
+    from core.io import TIME
+    from validation_hypo.campaign import (
+        _heldout_start_time,
+        final_params,
+        has_informative_heldout_signals,
+    )
+
+    params = final_params()
+    brut = load_csv("data/brut.csv")
+    brut[COW] = brut[COW].astype(str)
+
+    def informative(cow: str) -> bool:
+        du_cow = brut[brut[COW] == cow]
+        assert (du_cow[TIME].max() - du_cow[TIME].min()).total_seconds() / 86400.0 >= 14
+        depart = _heldout_start_time(
+            du_cow,
+            interval=str(params["interval"]),
+            window_baseline=int(params["window_baseline"]),
+            baseline_ratio=float(params["baseline_ratio"]),
+            coverage_min_pct=float(params["coverage_min_pct"]),
+        )
+        return has_informative_heldout_signals(du_cow, heldout_start=depart)
+
+    assert not informative(COW_CANAUX_MORTS), "la vache aux canaux muets redevient eligible"
+    # Une vache saine de meme duree de serie reste eligible : le critere ecarte
+    # le defaut, pas la periode.
+    assert informative("8154")
