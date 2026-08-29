@@ -44,6 +44,29 @@ python -m pip install -r requirements.txt
 L'environnement effectivement utilisé peut aussi être appelé avec le chemin absolu de son
 interpréteur Python. Les résultats ne doivent pas être mélangés avec des artefacts produits
 par une autre configuration du code.
+\begin{table}[H]
+  \centering
+  \caption{Principales technologies de la version reproductible.}
+  \label{tab:technologies}
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    Composant & Version & Rôle principal \\
+    \midrule
+    Python & 3.10 ou ultérieur & Langage d'exécution \\
+    pandas & 2.3.3 & Manipulation des données tabulaires \\
+    NumPy & 2.3.5 & Calcul numérique \\
+    scikit-learn & 1.7.2 & Comparateurs IF et LOF \\
+    SciPy & 1.16.2 & Tests et statistiques descriptives \\
+    statsmodels & 0.14.5 & Compléments statistiques \\
+    openpyxl & 3.1.5 & Lecture du classeur SLS \\
+    Streamlit & 1.51.0 & Interface interactive \\
+    Plotly & 6.3.0 & Tracés interactifs de l'interface \\
+    pytest & 8.4.2 & Tests automatisés \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 
 La reproduction complète suit six étapes, dans l'ordre~:
 \begin{enumerate}

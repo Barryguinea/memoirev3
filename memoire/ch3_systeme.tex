@@ -604,36 +604,15 @@ Les scripts réutilisent les campagnes existantes sans introduire de logique d'a
 parallèle.
 
 \subsection{Technologies et dépendances}
-Le Tableau~\ref{tab:technologies} présente les principales dépendances figées dans le fichier
-\path{requirements.txt}. Les versions exactes qui y figurent servent à reconstruire l'environnement et à
-garantir la reproductibilité numérique~; elles ne constituent pas un résultat scientifique.
+Les principales dépendances sont figées dans le fichier \path{requirements.txt} et leurs
+versions exactes sont reportées au Tableau~\ref{tab:technologies}, en annexe. Elles servent à
+reconstruire l'environnement et à garantir la reproductibilité numérique~; elles ne constituent
+pas un résultat scientifique.
 Les comparateurs IF et LOF proviennent de \texttt{scikit-learn}
 \citep{sklearn_api}, les tests statistiques de \texttt{SciPy} \citep{virtanen2020scipy},
 et l'interface de \texttt{Streamlit}; la manipulation des données et le calcul numérique
 reposent sur \texttt{pandas} \citep{mckinney2010data} et \texttt{NumPy} \citep{harris2020array}.
 
-\begin{table}[H]
-  \centering
-  \caption{Principales technologies de la version reproductible.}
-  \label{tab:technologies}
-  \small
-  \begin{tabular}{lll}
-    \toprule
-    Composant & Version & Rôle principal \\
-    \midrule
-    Python & 3.10 ou ultérieur & Langage d'exécution \\
-    pandas & 2.3.3 & Manipulation des données tabulaires \\
-    NumPy & 2.3.5 & Calcul numérique \\
-    scikit-learn & 1.7.2 & Comparateurs IF et LOF \\
-    SciPy & 1.16.2 & Tests et statistiques descriptives \\
-    statsmodels & 0.14.5 & Compléments statistiques \\
-    openpyxl & 3.1.5 & Lecture du classeur SLS \\
-    Streamlit & 1.51.0 & Interface interactive \\
-    Plotly & 6.3.0 & Tracés interactifs de l'interface \\
-    pytest & 8.4.2 & Tests automatisés \\
-    \bottomrule
-  \end{tabular}
-\end{table}
 
 \subsection{Évaluation du temps d'exécution}
 L'évaluation reconstruit les variables, exécute le comparateur Isolation Forest, les règles
