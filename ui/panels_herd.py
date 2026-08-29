@@ -104,15 +104,20 @@ def render_tab_herd(
         "coverage_min",
     ]
     display_cols = [col for col in display_cols if col in summary_df.columns]
+    # En-tetes abreges. Les trois colonnes de notifications repetaient le mot
+    # « Notifications », deja porte par la metrique placee au-dessus, et les
+    # vignettes du bas de l'onglet nomment deja ces memes decomptes « Fusion »,
+    # « HYPO » et « INSTABILITE ». Les libelles longs imposaient au tableau une
+    # largeur que la page du memoire reduit ensuite a un corps illisible.
     display_names = {
         COW: "Vache",
         "n_bins": "Intervalles",
-        "hybrid_warning_notifs": "Notifications fusionnées",
-        "behavioral_warning_notifs": "Notifications HYPO",
-        "instability_warning_notifs": "Notifications INSTABILITÉ",
-        "if_anomaly_points": "Anomalies IF (comparateur)",
-        "coverage_mean": "Couverture moyenne (%)",
-        "coverage_min": "Couverture minimale (%)",
+        "hybrid_warning_notifs": "Fusion",
+        "behavioral_warning_notifs": "HYPO",
+        "instability_warning_notifs": "INSTABILITÉ",
+        "if_anomaly_points": "Anomalies IF (comp.)",
+        "coverage_mean": "Couv. moy. (%)",
+        "coverage_min": "Couv. min. (%)",
     }
     summary_display = summary_df[display_cols].rename(columns=display_names)
     # Rang explicite a partir de 1 : le tableau est deja trie par priorite de
