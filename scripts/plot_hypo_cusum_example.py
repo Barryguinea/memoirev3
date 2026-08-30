@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Figure d'illustration HYPO : detection attribuable au niveau de l'evenement.
 
 Genere ``memoire/figures/hypo_cusum_example.{png,pdf}`` a partir des donnees
