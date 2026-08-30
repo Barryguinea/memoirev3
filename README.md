@@ -8,9 +8,9 @@ pose **jamais** un diagnostic de boiterie ni une classification de stade cliniqu
 
 La contribution principale est un détecteur temporel par vache (**HYPO**),
 complété par une extension bidirectionnelle exploratoire (**INSTABILITÉ** +
-fusion hiérarchique). L'évaluation est **post‑baseline et attribuable** : la
+fusion hiérarchique). L'évaluation est **post-baseline et attribuable** : la
 configuration est gelée avant la campagne finale, et les résultats chiffrés audités
-sont vérifiés contre des artefacts scellés par un manifeste SHA‑256.
+sont vérifiés contre des artefacts scellés par un manifeste SHA-256.
 
 ---
 
@@ -65,9 +65,9 @@ projet-memoire/
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
-│   ├── audit_manuscript_numbers.py     # 398 valeurs : artefact, registre et sources TeX
+│   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 129 tests (unitaires, invariants, non-régression)
+├── tests/                       # 138 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +105,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 129 tests
+pytest -q                                # 138 tests
 ```
 
 ---
@@ -133,7 +133,7 @@ campagne reste une **évaluation technique interne** et non un test indépendant
 2. **Ablation A-E** : HYPO comparé à : Isolation Forest + règles, IF ponctuel,
    LOF + règles, et un **comparateur pédométrique** (pas seuls, esprit
    Alsaaod 2012). Tests de Wilcoxon appariés au niveau vache, tailles d'effet
-   rang‑bisériale, intervalles de confiance par bootstrap regroupé par vache :
+   rang-bisériale, intervalles de confiance par bootstrap regroupé par vache :
    ```bash
    python scripts/compute_bootstrap_ci.py
    ```
@@ -188,14 +188,14 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
   python scripts/compute_channel_ablation.py
   python scripts/compute_correlation_time.py
   ```
-- Le manifeste **SHA‑256** scelle les artefacts :
+- Le manifeste **SHA-256** scelle les artefacts :
   ```bash
   python scripts/update_validation_manifest.py
   shasum -a 256 -c data/validation/validation_artifacts.sha256
   ```
   Le manifeste inclut un fichier de provenance contenant uniquement l'empreinte,
   la taille et les dimensions du corpus confidentiel, sans en diffuser le contenu.
-- Un script d'audit confronte aux artefacts **398 affirmations numériques explicitement
+- Un script d'audit confronte aux artefacts **401 affirmations numériques explicitement
   enregistrées**, puis cherche chacune d'elles dans les sources LaTeX. Comparer le
   registre aux seuls artefacts prouverait leur accord mutuel, pas celui du manuscrit :
   une valeur modifiée dans le texte et laissée intacte dans le registre passerait. Les
@@ -210,7 +210,7 @@ d'instabilité **exploratoire**. Ces limites sont énoncées dans le mémoire.
 
 ## Mémoire
 
-Sources LaTeX dans `memoire/` (compile avec `latexmk -lualatex main.tex`, PDF/A‑1b).
+Sources LaTeX dans `memoire/` (compile avec `latexmk -lualatex main.tex`, PDF/A-1b).
 
 ```bash
 cd memoire && latexmk -lualatex -interaction=nonstopmode main.tex
