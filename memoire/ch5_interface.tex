@@ -212,9 +212,9 @@ le représente la Figure~\ref{fig:streamlit_priority_animals}. L'ordre de vérif
 motif qui le justifie se lisent ainsi ensemble, sans qu'il soit nécessaire de revenir à la
 vue individuelle de chaque vache.
 
-% Page paysage. Neuf vignettes reparties sur trois rangees restent illisibles a
-% la largeur du texte : la vue pivotee leur donne un quart de largeur en plus,
-% et c'est la lisibilite qui prime ici sur la finesse d'impression. Meme
+% Page paysage. Six vignettes sur deux colonnes restent illisibles a la largeur
+% du texte : la vue pivotee leur donne un quart de largeur en plus, et c'est la
+% lisibilite qui prime ici sur la finesse d'impression. Meme
 % dispositif qu'au chapitre 6 : le folio normal tomberait sur le bord gauche
 % une fois la page pivotee, on le neutralise et on le replace, pivote, au bas
 % de la vue.
@@ -230,11 +230,14 @@ vue individuelle de chaque vache.
   \vspace*{\fill}
   \begin{figure}[H]
     \centering
-    % 0,90 et non davantage : la capture des neuf vignettes a un rapport de
-    % 1,40, si bien qu'a 0,95 la figure et sa legende totalisent 6,54 pouces
-    % pour 6,53 disponibles. Ce depassement d'un centieme suffisait a repousser
-    % le flottant et a laisser une page blanche derriere lui.
-    \includegraphics[width=0.98\linewidth]{figures/streamlit_priority_animals.png}
+    % 0,96 et non 0,98 : la capture fait 2370 px pour un rapport de 1,53, si bien
+    % qu'a 0,98 la figure et sa legende depassaient de trois dixiemes de point la
+    % hauteur disponible. Ce depassement suffisait a repousser le flottant et a
+    % ajouter une page. A 0,96 elle occupe 5,65 pouces sur 8,67 de large et rend
+    % a 273 ppp, sous le seuil usuel mais sans perte visible sur un trace au
+    % trait. La largeur reste prise au plus haut : les graduations et les dates
+    % des vignettes ne se lisent qu'a cette taille.
+    \includegraphics[width=0.96\linewidth]{figures/streamlit_priority_animals.png}
     \caption{Vaches à vérifier en priorité.}
     \label{fig:streamlit_priority_animals}
   \end{figure}
