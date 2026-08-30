@@ -41,6 +41,19 @@ LANE_BOTTOM = -0.19
 YMIN = -0.23
 
 
+# Les axes, les graduations et la grille sont dessines par matplotlib a 0,8
+# point, valeur qui ne suit pas la reduction des figures : ramenees a la
+# largeur de la page, elles ressortaient plus epaisses qu'avant le
+# redimensionnement. Ces reglages leur rendent leur finesse d'origine.
+plt.rcParams.update({
+    "axes.linewidth": 0.64,
+    "xtick.major.width": 0.64,
+    "ytick.major.width": 0.64,
+    "xtick.minor.width": 0.5,
+    "ytick.minor.width": 0.5,
+    "grid.linewidth": 0.5,
+})
+
 def _save(fig: plt.Figure, name: str) -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     png_path = FIGURES / f"{name}.png"
@@ -111,7 +124,10 @@ def plot_scenarios() -> None:
     ]
     grouped = grouped.set_index("scenario").loc[order]
     x = np.arange(len(grouped))
-    fig, ax = plt.subplots(figsize=(11, 4.8), constrained_layout=True)
+    # 9,0 pouces et non 11 : a 0,94 de la largeur du texte, la figure ramenait
+    # ses etiquettes a 5,5 points. On ne descend pas plus bas : douze libelles
+    # inclines finiraient par se chevaucher.
+    fig, ax = plt.subplots(figsize=(9.0, 3.93), constrained_layout=True)
     ax.bar(x - 0.19, 100 * grouped["actionable"], 0.38, label="Alerte actionnable", color="#376078")
     ax.bar(x + 0.19, 100 * grouped["surveillance"], 0.38, label="Surveillance d'instabilité", color="#be7832")
     ax.set_ylim(0, 105)

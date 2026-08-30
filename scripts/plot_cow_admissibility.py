@@ -36,6 +36,19 @@ GREEN = "#4b8764"
 GREY = "#9c9a92"
 
 
+# Les axes, les graduations et la grille sont dessines par matplotlib a 0,8
+# point, valeur qui ne suit pas la reduction des figures : ramenees a la
+# largeur de la page, elles ressortaient plus epaisses qu'avant le
+# redimensionnement. Ces reglages leur rendent leur finesse d'origine.
+plt.rcParams.update({
+    "axes.linewidth": 0.64,
+    "xtick.major.width": 0.64,
+    "ytick.major.width": 0.64,
+    "xtick.minor.width": 0.5,
+    "ytick.minor.width": 0.5,
+    "grid.linewidth": 0.5,
+})
+
 def main() -> None:
     df = pd.read_csv(BRUT, parse_dates=["Start"])
     span = (
@@ -47,17 +60,20 @@ def main() -> None:
     admissible = {str(r["cow"]) for r in csv.DictReader(open(EVENTS))}
 
     colors = [GREEN if c in admissible else GREY for c in span.index]
-    fig, ax = plt.subplots(figsize=(7.0, 6.4))
-    ax.barh(range(len(span)), span.values, color=colors, edgecolor="black", linewidth=0.4)
+    # 5,6 pouces et non 7,0 : posee a 0,80 de la largeur du texte, la figure
+    # ramenait ses etiquettes a 5,2 points. Le rapport est conserve, les
+    # epaisseurs suivent le facteur 1,25.
+    fig, ax = plt.subplots(figsize=(5.6, 5.12))
+    ax.barh(range(len(span)), span.values, color=colors, edgecolor="black", linewidth=0.32)
     ax.set_yticks(range(len(span)))
     ax.set_yticklabels(span.index, fontsize=7)
-    ax.axvline(MIN_DAYS, color="black", linestyle="--", linewidth=1.0)
+    ax.axvline(MIN_DAYS, color="black", linestyle="--", linewidth=0.8)
     ax.text(MIN_DAYS + 0.3, 0.5, "seuil 14 jours", rotation=90, va="bottom", fontsize=8)
     ax.set_xlabel("Durée de série disponible (jours)")
     ax.set_ylabel("Vache")
     handles = [
-        plt.Rectangle((0, 0), 1, 1, color=GREEN, ec="black", lw=0.4),
-        plt.Rectangle((0, 0), 1, 1, color=GREY, ec="black", lw=0.4),
+        plt.Rectangle((0, 0), 1, 1, color=GREEN, ec="black", lw=0.32),
+        plt.Rectangle((0, 0), 1, 1, color=GREY, ec="black", lw=0.32),
     ]
     ax.legend(handles, [f"Admissible ({len(admissible)})",
                         f"Non admissible ({len(span) - len(admissible)})"],

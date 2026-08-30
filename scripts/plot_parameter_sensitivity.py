@@ -119,7 +119,10 @@ def plot_effects(effects: pd.DataFrame, pdf_path: Path, png_path: Path) -> None:
     figure, (event_axis, background_axis) = plt.subplots(
         1,
         2,
-        figsize=(10.2, 6.2),
+        # 8,0 pouces et non 10,2 : a 0,98 de la largeur du texte, la figure
+        # ramenait ses etiquettes a 5,6 points. Rapport conserve, epaisseurs
+        # divisees par le facteur 1,275.
+        figsize=(8.0, 4.86),
         sharey=True,
         gridspec_kw={"width_ratios": [2.35, 1.0], "wspace": 0.08},
     )
@@ -140,7 +143,7 @@ def plot_effects(effects: pd.DataFrame, pdf_path: Path, png_path: Path) -> None:
     event_axis.invert_yaxis()
     event_axis.set_xlabel("Variation maximale absolue (points de %)")
     event_axis.set_title("(a) Réponse aux événements progressifs", loc="left", fontsize=10)
-    event_axis.grid(axis="x", linestyle=":", color="#B8B8B8", linewidth=0.7)
+    event_axis.grid(axis="x", linestyle=":", color="#B8B8B8", linewidth=0.55)
     event_axis.set_axisbelow(True)
     event_axis.legend(frameon=False, ncol=3, loc="lower right")
 
@@ -152,7 +155,7 @@ def plot_effects(effects: pd.DataFrame, pdf_path: Path, png_path: Path) -> None:
     )
     background_axis.set_xlabel("Variation absolue\ndu fond (/vache-jour)")
     background_axis.set_title("(b) Charge de fond", loc="left", fontsize=10)
-    background_axis.grid(axis="x", linestyle=":", color="#B8B8B8", linewidth=0.7)
+    background_axis.grid(axis="x", linestyle=":", color="#B8B8B8", linewidth=0.55)
     background_axis.set_axisbelow(True)
     background_axis.tick_params(axis="y", left=False, labelleft=False)
 
@@ -177,6 +180,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--png", type=Path, default=DEFAULT_PNG)
     return parser.parse_args()
 
+
+# Les axes, les graduations et la grille sont dessines par matplotlib a 0,8
+# point, valeur qui ne suit pas la reduction des figures : ramenees a la
+# largeur de la page, elles ressortaient plus epaisses qu'avant le
+# redimensionnement. Ces reglages leur rendent leur finesse d'origine.
+plt.rcParams.update({
+    "axes.linewidth": 0.64,
+    "xtick.major.width": 0.64,
+    "ytick.major.width": 0.64,
+    "xtick.minor.width": 0.5,
+    "ytick.minor.width": 0.5,
+    "grid.linewidth": 0.5,
+})
 
 def main() -> int:
     args = parse_args()
