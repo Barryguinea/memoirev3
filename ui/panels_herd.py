@@ -166,9 +166,8 @@ def render_tab_herd(
         # Le nom de la variable est celui du manuscrit : « Motion Index », et non
         # le nom de colonne brut ni la forme longue a trois segments.
         st.markdown(
-            f"**Signal tracé** : {plain_feature_name(colonne_tracee)}. "
-            "Les six vignettes partagent une même échelle verticale, "
-            "leurs amplitudes sont donc comparables."
+            f"**{plain_feature_name(colonne_tracee)}**, "
+            "échelle verticale commune aux six vignettes."
         )
 
     cols_grid = st.columns(2)
