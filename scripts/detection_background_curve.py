@@ -86,9 +86,9 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
         sharex=True,
     )
     series = [
-        ("attributable_coverage", "Couverture attribuable", "#28666e", "o"),
-        ("new_start_rate", "Nouveau départ", "#d97706", "s"),
-        ("iou20_rate", "IoU20", "#9b2226", "^"),
+        ("attributable_coverage", "Couverture attribuable", "#4b8764", "o"),
+        ("new_start_rate", "Nouveau départ", "#376078", "s"),
+        ("iou20_rate", "IoU20", "#be7832", "^"),
     ]
     for column, label, color, marker in series:
         ax_metrics.plot(
@@ -103,7 +103,7 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     ax_background.plot(
         ordered["score_threshold"],
         ordered["background_per_cow_day"],
-        color="#4d4d4d",
+        color="#826e9c",
         marker="D",
         linewidth=1.8,
         markersize=5.5,

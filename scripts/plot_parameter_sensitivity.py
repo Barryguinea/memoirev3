@@ -99,7 +99,7 @@ def build_parameter_effects(summary: pd.DataFrame) -> pd.DataFrame:
 def plot_effects(effects: pd.DataFrame, pdf_path: Path, png_path: Path) -> None:
     """Ecrit une figure a deux panneaux adaptee a la largeur du memoire."""
     colors = {
-        "Nouveau départ": "#375A7F",
+        "Nouveau départ": "#376078",
         "Couverture": "#4B8764",
         "IoU20": "#BE7832",
         "Fond": "#826E9C",
