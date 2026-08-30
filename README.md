@@ -35,7 +35,7 @@ comparateurs**, pas comme détecteur principal.
 ## Structure du projet
 
 ```
-projet-memoire/
+memoirev3/
 ├── app.py                       # Tableau de bord Streamlit (point d'entrée)
 ├── requirements.txt             # Dépendances figées (reproductibilité)
 ├── core/                        # Pipeline de détection
