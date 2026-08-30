@@ -7,15 +7,24 @@ le score comportemental s'eleve pendant la fenetre injectee et l'episode
 detecte se superpose a cette fenetre, alors que l'execution propre ne produit
 pas le meme episode au meme endroit.
 
-Usage : ``PYTHONPATH=. python scripts/plot_hypo_cusum_example.py``
+Usage : ``python scripts/plot_hypo_cusum_example.py``
 """
 
 from __future__ import annotations
 
+import sys
 import warnings
+from pathlib import Path
 
 import matplotlib
 import pandas as pd
+
+# Le script importe le code du projet : la racine doit etre sur le chemin, comme
+# dans les autres generateurs de figures, sinon il exige un PYTHONPATH pose a la
+# main et ne se rejoue pas dans les memes conditions que les autres.
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from core.features import build_interval_features
 from core.io import COW, TIME, available_base_cols, load_csv
@@ -43,8 +52,8 @@ def _run(raw: pd.DataFrame, params: dict, cow: str) -> pd.DataFrame:
 
 
 def main(
-    raw_csv: str = "data/brut.csv",
-    out_stem: str = "memoire/figures/hypo_cusum_example",
+    raw_csv: str = str(ROOT / "data/brut.csv"),
+    out_stem: str = str(ROOT / "memoire/figures/hypo_cusum_example"),
 ) -> None:
     warnings.filterwarnings("ignore")
     matplotlib.use("Agg")

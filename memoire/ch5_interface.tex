@@ -62,9 +62,9 @@ anomalies du comparateur, les candidats de chaque branche et les notifications r
 
 \begin{figure}[H]
   \centering
-  % La capture fait 2878 px de large : a 0,98 de la largeur du texte elle rend
-  % a 489 ppp, tres au-dessus du seuil d'impression. Le rapport large et bas
-  % de la vue tient en une demi-page en portrait.
+  % La capture fait 2878 px de large : a 0,98 de la largeur du texte, soit
+  % 6,40 pouces, elle rend a 450 ppp, tres au-dessus du seuil d'impression. Le
+  % rapport large et bas de la vue tient en une demi-page en portrait.
   \includegraphics[width=0.98\textwidth]{figures/streamlit_overview.png}
   \caption{Vue d'ensemble du tableau de bord.}
   \label{fig:streamlit_overview}
@@ -99,9 +99,10 @@ elles ne déclenchent aucune notification.
   \vspace*{\fill}
   \begin{figure}[H]
     \centering
-    % 0,95 : la capture faisant 2844 px, cette largeur laisse encore 331 ppp,
-    % au-dessus du seuil d'impression. Le passage en paysage ne coute donc rien
-    % en finesse et gagne un tiers de largeur.
+    % La capture fait 2582 px. Etalee sur 0,99 de la ligne en paysage, soit
+    % 8,94 pouces, elle rend a 289 ppp, juste sous le seuil d'impression usuel
+    % mais sans perte visible a cette taille de trait. Le paysage gagne en
+    % echange un tiers de largeur.
     \includegraphics[width=0.99\linewidth]{figures/streamlit_individual.png}
     \caption{Analyse individuelle du tableau de bord.}
     \label{fig:streamlit_individual}
@@ -121,10 +122,11 @@ individuelle, comme comparateur.
 
 \begin{figure}[H]
   \centering
-  % 0,92 et non 0,98 : la capture des vingt-huit rangs fait 1816 px de large,
-  % largeur a laquelle 0,98 ne donnerait que 284 ppp. Ce retrait la porte a
-  % 302 ppp, au-dessus du seuil d'impression.
-  \includegraphics[width=0.92\textwidth]{figures/streamlit_herd_table.png}
+  % La capture des vingt-huit rangs fait 1992 px de large : a 0,98 de la
+  % largeur du texte, soit 6,40 pouces, elle rend a 311 ppp. La largeur maximale
+  % est prise a dessein, ce tableau etant celui dont le corps se reduit le plus
+  % une fois ramene a la page.
+  \includegraphics[width=0.98\textwidth]{figures/streamlit_herd_table.png}
   \caption{Onglet de classement du troupeau par priorité de vérification.}
   \label{fig:streamlit_herd_table}
 \end{figure}

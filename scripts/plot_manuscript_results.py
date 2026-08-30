@@ -59,7 +59,10 @@ def plot_fusion_comparison() -> None:
     labels = ["HYPO", "INSTABILITÉ", "OU", "HIÉRARCHIQUE", "SÉQUENTIELLE"]
     data = data.set_index("configuration").loc[order]
 
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2), constrained_layout=True)
+    # Figure volontairement compacte : le rapport hauteur/largeur est conserve,
+    # donc la place prise dans la page ne bouge pas, mais la reduction a la
+    # largeur d'une colonne est moins forte et le texte y reste lisible.
+    fig, axes = plt.subplots(1, 2, figsize=(8.0, 3.2), constrained_layout=True)
     x = np.arange(len(data))
     width = 0.25
     # Memes couleurs que la figure des scenarios pour les memes grandeurs :
@@ -175,7 +178,9 @@ def plot_manual_review() -> None:
         ("isolated_sensor_spike", "Pic capteur isolé"),
         ("nonlocomotor_hypoactivity", "Hypoactivité non locomotrice"),
     ]
-    fig, axes = plt.subplots(4, 1, figsize=(13.5, 8.4), constrained_layout=True)
+    # Meme raison que pour la figure des regles de fusion : a 13,5 pouces, la
+    # reduction a la largeur d'une colonne ramenait les etiquettes sous 4 points.
+    fig, axes = plt.subplots(4, 1, figsize=(9.0, 5.6), constrained_layout=True)
     # Le temps couche accompagne les trois canaux d'activite : la posture pese
     # 0,20 dans le score HYPO et porte la fragmentation posturale de la branche
     # INSTABILITE. Sans elle, le panneau de l'instabilite illustrait un
