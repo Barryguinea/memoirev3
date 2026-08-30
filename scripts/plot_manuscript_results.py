@@ -87,7 +87,7 @@ def plot_fusion_comparison() -> None:
     axes[1].set_title("(b) Charge de fond", loc="left", fontsize=10)
     axes[1].set_xticks(x, labels, rotation=22, ha="right")
     axes[1].grid(axis="y", alpha=0.25)
-    axes[1].axhline(data.loc["hierarchical", "background_per_cow_day"], color="#af4646", linestyle="--", linewidth=1)
+    axes[1].axhline(data.loc["hierarchical", "background_per_cow_day"], color="#af4646", linestyle="--", linewidth=0.75)
     _save(fig, "fusion_comparison")
 
 
@@ -240,12 +240,12 @@ def plot_manual_review() -> None:
             # l'axe. Un centile eleve reléverait les canaux d'activite ecrases
             # du panneau (b), mais tronquerait 2 a 4 % des points au sommet.
             scale = max(1.0, float(smoothed.max()))
-            ax.plot(view[TIME], raw_values / scale, color=color, linewidth=0.7, alpha=0.18)
+            ax.plot(view[TIME], raw_values / scale, color=color, linewidth=0.45, alpha=0.18)
             ax.plot(
                 view[TIME],
                 smoothed / scale,
                 color=color,
-                linewidth=1.6,
+                linewidth=1.05,
                 linestyle=traits[column],
                 label=labels_signaux[column],
             )
@@ -263,14 +263,14 @@ def plot_manual_review() -> None:
                         color=ZONE_SURVEILLANCE, step="mid", lw=0)
         ax.fill_between(view[TIME], LANE_BOTTOM, LANE_TOP, where=episode,
                         color=ZONE_ALERTE, step="mid", lw=0)
-        ax.axhline(0.0, color="#999999", linewidth=0.6)
+        ax.axhline(0.0, color="#999999", linewidth=0.4)
         signal_floor = (0.0 - YMIN) / (YMAX - YMIN)
         ax.axvspan(pd.Timestamp(event["start"]), pd.Timestamp(event["end"]),
                    ymin=signal_floor, ymax=1.0, color=ZONE_INJECTEE, alpha=0.12)
         # Bornes verticales : sans elles, une fenetre injectee d'un seul pas de
         # quinze minutes est invisible sur trois jours d'axe.
         for bound in (event["start"], event["end"]):
-            ax.axvline(pd.Timestamp(bound), color="#555555", linestyle=":", linewidth=0.9)
+            ax.axvline(pd.Timestamp(bound), color="#555555", linestyle=":", linewidth=0.6)
         in_event = view[TIME].between(event["start"], event["end"])
         detected = bool(view.loc[in_event, "hybrid_warning_episode"].max())
         surveillance = bool(view.loc[in_event, "instability_warning_episode"].max())
