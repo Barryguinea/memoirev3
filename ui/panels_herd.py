@@ -11,6 +11,7 @@ import streamlit as st
 
 from core.io import COW
 from core.pipeline import run_pipeline_herd
+from ui.presentation import pretty_feature_name
 from ui.plots import build_small_fig
 
 PipelineKwargs = Dict[str, Any]
@@ -159,8 +160,14 @@ def render_tab_herd(
         maxi = pd.to_numeric(retenues[colonne_tracee], errors="coerce").max()
         if pd.notna(maxi) and float(maxi) > 0:
             y_commun = float(maxi) * 1.05
-        st.caption(
-            f"Variable tracée : {colonne_tracee}. Échelle verticale commune aux six vignettes."
+        # Au corps du texte plutot qu'en legende, comme les intitules de vignettes :
+        # st.caption rend en gris clair a environ 87 pour cent de cette taille, ce
+        # qui devient illisible une fois la vue reduite a la largeur d'une page.
+        # Le nom de colonne brut laissait par ailleurs paraitre « Motion Index_sum ».
+        st.markdown(
+            f"**Signal tracé** : {pretty_feature_name(colonne_tracee)}. "
+            "Les six vignettes partagent une même échelle verticale, "
+            "leurs amplitudes sont donc comparables."
         )
 
     cols_grid = st.columns(2)
