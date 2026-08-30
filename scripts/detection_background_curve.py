@@ -88,7 +88,7 @@ def _plot(summary: pd.DataFrame, pdf_out: Path, png_out: Path) -> None:
     series = [
         ("attributable_coverage", "Couverture attribuable", "#28666e", "o"),
         ("new_start_rate", "Nouveau départ", "#d97706", "s"),
-        ("iou20_rate", "IoU >= 0,20", "#9b2226", "^"),
+        ("iou20_rate", "IoU20", "#9b2226", "^"),
     ]
     for column, label, color, marker in series:
         ax_metrics.plot(
