@@ -182,8 +182,22 @@ def build_multi_panel_figure(df: pd.DataFrame, plot_cols: List[str], title: str 
     return fig
 
 
-def build_small_fig(df: pd.DataFrame, col: str) -> go.Figure:
-    """Mini graphique pour affichage compact."""
+def build_small_fig(
+    df: pd.DataFrame,
+    col: str,
+    *,
+    y_max: float | None = None,
+    show_legend: bool = False,
+) -> go.Figure:
+    """Vignette de reperage pour la vue troupeau.
+
+    Les axes portent des graduations et la vignette accepte un maximum commun.
+    Sans eux, la vignette ne disait ni sur quelle periode ni a quelle amplitude
+    elle tracait, et deux vaches placees cote a cote n'etaient pas comparables
+    puisque chacune se calait sur son propre maximum. ``show_legend`` ne sert que
+    sur la premiere vignette de la grille : une legende par vache repeterait six
+    fois la meme cle.
+    """
     fig = go.Figure()
 
     if col not in df.columns:
@@ -195,7 +209,8 @@ def build_small_fig(df: pd.DataFrame, col: str) -> go.Figure:
             y=df[col],
             mode="lines",
             line=dict(color=MINI_COLOR_LINE, width=1.5),
-            showlegend=False,
+            name="Signal",
+            showlegend=show_legend,
         )
     )
 
@@ -209,17 +224,30 @@ def build_small_fig(df: pd.DataFrame, col: str) -> go.Figure:
                     y=lame[col],
                     mode="markers",
                     marker=dict(color=MINI_COLOR_ALERT, size=5),
-                    showlegend=False,
+                    name="Épisode d'alerte",
+                    showlegend=show_legend,
                 )
             )
 
+    # Hauteur portee de 180 a 240 px : a 180, la vignette etait cinq fois plus
+    # large que haute et tout le signal restait ecrase contre l'axe, seuls les
+    # pics ressortant.
     fig.update_layout(
-        height=180,
-        margin=dict(l=5, r=5, t=5, b=5),
-        xaxis=dict(showticklabels=False, showgrid=False),
-        yaxis=dict(showticklabels=False, showgrid=False),
+        height=240,
+        margin=dict(l=44, r=6, t=6, b=30),
+        xaxis=dict(showticklabels=True, showgrid=False, tickformat="%d %b",
+                   nticks=6, tickfont=dict(size=10)),
+        yaxis=dict(showticklabels=True, showgrid=True, gridcolor="rgba(0,0,0,0.08)",
+                   nticks=4, tickfont=dict(size=10),
+                   range=[0, y_max] if y_max else None),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
+        # Legende posee a l'interieur du trace : au-dessus, elle ajoutait sa
+        # hauteur a la seule vignette qui la porte et desalignait les deux
+        # colonnes de la grille.
+        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="left", x=0.01,
+                    font=dict(size=11), bgcolor="rgba(255,255,255,0.75)",
+                    borderwidth=0),
     )
 
     return fig

@@ -147,6 +147,22 @@ def render_tab_herd(
     # decomptes qui l'accompagnent restent lisibles une fois la figure reduite
     # a la largeur d'une page du memoire.
     top_cows = summary_df.head(6)[COW].tolist()
+
+    # Variable tracee et maximum commun aux six vignettes. Chacune se calait
+    # auparavant sur son propre maximum : deux vaches cote a cote paraissaient
+    # d'amplitude comparable alors qu'un facteur trois les separait. Le titre
+    # nomme la variable, qu'aucune vignette ne portait.
+    colonne_tracee = next((pc for pc in plot_pref if pc in out_df.columns), None)
+    y_commun = None
+    if colonne_tracee is not None:
+        retenues = out_df[out_df[COW].astype(str).isin({str(c) for c in top_cows})]
+        maxi = pd.to_numeric(retenues[colonne_tracee], errors="coerce").max()
+        if pd.notna(maxi) and float(maxi) > 0:
+            y_commun = float(maxi) * 1.05
+        st.caption(
+            f"Variable tracée : {colonne_tracee}. Échelle verticale commune aux six vignettes."
+        )
+
     cols_grid = st.columns(2)
     slot = 0
     for cid in top_cows:
@@ -172,7 +188,9 @@ def render_tab_herd(
                     f"HYPO : {int(r['behavioral_warning_notifs'])} | "
                     f"INSTABILITÉ : {int(r['instability_warning_notifs'])}"
                 )
-                fig_mini = build_small_fig(g, plot_col)
+                fig_mini = build_small_fig(
+                    g, plot_col, y_max=y_commun, show_legend=(slot == 0)
+                )
                 st_plotly(fig_mini, "tab2", "mini", cid, file_hash, width="stretch")
             slot += 1
 
