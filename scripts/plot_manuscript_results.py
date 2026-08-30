@@ -45,7 +45,7 @@ def _save(fig: plt.Figure, name: str) -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     png_path = FIGURES / f"{name}.png"
     fig.savefig(FIGURES / f"{name}.pdf", bbox_inches="tight")
-    fig.savefig(png_path, dpi=220, bbox_inches="tight", transparent=False)
+    fig.savefig(png_path, dpi=300, bbox_inches="tight", transparent=False)
     plt.close(fig)
     with Image.open(png_path) as image:
         rgb = image.convert("RGB")
