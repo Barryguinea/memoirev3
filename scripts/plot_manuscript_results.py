@@ -209,11 +209,16 @@ def plot_manual_review() -> None:
     # soit moins de 6 %. La Figure du compromis detection-charge distingue deja
     # ses series par des marqueurs ; ici, 300 points par courbe les rendraient
     # illisibles, d'ou le trait.
+    # Motifs poses pour un rendu a bouts arrondis. Coupes d'equerre, les segments
+    # courts sortaient carres : le « point » des transitions mesurait 1,3 point
+    # de long pour autant d'epaisseur. Une longueur quasi nulle associee a un
+    # bout rond donne un disque du diametre du trait, et les tirets se terminent
+    # en demi-cercle au lieu d'un angle vif.
     traits = {
         "Lying Time_sum": "-",
-        "Steps_sum": (0, (5, 2)),
-        "Motion Index_sum": (0, (6, 2, 1, 2)),
-        "Transitions_sum": (0, (1, 1.6)),
+        "Steps_sum": (0, (4, 2.2)),
+        "Motion Index_sum": (0, (5, 1.8, 0.01, 1.8)),
+        "Transitions_sum": (0, (0.01, 2.2)),
     }
     for letter, (ax, (scenario, label)) in zip("abcd", zip(axes, scenarios)):
         injected, event = inject_profile(
@@ -250,6 +255,9 @@ def plot_manual_review() -> None:
                 linewidth=1.30,
                 linestyle=traits[column],
                 label=labels_signaux[column],
+                dash_capstyle="round",
+                solid_capstyle="round",
+                solid_joinstyle="round",
             )
         episode = pd.to_numeric(view["hybrid_warning_episode"], errors="coerce").fillna(0).astype(bool)
         instability = pd.to_numeric(view["instability_warning_episode"], errors="coerce").fillna(0).astype(bool)

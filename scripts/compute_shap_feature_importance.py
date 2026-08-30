@@ -262,7 +262,7 @@ def main() -> None:
                  fontsize=12, fontweight="bold")
     png_out = OUT_DIR / "shap_summary_plot.png"
     pdf_out = OUT_DIR / "shap_summary_plot.pdf"
-    fig.savefig(png_out, dpi=180, bbox_inches="tight")
+    fig.savefig(png_out, dpi=180, bbox_inches="tight", transparent=False)
     fig.savefig(pdf_out, bbox_inches="tight")
     plt.close(fig)
 

@@ -17,6 +17,7 @@ import warnings
 from pathlib import Path
 
 import matplotlib
+from PIL import Image
 import pandas as pd
 
 # Le script importe le code du projet : la racine doit etre sur le chemin, comme
@@ -103,24 +104,24 @@ def main(
     fig, ax = plt.subplots(
         2, 1, figsize=(8.2, 5.0), sharex=True, gridspec_kw={"height_ratios": [3, 1]}
     )
-    ax[0].axvspan(e0, e1, color="C1", alpha=0.15, label="fenêtre injectée")
+    ax[0].axvspan(e0, e1, color="#777777", alpha=0.15, label="fenêtre injectée")
     ax[0].plot(clean_w["_t"], clean_w["behavioral_warning_score"], color="0.6", lw=1.1,
                label="exécution propre")
-    ax[0].plot(inj_w["_t"], inj_w["behavioral_warning_score"], color="C0", lw=1.3,
+    ax[0].plot(inj_w["_t"], inj_w["behavioral_warning_score"], color="#376078", lw=1.3,
                label="exécution injectée")
-    ax[0].axhline(0.12, ls="--", color="C3", lw=1.0, label="seuil de candidat (0,12)")
+    ax[0].axhline(0.12, ls="--", color="#af4646", lw=1.0, label="seuil de candidat (0,12)")
     ax[0].set_ylabel("score comportemental $S_H(t)$")
     ax[0].set_title("(a) Score comportemental", loc="left", fontsize=10)
     ax[0].legend(loc="upper left", fontsize=8, framealpha=0.9)
 
-    ax[1].axvspan(e0, e1, color="C1", alpha=0.15)
+    ax[1].axvspan(e0, e1, color="#777777", alpha=0.15)
 
     def lane(frame: pd.DataFrame, y0: float, y1: float, color: str) -> None:
         episode = frame["behavioral_warning_episode"].to_numpy()
         ax[1].fill_between(frame["_t"], y0, y1, where=episode == 1, color=color,
                            step="mid", lw=0)
 
-    lane(inj_w, 0.55, 0.95, "C0")
+    lane(inj_w, 0.55, 0.95, "#376078")
     lane(clean_w, 0.05, 0.45, "0.6")
     ax[1].set_yticks([0.25, 0.75])
     ax[1].set_yticklabels(["propre", "injectée"], fontsize=8)
@@ -132,7 +133,13 @@ def main(
     fig.tight_layout()
     for ext in ("png", "pdf"):
         fig.savefig(f"{out_stem}.{ext}", dpi=300 if ext == "png" else None,
-                    bbox_inches="tight")
+                    bbox_inches="tight", transparent=False)
+    # Le canal alpha survit a transparent=False et fait echouer la validation
+    # PDF/A-1b, qui interdit la transparence. Les autres generateurs aplatissent
+    # de la meme facon.
+    with Image.open(f"{out_stem}.png") as image:
+        rgb = image.convert("RGB")
+    rgb.save(f"{out_stem}.png", dpi=(300, 300))
     print(f"Figure écrite : {out_stem}.png / .pdf")
 
 
