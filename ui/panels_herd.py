@@ -11,7 +11,7 @@ import streamlit as st
 
 from core.io import COW
 from core.pipeline import run_pipeline_herd
-from ui.presentation import pretty_feature_name
+from ui.presentation import plain_feature_name
 from ui.plots import build_small_fig
 
 PipelineKwargs = Dict[str, Any]
@@ -163,9 +163,10 @@ def render_tab_herd(
         # Au corps du texte plutot qu'en legende, comme les intitules de vignettes :
         # st.caption rend en gris clair a environ 87 pour cent de cette taille, ce
         # qui devient illisible une fois la vue reduite a la largeur d'une page.
-        # Le nom de colonne brut laissait par ailleurs paraitre « Motion Index_sum ».
+        # Le nom de la variable est celui du manuscrit : « Motion Index », et non
+        # le nom de colonne brut ni la forme longue a trois segments.
         st.markdown(
-            f"**Signal tracé** : {pretty_feature_name(colonne_tracee)}. "
+            f"**Signal tracé** : {plain_feature_name(colonne_tracee)}. "
             "Les six vignettes partagent une même échelle verticale, "
             "leurs amplitudes sont donc comparables."
         )

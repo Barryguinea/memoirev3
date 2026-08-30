@@ -45,6 +45,30 @@ def pretty_feature_name(col: Optional[str]) -> str:
     return base
 
 
+def plain_feature_name(col: Optional[str]) -> str:
+    """Nom de la variable tel que le manuscrit l'emploie.
+
+    ``pretty_feature_name`` empile une categorie, un nom et une agregation, ce
+    qui donne « Activite - Motion Index - somme » : lisible pour qui connait le
+    schema des colonnes, opaque pour un lecteur. Le manuscrit ecrit simplement
+    « Motion Index », defini au glossaire, et l'agregation par intervalle est
+    decrite au chapitre du systeme.
+    """
+    if not col:
+        return "Variable"
+    nom = str(col).lower()
+    for motif, libelle in (
+        ("motion index", "Motion Index"),
+        ("steps", "Pas"),
+        ("lying time", "Temps couché"),
+        ("standing time", "Temps debout"),
+        ("transitions", "Transitions"),
+    ):
+        if motif in nom:
+            return libelle
+    return str(col)
+
+
 def compact_feature_title(col: Optional[str], max_len: int = 38) -> str:
     """Libelle feature raccourci pour les titres de sous-graphiques (tronque a *max_len*)."""
     label = pretty_feature_name(col)

@@ -11,6 +11,7 @@ from ui.presentation import (
     level_priority,
     normalize_alert_level,
     plot_options_for_mode,
+    plain_feature_name,
     pretty_feature_name,
 )
 
@@ -131,3 +132,17 @@ def test_filter_detection_table_uses_current_pipeline_outputs() -> None:
         only_hypo_candidate=True,
     )
     assert list(combined.index) == [1]
+
+
+def test_plain_feature_name_donne_le_nom_du_manuscrit():
+    """Le manuscrit ecrit « Motion Index », pas la forme a trois segments.
+
+    ``pretty_feature_name`` sert a nommer les traces d'un graphique, ou la
+    categorie et l'agregation aident a distinguer des variantes voisines. Dans
+    une cle de lecture destinee a etre lue, elle produisait « Activite - Motion
+    Index - somme », que le lecteur ne rattache a rien.
+    """
+    assert plain_feature_name("Motion Index_sum") == "Motion Index"
+    assert plain_feature_name("Steps_sum_rrz") == "Pas"
+    assert plain_feature_name("Lying Time_sum") == "Temps couché"
+    assert plain_feature_name(None) == "Variable"
