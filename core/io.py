@@ -166,7 +166,7 @@ def load_csv(path: str) -> pd.DataFrame:
 
 def available_base_cols(df: pd.DataFrame) -> List[str]:
     """
-    Colonnes “utiles” pour build_interval_features
+    Colonnes "utiles" pour build_interval_features
     """
     cols = []
     for c in [STEPS, MI, LYING, STANDING, TRANSITIONS]:

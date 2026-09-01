@@ -38,7 +38,7 @@ def apply_alert_logic(
     boiterie_min_families: int = 2,
     require_mi_for_boiterie: bool = False,
     coverage_min_pct: float = 25.0,
-    # préférences candidates rrz (sans (s) pour éviter l’incohérence)
+    # préférences candidates rrz (sans (s) pour éviter l'incohérence)
     pref_rrz_cols: Optional[List[str]] = None,
     mi_name: str = "Motion Index",
 ) -> pd.DataFrame:
