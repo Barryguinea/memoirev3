@@ -867,11 +867,14 @@ OUT.parent.mkdir(parents=True, exist_ok=True)
 audit.to_csv(OUT, index=False)
 
 missing = audit[~audit["quoted_in_manuscript"] & ~audit["claim"].isin(NOT_QUOTED)]
+registered_unquoted = audit[
+    ~audit["quoted_in_manuscript"] & audit["claim"].isin(NOT_QUOTED)
+]
 quoted = int(audit["quoted_in_manuscript"].sum())
 print(
     f"Verified {len(audit)} manuscript values against the artifacts; "
     f"{quoted} of them are quoted in the TeX sources, "
-    f"{len(NOT_QUOTED)} are registered as computed but never quoted."
+    f"{len(registered_unquoted)} are registered as computed but never quoted."
 )
 if len(missing):
     lignes = "\n".join(

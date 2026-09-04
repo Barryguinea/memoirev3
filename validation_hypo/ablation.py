@@ -339,7 +339,10 @@ def run_clean_ablation(
 
     out = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()
     if verbose and not out.empty:
-        print(f"Ablation terminée : {out['event_id'].nunique()} événements × 4 variantes.")
+        print(
+            f"Ablation terminée : {out['event_id'].nunique()} événements × "
+            f"{out['variante'].nunique()} variantes."
+        )
     return out
 
 
