@@ -25,7 +25,33 @@ TESTS_HORS_MANUSCRIT = {
     "test_hypo_stress_campaign.py::test_stress_campaign_passes_clean_reference_to_every_injected_run",
     "test_hypo_stress_campaign.py::test_stress_campaign_recomputes_the_reference_by_default",
     "test_hypo_stress_campaign.py::test_fixed_reference_output_cannot_overwrite_sealed_artifacts",
+    "test_manuscript_claims.py::test_les_commandes_de_scripts_de_l_annexe_sont_executables",
 }
+
+PAQUETS_DU_DEPOT = {"core", "validation_hypo", "validation_hybrid", "ui", "scripts"}
+
+
+def test_les_commandes_de_scripts_de_l_annexe_sont_executables() -> None:
+    """Chaque `python scripts/X.py` de l'annexe doit s'importer depuis la racine.
+
+    Python place le dossier du script en tete de sys.path, jamais la racine du
+    projet. Un script qui importe un paquet du depot doit donc l'ajouter
+    lui-meme, sans quoi la commande imprimee dans le manuscrit echoue en
+    ModuleNotFoundError alors que les calculs, eux, sont corrects.
+    """
+    annexe = (ROOT / "memoire/annexe.tex").read_text(encoding="utf8")
+    chemins = set(re.findall(r"python (scripts/[\w/]+\.py)", annexe))
+    assert chemins, "aucune commande de script trouvee dans l'annexe"
+    fautifs = []
+    for relatif in sorted(chemins):
+        source = (ROOT / relatif).read_text(encoding="utf8")
+        importe_le_depot = any(
+            module.split(".")[0] in PAQUETS_DU_DEPOT
+            for module in re.findall(r"^\s*(?:from|import) ([\w.]+)", source, re.M)
+        )
+        if importe_le_depot and "sys.path.insert" not in source:
+            fautifs.append(relatif)
+    assert not fautifs, f"commandes de l'annexe non executables telles qu'ecrites : {fautifs}"
 
 
 def _tests_declares() -> set[str]:

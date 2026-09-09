@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Sensibilite des comparateurs IF et LOF a leur parametre de contamination.
 
 L'analyse OFAT de HYPO fait varier dix parametres du detecteur propose, mais aucun
@@ -16,14 +17,20 @@ Usage : ``python scripts/compute_comparator_sensitivity.py``
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+# Permet l'execution directe: `python scripts/compute_comparator_sensitivity.py`
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import pandas as pd
 
 from validation_hypo.ablation import ablation_summary, run_clean_ablation
 from validation_hypo.campaign import final_params
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = PROJECT_ROOT
 OUTPUT = ROOT / "data/validation/hypo_module/comparator_contamination_sensitivity.csv"
 CONTAMINATIONS = (0.02, 0.04, 0.06, 0.10, 0.15)
 REFERENCE = 0.06

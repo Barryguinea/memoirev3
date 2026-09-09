@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Effet de la tolerance d'appariement des departs sur les metriques attribuables.
 
 Un nouveau depart n'est credite que s'il n'existe pas de depart comparable dans
@@ -15,14 +16,20 @@ Usage : ``python scripts/compute_match_tolerance_sensitivity.py``
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+# Permet l'execution directe: `python scripts/compute_match_tolerance_sensitivity.py`
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import pandas as pd
 
 from validation_hypo import campaign as campaign_module
 from validation_hypo.ablation import ablation_summary, run_clean_ablation
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = PROJECT_ROOT
 OUTPUT = ROOT / "data/validation/hypo_module/match_tolerance_sensitivity.csv"
 TOLERANCES = (0.0, 1.0, 2.0)
 REFERENCE = campaign_module.DEFAULT_MATCH_TOLERANCE_HOURS

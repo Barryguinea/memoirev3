@@ -83,7 +83,7 @@ memoirev3/
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 147 tests (unitaires, invariants, non-régression)
+├── tests/                       # 148 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -121,7 +121,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 147 tests
+pytest -q                                # 148 tests
 ```
 
 ---
