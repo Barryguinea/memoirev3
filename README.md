@@ -14,6 +14,22 @@ sont vérifiés contre des artefacts scellés par un manifeste SHA-256.
 
 ---
 
+## Politique de référence du test de stress
+
+Le test de stress accepte deux politiques de référence. Par défaut, le ratio de
+référence est recalculé sur les intervalles admissibles de chaque exécution.
+C'est le comportement qui produit les artefacts scellés de
+`data/validation/hypo_stress/` et les chiffres du manuscrit.
+
+Avec `--fixed-reference`, l'exécution injectée réutilise les horodatages
+d'entraînement de l'exécution propre : la seule différence entre les deux
+exécutions redevient la perturbation elle-même. Ces résultats sont écrits dans
+`data/validation/stress_fixed_reference/`, avec leur provenance et leur propre
+manifeste, et ne remplacent jamais les artefacts scellés.
+Voir [la note sur la politique de référence](docs/politique_reference_stress.md).
+
+---
+
 ## Pipeline
 
 ```
@@ -67,7 +83,7 @@ memoirev3/
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 142 tests (unitaires, invariants, non-régression)
+├── tests/                       # 147 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -105,7 +121,7 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 142 tests
+pytest -q                                # 147 tests
 ```
 
 ---
@@ -148,6 +164,9 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    modéré de référence, y compris après le retrait du bloc de données manquantes.
    Cet appariement ne garantit pas une modification comportementale physique
    identique entre vaches ou familles de signaux.
+   Sans drapeau, la commande régénère les artefacts scellés de
+   `data/validation/hypo_stress/`. Ajouter `--fixed-reference` pour la seconde
+   politique de référence décrite plus haut.
 
 4. **Extension bidirectionnelle** : douze scénarios (hypoactivité, instabilité,
    séquence) plus des contrôles et confondants (pic capteur, exercice, œstrus) :

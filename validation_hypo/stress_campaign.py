@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import platform
+from importlib.metadata import version
 from itertools import product
 from pathlib import Path
 from typing import Optional, Sequence
@@ -41,6 +43,22 @@ from validation_hypo.campaign import (
 )
 
 PROTOCOL_PATH = Path(__file__).with_name("stress_protocol.json")
+# Politiques de reference du test de stress.
+# HISTORICAL : le ratio de reference est recalcule sur les intervalles admissibles
+#   de chaque execution. Le scenario de suppression raccourcit alors la reference
+#   de l'execution injectee par rapport a l'execution propre.
+# FIXED : l'execution injectee reutilise les horodatages d'entrainement de
+#   l'execution propre, de sorte que la seule difference reste la perturbation.
+HISTORICAL_REFERENCE_POLICY = "ratio_recomputed_per_run"
+FIXED_REFERENCE_POLICY = "clean_training_timestamps_fixed"
+SEALED_OUTPUT_DIR = PROTOCOL_PATH.parent.parent / "data/validation/hypo_stress"
+HISTORICAL_OUTPUT_DIR = "data/validation/hypo_stress"
+FIXED_OUTPUT_DIR = "data/validation/stress_fixed_reference"
+
+
+def default_output_dir(*, fixed_reference: bool) -> str:
+    """Dossier de sortie associe a chaque politique de reference."""
+    return FIXED_OUTPUT_DIR if fixed_reference else HISTORICAL_OUTPUT_DIR
 BASE_CHANGES = {
     "steps": -0.29,
     "motion": -0.25,
@@ -403,6 +421,7 @@ def run_stress_campaign(
     cows: Optional[Sequence[str]] = None,
     max_cows: int | None = None,
     verbose: bool = True,
+    fixed_reference: bool = False,
 ) -> pd.DataFrame:
     protocol = load_protocol()
     params = final_params()
@@ -434,6 +453,12 @@ def run_stress_campaign(
             window_baseline=int(params["window_baseline"]),
         )
         clean_variants = _run_variants(clean_features, cow, params, None)
+        clean_primary = clean_variants[_VARIANT_NAMES[0]]
+        reference_times = (
+            pd.DatetimeIndex(clean_primary.loc[clean_primary["if_train_point"].eq(1), TIME])
+            if fixed_reference
+            else None
+        )
         monitoring_days = {
             name: _monitoring_duration_days(
                 predictions,
@@ -482,8 +507,19 @@ def run_stress_campaign(
                 cols=available_base_cols(injected),
                 window_baseline=int(params["window_baseline"]),
             )
-            variants = _run_variants(features, cow, params, None)
+            variants = _run_variants(
+                features, cow, params, None, reference_times=reference_times,
+            )
             for name, predictions in variants.items():
+                if reference_times is not None:
+                    for run in (clean_variants[name], predictions):
+                        training_times = pd.DatetimeIndex(
+                            run.loc[run["if_train_point"].eq(1), TIME]
+                        )
+                        if not training_times.equals(reference_times):
+                            raise RuntimeError(
+                                f"Reference timestamps changed for {cow}, {name}."
+                            )
                 metrics = _evaluate_binary_output(
                     predictions,
                     event,
@@ -503,6 +539,10 @@ def run_stress_campaign(
                 result["background_notif_per_cow_day"] = background_rates[name]
                 result["monitoring_days"] = monitoring_days[name]
                 result["protocol_sha256"] = protocol_sha256()
+                if reference_times is not None:
+                    result["reference_policy"] = FIXED_REFERENCE_POLICY
+                    result["reference_n_intervals"] = len(reference_times)
+                    result["reference_end"] = reference_times[-1]
                 rows.append(result)
             if verbose and (done % 20 == 0 or done == total):
                 print(
@@ -630,12 +670,30 @@ def compare_variants(events: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _uses_fixed_reference(events: pd.DataFrame) -> bool:
+    """Politique de reference d'un jeu d'evenements, refusant tout melange."""
+    if "reference_policy" not in events.columns:
+        return False
+    policies = set(events["reference_policy"].dropna().unique())
+    if not policies:
+        return False
+    if policies != {FIXED_REFERENCE_POLICY}:
+        raise ValueError("Events mix reference policies; export them separately.")
+    return True
+
+
 def write_outputs(
     events: pd.DataFrame,
-    output_dir: str = "data/validation/hypo_stress",
+    output_dir: str | None = None,
+    *,
+    raw_csv: str | None = None,
 ) -> dict[str, object]:
     protocol = load_protocol()
-    output = Path(output_dir)
+    fixed_reference = _uses_fixed_reference(events)
+    output = Path(output_dir or default_output_dir(fixed_reference=fixed_reference))
+    sealed = output.resolve() == SEALED_OUTPUT_DIR.resolve()
+    if fixed_reference and sealed:
+        raise ValueError("Preserve the sealed stress results; use a separate output directory.")
     output.mkdir(parents=True, exist_ok=True)
     scenario_summary, variant_summary = summarize(events)
     comparisons = compare_variants(events)
@@ -658,9 +716,44 @@ def write_outputs(
         "scenario_summary": scenario_summary.to_dict(orient="records"),
         "paired_comparisons": comparisons.to_dict(orient="records"),
     }
+    if fixed_reference:
+        summary = {"reference_policy": FIXED_REFERENCE_POLICY, **summary}
     (output / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
+    )
+    if not fixed_reference:
+        return summary
+    root = PROTOCOL_PATH.parent.parent
+    source_paths = sorted({
+        *root.glob("core/*.py"),
+        *root.glob("validation_hypo/*.py"),
+        PROTOCOL_PATH,
+        root / "scripts/run_hypo_stress_validation.py",
+    })
+    provenance = {
+        "reference_policy": FIXED_REFERENCE_POLICY,
+        "scope": "Fixed-reference run; the sealed artifacts are left untouched.",
+        "python_version": platform.python_version(),
+        "packages": {name: version(name) for name in ("numpy", "pandas", "scipy", "scikit-learn")},
+        "source_sha256": {
+            str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in source_paths
+        },
+        "input_sha256": hashlib.sha256(Path(raw_csv).read_bytes()).hexdigest() if raw_csv else None,
+    }
+    (output / "provenance.json").write_text(
+        json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+    )
+    artifact_names = (
+        "events.csv", "scenario_summary.csv", "variant_summary.csv",
+        "paired_comparisons.csv", "summary.json", "provenance.json",
+    )
+    (output / "artifacts.sha256").write_text(
+        "".join(
+            f"{hashlib.sha256((output / name).read_bytes()).hexdigest()}  {name}\n"
+            for name in artifact_names
+        ), encoding="utf-8",
     )
     return summary
 

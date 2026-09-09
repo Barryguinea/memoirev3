@@ -14,19 +14,32 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = ROOT / "tests"
 CH3 = ROOT / "memoire/ch3_systeme.tex"
+README = ROOT / "README.md"
+
+# Tests de la politique de reference fixe, posterieurs au gel du manuscrit.
+# Le compteur du chapitre 3 decrit la suite scellee ; celui du README decrit la
+# suite courante. Les deux sont verifies separement.
+TESTS_HORS_MANUSCRIT = {
+    "test_hypo_stress_campaign.py::test_all_variants_keep_clean_reference_after_injection",
+    "test_hypo_stress_campaign.py::test_fixed_reference_rejects_changed_training_points",
+    "test_hypo_stress_campaign.py::test_stress_campaign_passes_clean_reference_to_every_injected_run",
+    "test_hypo_stress_campaign.py::test_stress_campaign_recomputes_the_reference_by_default",
+    "test_hypo_stress_campaign.py::test_fixed_reference_output_cannot_overwrite_sealed_artifacts",
+}
 
 
-def _tests_declares() -> int:
-    """Nombre de fonctions de test du depot.
+def _tests_declares() -> set[str]:
+    """Identifiants des fonctions de test du depot.
 
     Compte les definitions plutot que la collecte pytest : appeler pytest depuis
     un test le ferait s'executer lui-meme. Les deux totaux coincident tant que
     la suite n'utilise pas de parametrage, ce que le second test verifie.
     """
-    total = 0
+    identifiers = set()
     for chemin in sorted(TESTS.glob("test_*.py")):
-        total += len(re.findall(r"^\s*def (test_\w+)", chemin.read_text(encoding="utf8"), re.M))
-    return total
+        names = re.findall(r"^\s*def (test_\w+)", chemin.read_text(encoding="utf8"), re.M)
+        identifiers.update(f"{chemin.name}::{name}" for name in names)
+    return identifiers
 
 
 def test_le_manuscrit_annonce_le_bon_nombre_de_tests() -> None:
@@ -34,7 +47,12 @@ def test_le_manuscrit_annonce_le_bon_nombre_de_tests() -> None:
         r"La suite automatisée contient (\d+) tests", CH3.read_text(encoding="utf8")
     )
     assert annonce is not None, "la phrase du chapitre 3 a change de forme"
-    assert int(annonce.group(1)) == _tests_declares()
+    tests = _tests_declares()
+    assert TESTS_HORS_MANUSCRIT <= tests, "un test declare hors manuscrit est absent"
+    assert int(annonce.group(1)) == len(tests - TESTS_HORS_MANUSCRIT)
+    current = re.search(r"tests/\s+# (\d+) tests", README.read_text(encoding="utf8"))
+    assert current is not None
+    assert int(current.group(1)) == len(tests)
 
 
 def test_aucun_test_parametre_ne_fausse_le_compte() -> None:

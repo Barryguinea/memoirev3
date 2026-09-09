@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from core import config as C
+from core.model_if import fixed_reference_indices
 
 
 def production_split_indices(
@@ -14,6 +15,7 @@ def production_split_indices(
     baseline_ratio: float = C.DEFAULT_BASELINE_RATIO,
     coverage_min_pct: float = C.DEFAULT_COVERAGE_MIN_PCT,
     sensor_warmup_bins: int = C.DEFAULT_SENSOR_WARMUP_BINS,
+    reference_times: pd.DatetimeIndex | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Retourne ``(train, future, candidats)`` comme ``core.model_if.run_if_core``."""
     df = interval_df.reset_index(drop=True)
@@ -40,9 +42,13 @@ def production_split_indices(
     if candidate_idx.size == 0:
         candidate_idx = np.arange(len(df))
 
-    br = max(0.05, min(0.95, float(baseline_ratio)))
-    n_train = min(max(30, int(round(len(candidate_idx) * br))), len(candidate_idx))
-    train_idx = candidate_idx[:n_train]
+    if reference_times is None:
+        br = max(0.05, min(0.95, float(baseline_ratio)))
+        n_train = min(max(30, int(round(len(candidate_idx) * br))), len(candidate_idx))
+        train_idx = candidate_idx[:n_train]
+    else:
+        train_idx = fixed_reference_indices(df, candidate_idx, reference_times)
+        n_train = len(train_idx)
     future_idx = candidate_idx[n_train:]
     return train_idx, future_idx, candidate_idx
 
@@ -53,6 +59,7 @@ def add_production_split_columns(
     baseline_ratio: float = C.DEFAULT_BASELINE_RATIO,
     coverage_min_pct: float = C.DEFAULT_COVERAGE_MIN_PCT,
     sensor_warmup_bins: int = C.DEFAULT_SENSOR_WARMUP_BINS,
+    reference_times: pd.DatetimeIndex | None = None,
 ) -> tuple[pd.DataFrame, np.ndarray]:
     """Ajoute les colonnes de split de production et retourne les indices train."""
     df = interval_df.reset_index(drop=True).copy()
@@ -61,6 +68,7 @@ def add_production_split_columns(
         baseline_ratio=baseline_ratio,
         coverage_min_pct=coverage_min_pct,
         sensor_warmup_bins=sensor_warmup_bins,
+        reference_times=reference_times,
     )
     df["dataset_split"] = "excluded"
     df.loc[future_idx, "dataset_split"] = "futur"

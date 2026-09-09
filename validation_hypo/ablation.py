@@ -53,7 +53,11 @@ def _alert_kwargs(params: Dict[str, object]) -> Dict[str, object]:
     }
 
 
-def _run_if(features: pd.DataFrame, params: Dict[str, object]) -> pd.DataFrame:
+def _run_if(
+    features: pd.DataFrame,
+    params: Dict[str, object],
+    reference_times: Optional[pd.DatetimeIndex] = None,
+) -> pd.DataFrame:
     return run_if_core(
         features.copy(),
         time_col=TIME,
@@ -62,6 +66,7 @@ def _run_if(features: pd.DataFrame, params: Dict[str, object]) -> pd.DataFrame:
         baseline_ratio=float(params["baseline_ratio"]),
         coverage_min_pct=float(params["coverage_min_pct"]),
         sensor_warmup_bins=C.DEFAULT_SENSOR_WARMUP_BINS,
+        reference_times=reference_times,
     )
 
 
@@ -70,9 +75,10 @@ def _run_variant_a(
     cow: str,
     params: Dict[str, object],
     warning_config: Optional[EarlyWarningConfig],
+    reference_times: Optional[pd.DatetimeIndex] = None,
 ) -> pd.DataFrame:
     out = apply_behavioral_early_warning(
-        _run_if(features, params),
+        _run_if(features, params, reference_times),
         interval=str(params["interval"]),
         config=warning_config,
     )
@@ -100,10 +106,11 @@ def _run_variant_e(
     cow: str,
     params: Dict[str, object],
     warning_config: Optional[EarlyWarningConfig],
+    reference_times: Optional[pd.DatetimeIndex] = None,
 ) -> pd.DataFrame:
     """Comparateur pedometrique : detecteur temporel restreint aux pas seuls."""
     out = apply_behavioral_early_warning(
-        _run_if(features, params),
+        _run_if(features, params, reference_times),
         interval=str(params["interval"]),
         config=_pedometric_config(warning_config),
     )
@@ -114,15 +121,21 @@ def _run_variant_e(
     return out
 
 
-def _run_variant_b(features: pd.DataFrame, cow: str, params: Dict[str, object]) -> pd.DataFrame:
+def _run_variant_b(
+    features: pd.DataFrame, cow: str, params: Dict[str, object],
+    reference_times: Optional[pd.DatetimeIndex] = None,
+) -> pd.DataFrame:
     """Comparateur IF suivi de règles de persistance."""
-    out = apply_alert_logic(_run_if(features, params), **_alert_kwargs(params))
+    out = apply_alert_logic(_run_if(features, params, reference_times), **_alert_kwargs(params))
     out[COW] = str(cow)
     return out
 
 
-def _run_variant_c(features: pd.DataFrame, cow: str, params: Dict[str, object]) -> pd.DataFrame:
-    out = _run_if(features, params)
+def _run_variant_c(
+    features: pd.DataFrame, cow: str, params: Dict[str, object],
+    reference_times: Optional[pd.DatetimeIndex] = None,
+) -> pd.DataFrame:
+    out = _run_if(features, params, reference_times)
     out["pred_lameness_episode"] = out["if_anomaly_point"]
     out["pred_lameness_start"] = (
         (out["pred_lameness_episode"] == 1)
@@ -133,13 +146,17 @@ def _run_variant_c(features: pd.DataFrame, cow: str, params: Dict[str, object]) 
     return out
 
 
-def _run_variant_d(features: pd.DataFrame, cow: str, params: Dict[str, object]) -> pd.DataFrame:
+def _run_variant_d(
+    features: pd.DataFrame, cow: str, params: Dict[str, object],
+    reference_times: Optional[pd.DatetimeIndex] = None,
+) -> pd.DataFrame:
     """LOF novelty entraîné sur les mêmes points de baseline que l'IF."""
     out, train_idx = add_production_split_columns(
         features.sort_values(TIME),
         baseline_ratio=float(params["baseline_ratio"]),
         coverage_min_pct=float(params["coverage_min_pct"]),
         sensor_warmup_bins=C.DEFAULT_SENSOR_WARMUP_BINS,
+        reference_times=reference_times,
     )
     feature_cols = _default_feature_cols(out)
     x = out[feature_cols].replace([np.inf, -np.inf], np.nan).fillna(0.0)
@@ -178,13 +195,15 @@ def _run_variants(
     cow: str,
     params: Dict[str, object],
     warning_config: Optional[EarlyWarningConfig],
+    *,
+    reference_times: Optional[pd.DatetimeIndex] = None,
 ) -> Dict[str, pd.DataFrame]:
     return {
-        _VARIANT_NAMES[0]: _run_variant_a(features, cow, params, warning_config),
-        _VARIANT_NAMES[1]: _run_variant_b(features, cow, params),
-        _VARIANT_NAMES[2]: _run_variant_c(features, cow, params),
-        _VARIANT_NAMES[3]: _run_variant_d(features, cow, params),
-        _VARIANT_NAMES[4]: _run_variant_e(features, cow, params, warning_config),
+        _VARIANT_NAMES[0]: _run_variant_a(features, cow, params, warning_config, reference_times),
+        _VARIANT_NAMES[1]: _run_variant_b(features, cow, params, reference_times),
+        _VARIANT_NAMES[2]: _run_variant_c(features, cow, params, reference_times),
+        _VARIANT_NAMES[3]: _run_variant_d(features, cow, params, reference_times),
+        _VARIANT_NAMES[4]: _run_variant_e(features, cow, params, warning_config, reference_times),
     }
 
 

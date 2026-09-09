@@ -54,6 +54,33 @@ def _default_feature_cols(df: pd.DataFrame) -> List[str]:
     return cols
 
 
+def fixed_reference_indices(
+    df: pd.DataFrame,
+    candidate_idx: np.ndarray,
+    reference_times: pd.DatetimeIndex,
+    *,
+    time_col: str = "T",
+) -> np.ndarray:
+    """Resolve an unchanged chronological training prefix from a clean run.
+
+    Fail rather than silently shortening the reference if any of its timestamps
+    disappears, becomes ineligible, or is no longer a candidate prefix.
+    """
+    times = pd.DatetimeIndex(pd.to_datetime(df[time_col]))
+    reference = pd.DatetimeIndex(reference_times).sort_values()
+    if (
+        reference.empty or reference.hasnans or not reference.is_unique
+        or times.hasnans or not times.is_unique
+    ):
+        raise ValueError("Reference and feature timestamps must be unique and non-null.")
+    train_idx = times.get_indexer(reference)
+    if (train_idx < 0).any() or not np.array_equal(
+        train_idx, candidate_idx[:len(reference)]
+    ):
+        raise ValueError("Clean reference timestamps must remain an eligible training prefix.")
+    return train_idx
+
+
 def run_if_core(
     interval_df: pd.DataFrame,
     *,
@@ -64,6 +91,7 @@ def run_if_core(
     baseline_ratio: Optional[float] = None,  # None => fit sur tout (mode historique)
     coverage_min_pct: float = 25.0,
     sensor_warmup_bins: int = 3,
+    reference_times: Optional[pd.DatetimeIndex] = None,
 ) -> pd.DataFrame:
     """
     Isolation Forest sur df d'intervalle.
@@ -119,7 +147,14 @@ def run_if_core(
         effective_candidate_mask.iloc[candidate_idx] = 1
 
     # split baseline optionnel applique uniquement sur les points candidats
-    if baseline_ratio is None:
+    if reference_times is not None:
+        train_idx = fixed_reference_indices(
+            df, candidate_idx, reference_times, time_col=time_col,
+        )
+        df["dataset_split"] = "excluded"
+        df.loc[candidate_idx, "dataset_split"] = "futur"
+        df.loc[train_idx, "dataset_split"] = "baseline"
+    elif baseline_ratio is None:
         train_idx = candidate_idx
         df["dataset_split"] = "excluded"
         df.loc[candidate_idx, "dataset_split"] = "all"
