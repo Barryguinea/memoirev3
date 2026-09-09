@@ -415,6 +415,27 @@ def _eligible_cows(
     return eligible, heldout_by_cow
 
 
+def _reference_policy_notice(*, fixed_reference: bool) -> str:
+    """Annonce la politique de reference employee et l'existence de l'autre."""
+    if fixed_reference:
+        return (
+            f"Politique de reference : {FIXED_REFERENCE_POLICY}.\n"
+            "  Les executions injectees reutilisent les horodatages d'entrainement de\n"
+            "  l'execution propre : la seule difference entre les deux reste la\n"
+            f"  perturbation. Sortie par defaut : {FIXED_OUTPUT_DIR}/.\n"
+            "  Sans le drapeau, la campagne regenere les artefacts sceles du manuscrit."
+        )
+    return (
+        f"Politique de reference : {HISTORICAL_REFERENCE_POLICY}.\n"
+        "  Le ratio de reference est recalcule sur les intervalles admissibles de chaque\n"
+        f"  execution. C'est le comportement qui produit {HISTORICAL_OUTPUT_DIR}/ et les\n"
+        "  chiffres du manuscrit. Dans le scenario contiguous_dropout, la reference de\n"
+        "  l'execution injectee est donc plus courte que celle de l'execution propre.\n"
+        "  Utiliser --fixed-reference pour la conserver ; voir\n"
+        "  docs/politique_reference_stress.md."
+    )
+
+
 def run_stress_campaign(
     raw_csv: str = "data/brut.csv",
     *,
@@ -441,6 +462,8 @@ def run_stress_campaign(
     total = len(eligible) * len(scenarios) * len(placements)
     done = 0
     rows: list[dict[str, object]] = []
+    if verbose:
+        print(_reference_policy_notice(fixed_reference=fixed_reference))
 
     for cow in eligible:
         cow_raw = raw[raw[COW] == cow]
