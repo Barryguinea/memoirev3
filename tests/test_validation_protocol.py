@@ -17,6 +17,7 @@ from validation_hypo.campaign import (
 )
 from validation_hypo.qa import assert_campaign_valid
 from validation_hypo.training import production_split_indices
+import pytest
 
 
 def test_stable_seed_uses_process_independent_digest():
@@ -25,6 +26,7 @@ def test_stable_seed_uses_process_independent_digest():
     assert _stable_seed("8081", "gradual_marked", 11) == expected
 
 
+@pytest.mark.corpus
 def test_training_indices_match_core_model_split():
     raw = load_csv("data/brut.csv")
     raw[COW] = raw[COW].astype(str)
@@ -47,6 +49,7 @@ def test_training_indices_match_core_model_split():
     assert scored.index[scored["dataset_split"] == "futur"].tolist() == future_idx.tolist()
 
 
+@pytest.mark.corpus
 def test_injections_are_reproducible_held_out_and_do_not_mutate_input():
     raw = load_csv("data/brut.csv")
     raw[COW] = raw[COW].astype(str)
@@ -88,6 +91,7 @@ def test_injections_are_reproducible_held_out_and_do_not_mutate_input():
     assert event["source_transitions_sum"] > 0
 
 
+@pytest.mark.corpus
 def test_zero_core_channels_in_heldout_period_are_not_informative():
     raw = load_csv("data/brut.csv")
     raw[COW] = raw[COW].astype(str)

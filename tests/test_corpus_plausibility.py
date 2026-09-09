@@ -21,6 +21,9 @@ import pytest
 
 from core.io import COW, load_csv
 
+# Tous les tests de ce module lisent le corpus confidentiel.
+pytestmark = pytest.mark.corpus
+
 # Journees sans aucune activite mesuree, reperees le 2026-08-26.
 JOURNEES_SANS_ACTIVITE = {
     "2023-10-16",

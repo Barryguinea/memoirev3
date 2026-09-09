@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from streamlit.testing.v1 import AppTest
+import pytest
 
 
 APP_FILE = Path(__file__).resolve().parents[1] / "app.py"
@@ -35,6 +36,7 @@ def _fake_upload_csv() -> io.BytesIO:
     return FakeUpload(payload, "sample.csv")
 
 
+@pytest.mark.corpus
 def test_app_smoke_without_upload_uses_builtin_corpus_and_no_exception():
     at = AppTest.from_file(APP_FILE)
     at.run(timeout=40)
@@ -66,6 +68,7 @@ def test_app_smoke_with_monkeypatched_upload_reaches_tabs_and_no_exception(monke
     assert not any("Importez un fichier CSV" in str(msg) for msg in infos)
 
 
+@pytest.mark.corpus
 def test_app_smoke_sidebar_recompute_button_reruns_without_exception():
     at = AppTest.from_file(APP_FILE)
     at.run(timeout=40)

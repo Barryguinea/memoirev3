@@ -5,8 +5,10 @@ from core.hybrid_warning import HybridFusionConfig, apply_hybrid_warning
 from core.io import COW, TIME, load_csv
 from validation_hybrid.campaign import final_params, inject_profile
 from core.pipeline import run_pipeline_one_cow
+import pytest
 
 
+@pytest.mark.corpus
 def test_pipeline_exposes_three_separate_outputs():
     raw = load_csv("data/brut.csv")
     raw[COW] = raw[COW].astype(str)
@@ -90,6 +92,7 @@ def test_frame_without_baseline_produces_no_instability_output():
     assert (out["hybrid_warning_priority"] <= 1).all()
 
 
+@pytest.mark.corpus
 def test_profiles_are_post_baseline_and_preserve_posture_total():
     raw = load_csv("data/brut.csv")
     raw[COW] = raw[COW].astype(str)

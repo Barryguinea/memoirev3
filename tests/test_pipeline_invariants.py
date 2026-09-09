@@ -3,6 +3,10 @@ from pathlib import Path
 
 from core.io import load_csv
 from core.pipeline import run_pipeline_herd
+import pytest
+
+# Tous les tests de ce module lisent le corpus confidentiel.
+pytestmark = pytest.mark.corpus
 
 
 class TestPipelineInvariants(unittest.TestCase):

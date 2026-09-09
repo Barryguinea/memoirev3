@@ -1,6 +1,10 @@
 import hashlib
 import json
 from pathlib import Path
+import pytest
+
+# Tous les tests de ce module lisent le corpus confidentiel.
+pytestmark = pytest.mark.corpus
 
 
 ROOT = Path(__file__).resolve().parents[1]

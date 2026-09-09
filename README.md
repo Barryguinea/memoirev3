@@ -124,6 +124,11 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 pytest -q                                # 148 tests
 ```
 
+Le corpus brut est confidentiel et n'est pas versionné. Sans `data/brut.csv`,
+vingt-deux tests portant la marque `corpus` sont ignorés avec un motif explicite
+et la suite affiche `126 passed, 22 skipped` : c'est le résultat attendu pour
+une copie du dépôt seul, et non un échec.
+
 ---
 
 ## Stratégie d'évaluation
