@@ -14,6 +14,21 @@ sont vérifiés contre des artefacts scellés par un manifeste SHA-256.
 
 ---
 
+## État de référence du manuscrit
+
+L'étiquette `manuscrit-v3` désigne l'état du dépôt qui régénère, à l'octet près,
+les artefacts scellés de `data/validation/hypo_stress/` et les valeurs citées
+dans le manuscrit. Les évolutions ultérieures du code ne déplacent pas cette
+étiquette.
+
+```bash
+git checkout manuscrit-v3
+python -m scripts.run_hypo_stress_validation
+shasum -a 256 -c data/validation/validation_artifacts.sha256
+```
+
+---
+
 ## Politique de référence du test de stress
 
 Le test de stress accepte deux politiques de référence. Par défaut, le ratio de
