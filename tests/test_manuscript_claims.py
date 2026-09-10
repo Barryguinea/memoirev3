@@ -23,7 +23,8 @@ TESTS_HORS_MANUSCRIT = {
     "test_hypo_stress_campaign.py::test_all_variants_keep_clean_reference_after_injection",
     "test_hypo_stress_campaign.py::test_fixed_reference_rejects_changed_training_points",
     "test_hypo_stress_campaign.py::test_stress_campaign_passes_clean_reference_to_every_injected_run",
-    "test_hypo_stress_campaign.py::test_stress_campaign_recomputes_the_reference_by_default",
+    "test_hypo_stress_campaign.py::test_stress_campaign_recomputes_reference_in_historical_mode",
+    "test_hypo_stress_campaign.py::test_stress_cli_selects_reference_policy_and_output",
     "test_hypo_stress_campaign.py::test_fixed_reference_output_cannot_overwrite_sealed_artifacts",
     "test_manuscript_claims.py::test_les_commandes_de_scripts_de_l_annexe_sont_executables",
 }

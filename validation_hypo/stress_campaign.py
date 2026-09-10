@@ -423,7 +423,8 @@ def _reference_policy_notice(*, fixed_reference: bool) -> str:
             "  Les executions injectees reutilisent les horodatages d'entrainement de\n"
             "  l'execution propre : la seule difference entre les deux reste la\n"
             f"  perturbation. Sortie par defaut : {FIXED_OUTPUT_DIR}/.\n"
-            "  Sans le drapeau, la campagne regenere les artefacts sceles du manuscrit."
+            "  Utiliser --historical-reference pour regenerer les artefacts sceles\n"
+            "  du manuscrit ; voir docs/politique_reference_stress.md."
         )
     return (
         f"Politique de reference : {HISTORICAL_REFERENCE_POLICY}.\n"
@@ -431,7 +432,7 @@ def _reference_policy_notice(*, fixed_reference: bool) -> str:
         f"  execution. C'est le comportement qui produit {HISTORICAL_OUTPUT_DIR}/ et les\n"
         "  chiffres du manuscrit. Dans le scenario contiguous_dropout, la reference de\n"
         "  l'execution injectee est donc plus courte que celle de l'execution propre.\n"
-        "  Utiliser --fixed-reference pour la conserver ; voir\n"
+        "  Sans --historical-reference, la reference est conservee (mode par defaut) ; voir\n"
         "  docs/politique_reference_stress.md."
     )
 
@@ -442,7 +443,7 @@ def run_stress_campaign(
     cows: Optional[Sequence[str]] = None,
     max_cows: int | None = None,
     verbose: bool = True,
-    fixed_reference: bool = False,
+    fixed_reference: bool = True,
 ) -> pd.DataFrame:
     protocol = load_protocol()
     params = final_params()

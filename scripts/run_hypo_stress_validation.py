@@ -1,4 +1,4 @@
-"""Execute the frozen dose-matched HYPO stress campaign."""
+"""Execute the dose-matched HYPO stress campaign with a fixed reference by default."""
 
 from __future__ import annotations
 
@@ -19,14 +19,24 @@ def main() -> None:
         "--output-dir",
         help="Default: the directory associated with the selected reference policy.",
     )
-    parser.add_argument(
+    reference = parser.add_mutually_exclusive_group()
+    reference.add_argument(
         "--fixed-reference",
         action="store_true",
         help=(
-            "Reuse the clean run training timestamps in the injected runs "
-            "instead of recomputing the reference ratio on each run."
+            "Reuse the clean run training timestamps in the injected runs (default)."
         ),
     )
+    reference.add_argument(
+        "--historical-reference",
+        dest="fixed_reference",
+        action="store_false",
+        help=(
+            "Recompute the reference ratio on each run to reproduce the sealed "
+            "manuscript results."
+        ),
+    )
+    parser.set_defaults(fixed_reference=True)
     parser.add_argument(
         "--smoke",
         action="store_true",

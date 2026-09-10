@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import sys
+from unittest.mock import Mock
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,6 +10,7 @@ import pytest
 from core import model_if
 from core.features import build_interval_features
 from core.io import COW, LYING, MI, STANDING, STEPS, TIME, TRANSITIONS, TR_DOWN, TR_UP
+from scripts import run_hypo_stress_validation as stress_cli
 from validation_hypo import stress_campaign
 from validation_hypo.ablation import _VARIANT_NAMES, _run_variants
 from validation_hypo.campaign import final_params
@@ -206,7 +210,7 @@ def test_fixed_reference_rejects_changed_training_points():
         _check_invalid_reference(defect)
 
 
-def test_stress_campaign_passes_clean_reference_to_every_injected_run(monkeypatch):
+def test_stress_campaign_passes_clean_reference_to_every_injected_run(monkeypatch, capsys):
     monkeypatch.setattr(model_if, "N_ESTIMATORS", 8)
     monkeypatch.setattr(stress_campaign, "load_csv", lambda _: _raw_cow())
     original = stress_campaign._run_variants
@@ -217,7 +221,7 @@ def test_stress_campaign_passes_clean_reference_to_every_injected_run(monkeypatc
         return original(*args, **kwargs)
 
     monkeypatch.setattr(stress_campaign, "_run_variants", tracked)
-    events = stress_campaign.run_stress_campaign(verbose=False, fixed_reference=True)
+    events = stress_campaign.run_stress_campaign()
     assert references[0] is None
     assert len(references) == 19
     assert all(ref is not None and ref.equals(references[1]) for ref in references[1:])
@@ -225,10 +229,13 @@ def test_stress_campaign_passes_clean_reference_to_every_injected_run(monkeypatc
     assert events["reference_policy"].eq(stress_campaign.FIXED_REFERENCE_POLICY).all()
     assert events["reference_end"].nunique() == 1
     assert events["reference_n_intervals"].nunique() == 1
+    notice = capsys.readouterr().out
+    assert stress_campaign.FIXED_REFERENCE_POLICY in notice
+    assert "--historical-reference" in notice
 
 
-def test_stress_campaign_recomputes_the_reference_by_default(monkeypatch):
-    """Sans drapeau, la campagne conserve exactement le comportement historique."""
+def test_stress_campaign_recomputes_reference_in_historical_mode(monkeypatch, capsys):
+    """La reproduction historique doit etre demandee explicitement."""
     monkeypatch.setattr(model_if, "N_ESTIMATORS", 8)
     monkeypatch.setattr(stress_campaign, "load_csv", lambda _: _raw_cow())
     original = stress_campaign._run_variants
@@ -239,12 +246,45 @@ def test_stress_campaign_recomputes_the_reference_by_default(monkeypatch):
         return original(*args, **kwargs)
 
     monkeypatch.setattr(stress_campaign, "_run_variants", tracked)
-    events = stress_campaign.run_stress_campaign(verbose=False)
+    events = stress_campaign.run_stress_campaign(fixed_reference=False)
     assert references and all(ref is None for ref in references)
     assert "reference_policy" not in events.columns
     assert stress_campaign.default_output_dir(fixed_reference=False) == (
         stress_campaign.HISTORICAL_OUTPUT_DIR
     )
+    notice = capsys.readouterr().out
+    assert stress_campaign.HISTORICAL_REFERENCE_POLICY in notice
+    assert "plus courte" in notice
+
+
+def test_stress_cli_selects_reference_policy_and_output(monkeypatch, tmp_path):
+    events = pd.DataFrame()
+    for flags, fixed, max_cows, output in (
+        ([], True, None, stress_campaign.FIXED_OUTPUT_DIR),
+        (["--fixed-reference"], True, None, stress_campaign.FIXED_OUTPUT_DIR),
+        (["--historical-reference"], False, None, stress_campaign.HISTORICAL_OUTPUT_DIR),
+        (["--smoke"], True, 2, "data/validation/stress_smoke/stress_fixed_reference"),
+        (["--smoke", "--historical-reference"], False, 2,
+         "data/validation/stress_smoke/hypo_stress"),
+        (["--output-dir", str(tmp_path)], True, None, str(tmp_path)),
+    ):
+        run = Mock(return_value=events)
+        write = Mock(return_value={"n_events": 0})
+        monkeypatch.setattr(stress_cli, "run_stress_campaign", run)
+        monkeypatch.setattr(stress_cli, "write_outputs", write)
+        monkeypatch.setattr(sys, "argv", ["stress", *flags])
+        stress_cli.main()
+        run.assert_called_once_with(max_cows=max_cows, fixed_reference=fixed)
+        write.assert_called_once_with(events, output, raw_csv="data/brut.csv")
+
+    run.reset_mock()
+    write.reset_mock()
+    monkeypatch.setattr(sys, "argv", ["stress", "--fixed-reference", "--historical-reference"])
+    with pytest.raises(SystemExit) as error:
+        stress_cli.main()
+    assert error.value.code == 2
+    run.assert_not_called()
+    write.assert_not_called()
 
 
 def test_fixed_reference_output_cannot_overwrite_sealed_artifacts():

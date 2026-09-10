@@ -8,12 +8,14 @@ comportement de référence sur les mêmes intervalles.
 
 ## Deux politiques
 
-`ratio_recomputed_per_run` est le comportement par défaut. La référence est
+`ratio_recomputed_per_run` est demandé avec `--historical-reference` sur `main`.
+Il reste le comportement par défaut de la version `manuscrit-v3`. La référence est
 constituée des premiers 60 % des intervalles admissibles de l'exécution
 considérée. C'est la politique qui produit les artefacts scellés de
 `data/validation/hypo_stress/` et les chiffres du manuscrit.
 
-`clean_training_timestamps_fixed` transmet à l'exécution injectée les
+`clean_training_timestamps_fixed` est le comportement par défaut sur `main`.
+Il transmet à l'exécution injectée les
 horodatages d'entraînement retenus par l'exécution propre. Isolation Forest et
 LOF apprennent alors sur ces mêmes points, et le détecteur temporel ainsi que le
 comparateur pédométrique utilisent les étiquettes de référence correspondantes.
@@ -25,8 +27,8 @@ passent le filtre de couverture, et non sur la durée calendaire. Dans le
 scénario `contiguous_dropout`, la suppression de douze heures de mesures met
 48 intervalles à une couverture nulle. Ils sortent du décompte des candidats, le
 seuil des 60 % recule d'autant, et la fin de la référence se déplace de
-7 h 15. La mesure sur les onze vaches donne la même valeur pour chacune :
-1465 intervalles de référence deviennent 1436.
+7 h 15. Sur chacune des onze vaches, la référence perd 29 intervalles :
+1465 deviennent 1436 pour dix vaches et 1480 deviennent 1451 pour la vache 8147.
 
 Le bloc supprimé se situe entièrement après la frontière de référence, donc le
 contenu de la période de référence n'est pas altéré : elle est seulement
@@ -72,17 +74,25 @@ enregistrée dans les sorties de la seconde politique et dans leur provenance.
 
 ```bash
 python -m scripts.run_hypo_stress_validation
-python -m scripts.run_hypo_stress_validation --fixed-reference
+python -m scripts.run_hypo_stress_validation --historical-reference
 ```
 
-La première régénère `data/validation/hypo_stress/` et reste vérifiable par
-`data/validation/validation_artifacts.sha256`. La seconde écrit dans
+Sur `main`, la première commande utilise la référence fixe et écrit dans
 `data/validation/stress_fixed_reference/` un jeu complet accompagné d'un fichier
 de provenance et d'un manifeste propre, vérifiable depuis ce dossier :
 
 ```bash
 shasum -a 256 -c artifacts.sha256
 ```
+
+La seconde commande reproduit `data/validation/hypo_stress/` et reste vérifiable
+par `data/validation/validation_artifacts.sha256`. L'option `--fixed-reference`
+reste acceptée comme sélection explicite du mode par défaut. Elle ne peut pas
+être combinée avec `--historical-reference`.
+
+La version `manuscrit-v3` reste inchangée : sa commande sans option reproduit les
+résultats du manuscrit. L'option `--historical-reference` concerne la branche
+`main`, pas cette version archivée.
 
 Le programme refuse d'écrire des résultats à référence fixe dans le dossier
 scellé, et refuse une référence manquante, dupliquée ou qui ne correspond plus
@@ -94,10 +104,10 @@ versions des bibliothèques, sans diffuser les données brutes confidentielles.
 
 ## Tests
 
-Cinq tests couvrent cette politique : les six formes d'injection sur les cinq
+Six tests couvrent cette politique : les six formes d'injection sur les cinq
 variantes, cinq références invalides, la transmission de la référence dans une
-campagne complète, la conservation du comportement par défaut, et la protection
-du dossier scellé.
+campagne complète par défaut, la reproduction historique explicite, la sélection
+du mode et du dossier en ligne de commande, et la protection du dossier scellé.
 
 Le compteur du chapitre 3 décrit la suite scellée. Le compteur du README décrit
 la suite courante. Le contrôle documentaire vérifie les deux séparément.
