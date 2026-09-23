@@ -1,4 +1,4 @@
-# Isolation Forest à l'échelle de temps de HYPO
+# Isolation Forest et LOF à l'échelle de temps de HYPO
 
 ## La question
 
@@ -9,24 +9,28 @@ une moyenne de sept intervalles. Les dégradations injectées durent de 36 à
 60 heures. Leur échec de localisation pourrait donc tenir à l'échelle de temps
 de leurs variables plutôt qu'à leur principe de détection.
 
-Cette analyse répond à cette objection en donnant à Isolation Forest exactement
-les variables que lit HYPO.
+Cette analyse teste cette objection en donnant à Isolation Forest et à LOF
+exactement les variables que lit HYPO.
 
-## Les deux variantes ajoutées
+## Les quatre variantes ajoutées
 
-Les deux variantes reçoivent les cinq ratios de HYPO : pas, Motion Index,
+Les quatre variantes reçoivent les cinq ratios de HYPO : pas, Motion Index,
 transitions, temps couché et temps debout, chacun sur un total glissant de
-12 heures rapporté à la référence individuelle du même créneau horaire. Isolation
-Forest reprend les hyperparamètres figés du comparateur (Tableau 3.2) et apprend
-sur les seuls intervalles de la période de référence.
+12 heures rapporté à la référence individuelle du même créneau horaire. Les
+ratios sont mis à l'échelle comme dans l'ablation (RobustScaler, intervalle
+10-90), et les modèles apprennent sur les seuls intervalles de la période de
+référence.
 
-- **F. IF ponctuel sur ratios 12 h** : chaque intervalle jugé anormal pendant la
-  période future forme un épisode.
-- **G. IF + persistance HYPO sur ratios 12 h** : un épisode exige au moins 45 %
-  d'intervalles anormaux sur six heures, comme la persistance de HYPO.
+- **F. IF ponctuel** et **G. IF + persistance** : Isolation Forest avec les
+  hyperparamètres figés du comparateur (Tableau 3.2).
+- **H. LOF ponctuel** et **I. LOF + persistance** : LOF réglé comme la variante D
+  de l'ablation (mode nouveauté, au plus 20 voisins, contamination de 0,06).
+- Les variantes ponctuelles forment un épisode de chaque intervalle jugé
+  anormal pendant la période future ; les variantes avec persistance exigent au
+  moins 45 % d'intervalles anormaux sur six heures, comme HYPO.
 
-Les deux notifient au plus une fois par 24 heures, comme HYPO. Mêmes onze
-vaches, mêmes quarante-quatre événements, même attribution par soustraction de
+Toutes notifient au plus une fois par 24 heures, comme HYPO. Mêmes onze vaches,
+mêmes quarante-quatre événements, même attribution par soustraction de
 l'exécution propre que l'ablation principale.
 
 ## Résultats
@@ -36,26 +40,40 @@ l'exécution propre que l'ablation principale.
 | A. HYPO | 43,2 % | 65,9 % | 29,5 % | 0,137 | 0,402 | 0,73 |
 | F. IF ponctuel, ratios 12 h | 22,7 % | 20,5 % | 0,0 % | 0,002 | 0,330 | 0,47 |
 | G. IF + persistance, ratios 12 h | 6,8 % | 11,4 % | 0,0 % | 0,001 | 0,143 | 0,17 |
+| H. LOF ponctuel, ratios 12 h | 45,5 % | 47,7 % | 0,0 % | 0,009 | 0,669 | 0,75 |
+| I. LOF + persistance, ratios 12 h | 20,5 % | 15,9 % | 0,0 % | 0,012 | 0,286 | 0,43 |
 
 Tests de Wilcoxon appariés par vache :
 
-| Comparaison | IoU | Vaches favorisant HYPO | Nouveau départ |
+| Comparaison | IoU | Vaches favorisant HYPO (IoU) | Nouveau départ |
 |---|---|---|---|
 | A contre F | p = 0,00098 | 11 sur 11 | p = 0,03125 |
 | A contre G | p = 0,00098 | 11 sur 11 | p = 0,00195 |
+| A contre H | p = 0,00098 | 11 sur 11 | p = 1,0 |
+| A contre I | p = 0,00098 | 11 sur 11 | p = 0,03125 |
 
 ## Lecture
 
-Même alimenté par les ratios sur 12 heures de HYPO, Isolation Forest ne localise
-aucun événement au seuil IoU20, et son IoU moyen reste inférieur à 0,003.
-L'avantage de localisation de HYPO tient chez les onze vaches. Il ne s'explique
-donc pas par la seule échelle de temps des variables : il tient à la manière de
-les exploiter, c'est-à-dire à la direction du changement recherchée, à la
-concordance entre familles et à l'accumulation par CUSUM.
+Même alimentés par les ratios sur 12 heures de HYPO, Isolation Forest et LOF ne
+localisent aucun événement au seuil IoU20, et leur IoU moyen reste inférieur à
+0,013. L'avantage de localisation de HYPO sur ces quatre variantes tient chez les
+onze vaches. Fournir aux comparateurs des variables à la même échelle de temps ne
+suffit donc pas à combler cet écart.
 
-La conclusion porte sur ces deux variantes, avec les hyperparamètres figés du
-comparateur. Elle ne couvre pas toutes les configurations possibles
-d'Isolation Forest.
+L'avantage ne porte pas sur la détection. LOF ponctuel ouvre autant de nouveaux
+départs que HYPO (45,5 contre 43,2 %, p = 1,0) et atteint un F1 comparable (0,75
+contre 0,73), au prix d'une charge de fond plus élevée (0,669 contre 0,402
+notification par vache-jour) et sans localiser les événements. Ce constat rejoint
+celui de `docs/politique_mad.md` : le résultat le mieux soutenu est l'avantage de
+localisation, non une supériorité de HYPO sur toutes les métriques.
+
+## Portée
+
+L'analyse porte sur ces quatre variantes, avec les hyperparamètres figés des
+comparateurs. Elle ne couvre pas toutes les configurations possibles
+d'Isolation Forest ou de LOF. Elle ne dit pas non plus quelle part de l'avantage
+de HYPO revient à la direction du changement recherchée, à la concordance entre
+familles ou à l'accumulation par CUSUM : ces ingrédients n'ont pas été isolés.
 
 ## Commande
 

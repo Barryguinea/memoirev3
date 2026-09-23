@@ -1,3 +1,5 @@
 paire,iou_A,iou_autre,p_wilcoxon_iou,n_informatif_iou,n_favorables_A_iou,detection_A,detection_autre,p_wilcoxon_detection,n_informatif_detection,n_favorables_A_detection
 A vs F,0.137052,0.002115,0.00098,11,11,0.431818,0.227273,0.03125,6,6
 A vs G,0.137052,0.001144,0.00098,11,11,0.431818,0.068182,0.00195,10,10
+A vs H,0.137052,0.009036,0.00098,11,11,0.431818,0.454545,1.0,10,5
+A vs I,0.137052,0.012068,0.00098,11,11,0.431818,0.204545,0.03125,6,6

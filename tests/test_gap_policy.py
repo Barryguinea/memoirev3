@@ -19,11 +19,7 @@ from core.early_warning import (
 from core.features import build_interval_features
 from core.model_if import run_if_core
 from validation_hypo.campaign import final_params
-from validation_hypo.timescale_comparators import (
-    IF_PERSISTENT,
-    IF_POINT,
-    timescale_variants,
-)
+from validation_hypo.timescale_comparators import COMPARATORS, timescale_variants
 
 COLONNES = ["Steps", "Motion Index", "Transitions", "Lying Time", "Standing Time"]
 
@@ -107,5 +103,5 @@ def test_le_comparateur_a_12_heures_n_alerte_que_dans_la_periode_future() -> Non
     )
     sorties = timescale_variants(features, final_params())
     reference = _intervalles(brut)["dataset_split"].ne("futur").to_numpy()
-    for nom in (IF_POINT, IF_PERSISTENT):
+    for nom in COMPARATORS:
         assert sorties[nom].loc[reference, "pred_lameness_episode"].sum() == 0

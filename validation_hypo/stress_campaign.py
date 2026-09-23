@@ -445,9 +445,11 @@ def run_stress_campaign(
     verbose: bool = True,
     fixed_reference: bool = True,
     gap_policy: str = "historical",
+    mad_mode: str = "historical",
 ) -> pd.DataFrame:
     """``gap_policy`` ne touche que HYPO et le comparateur pedometrique ; voir
-    docs/politique_trous_de_donnees.md."""
+    docs/politique_trous_de_donnees.md. ``mad_mode`` ne touche que les z-scores
+    glissants lus par IF et LOF ; voir docs/politique_mad.md."""
     protocol = load_protocol()
     params = final_params()
     raw = load_csv(raw_csv)
@@ -478,6 +480,7 @@ def run_stress_campaign(
             interval=str(params["interval"]),
             cols=available_base_cols(cow_raw),
             window_baseline=int(params["window_baseline"]),
+            mad_mode=mad_mode,
         )
         clean_variants = _run_variants(
             clean_features, cow, params, None, gap_policy=gap_policy,
@@ -535,6 +538,7 @@ def run_stress_campaign(
                 interval=str(params["interval"]),
                 cols=available_base_cols(injected),
                 window_baseline=int(params["window_baseline"]),
+                mad_mode=mad_mode,
             )
             variants = _run_variants(
                 features, cow, params, None, reference_times=reference_times,

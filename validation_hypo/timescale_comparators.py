@@ -1,11 +1,11 @@
-"""Isolation Forest alimenté par les ratios sur 12 heures de HYPO.
+"""Isolation Forest et LOF alimentés par les ratios sur 12 heures de HYPO.
 
 Les comparateurs B, C et D de l'ablation reçoivent des variables construites sur
 quelques heures (z-scores glissants sur 24 intervalles, différences premières,
 écart à une moyenne de sept intervalles). Les dégradations injectées durent 36 à
 60 heures. Cette analyse vérifie que l'écart de localisation ne tient pas à cette
-seule différence d'échelle : Isolation Forest reçoit ici exactement les ratios à
-la référence individuelle que lit HYPO. Voir docs/comparateur_echelle_temps.md.
+seule différence d'échelle : Isolation Forest et LOF reçoivent ici exactement les
+ratios à la référence individuelle que lit HYPO. Voir docs/comparateur_echelle_temps.md.
 """
 
 from __future__ import annotations
@@ -15,6 +15,7 @@ from typing import Dict, Optional, Sequence
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import RobustScaler
 
 from core.early_warning import apply_behavioral_early_warning
@@ -38,7 +39,10 @@ RATIO_COLUMNS = tuple(
 HYPO = "A. Alerte temporelle multivariée"
 IF_POINT = "F. IF ponctuel sur ratios 12 h"
 IF_PERSISTENT = "G. IF + persistance HYPO sur ratios 12 h"
-VARIANTS = (HYPO, IF_POINT, IF_PERSISTENT)
+LOF_POINT = "H. LOF ponctuel sur ratios 12 h"
+LOF_PERSISTENT = "I. LOF + persistance HYPO sur ratios 12 h"
+VARIANTS = (HYPO, IF_POINT, IF_PERSISTENT, LOF_POINT, LOF_PERSISTENT)
+COMPARATORS = VARIANTS[1:]
 SCENARIOS = ("gradual_mild", "gradual_moderate", "gradual_marked", "isolated_short_variation")
 
 
@@ -59,12 +63,14 @@ def _cooldown(starts: pd.Series, cooldown_bins: int) -> np.ndarray:
 def timescale_variants(
     features: pd.DataFrame, params: Dict[str, object]
 ) -> Dict[str, pd.DataFrame]:
-    """HYPO et deux variantes d'Isolation Forest sur les ratios de HYPO.
+    """HYPO et quatre comparateurs sur les ratios de HYPO.
 
-    Isolation Forest reprend les hyperparamètres figés du comparateur et apprend
-    sur les seuls intervalles de référence. La variante G applique la persistance
-    de HYPO (au moins 45 % d'intervalles anormaux sur six heures). Les deux
-    variantes notifient au plus une fois par 24 heures, comme HYPO.
+    Isolation Forest reprend les hyperparamètres figés du comparateur ; LOF est
+    réglé comme la variante D de l'ablation (mode nouveauté, au plus 20 voisins,
+    même contamination). Les deux apprennent sur les seuls intervalles de
+    référence, après la même mise à l'échelle robuste. Les variantes G et I
+    appliquent la persistance de HYPO (au moins 45 % d'intervalles anormaux sur
+    six heures). Tous notifient au plus une fois par 24 heures, comme HYPO.
     """
     interval = str(params["interval"])
     base = apply_behavioral_early_warning(_run_if(features, params), interval=interval)
@@ -93,13 +99,28 @@ def timescale_variants(
         (model.predict(scaler.transform(ratios)) == -1) & valid.to_numpy(),
         index=base.index,
     ).astype(int)
+    train_scaled = scaler.transform(ratios[train])
+    lof = LocalOutlierFactor(
+        n_neighbors=min(20, max(2, len(train_scaled) - 1)),
+        contamination=float(params["contamination"]),
+        novelty=True,
+    ).fit(train_scaled)
+    lof_anomaly = pd.Series(
+        (lof.predict(scaler.transform(ratios)) == -1) & valid.to_numpy(),
+        index=base.index,
+    ).astype(int)
+
+    def persistent(points: pd.Series) -> pd.Series:
+        return (
+            (points.rolling(persist_bins, min_periods=persist_bins).mean() >= 0.45) & future
+        ).astype(int)
 
     episodes = {
         HYPO: base["behavioral_warning_episode"].astype(int),
         IF_POINT: (anomaly.eq(1) & future).astype(int),
-        IF_PERSISTENT: (
-            (anomaly.rolling(persist_bins, min_periods=persist_bins).mean() >= 0.45) & future
-        ).astype(int),
+        IF_PERSISTENT: persistent(anomaly),
+        LOF_POINT: (lof_anomaly.eq(1) & future).astype(int),
+        LOF_PERSISTENT: persistent(lof_anomaly),
     }
     outputs = {}
     for name, episode in episodes.items():
@@ -224,11 +245,11 @@ def summarize_timescale(events: pd.DataFrame) -> pd.DataFrame:
 
 
 def paired_tests_timescale(events: pd.DataFrame) -> pd.DataFrame:
-    """Wilcoxon apparié par vache, HYPO contre chaque variante d'Isolation Forest."""
+    """Wilcoxon apparié par vache, HYPO contre chaque comparateur."""
     unique = events.drop_duplicates(["event_id", "variante"])
     per_cow = unique.groupby(["cow", "variante"])[["best_iou", "detected_any_overlap"]].mean()
     rows = []
-    for other in (IF_POINT, IF_PERSISTENT):
+    for other in COMPARATORS:
         record = {"paire": f"A vs {other[0]}"}
         for metric, label in (("best_iou", "iou"), ("detected_any_overlap", "detection")):
             table = per_cow[metric].unstack()[[HYPO, other]].dropna()
@@ -246,8 +267,11 @@ def paired_tests_timescale(events: pd.DataFrame) -> pd.DataFrame:
 
 
 __all__ = [
+    "COMPARATORS",
     "IF_PERSISTENT",
     "IF_POINT",
+    "LOF_PERSISTENT",
+    "LOF_POINT",
     "RATIO_COLUMNS",
     "paired_tests_timescale",
     "run_timescale_ablation",

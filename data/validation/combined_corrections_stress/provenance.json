@@ -1,12 +1,16 @@
 {
-  "scope": "IF et LOF sur les ratios de HYPO ; les artefacts scelles sont intacts.",
-  "features": [
-    "warning_ratio_steps",
-    "warning_ratio_motion",
-    "warning_ratio_transitions",
-    "warning_ratio_lying",
-    "warning_ratio_standing"
+  "scope": "Test de stress sous le MAD standard, seul et combiné à coverage_aware ; les artefacts scellés sont intacts.",
+  "configurations": [
+    {
+      "mad_mode": "window",
+      "gap_policy": "historical"
+    },
+    {
+      "mad_mode": "window",
+      "gap_policy": "coverage_aware"
+    }
   ],
+  "stress_reference_policy": "clean_training_timestamps_fixed",
   "python_version": "3.13.9",
   "packages": {
     "numpy": "2.3.5",
@@ -26,7 +30,7 @@
     "core/io.py": "e30ac6022041ca11160bd8b4a73025b56490f195be205360938f9d6bee7154a4",
     "core/model_if.py": "6ab9071fa20a0a6da757df48707ac45549622ffa66a995f03d7566d82553847f",
     "core/pipeline.py": "ca8bdeca084b407390d90f86989de41c5495d33b72d008ebdcf171ab62e3b108",
-    "scripts/compute_if_timescale_sensitivity.py": "ea1af563cb52accb4f506d061c22a755da19d2aaa8878c15f130b8ee0103010d",
+    "scripts/compute_combined_corrections_stress.py": "30466d0eb9107beda496d0127eb01aa78b5aa0b596cce3f28c5b1bd826f2667e",
     "validation_hypo/__init__.py": "ccbf09ee8530478027f10db77550ee2b5ef9e81e27061b033eb8ff241464155a",
     "validation_hypo/ablation.py": "57c6610eb8658f618d4f3102bbb2a6e2a9c78ad299e32331166eb701158db0a2",
     "validation_hypo/analysis.py": "96f912245517213b24932292e7021f8b68c14e183b2cf4fa81f379beb24fa402",
@@ -40,6 +44,7 @@
     "validation_hypo/sensitivity.py": "4f78910db7e052d8f1843f80107364c38f59364746bf92d946732653c50c17ab",
     "validation_hypo/shap_production.py": "64431cb4b1832379223d7f74ebdb3d90bc73a6637be5aa9414527c130592274f",
     "validation_hypo/stress_campaign.py": "39883078d724d644dacd3a3ecdca186639d453e311eda6aac1392defd032aa0f",
+    "validation_hypo/stress_protocol.json": "ae6b5604b139f11787525cb48f4376946b63a1b753b707b347dcfd1117c88282",
     "validation_hypo/timescale_comparators.py": "a8612bf18c5ea4bd677034fedadc423fa655ab58383c0a3c7816da0aa7a62364",
     "validation_hypo/training.py": "4b76a79aad68b1e8c91116f7291574cb4dd887021c08c1afa03b1c06170d8b62"
   },

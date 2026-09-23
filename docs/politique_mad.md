@@ -72,9 +72,11 @@ Ce qui change avec le MAD standard :
 - la comparaison exploratoire A contre C sur le nouveau départ perd sa
   significativité après correction de Holm.
 
-La sensibilité à la contamination et le test de stress n'ont pas été rejoués
-ici avec le mode `window` : ils le seront lors de la mise en conformité du
-manuscrit.
+Le test de stress a été rejoué avec le mode `window`, seul et combiné à la
+nouvelle gestion des trous de données : l'avantage de recouvrement de HYPO sur
+IF et LOF demeure significatif mais se réduit (voir
+`docs/corrections_combinees.md`). La sensibilité à la contamination n'a pas été
+rejouée avec le mode `window`.
 
 ## Ce qui n'est pas modifié
 

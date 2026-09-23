@@ -46,8 +46,10 @@ est disponible ; son effet est mesuré dans
 du manuscrit reste le comportement par défaut.
 
 Enfin, [une analyse complémentaire](docs/comparateur_echelle_temps.md) alimente
-Isolation Forest avec les ratios sur 12 heures de HYPO, pour vérifier que
-l'avantage de localisation ne tient pas à l'échelle de temps des variables.
+Isolation Forest et LOF avec les ratios sur 12 heures de HYPO, pour vérifier que
+l'avantage de localisation ne tient pas à la seule échelle de temps des variables.
+Le test de stress a aussi été rejoué avec les deux corrections appliquées ensemble
+([note](docs/corrections_combinees.md)).
 
 ---
 
@@ -107,7 +109,7 @@ memoirev3/
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   ├── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
 │   ├── stress_campaign.py       #   Test de stress à aire d'enveloppe appariée
-│   ├── timescale_comparators.py #   Isolation Forest sur les ratios sur 12 h de HYPO
+│   ├── timescale_comparators.py #   IF et LOF sur les ratios sur 12 h de HYPO
 │   └── stress_protocol.json     #   Protocole gelé du stress test
 ├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
@@ -122,7 +124,8 @@ memoirev3/
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── compute_mad_sensitivity.py      # Ablation sous les deux définitions du MAD glissant
 │   ├── compute_gap_policy_sensitivity.py  # Trous de données : blocs seuls, ablation, stress
-│   ├── compute_if_timescale_sensitivity.py # IF sur les ratios sur 12 h de HYPO
+│   ├── compute_if_timescale_sensitivity.py # IF et LOF sur les ratios sur 12 h de HYPO
+│   ├── compute_combined_corrections_stress.py # Stress sous MAD standard et trous corrigés
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
@@ -133,7 +136,8 @@ memoirev3/
 │       ├── derived_metrics/     # F1, ablation par canal et autocorrélation
 │       ├── mad_sensitivity/            # Ablation sous les deux définitions du MAD
 │       ├── gap_policy_sensitivity/     # Trous de données : blocs seuls, ablation, stress
-│       └── if_timescale_sensitivity/   # IF sur les ratios sur 12 h de HYPO
+│       ├── if_timescale_sensitivity/   # IF et LOF sur les ratios sur 12 h de HYPO
+│       └── combined_corrections_stress/ # Stress sous les deux corrections combinées
 ├── memoire/                     # Mémoire LaTeX (sources, figures, bibliographie)
 ├── docs/                        # Documentation (architecture, lecture du code, audit)
 └── notebooks/                   # Notebook de reproduction
@@ -245,7 +249,8 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    ```bash
    python scripts/compute_mad_sensitivity.py            # définition du MAD glissant
    python scripts/compute_gap_policy_sensitivity.py     # trous de données
-   python scripts/compute_if_timescale_sensitivity.py   # IF sur les ratios sur 12 h
+   python scripts/compute_if_timescale_sensitivity.py   # IF et LOF sur les ratios sur 12 h
+   python scripts/compute_combined_corrections_stress.py  # stress, corrections combinées
    ```
    - **MAD glissant** : l'avantage de localisation de HYPO sur IF et LOF tient sous
      la définition standard ; sa supériorité en F1 et en nouveaux départs ne tient pas
@@ -253,9 +258,17 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    - **Trous de données** : un trou de 12 h seul déclenchait HYPO dans 30 cas sur 33,
      aucun avec la politique `coverage_aware` ; la campagne principale est inchangée
      ([note](docs/politique_trous_de_donnees.md)).
-   - **Échelle de temps des comparateurs** : Isolation Forest alimenté par les ratios
-     sur 12 h de HYPO ne localise aucun événement à IoU20 ; l'avantage de HYPO tient
-     chez les onze vaches ([note](docs/comparateur_echelle_temps.md)).
+   - **Échelle de temps des comparateurs** : Isolation Forest et LOF alimentés par
+     les ratios sur 12 h de HYPO ne localisent aucun événement à IoU20 ; l'avantage de
+     localisation de HYPO tient chez les onze vaches. Il ne porte pas sur la
+     détection : LOF ponctuel ouvre autant de nouveaux départs que HYPO, avec plus de
+     fond ([note](docs/comparateur_echelle_temps.md)).
+   - **Corrections combinées** : avec le MAD standard et la politique
+     `coverage_aware`, HYPO recouvre 92,1 % des événements du test de stress. Son
+     avantage de recouvrement sur IF et LOF reste significatif mais se réduit
+     (+0,218 à +0,564 selon la variante, contre +0,527 à +0,842 dans le manuscrit) ;
+     HYPO n'a toujours pas d'avantage sur le comparateur pédométrique
+     (−0,018, `p = 0,77`) ([note](docs/corrections_combinees.md)).
 
 ### Limites assumées
 
@@ -314,7 +327,8 @@ cd memoire && latexmk -lualatex -interaction=nonstopmode main.tex
 - `docs/politique_reference_stress.md` : politique de référence du test de stress
 - `docs/politique_mad.md` : définition du z-score robuste glissant et sensibilité
 - `docs/politique_trous_de_donnees.md` : trous de données dans les totaux glissants de HYPO
-- `docs/comparateur_echelle_temps.md` : Isolation Forest à l'échelle de temps de HYPO
+- `docs/comparateur_echelle_temps.md` : Isolation Forest et LOF à l'échelle de temps de HYPO
+- `docs/corrections_combinees.md` : test de stress sous les deux corrections combinées
 - `docs/archive_historique/architecture_memoire.md` : architecture détaillée
 - `docs/archive_historique/cartographie_projet_fr.md` : rôle de chaque dossier et fichier
 - `docs/archive_historique/guide_lecture_code_fr.md` : ordre de lecture du code

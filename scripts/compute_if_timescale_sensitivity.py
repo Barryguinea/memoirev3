@@ -1,8 +1,8 @@
 # ruff: noqa: E402
-"""Isolation Forest alimente par les ratios sur 12 heures de HYPO.
+"""Isolation Forest et LOF alimentes par les ratios sur 12 heures de HYPO.
 
-Verifie que l'avantage de localisation de HYPO sur Isolation Forest ne tient pas
-seulement a l'echelle de temps des variables fournies au comparateur. Memes onze
+Verifie que l'avantage de localisation de HYPO sur Isolation Forest et LOF ne
+tient pas seulement a l'echelle de temps des variables fournies aux comparateurs. Memes onze
 vaches, memes quarante-quatre evenements que l'ablation principale. Resultats
 ecrits dans un dossier separe muni de sa propre provenance et de son propre
 manifeste ; les artefacts scelles ne sont jamais modifies. Voir
@@ -69,7 +69,7 @@ def main() -> None:
         Path(__file__).resolve(),
     })
     provenance = {
-        "scope": "Isolation Forest sur les ratios de HYPO ; les artefacts scelles sont intacts.",
+        "scope": "IF et LOF sur les ratios de HYPO ; les artefacts scelles sont intacts.",
         "features": list(RATIO_COLUMNS),
         "python_version": platform.python_version(),
         "packages": {
