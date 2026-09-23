@@ -1,0 +1,11 @@
+gap_policy,variante,n_events,n_cows,detect_any,iou20,best_iou,false_notif_cow_day,couverture_attribuable
+historical,A. Alerte temporelle multivariée,44,11,0.432,0.295,0.137,0.402,0.659091
+historical,B. IF + règles de persistance,44,11,0.159,0.0,0.004,0.152,0.136364
+historical,C. IF seul,44,11,0.136,0.0,0.002,7.658,0.227273
+historical,D. LOF + règles,44,11,0.159,0.0,0.005,0.107,0.181818
+historical,E. Comparateur pédométrique (pas seuls),44,11,0.273,0.318,0.141,0.518,0.727273
+coverage_aware,A. Alerte temporelle multivariée,44,11,0.432,0.295,0.137,0.402,0.659091
+coverage_aware,B. IF + règles de persistance,44,11,0.159,0.0,0.004,0.152,0.136364
+coverage_aware,C. IF seul,44,11,0.136,0.0,0.002,7.658,0.227273
+coverage_aware,D. LOF + règles,44,11,0.159,0.0,0.005,0.107,0.181818
+coverage_aware,E. Comparateur pédométrique (pas seuls),44,11,0.273,0.318,0.141,0.518,0.727273

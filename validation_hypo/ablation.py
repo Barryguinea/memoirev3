@@ -76,11 +76,13 @@ def _run_variant_a(
     params: Dict[str, object],
     warning_config: Optional[EarlyWarningConfig],
     reference_times: Optional[pd.DatetimeIndex] = None,
+    gap_policy: str = "historical",
 ) -> pd.DataFrame:
     out = apply_behavioral_early_warning(
         _run_if(features, params, reference_times),
         interval=str(params["interval"]),
         config=warning_config,
+        gap_policy=gap_policy,
     )
     out["pred_lameness_episode"] = out["behavioral_warning_episode"]
     out["pred_lameness_start"] = out["behavioral_warning_start"]
@@ -107,12 +109,14 @@ def _run_variant_e(
     params: Dict[str, object],
     warning_config: Optional[EarlyWarningConfig],
     reference_times: Optional[pd.DatetimeIndex] = None,
+    gap_policy: str = "historical",
 ) -> pd.DataFrame:
     """Comparateur pedometrique : detecteur temporel restreint aux pas seuls."""
     out = apply_behavioral_early_warning(
         _run_if(features, params, reference_times),
         interval=str(params["interval"]),
         config=_pedometric_config(warning_config),
+        gap_policy=gap_policy,
     )
     out["pred_lameness_episode"] = out["behavioral_warning_episode"]
     out["pred_lameness_start"] = out["behavioral_warning_start"]
@@ -197,13 +201,18 @@ def _run_variants(
     warning_config: Optional[EarlyWarningConfig],
     *,
     reference_times: Optional[pd.DatetimeIndex] = None,
+    gap_policy: str = "historical",
 ) -> Dict[str, pd.DataFrame]:
     return {
-        _VARIANT_NAMES[0]: _run_variant_a(features, cow, params, warning_config, reference_times),
+        _VARIANT_NAMES[0]: _run_variant_a(
+            features, cow, params, warning_config, reference_times, gap_policy
+        ),
         _VARIANT_NAMES[1]: _run_variant_b(features, cow, params, reference_times),
         _VARIANT_NAMES[2]: _run_variant_c(features, cow, params, reference_times),
         _VARIANT_NAMES[3]: _run_variant_d(features, cow, params, reference_times),
-        _VARIANT_NAMES[4]: _run_variant_e(features, cow, params, warning_config, reference_times),
+        _VARIANT_NAMES[4]: _run_variant_e(
+            features, cow, params, warning_config, reference_times, gap_policy
+        ),
     }
 
 
@@ -222,11 +231,14 @@ def run_clean_ablation(
     warning_config: Optional[EarlyWarningConfig] = None,
     verbose: bool = True,
     mad_mode: str = "historical",
+    gap_policy: str = "historical",
 ) -> pd.DataFrame:
     """Évalue les cinq variantes A à E sur les mêmes injections post-baseline.
 
     ``mad_mode`` ne touche que les z-scores glissants lus par IF et LOF
-    (variantes B, C et D) ; voir docs/politique_mad.md.
+    (variantes B, C et D) ; voir docs/politique_mad.md. ``gap_policy`` ne touche
+    que HYPO et le comparateur pédométrique (A et E) ; voir
+    docs/politique_trous_de_donnees.md.
     """
     params = params or final_params()
     df_all = load_csv(raw_csv)
@@ -278,6 +290,7 @@ def run_clean_ablation(
             cow,
             params,
             warning_config,
+            gap_policy=gap_policy,
         )
         monitoring_days = {
             name: _monitoring_duration_days(
@@ -337,6 +350,7 @@ def run_clean_ablation(
                     cow,
                     params,
                     warning_config,
+                    gap_policy=gap_policy,
                 ).items():
                     event = events.iloc[0]
                     metrics = _evaluate_binary_output(

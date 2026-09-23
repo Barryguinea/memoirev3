@@ -1,0 +1,9 @@
+gap_policy,primary,comparator,n_cows,primary_cow_mean,comparator_cow_mean,mean_paired_difference,exact_sign_flip_p_one_sided
+historical,A. Alerte temporelle multivariée,B. IF + règles de persistance,11,0.9696969696969696,0.12727272727272726,0.8424242424242425,0.00048828125
+historical,A. Alerte temporelle multivariée,C. IF seul,11,0.9696969696969696,0.4424242424242424,0.5272727272727273,0.00048828125
+historical,A. Alerte temporelle multivariée,D. LOF + règles,11,0.9696969696969696,0.2787878787878788,0.6909090909090909,0.00048828125
+historical,A. Alerte temporelle multivariée,E. Comparateur pédométrique (pas seuls),11,0.9696969696969696,0.9878787878787879,-0.018181818181818177,0.875
+coverage_aware,A. Alerte temporelle multivariée,B. IF + règles de persistance,11,0.9212121212121211,0.12727272727272726,0.7939393939393941,0.00048828125
+coverage_aware,A. Alerte temporelle multivariée,C. IF seul,11,0.9212121212121211,0.4424242424242424,0.47878787878787876,0.00048828125
+coverage_aware,A. Alerte temporelle multivariée,D. LOF + règles,11,0.9212121212121211,0.2787878787878788,0.6424242424242423,0.00048828125
+coverage_aware,A. Alerte temporelle multivariée,E. Comparateur pédométrique (pas seuls),11,0.9212121212121211,0.9393939393939394,-0.018181818181818188,0.765625

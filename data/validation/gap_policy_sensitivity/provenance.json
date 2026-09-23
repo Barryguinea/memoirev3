@@ -1,0 +1,52 @@
+{
+  "scope": "Sensibilite a la politique des trous de donnees ; les artefacts scelles sont intacts.",
+  "gap_policies": [
+    "historical",
+    "coverage_aware"
+  ],
+  "gap_hours": 12,
+  "positions": [
+    0.18,
+    0.5,
+    0.82
+  ],
+  "stress_reference_policy": "clean_training_timestamps_fixed",
+  "python_version": "3.13.9",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "2.3.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.7.2"
+  },
+  "source_sha256": {
+    "core/__init__.py": "8529833da44df2e3253aa5a223c9ff98a2b20ba83f3f3ada3d34a13d0a875633",
+    "core/_alerts_engine.py": "a2e1802a361b76a316ee26a44d074ad66204ef10a460d53402e41166e2e55f4f",
+    "core/_alerts_helpers.py": "e6d9221521dcc1b51724ddc1c58591da73d187f20a66d5dc8561005466db5d2a",
+    "core/alerts.py": "68571f143a90c3544d24f08b44ea19f9067a1f3215692e11546a43c2493c0ec3",
+    "core/config.py": "7cc66ae15a08b5e447ca693ce76df29e41fc688778d09600fc24c5c1659be61f",
+    "core/early_warning.py": "3940573e2db4ca78c749621580bfb6efbdf106ce23f2044e64c5784d82fa0453",
+    "core/features.py": "e1fe469c30bbafec93aadf972b992ec44a0a4d3dd3eb5dbe417f85a5c03e9362",
+    "core/hybrid_warning.py": "551c2d3ff6945503d71ff8d2215ca526834195b8de2c99878582d632bcc71c67",
+    "core/io.py": "e30ac6022041ca11160bd8b4a73025b56490f195be205360938f9d6bee7154a4",
+    "core/model_if.py": "6ab9071fa20a0a6da757df48707ac45549622ffa66a995f03d7566d82553847f",
+    "core/pipeline.py": "ca8bdeca084b407390d90f86989de41c5495d33b72d008ebdcf171ab62e3b108",
+    "scripts/compute_gap_policy_sensitivity.py": "4fdd1000bcf9e13445bd7e3050aa9ed8b6c456f8f2e81d1965c0516ca148a0fa",
+    "validation_hypo/__init__.py": "ccbf09ee8530478027f10db77550ee2b5ef9e81e27061b033eb8ff241464155a",
+    "validation_hypo/ablation.py": "57c6610eb8658f618d4f3102bbb2a6e2a9c78ad299e32331166eb701158db0a2",
+    "validation_hypo/analysis.py": "96f912245517213b24932292e7021f8b68c14e183b2cf4fa81f379beb24fa402",
+    "validation_hypo/campaign.py": "25bb64cde934551a0031f1bdb1f809ba01ab0832bc2098250797e7c51a8b137c",
+    "validation_hypo/diagnostics.py": "393b638f224165197ef35260109f0e6406a8826ed154cb41f66b1ff92f138afb",
+    "validation_hypo/finalize_artifacts.py": "9a4e36605979d653d053e69f981d2d14dfd6705809cd994781a4212e6d895825",
+    "validation_hypo/manual_review.py": "36af889746159de2099c8b339ea720273360af746ad01c85c97a8ab5ef80d9aa",
+    "validation_hypo/mcgill_sync_validation.py": "a58d3952748ad9665d26ca5a6331b094d8605732f7d4fe46db651dd1295e8349",
+    "validation_hypo/profiles.py": "2da19f23044f7608f3c9ffd7e97f7f21dd5c45e3e07e46d2b014f2608ea4c2d4",
+    "validation_hypo/qa.py": "1fefaede2db2d981fcab0fdec5710cd6b743825cd19a4b74408dd14ef9bd7302",
+    "validation_hypo/sensitivity.py": "4f78910db7e052d8f1843f80107364c38f59364746bf92d946732653c50c17ab",
+    "validation_hypo/shap_production.py": "64431cb4b1832379223d7f74ebdb3d90bc73a6637be5aa9414527c130592274f",
+    "validation_hypo/stress_campaign.py": "b24bac49de9e7f6be29e5313a1d57ba8bf3114fb35763f6d8ec5b150a8f44983",
+    "validation_hypo/stress_protocol.json": "ae6b5604b139f11787525cb48f4376946b63a1b753b707b347dcfd1117c88282",
+    "validation_hypo/timescale_comparators.py": "3fc50b2663515876c95a0130b1ca5e37a3a4f1d7306c90f0f734b24b8572f197",
+    "validation_hypo/training.py": "4b76a79aad68b1e8c91116f7291574cb4dd887021c08c1afa03b1c06170d8b62"
+  },
+  "input_sha256": "ba0c2a2927379f3824a258357a09f744723e6cb5a0f21b649f66fda94b826146"
+}

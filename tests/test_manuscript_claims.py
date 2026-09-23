@@ -31,6 +31,11 @@ TESTS_HORS_MANUSCRIT = {
     "test_rolling_mad_modes.py::test_le_mode_window_suit_la_definition_du_mad_de_fenetre",
     "test_rolling_mad_modes.py::test_un_mode_inconnu_est_refuse",
     "test_rolling_mad_modes.py::test_le_mode_ne_modifie_que_les_z_scores_glissants",
+    "test_gap_policy.py::test_la_politique_historique_reste_le_defaut",
+    "test_gap_policy.py::test_un_intervalle_vide_ne_compte_plus_comme_une_activite_nulle",
+    "test_gap_policy.py::test_une_politique_inconnue_est_refusee",
+    "test_gap_policy.py::test_un_trou_seul_ne_declenche_hypo_qu_en_mode_historique",
+    "test_gap_policy.py::test_le_comparateur_a_12_heures_n_alerte_que_dans_la_periode_future",
 }
 
 PAQUETS_DU_DEPOT = {"core", "validation_hypo", "validation_hybrid", "ui", "scripts"}

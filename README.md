@@ -39,6 +39,16 @@ et LOF ; il est mesuré et documenté dans
 [la note sur la définition du MAD glissant](docs/politique_mad.md). Le calcul du
 manuscrit reste le comportement par défaut.
 
+Dans le code du manuscrit, un trou de données compte comme une activité nulle
+dans les totaux glissants de HYPO. Une politique qui écarte les intervalles vides
+est disponible ; son effet est mesuré dans
+[la note sur les trous de données](docs/politique_trous_de_donnees.md). Le calcul
+du manuscrit reste le comportement par défaut.
+
+Enfin, [une analyse complémentaire](docs/comparateur_echelle_temps.md) alimente
+Isolation Forest avec les ratios sur 12 heures de HYPO, pour vérifier que
+l'avantage de localisation ne tient pas à l'échelle de temps des variables.
+
 ---
 
 ## Politique de référence du test de stress
@@ -97,6 +107,7 @@ memoirev3/
 │   ├── ablation.py              #   Ablation A-E (HYPO vs IF, LOF, pédométrique)
 │   ├── sensitivity.py           #   Analyse OFAT (robustesse locale, sans sélection)
 │   ├── stress_campaign.py       #   Test de stress à aire d'enveloppe appariée
+│   ├── timescale_comparators.py #   Isolation Forest sur les ratios sur 12 h de HYPO
 │   └── stress_protocol.json     #   Protocole gelé du stress test
 ├── validation_hybrid/             # Extension bidirectionnelle
 │   ├── profiles.py              #   Douze scénarios synthétiques + contrôles
@@ -110,10 +121,12 @@ memoirev3/
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
 │   ├── compute_mad_sensitivity.py      # Ablation sous les deux définitions du MAD glissant
+│   ├── compute_gap_policy_sensitivity.py  # Trous de données : blocs seuls, ablation, stress
+│   ├── compute_if_timescale_sensitivity.py # IF sur les ratios sur 12 h de HYPO
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 153 tests (unitaires, invariants, non-régression)
+├── tests/                       # 158 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -151,12 +164,12 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 153 tests
+pytest -q                                # 158 tests
 ```
 
 Le corpus brut est confidentiel et n'est pas versionné. Sans `data/brut.csv`,
 vingt-deux tests portant la marque `corpus` sont ignorés avec un motif explicite
-et la suite affiche `131 passed, 22 skipped` : c'est le résultat attendu pour
+et la suite affiche `136 passed, 22 skipped` : c'est le résultat attendu pour
 une copie du dépôt seul, et non un échec.
 
 ---

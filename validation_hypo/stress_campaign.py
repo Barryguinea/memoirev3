@@ -444,7 +444,10 @@ def run_stress_campaign(
     max_cows: int | None = None,
     verbose: bool = True,
     fixed_reference: bool = True,
+    gap_policy: str = "historical",
 ) -> pd.DataFrame:
+    """``gap_policy`` ne touche que HYPO et le comparateur pedometrique ; voir
+    docs/politique_trous_de_donnees.md."""
     protocol = load_protocol()
     params = final_params()
     raw = load_csv(raw_csv)
@@ -476,7 +479,9 @@ def run_stress_campaign(
             cols=available_base_cols(cow_raw),
             window_baseline=int(params["window_baseline"]),
         )
-        clean_variants = _run_variants(clean_features, cow, params, None)
+        clean_variants = _run_variants(
+            clean_features, cow, params, None, gap_policy=gap_policy,
+        )
         clean_primary = clean_variants[_VARIANT_NAMES[0]]
         reference_times = (
             pd.DatetimeIndex(clean_primary.loc[clean_primary["if_train_point"].eq(1), TIME])
@@ -533,6 +538,7 @@ def run_stress_campaign(
             )
             variants = _run_variants(
                 features, cow, params, None, reference_times=reference_times,
+                gap_policy=gap_policy,
             )
             for name, predictions in variants.items():
                 if reference_times is not None:

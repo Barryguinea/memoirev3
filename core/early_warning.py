@@ -61,6 +61,28 @@ def _rolling_total(df: pd.DataFrame, column: str, window_bins: int) -> pd.Series
     return values.rolling(window_bins, min_periods=max(4, window_bins // 2)).sum()
 
 
+GAP_POLICIES = ("historical", "coverage_aware")
+GAP_MIN_VALID_FRACTION = 0.9
+
+
+def _rolling_total_coverage_aware(
+    df: pd.DataFrame, column: str, window_bins: int, valid: pd.Series
+) -> pd.Series:
+    """Total glissant des seuls intervalles mesurés, ramené au nombre d'intervalles présents.
+
+    Un intervalle vide ne compte plus comme une activité nulle, et aucun total
+    n'est produit tant que moins de 90 % de la fenêtre est mesurée.
+    """
+    if column not in df:
+        return pd.Series(np.nan, index=df.index, dtype=float)
+    values = pd.to_numeric(df[column], errors="coerce").astype(float).where(valid)
+    total = values.rolling(window_bins, min_periods=1).sum()
+    rows = pd.Series(1.0, index=df.index).rolling(window_bins, min_periods=1).sum()
+    count = valid.astype(float).rolling(window_bins, min_periods=1).sum()
+    enough = (count >= max(4, window_bins // 2)) & (count >= GAP_MIN_VALID_FRACTION * rows)
+    return (total * rows / count).where(enough)
+
+
 def _one_sided_cusum(evidence: pd.Series, drift: float) -> pd.Series:
     values = pd.to_numeric(evidence, errors="coerce").fillna(0.0).to_numpy(float)
     out = np.zeros(len(values), dtype=float)
@@ -76,13 +98,20 @@ def apply_behavioral_early_warning(
     *,
     interval: str,
     config: EarlyWarningConfig | None = None,
+    gap_policy: str = "historical",
 ) -> pd.DataFrame:
     """Ajoute les sorties d'alerte comportementale a un tableau d'intervalles.
 
     La baseline est celle deja materialisee par ``run_if_core`` dans
     ``dataset_split``. Les ratios sont calcules sur des totaux glissants et
     compares aux medianes individuelles du meme creneau horaire.
+
+    ``gap_policy`` : ``historical`` (manuscrit v3) compte un intervalle vide comme
+    une activite nulle ; ``coverage_aware`` l'ecarte des totaux. Voir
+    docs/politique_trous_de_donnees.md.
     """
+    if gap_policy not in GAP_POLICIES:
+        raise ValueError(f"gap_policy inconnue : {gap_policy}. Attendues : {GAP_POLICIES}")
     cfg = config or EarlyWarningConfig()
     df = interval_df.sort_values("T").copy().reset_index(drop=True)
     minutes = interval_to_minutes(interval)
@@ -118,7 +147,10 @@ def apply_behavioral_early_warning(
     ratios: dict[str, pd.Series] = {}
     day_bins = max(4, int(round(24 * 60 / minutes)))
     for family, column in signal_columns.items():
-        total = _rolling_total(df, column, window_bins)
+        if gap_policy == "coverage_aware":
+            total = _rolling_total_coverage_aware(df, column, window_bins, valid_cov)
+        else:
+            total = _rolling_total(df, column, window_bins)
         expected = _baseline_expected_by_slot(total, slots, baseline_mask)
         baseline_ratio = _safe_ratio(total, expected)
         local_ratio = _safe_ratio(total, total.shift(day_bins))

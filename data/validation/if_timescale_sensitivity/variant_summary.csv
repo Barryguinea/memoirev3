@@ -1,0 +1,4 @@
+variante,n_events,n_cows,nouveau_depart,couverture_attribuable,iou20,iou_moyen,fond_par_vache_jour,f1_nouveau_depart
+A. Alerte temporelle multivariée,44,11,0.431818,0.659091,0.295455,0.137052,0.401646,0.730769
+F. IF ponctuel sur ratios 12 h,44,11,0.227273,0.204545,0.0,0.002115,0.330348,0.465116
+G. IF + persistance HYPO sur ratios 12 h,44,11,0.068182,0.113636,0.0,0.001144,0.142842,0.166667
