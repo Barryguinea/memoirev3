@@ -60,10 +60,11 @@ localisent aucun événement au seuil IoU20, et leur IoU moyen reste inférieur 
 onze vaches. Fournir aux comparateurs des variables à la même échelle de temps ne
 suffit donc pas à combler cet écart.
 
-L'avantage ne porte pas sur la détection. LOF ponctuel ouvre autant de nouveaux
-départs que HYPO (45,5 contre 43,2 %, p = 1,0) et atteint un F1 comparable (0,75
-contre 0,73), au prix d'une charge de fond plus élevée (0,669 contre 0,402
-notification par vache-jour) et sans localiser les événements. Ce constat rejoint
+L'avantage ne porte pas sur la détection. LOF ponctuel ouvre un nombre voisin de
+nouveaux départs (20 contre 19 événements sur 44, soit 45,5 contre 43,2 %) et un
+F1 voisin (0,75 contre 0,73), sans différence détectée (p = 1,0, ce qui ne
+démontre pas une équivalence), au prix d'une charge de fond plus élevée (0,669
+contre 0,402 notification par vache-jour) et sans localiser les événements. Ce constat rejoint
 celui de `docs/politique_mad.md` : le résultat le mieux soutenu est l'avantage de
 localisation, non une supériorité de HYPO sur toutes les métriques.
 

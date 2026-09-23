@@ -261,8 +261,9 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    - **Échelle de temps des comparateurs** : Isolation Forest et LOF alimentés par
      les ratios sur 12 h de HYPO ne localisent aucun événement à IoU20 ; l'avantage de
      localisation de HYPO tient chez les onze vaches. Il ne porte pas sur la
-     détection : LOF ponctuel ouvre autant de nouveaux départs que HYPO, avec plus de
-     fond ([note](docs/comparateur_echelle_temps.md)).
+     détection : LOF ponctuel ouvre un nombre voisin de nouveaux départs (20 contre 19
+     sur 44), sans différence détectée, avec plus de fond
+     ([note](docs/comparateur_echelle_temps.md)).
    - **Corrections combinées** : avec le MAD standard et la politique
      `coverage_aware`, HYPO recouvre 92,1 % des événements du test de stress. Son
      avantage de recouvrement sur IF et LOF reste significatif mais se réduit

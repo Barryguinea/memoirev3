@@ -6,11 +6,17 @@ fixe (198 événements, cinq variantes) avec les deux corrections appliquées
 ensemble : le MAD standard pour Isolation Forest et LOF (`mad_mode="window"`) et
 la politique `coverage_aware` pour HYPO et le comparateur pédométrique.
 
+Toutes les configurations suivent la référence fixe, comportement par défaut de
+`main` (voir `docs/politique_reference_stress.md`). Le manuscrit déposé suit la
+référence historique : HYPO, IF + persistance et IF ponctuel y ont les mêmes
+valeurs, mais LOF + persistance y recouvre 26,7 % et le comparateur pédométrique
+98,2 %, pour des écarts de HYPO de +0,703 et −0,012 (p = 0,844).
+
 ## Recouvrement attribuable sur les 165 événements positifs
 
 | Configuration | HYPO | IF + persistance | IF ponctuel | LOF + persistance | Pédométrique |
 |---|---|---|---|---|---|
-| Manuscrit (MAD historique, trous historiques) | 97,0 % | 12,7 % | 44,2 % | 27,9 % | 98,8 % |
+| MAD et trous historiques | 97,0 % | 12,7 % | 44,2 % | 27,9 % | 98,8 % |
 | MAD standard seul | 97,0 % | 35,8 % | 70,3 % | 60,0 % | 98,8 % |
 | Trous corrigés seuls | 92,1 % | 12,7 % | 44,2 % | 27,9 % | 93,9 % |
 | **Les deux corrections** | **92,1 %** | **35,8 %** | **70,3 %** | **60,0 %** | **93,9 %** |
@@ -21,7 +27,7 @@ atteint 26,1 % à IoU20 et le comparateur pédométrique 30,9 %.
 
 ## Comparaisons appariées de HYPO (différence moyenne de recouvrement par vache)
 
-| HYPO contre | Manuscrit | MAD standard seul | Les deux corrections | p unilatéral exact, deux corrections |
+| HYPO contre | MAD et trous historiques | MAD standard seul | Les deux corrections | p unilatéral exact, deux corrections |
 |---|---|---|---|---|
 | IF + persistance | +0,842 | +0,612 | +0,564 | 0,000488 |
 | IF ponctuel | +0,527 | +0,267 | +0,218 | 0,000977 |
