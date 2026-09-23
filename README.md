@@ -130,7 +130,10 @@ memoirev3/
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
-│       └── derived_metrics/     # F1, ablation par canal et autocorrélation
+│       ├── derived_metrics/     # F1, ablation par canal et autocorrélation
+│       ├── mad_sensitivity/            # Ablation sous les deux définitions du MAD
+│       ├── gap_policy_sensitivity/     # Trous de données : blocs seuls, ablation, stress
+│       └── if_timescale_sensitivity/   # IF sur les ratios sur 12 h de HYPO
 ├── memoire/                     # Mémoire LaTeX (sources, figures, bibliographie)
 ├── docs/                        # Documentation (architecture, lecture du code, audit)
 └── notebooks/                   # Notebook de reproduction
@@ -236,6 +239,24 @@ campagne reste une **évaluation technique interne** et non un test indépendant
    (`p = 0,0467`), mais devient non concluant sur les vingt combinaisons
    variante-métrique (`p = 0,0742` en unilatéral).
 
+6. **Analyses de sensibilité postérieures au dépôt du manuscrit** : elles laissent
+   le comportement par défaut inchangé et écrivent dans des dossiers séparés, chacun
+   muni de sa provenance et de son manifeste (`shasum -a 256 -c artifacts.sha256`).
+   ```bash
+   python scripts/compute_mad_sensitivity.py            # définition du MAD glissant
+   python scripts/compute_gap_policy_sensitivity.py     # trous de données
+   python scripts/compute_if_timescale_sensitivity.py   # IF sur les ratios sur 12 h
+   ```
+   - **MAD glissant** : l'avantage de localisation de HYPO sur IF et LOF tient sous
+     la définition standard ; sa supériorité en F1 et en nouveaux départs ne tient pas
+     ([note](docs/politique_mad.md)).
+   - **Trous de données** : un trou de 12 h seul déclenchait HYPO dans 30 cas sur 33,
+     aucun avec la politique `coverage_aware` ; la campagne principale est inchangée
+     ([note](docs/politique_trous_de_donnees.md)).
+   - **Échelle de temps des comparateurs** : Isolation Forest alimenté par les ratios
+     sur 12 h de HYPO ne localise aucun événement à IoU20 ; l'avantage de HYPO tient
+     chez les onze vaches ([note](docs/comparateur_echelle_temps.md)).
+
 ### Limites assumées
 
 Validation sur **injections synthétiques** (pas de gold standard vétérinaire
@@ -290,6 +311,10 @@ cd memoire && latexmk -lualatex -interaction=nonstopmode main.tex
 
 ## Documentation
 
+- `docs/politique_reference_stress.md` : politique de référence du test de stress
+- `docs/politique_mad.md` : définition du z-score robuste glissant et sensibilité
+- `docs/politique_trous_de_donnees.md` : trous de données dans les totaux glissants de HYPO
+- `docs/comparateur_echelle_temps.md` : Isolation Forest à l'échelle de temps de HYPO
 - `docs/archive_historique/architecture_memoire.md` : architecture détaillée
 - `docs/archive_historique/cartographie_projet_fr.md` : rôle de chaque dossier et fichier
 - `docs/archive_historique/guide_lecture_code_fr.md` : ordre de lecture du code
