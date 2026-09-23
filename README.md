@@ -33,6 +33,12 @@ python -m scripts.run_hypo_stress_validation
 shasum -a 256 -c data/validation/validation_artifacts.sha256
 ```
 
+Le z-score robuste glissant calculé par le code diffère de la définition du
+Tableau 4.5 du manuscrit. L'écart ne touche que les comparateurs Isolation Forest
+et LOF ; il est mesuré et documenté dans
+[la note sur la définition du MAD glissant](docs/politique_mad.md). Le calcul du
+manuscrit reste le comportement par défaut.
+
 ---
 
 ## Politique de référence du test de stress
@@ -103,10 +109,11 @@ memoirev3/
 │   ├── compute_failure_modes.py        # Typologie des modes de défaillance
 │   ├── detection_background_curve.py   # Courbe détection-charge (robustesse)
 │   ├── run_hypo_stress_validation.py   # Campagne moins favorable, sans réglage
+│   ├── compute_mad_sensitivity.py      # Ablation sous les deux définitions du MAD glissant
 │   ├── audit_bibliography.py            # Contrôle des 74 références et de leurs sources
 │   ├── audit_manuscript_numbers.py     # 401 valeurs : artefact, registre et sources TeX
 │   └── update_validation_manifest.py           # (Re)génère le manifeste SHA-256
-├── tests/                       # 149 tests (unitaires, invariants, non-régression)
+├── tests/                       # 153 tests (unitaires, invariants, non-régression)
 ├── data/
 │   ├── brut.csv                 # Données capteurs brutes (confidentiel, non versionné)
 │   └── validation/              # Artefacts + manifeste validation_artifacts.sha256
@@ -144,12 +151,12 @@ Les marqueurs signalent une **vérification à effectuer**, pas une boiterie con
 ### Tests
 
 ```bash
-pytest -q                                # 149 tests
+pytest -q                                # 153 tests
 ```
 
 Le corpus brut est confidentiel et n'est pas versionné. Sans `data/brut.csv`,
 vingt-deux tests portant la marque `corpus` sont ignorés avec un motif explicite
-et la suite affiche `127 passed, 22 skipped` : c'est le résultat attendu pour
+et la suite affiche `131 passed, 22 skipped` : c'est le résultat attendu pour
 une copie du dépôt seul, et non un échec.
 
 ---

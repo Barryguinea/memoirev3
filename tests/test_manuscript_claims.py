@@ -27,6 +27,10 @@ TESTS_HORS_MANUSCRIT = {
     "test_hypo_stress_campaign.py::test_stress_cli_selects_reference_policy_and_output",
     "test_hypo_stress_campaign.py::test_fixed_reference_output_cannot_overwrite_sealed_artifacts",
     "test_manuscript_claims.py::test_les_commandes_de_scripts_de_l_annexe_sont_executables",
+    "test_rolling_mad_modes.py::test_le_mode_historique_reste_le_defaut",
+    "test_rolling_mad_modes.py::test_le_mode_window_suit_la_definition_du_mad_de_fenetre",
+    "test_rolling_mad_modes.py::test_un_mode_inconnu_est_refuse",
+    "test_rolling_mad_modes.py::test_le_mode_ne_modifie_que_les_z_scores_glissants",
 }
 
 PAQUETS_DU_DEPOT = {"core", "validation_hypo", "validation_hybrid", "ui", "scripts"}

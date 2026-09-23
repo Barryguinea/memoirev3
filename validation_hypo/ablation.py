@@ -221,8 +221,13 @@ def run_clean_ablation(
     params: Optional[Dict[str, object]] = None,
     warning_config: Optional[EarlyWarningConfig] = None,
     verbose: bool = True,
+    mad_mode: str = "historical",
 ) -> pd.DataFrame:
-    """Évalue les cinq variantes A à E sur les mêmes injections post-baseline."""
+    """Évalue les cinq variantes A à E sur les mêmes injections post-baseline.
+
+    ``mad_mode`` ne touche que les z-scores glissants lus par IF et LOF
+    (variantes B, C et D) ; voir docs/politique_mad.md.
+    """
     params = params or final_params()
     df_all = load_csv(raw_csv)
     df_all[COW] = df_all[COW].astype(str)
@@ -266,6 +271,7 @@ def run_clean_ablation(
             interval=str(params["interval"]),
             cols=available_base_cols(raw_cow),
             window_baseline=int(params["window_baseline"]),
+            mad_mode=mad_mode,
         )
         clean_variants = _run_variants(
             clean_features,
@@ -324,6 +330,7 @@ def run_clean_ablation(
                     interval=str(params["interval"]),
                     cols=available_base_cols(injected),
                     window_baseline=int(params["window_baseline"]),
+                    mad_mode=mad_mode,
                 )
                 for name, pred in _run_variants(
                     features,

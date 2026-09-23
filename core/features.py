@@ -65,13 +65,39 @@ def robust_z(x: np.ndarray, eps: float = EPS) -> np.ndarray:
     return z
 
 
-def rolling_robust_z(series: pd.Series, window_size: int, eps: float = EPS) -> pd.Series:
-    """Rolling robust z-score (MAD) avec replis IQR puis écart-type."""
+ROLLING_MAD_MODES = ("historical", "window")
+
+
+def _window_mad(values: np.ndarray) -> float:
+    """Écart absolu médian des valeurs finies d'une fenêtre, autour de sa médiane."""
+    finite = values[np.isfinite(values)]
+    if finite.size == 0:
+        return np.nan
+    return float(np.median(np.abs(finite - np.median(finite))))
+
+
+def rolling_robust_z(
+    series: pd.Series,
+    window_size: int,
+    eps: float = EPS,
+    mad_mode: str = "historical",
+) -> pd.Series:
+    """Rolling robust z-score (MAD) avec replis IQR puis écart-type.
+
+    ``historical`` reproduit le manuscrit v3 : chaque écart est pris à la médiane
+    mobile de son propre intervalle. ``window`` applique l'écart absolu médian
+    standard de la fenêtre courante. Voir docs/politique_mad.md.
+    """
+    if mad_mode not in ROLLING_MAD_MODES:
+        raise ValueError(f"mad_mode inconnu : {mad_mode}. Attendus : {ROLLING_MAD_MODES}")
     series = pd.to_numeric(series, errors="coerce").astype(float)
     min_periods = MIN_PERIODS_ROLLING(window_size)
 
     med = series.rolling(window_size, min_periods=min_periods).median()
-    mad = (series - med).abs().rolling(window_size, min_periods=min_periods).median()
+    if mad_mode == "historical":
+        mad = (series - med).abs().rolling(window_size, min_periods=min_periods).median()
+    else:
+        mad = series.rolling(window_size, min_periods=min_periods).apply(_window_mad, raw=True)
     denom = MAD_FACTOR * mad
 
     z = (series - med) / denom
@@ -106,6 +132,7 @@ def build_interval_features(
     cols: List[str],
     window_baseline: int,
     mi_name: str = "Motion Index",
+    mad_mode: str = "historical",
 ) -> pd.DataFrame:
     """
     Reprend exactement la logique de l'implémentation historique de référence :
@@ -171,7 +198,7 @@ def build_interval_features(
         series = pd.to_numeric(out[col], errors="coerce").astype(float)
 
         out[f"{col}_rz"] = robust_z(series.values)
-        out[f"{col}_rrz"] = rolling_robust_z(series, window_baseline)
+        out[f"{col}_rrz"] = rolling_robust_z(series, window_baseline, mad_mode=mad_mode)
 
         out[f"{col}_d1"] = series.diff()
         out[f"{col}_d1_per_hour"] = out[f"{col}_d1"] / (mins / 60.0)
